@@ -1,2 +1,66 @@
 # SCMBAT
-Spectrum Consumption Model Builder and Analysis Tool
+The **Spectrum Consumption Model Builder and Analysis Tool (SCMBAT) **facilitates the construction of Spectrum Consumption Models (SCMs) and the analysis of compatibility between transmitters and receivers for which an SCM describes their boundaries of spectrum use. 
+
+The structure of SCMs and the mechanisms to determine non-interfering use of spectrum when devices express their spectrum use boundaries via SCMs is defined in the IEEE Standard 1900.5.2 being elaborated by the IEEE 1900.5 Working Group on Policy Language and Architectures for Managing Cognitive Radio for Dynamic Spectrum Access Applications. http://grouper.ieee.org/groups/dyspan/5/index.htm
+
+Overall, SCMBAT aims to incentivize the use of SCMs, uncover the potential benefits of their use, collect feedback for their improvement and contribute to the development of spectrum sharing techniques.
+
+###Building the code: 
+
+The code for the tool has been built in Java and uses scripts written in Octave (a numerical computation language with similarities to Matlab) and some shell scripts.
+
+
+####System requirements
+
+- OpenJDK 7 or 8. 
+
+- Octave version 3.8 or higher
+https://www.gnu.org/software/octave/
+
+- Required libraries  (these are provided in the libraries folder):
+commons-logging-1.1.1.jar
+javaoctave-0.6.4.jar  (https://kenai.com/projects/javaoctave/pages/Home)
+
+*Notes:*
+- The tool has been tested in Ubuntu 16.04.
+- Please note that the java file with the main( ) method is the Home.java file in the SCM_home folder.
+
+###Executing the code – environment setup
+If you have built the code and want to execute it, please note that the following elements should be present in the same directory where you have your executable
+
+- a sub-directory called “octave” with all the octave scripts for the tool in it.
+- The scripts MaxPow.sh and TotPow.sh
+- (optional) a sub-directory containing the commons-logging and javaoctave jar libraries (depends on the options you used to compile the code)
+- (Recommended) A “Models” directory where the spectrum consumption model directories and files will be created by default.
+- A directory with the license files
+
+
+###Tool use – Notes/Observations
+- Spectrum Consumption Models are saved as xml files compatible with the IEEE 1900.5.2	XML Schema for SCM. The XML file with the SCM information will be stored inside a subdirectory with the same name of the model.
+
+- When doing compatibility calculations, a couple files are currently being generated inside the Octave directory: CompatAnalysis.png, SCM_receiver_java.txt and SCM_transmitter_java.txt. 
+In future versions of the tool these files will be placed in a separate directory.
+
+- When saving the data for a SCM, the application reconfirms that you are saving it into a Transmitter model (Tx) or a receive model file (Rx) depending on how you started building the model. Additionally, it provides several warning windows indicating data that is missing (which may be intentional from a modelers perspective) or data that should be numeric and isn't (potential data entry error).
+
+###Bug reports / Feature requests / Code contributions
+Please look at the guidelines mentioned in Contributing.md
+
+
+###Documentation
+A small video tutorial and a tutorial document are currently under preparation.
+
+Introduction to Spectrum Consumption Models:
+- J. Stine, C. Caicedo, “Enabling Spectrum Sharing via Spectrum Consumption Models”, IEEE Journal of Selected Areas in Communications (JSAC), Vol 33, No. 4, 201
+https://www.researchgate.net/publication/271964910_Enabling_Spectrum_Sharing_via_Spectrum_Consumption_Models?fulltextDialog=true
+
+Detailed explanations on SCMs and Model-Based Spectrum Managment can be found in:
+- Model-Based Spectrum Management Part 1: Modeling and Computation Manual Version 2.0
+https://www.mitre.org/publications/technical-papers/model-based-spectrum-management-part-1-modeling-and-computation-manual
+
+
+###Acknowledgements:
+In addition to the contributors mentioned in Contributors.md the project originators would like to thank Google Inc. who provided initial support to start this project via a Google Faculty Award.
+
+###Copyright and License
+Code and documentation Copyright Syracuse University 2016. Code is released under a GPLv3 license 
