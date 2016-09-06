@@ -10,7 +10,7 @@ Overall, SCMBAT aims to incentivize the use of SCMs, uncover the potential benef
 The code for the tool has been built in Java and uses scripts written in Octave (a numerical computation language with similarities to Matlab) and some shell scripts.
 
 
-####System requirements
+####System requirements 
 
 - OpenJDK 7 or 8. 
 
@@ -25,8 +25,15 @@ javaoctave-0.6.4.jar  (https://kenai.com/projects/javaoctave/pages/Home)
 - The tool has been tested in Ubuntu 16.04.
 - Please note that the java file with the main( ) method is the Home.java file in the SCM_home folder.
 
+###Code structure
+- The *src* folder contains Java code components 
+- The *Octave* folder contains scripts written in octave for SCMBAT operations
+- The *Models* folder contains an example of a SCM for a transmitter and a receiver which can be loaded and explored in SCMBAT.
+- The *libraries* folder contains jar libraries required by SCMBAT
+- The MaxPow.sh and TotPow.sh are required for adequate execution of compatibility computations in SCMBAT
+
 ###Executing the code – environment setup
-If you have built the code and want to execute it, please note that the following elements should be present in the same directory where you have your executable
+If you have compiled the Java code and want to execute it (i.e. an executable JAR file), please note that the following elements should be present in the same directory where you have your executable
 
 - a sub-directory called “octave” with all the octave scripts for the tool in it.
 - The scripts MaxPow.sh and TotPow.sh
@@ -34,6 +41,7 @@ If you have built the code and want to execute it, please note that the followin
 - (Recommended) A “Models” directory where the spectrum consumption model directories and files will be created by default.
 - A directory with the license files
 
+Also make sure your system meets the requirements mentioned previously
 
 ###Tool use – Notes/Observations
 - Spectrum Consumption Models are saved as xml files compatible with the IEEE 1900.5.2	XML Schema for SCM. The XML file with the SCM information will be stored inside a subdirectory with the same name of the model.
@@ -51,7 +59,7 @@ Please look at the guidelines mentioned in Contributing.md
 A small video tutorial and a tutorial document are currently under preparation.
 
 Introduction to Spectrum Consumption Models:
-- J. Stine, C. Caicedo, “Enabling Spectrum Sharing via Spectrum Consumption Models”, IEEE Journal of Selected Areas in Communications (JSAC), Vol 33, No. 4, 201
+- J. Stine, C. Caicedo, “Enabling Spectrum Sharing via Spectrum Consumption Models”, IEEE Journal of Selected Areas in Communications (JSAC), Vol 33, No. 4, 2015
 https://www.researchgate.net/publication/271964910_Enabling_Spectrum_Sharing_via_Spectrum_Consumption_Models?fulltextDialog=true
 
 Detailed explanations on SCMs and Model-Based Spectrum Managment can be found in:
