@@ -56,7 +56,11 @@ Please look at the guidelines mentioned in Contributing.md
 
 
 ###Documentation
-A small video tutorial and a tutorial document are currently under preparation.
+Video tutorial 
+The video tutorial for SCMBAT is available at:
+[SCMBAT_video_tutorial](https://coursecast.ischool.syr.edu/Panopto/Pages/Viewer.aspx?id=a201b9c0-63fd-4ff4-b2b5-cf1d59f99a8f) 
+
+A tutorial document is currently under preparation.
 
 Introduction to Spectrum Consumption Models:
 - J. Stine, C. Caicedo, “Enabling Spectrum Sharing via Spectrum Consumption Models”, IEEE Journal of Selected Areas in Communications (JSAC), Vol 33, No. 4, 2015
