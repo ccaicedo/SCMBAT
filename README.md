@@ -56,19 +56,24 @@ Please look at the guidelines mentioned in Contributing.md
 
 
 ###Documentation
-Video tutorial 
-The video tutorial for SCMBAT is available at:
+*Video tutorial* 
+
+- The video tutorial for SCMBAT is available at:
 [SCMBAT_video_tutorial](https://coursecast.ischool.syr.edu/Panopto/Pages/Viewer.aspx?id=a201b9c0-63fd-4ff4-b2b5-cf1d59f99a8f) 
 
 A tutorial document is currently under preparation.
 
-Introduction to Spectrum Consumption Models:
+*Introduction to Spectrum Consumption Models:*
+
 - J. Stine, C. Caicedo, “Enabling Spectrum Sharing via Spectrum Consumption Models”, IEEE Journal of Selected Areas in Communications (JSAC), Vol 33, No. 4, 2015
 https://www.researchgate.net/publication/271964910_Enabling_Spectrum_Sharing_via_Spectrum_Consumption_Models?fulltextDialog=true
 
-Detailed explanations on SCMs and Model-Based Spectrum Managment can be found in:
+
+*Detailed explanations on SCMs and Model-Based Spectrum Managment can be found in:*
+
 - Model-Based Spectrum Management Part 1: Modeling and Computation Manual Version 2.0
 https://www.mitre.org/publications/technical-papers/model-based-spectrum-management-part-1-modeling-and-computation-manual
+
 
 
 ###Acknowledgements:
