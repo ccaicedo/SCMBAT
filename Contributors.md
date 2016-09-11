@@ -1,9 +1,10 @@
 ####Creators
-Carlos Caicedo – Syracuse University
+- Carlos Caicedo – Syracuse University
 https://github.com/ccaicedo
 Project / repository manager
 
-Arnav Mohan – Syracuse University
+- Arnav Mohan – Syracuse University
+https://github.com/mohanarnav
 Lead developer – SCMBAT v1.0
 
 ####Code contributors
