@@ -5,12 +5,12 @@ The structure of SCMs and the mechanisms to determine non-interfering use of spe
 
 Overall, SCMBAT aims to incentivize the use of SCMs, uncover the potential benefits of their use, collect feedback for their improvement and contribute to the development of spectrum sharing techniques.
 
-###Building the code: 
+### Building the code: 
 
 The code for the tool has been built in Java and uses scripts written in Octave (a numerical computation language with similarities to Matlab) and some shell scripts.
 
 
-####System requirements 
+#### System requirements 
 
 - OpenJDK 7 or 8. 
 
@@ -25,14 +25,14 @@ javaoctave-0.6.4.jar  (https://kenai.com/projects/javaoctave/pages/Home)
 - The tool has been tested in Ubuntu 16.04.
 - Please note that the java file with the main( ) method is the Home.java file in the SCM_home folder.
 
-###Code structure
+### Code structure
 - The *src* folder contains Java code components 
 - The *Octave* folder contains scripts written in octave for SCMBAT operations
 - The *Models* folder contains an example of a SCM for a transmitter and a receiver which can be loaded and explored in SCMBAT.
 - The *libraries* folder contains jar libraries required by SCMBAT
 - The MaxPow.sh and TotPow.sh are required for adequate execution of compatibility computations in SCMBAT
 
-###Executing the code – environment setup
+### Executing the code – environment setup
 If you have compiled the Java code and want to execute it (i.e. an executable JAR file), please note that the following elements should be present in the same directory where you have your executable
 
 - a sub-directory called “octave” with all the octave scripts for the tool in it.
@@ -43,7 +43,7 @@ If you have compiled the Java code and want to execute it (i.e. an executable JA
 
 Also make sure your system meets the requirements mentioned previously
 
-###Tool use – Notes/Observations
+### Tool use – Notes/Observations
 - Spectrum Consumption Models are saved as xml files compatible with the IEEE 1900.5.2	XML Schema for SCM. The XML file with the SCM information will be stored inside a subdirectory with the same name of the model.
 
 - When doing compatibility calculations, a couple files are currently being generated inside the Octave directory: CompatAnalysis.png, SCM_receiver_java.txt and SCM_transmitter_java.txt. 
@@ -51,11 +51,11 @@ In future versions of the tool these files will be placed in a separate director
 
 - When saving the data for a SCM, the application reconfirms that you are saving it into a Transmitter model (Tx) or a receive model file (Rx) depending on how you started building the model. Additionally, it provides several warning windows indicating data that is missing (which may be intentional from a modelers perspective) or data that should be numeric and isn't (potential data entry error).
 
-###Bug reports / Feature requests / Code contributions
+### Bug reports / Feature requests / Code contributions
 Please look at the guidelines mentioned in Contributing.md
 
 
-###Documentation
+### Documentation
 *Video tutorial* 
 
 - The video tutorial for SCMBAT is available at:
@@ -76,8 +76,8 @@ https://www.mitre.org/publications/technical-papers/model-based-spectrum-managem
 
 
 
-###Acknowledgements:
+### Acknowledgements:
 In addition to the contributors mentioned in Contributors.md the project originators would like to thank Google Inc. who provided initial support to start this project via a Google Faculty Award.
 
-###Copyright and License
+### Copyright and License
 Code and documentation Copyright Syracuse University 2016. Code is released under a GPLv3 license 

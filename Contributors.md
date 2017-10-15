@@ -1,4 +1,4 @@
-####Creators
+#### Creators
 - Carlos Caicedo – Syracuse University
 https://github.com/ccaicedo
 Project / repository manager
@@ -7,5 +7,5 @@ Project / repository manager
 https://github.com/mohanarnav
 Lead developer – SCMBAT v1.0
 
-####Code contributors
+#### Code contributors
 To be listed in alphabetical order
