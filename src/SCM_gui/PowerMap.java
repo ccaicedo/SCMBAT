@@ -56,7 +56,23 @@ public class PowerMap {
     int count1 = 2;
 	Object rowData1[][] = { { "1","","",""} };
     Object columnNames1[] = {"#","Elevation Angle","Azimuth Angle", "Gain (dB)"};
-    TableModel table_model1 = new DefaultTableModel(rowData1, columnNames1);    
+    TableModel table_model1 = new DefaultTableModel(rowData1, columnNames1) {
+		private static final long serialVersionUID = 2580299347572016977L;  //Adding a serial version ID
+
+			@Override
+    	        public boolean isCellEditable(int row, int column)
+    	        {
+    	            // make read only column
+					if(column ==0 )
+					{
+						return false;
+					}
+					else
+					{
+						return true;
+					}
+    	        }
+    };
     public JTable table1 = new JTable(table_model1);
     
     JLabel relativeText = new JLabel("orientation relative to Platform");
@@ -354,8 +370,32 @@ public class PowerMap {
 			public void actionPerformed(ActionEvent arg0) {
 			
 				DefaultTableModel model = (DefaultTableModel) table.getModel();
-				model.removeRow(model.getRowCount() - 1);
-				count = count - 1;
+				/*
+				 * Allowing the deletion of selected rows
+				 */
+				int[] selectedRows = table.getSelectedRows();
+				int numberOfRows = selectedRows.length;
+				   for(int row=selectedRows.length-1;row>=0;row--){
+					int rowNum = selectedRows[row];
+				     model.removeRow(rowNum);
+				     //Updating the index column - count variable appropriately
+				     if(rowNum!=table.getRowCount())
+				     {
+				    	 table.getModel().setValueAt(rowNum+1,rowNum ,0 );
+				     }
+				     
+				   }
+			//	model.removeRow(model.getRowCount() - 1);		 
+				   count = count - numberOfRows;
+				   for(int i=count;i>=0;i--)
+				   {
+					   int curVal = Integer.parseInt(table.getModel().getValueAt(i, 0).toString());
+					   if(curVal!= i+1)
+					   {
+						   table.getModel().setValueAt(i+1, i, 0);
+					   }
+				   }
+				
 			}
 		});
 	    

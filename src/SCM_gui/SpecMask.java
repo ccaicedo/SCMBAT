@@ -69,7 +69,24 @@ public class SpecMask {
     
     String column_names[] = {"#","Frequency (MHz)", "Power (dB)"};
     Object rowData[][] = { { "1","",""} };
-    TableModel table_model = new DefaultTableModel(rowData,column_names);
+    TableModel table_model = new DefaultTableModel(rowData,column_names) {
+    	
+		private static final long serialVersionUID = 8235600107489275732L;
+
+		@Override
+        public boolean isCellEditable(int row, int column)
+        {
+            // make read only column
+			if(column ==0 )
+			{
+				return false;
+			}
+			else
+			{
+				return true;
+			}
+        }
+    };
     public JTable table = new JTable(table_model);	
 	JScrollPane tableContainer = new JScrollPane(table);
     
@@ -376,7 +393,31 @@ public class SpecMask {
 			public void actionPerformed(ActionEvent arg0) {
 			
 				DefaultTableModel model = (DefaultTableModel) table.getModel();
-				model.removeRow(model.getRowCount() - 1);
+				//model.removeRow(model.getRowCount() - 1);
+				/*
+				 * Allowing the deletion of selected rows
+				 */
+				int[] selectedRows = table.getSelectedRows();
+				   for(int row=selectedRows.length-1;row>=0;row--){
+					int rowNum = selectedRows[row];
+				     model.removeRow(rowNum);
+				     //Updating the index column - count variable appropriately
+				     if(rowNum!=table.getRowCount())
+				     {
+				    	 table.getModel().setValueAt(rowNum+1,rowNum ,0 );
+				     }
+				     
+				   }
+			//	model.removeRow(model.getRowCount() - 1);		 
+				   for(int i=table.getRowCount()-1;i>=0;i--)
+				   {
+					   int curVal = Integer.parseInt(table.getModel().getValueAt(i, 0).toString());
+					   if(curVal!= i+1)
+					   {
+						   table.getModel().setValueAt(i+1, i, 0);
+					   }
+				   }
+				
 			}
 		});
         
