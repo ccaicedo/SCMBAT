@@ -26,12 +26,25 @@ along with program.  If not, see <http://www.gnu.org/licenses/>.
 
 package SCM_gui;
 
-import java.awt.*;
+import java.awt.CardLayout;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.HashMap;
 
-import javax.swing.*;
+import javax.swing.Action;
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
 
 public class SCM_MainWindow {
 
@@ -71,12 +84,31 @@ public class SCM_MainWindow {
     
 	public SCMControl control = new SCMControl();
 	
+	//OpenedModels HahhMap
+	HashMap<Integer, Boolean> openedModels = new HashMap<Integer, Boolean>();
 	
+	public SCM_MainWindow()
+	{
+		
+	}
+	public SCM_MainWindow(HashMap<Integer, Boolean> openedModels)
+	{
+		this.openedModels = openedModels;
+	}
 	
-    public void design() {
+    public void design(int Index) {
     
     	final JFrame frame = new JFrame("Spectrum Consumption Model Builder - "+SaveName);
     	
+    	frame.addWindowListener(new WindowAdapter() {
+    		   public void windowClosing(WindowEvent evt) {
+    			   //If the create operation is trying to open the window
+    			   if(Index!=-1)
+    			   {
+    	    		     openedModels.put(Index, false);  
+    			   }
+    		   }
+    		  });
     	final ActionListener exitAction = new ActionListener(){
     		public void actionPerformed(ActionEvent e) {
     			frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));

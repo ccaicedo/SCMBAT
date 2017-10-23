@@ -170,6 +170,10 @@ public class IMC {
         TableColumn col = table.getColumnModel().getColumn(0);
         col.setPreferredWidth(5);
         
+        //Setting the property for the table to save the fields when out of focus
+		table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
+
+        
         Dimension tableSize = tableContainer.getPreferredSize();
         tableContainer.setBounds(25, 160 + 40 +200, 
         		tableSize.width , tableSize.height - 200);

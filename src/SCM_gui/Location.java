@@ -398,6 +398,7 @@ public int index =0;
 		head = new JLabel("Location - Point");
 		Dimension headSize = head.getPreferredSize();
 		head.setBounds(25, 200, headSize.width, headSize.height);
+		pointTable.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
 		
 		table=pointTable;
 		tableContainer = new JScrollPane(table);
