@@ -41,12 +41,16 @@ import org.ieee.dyspansc._1900._5.scm.RxModelType;
 
 public class PrintRxText extends PrintText{
 
-	public void printText(RxModelType model, String SaveName){
+	public String printText(RxModelType model, String SaveName){
 		
+		String warningMessage = "\n";
 		PrintWriter printfile;
 		try{
 			System.out.println("Rx Printing");
-			printfile = new PrintWriter ("Octave/" + SaveName);
+		//	printfile = new PrintWriter ("Octave/" + SaveName);
+			
+			//Adding the new Directory for adding the output files
+			printfile = new PrintWriter ("Output/" + SaveName);
 			int o=0;
 			
 			if(model.getUnderlayMask().get(o)!=null){
@@ -177,16 +181,18 @@ public class PrintRxText extends PrintText{
 				
 			}			
 			
-			printReferencePower(model.getReferencePower().get(o), printfile, "Rx");
-			printPowerMap(model.getScmPowerMap().get(o),printfile,"Rx");
+			warningMessage = warningMessage + printReferencePower(model.getReferencePower().get(o), printfile, "Rx");
+			warningMessage = warningMessage + printPowerMap(model.getScmPowerMap().get(o),printfile,"Rx");
 			printLocation(model.getScmLocation().get(o),printfile,"Rx");
 			printTime(model.getScmSchedule().get(o),printfile,"Rx");
 			
 			printfile.close();
 		}catch(Exception e){
-			new Warn().setWarn("Error", "Couldn't save the Receiver data correctly");
+			
+			warningMessage = warningMessage + "\nERROR - Couldn't save the Receiver data correctly";
+			//new Warn().setWarn("Error", "Couldn't save the Receiver data correctly");
 		}
-		
+		return warningMessage;
 	}
 }
 

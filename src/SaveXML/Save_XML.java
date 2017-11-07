@@ -47,10 +47,42 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.ieee.dyspansc._1900._5.scm.*;
+import org.ieee.dyspansc._1900._5.scm.BTPRatedListType;
+import org.ieee.dyspansc._1900._5.scm.BTPRatingType;
+import org.ieee.dyspansc._1900._5.scm.BWRatedListType;
+import org.ieee.dyspansc._1900._5.scm.BWRatingType;
+import org.ieee.dyspansc._1900._5.scm.BandListType;
+import org.ieee.dyspansc._1900._5.scm.BandType;
+import org.ieee.dyspansc._1900._5.scm.DCRatedListType;
+import org.ieee.dyspansc._1900._5.scm.DCRatingType;
+import org.ieee.dyspansc._1900._5.scm.FrequencyListType;
+import org.ieee.dyspansc._1900._5.scm.GainMapType;
+import org.ieee.dyspansc._1900._5.scm.GainMapValueType;
+import org.ieee.dyspansc._1900._5.scm.HoppingDataType;
+import org.ieee.dyspansc._1900._5.scm.InflectionPointType;
+import org.ieee.dyspansc._1900._5.scm.LocationType;
+import org.ieee.dyspansc._1900._5.scm.ObjectFactory;
+import org.ieee.dyspansc._1900._5.scm.OrientationType;
+import org.ieee.dyspansc._1900._5.scm.PiecewiseLinearType;
+import org.ieee.dyspansc._1900._5.scm.PointType;
+import org.ieee.dyspansc._1900._5.scm.PropMapType;
+import org.ieee.dyspansc._1900._5.scm.PropMapValueType;
+import org.ieee.dyspansc._1900._5.scm.PropagationModelType;
+import org.ieee.dyspansc._1900._5.scm.RatingType;
+import org.ieee.dyspansc._1900._5.scm.ReferencePowerType;
+import org.ieee.dyspansc._1900._5.scm.RelativeToPlatformType;
+import org.ieee.dyspansc._1900._5.scm.RxModelType;
+import org.ieee.dyspansc._1900._5.scm.SCMLocationType;
+import org.ieee.dyspansc._1900._5.scm.SCMMaskType;
+import org.ieee.dyspansc._1900._5.scm.SCMPowerMapType;
+import org.ieee.dyspansc._1900._5.scm.SCMPropagationMapType;
+import org.ieee.dyspansc._1900._5.scm.SCMScheduleType;
+import org.ieee.dyspansc._1900._5.scm.SpectrumMaskType;
+import org.ieee.dyspansc._1900._5.scm.TowardReferencePointType;
+import org.ieee.dyspansc._1900._5.scm.TxModelType;
+import org.ieee.dyspansc._1900._5.scm.UnderlayMaskType;
 import org.w3c.dom.Document;
 
-import Execute.Warn;
 import SCM_gui.Location;
 import SCM_gui.PowerMap;
 import SCM_gui.PropMap;
@@ -68,6 +100,13 @@ public class Save_XML extends ObjectFactory {
 	TxModelType TxModel;
 	RxModelType RxModel;
 	Object Model;
+	
+	/*
+	 * Maintain the global warning message and flag to display the warnings
+	 */
+	public String warningMessage = "\n";
+	public boolean warningFlag = false;
+	
 	//Creating a XML document.
 	public void createXML(String SystemID, String device){
 		
@@ -121,13 +160,17 @@ public class Save_XML extends ObjectFactory {
 			TxModel.getSpectrumMask().get(o).getScmMask().getInflectionPoint().get(i).setRelativePower(data);
 		
 			}catch(Exception e){
-				new Warn().setWarn("Warning", "The entry at row: " +(i+1)+" in the Spectrum Mask table should be numerical");
+				warningMessage = warningMessage + "\nThe entry at row: " +(i+1)+" in the Spectrum Mask table should be numerical";
+				warningFlag = true;
 			}
 		}    	
 		try{
 		TxModel.getSpectrumMask().get(o).setResolutionBW(Double.parseDouble(specMask.ResTextField.getText()));
 		}catch(Exception e){
-			new Warn().setWarn("Warning", "The entry in Resolution BW field should be numeric");
+			warningMessage = warningMessage + "\nThe entry in Resolution BW field should be numeric";
+			warningFlag = true;
+			
+		//	new Warn().setWarn("Warning", "The entry in Resolution BW field should be numeric");
 		}
 		// If there is Spectrum Hopping Data
 		
@@ -150,8 +193,11 @@ public class Save_XML extends ObjectFactory {
 					TxModel.getSpectrumMask().get(o).getHoppingData().getFrequencyList().getReferenceFreq()
 					.add(Double.parseDouble(freqTable.getValueAt(i, 1).toString()));
 					}catch(Exception e){
-						new Warn().setWarn("Warning", "The entry at row: " + (i+1)+ 
-								" in the Frequency list table should be numerical");
+						warningMessage = warningMessage + "\nThe entry at row: " + (i+1) + " in the Frequency list table should be numerical";
+						warningFlag = true;
+						
+						//new Warn().setWarn("Warning", "The entry at row: " + (i+1)+ 
+							//	" in the Frequency list table should be numerical");
 					}
 				}
 			}
@@ -169,8 +215,11 @@ public class Save_XML extends ObjectFactory {
 					TxModel.getSpectrumMask().get(o).getHoppingData().getBandList().getBand().get(i)
 					.setEndFrequency(Double.parseDouble(bandTable.getValueAt(i, 2).toString()));
 					}catch(Exception e){
-						new Warn().setWarn("Warning", "The entry at row: " + (i+1)+ 
-								" in the Band List table should be numerical");
+						
+						warningMessage = warningMessage + "\nThe entry at row: " + (i+1)+ " in the Band List table should be numerical";
+						warningFlag = true;
+						/*new Warn().setWarn("Warning", "The entry at row: " + (i+1)+ 
+								" in the Band List table should be numerical");*/
 					}
 				}	
 			}	
@@ -186,7 +235,8 @@ public class Save_XML extends ObjectFactory {
 		try{
 		under.setResolutionBW(Double.parseDouble(underlayMask.ResTextField.getText()));}
 		catch(Exception e){
-			new Warn().setWarn("warning", "The entry in the Resolution BW field should be numeric");
+			warningMessage= warningMessage + "\nThe entry in the Resolution BW field should be numeric";
+			warningFlag = true;
 		}
 		under.setScmMask(new SCMMaskType());
 		
@@ -201,8 +251,12 @@ public class Save_XML extends ObjectFactory {
 			ifPoint.setRelativePower(data);
 			under.getScmMask().getInflectionPoint().add(ifPoint);
 			}catch(Exception e){
+				
+				warningMessage = warningMessage + "\nThe entry at row: "+(i+1)+ "in the Underlay Mask table should be numeric";
+				warningFlag = true;
+				/*
 				new Warn().setWarn("warning", "The entry at row: "+(i+1)+
-						" in the Underlay Mask table should be numeric");
+						" in the Underlay Mask table should be numeric");*/
 			}
 		}
 		
@@ -224,7 +278,10 @@ public class Save_XML extends ObjectFactory {
 		       case 0: try{under.getRating().
 		       	setRatedBW(Double.parseDouble(underlayMask.underlayRated.BandRatField.getText().toString()));
 		       }catch(Exception e){
-		    	   new Warn().setWarn("Warning", "BW Rating number should be a number");
+		    	   
+		    	   warningMessage = warningMessage + "\nBW Rating number should be a number";
+		    	   warningFlag = true;
+		    	  // new Warn().setWarn("Warning", "BW Rating number should be a number");
 		       }
 		       break;
 		       
@@ -241,8 +298,10 @@ public class Save_XML extends ObjectFactory {
 					data = Double.parseDouble(Sdata.getValueAt(i, 2).toString());
 					bwRating.setAdjustment(data);
 					}catch(Exception e){
-						new Warn().setWarn("Warning", "The entry in row: " + i+1 + 
-								" in the BW list table should be numerical");
+						 warningMessage = warningMessage + "\nThe entry in row: " + i+1 +" in the BW list table should be numerical";
+				    	 warningFlag = true;
+						/*new Warn().setWarn("Warning", "The entry in row: " + i+1 + 
+								" in the BW list table should be numerical");*/
 					}
 					bwRatedList.getBwRating().add(bwRating);
 				}
@@ -253,7 +312,10 @@ public class Save_XML extends ObjectFactory {
 		       case 2: try{under.getRating().
 		       	setRatedBTP(Double.parseDouble(underlayMask.underlayRated.BTPRatingField.getText().toString()));
 		       }catch(Exception e){
-		    	new Warn().setWarn("Warning", "The entry in BTP Rated field should be numerical");   
+		    	   
+		    	 warningMessage = warningMessage  + "\nThe entry in BTP Rated field should be numerical";
+		    	 warningFlag = true;
+		    //	new Warn().setWarn("Warning", "The entry in BTP Rated field should be numerical");   
 		       }
 		       break;
 		       
@@ -270,8 +332,10 @@ public class Save_XML extends ObjectFactory {
 		    	   data = Double.parseDouble(Sdata.getValueAt(i, 2).toString());
 		    	   btpRating.setAdjustment(data);
 		    	   }catch(Exception e){
-		    		   new Warn().setWarn("Warning","The entry in row: " + (i+1)+
-		    				   " in the BTP Rated List table should be numerical");
+		    		   warningMessage = warningMessage  + "\nThe entry in row: " + (i+1)+"in the BTP Rated List table should be numerical";
+				       warningFlag = true;
+		    		   /*new Warn().setWarn("Warning","The entry in row: " + (i+1)+
+		    				   " in the BTP Rated List table should be numerical");*/
 		    	   }
 		    	   btpRatedList.getBtpRating().add(btpRating);
 		       }
@@ -294,8 +358,11 @@ public class Save_XML extends ObjectFactory {
 		    	   data = Double.parseDouble(Sdata.getValueAt(i, 3).toString());
 		    	   dcRating.setAdjustment(data);
 		    	   }catch(Exception e){
-		    		   new Warn().setWarn("Warning", "The entry in row: " + (i+1)+
-		    				   " in the DC rating table should be numerical");
+		    		   
+		    		   warningMessage = warningMessage + "\nThe entry in row:" + (i+1)+"in the DC rating table should be numerical";
+		    		   warningFlag = true;
+		    		   /*new Warn().setWarn("Warning", "The entry in row: " + (i+1)+
+		    				   " in the DC rating table should be numerical");*/
 		    	   }
 		    	   
 		       }
@@ -306,7 +373,9 @@ public class Save_XML extends ObjectFactory {
 		       case 5: try{under.getRating().
 		        setPorpIndex(Integer.parseInt(underlayMask.underlayRated.PolicyField.getText().toString()));
 		       }catch(Exception e){
-		    	   new Warn().setWarn("Warning", "The entry for PorP Index should be numerical");
+		    	   warningMessage = warningMessage + "\nThe entry for PorP Index should be numerical";
+	    		   warningFlag = true;
+		    	  // new Warn().setWarn("Warning", "The entry for PorP Index should be numerical");
 		       }
 		       break;	       
 		    
@@ -370,8 +439,11 @@ public class Save_XML extends ObjectFactory {
 				}		
 				
 			}catch(Exception e){
+				warningMessage = warningMessage + "\nThe entry in row: "+ (i+1) +" in the Power Map table should be numeric";
+				warningFlag = true;		
+				/*
 				new Warn().setWarn("Warning", "The entry in row: "+ (i+1) 
-						+ " in the Power Map table should be numeric");
+						+ " in the Power Map table should be numeric");*/
 			}
 			}
 			
@@ -401,7 +473,10 @@ public class Save_XML extends ObjectFactory {
 		try{
 		pow.setValue(Double.parseDouble(powerField.getText()));
 		}catch(Exception e){
-			new Warn().setWarn("Warning", "The entry in the Reference Power field should be numeric");
+			warningMessage = warningMessage + "\nThe entry in the Reference Power field should be numeric";
+			warningFlag = true;
+			
+			//new Warn().setWarn("Warning", "The entry in the Reference Power field should be numeric");
 		}
 		if(device.equals("Tx")){
 			TxModel.getReferencePower().add(pow);
@@ -490,7 +565,9 @@ public class Save_XML extends ObjectFactory {
 			}		
 			
 			}catch(Exception e){
-				new Warn().setWarn("Warning", "The entry at row: " + (i+1) + " in the propagation map table should be numeric");
+				warningMessage = warningMessage + "\nThe entry at row: " + (i+1) + " in the propagation map table should be numeric";
+				warningFlag = true;
+				//new Warn().setWarn("Warning", "The entry at row: " + (i+1) + " in the propagation map table should be numeric");
 			}
 		}
 		
@@ -522,7 +599,9 @@ public class Save_XML extends ObjectFactory {
 			date=df.parse(startTime);
 			startHour = Integer.parseInt(timeModel.getValueAt(0, 4).toString());
 			}catch(Exception e){
-				new Warn().setWarn("Warning","The Start Time couldn't be parsed");
+				warningMessage = warningMessage + "\nThe Start Time couldn't be parsed";
+				warningFlag = true;
+			//	new Warn().setWarn("Warning","The Start Time couldn't be parsed");
 			}
 			cal.setTime(date);
 			XMLGregorianCalendar start = DatatypeFactory.newInstance().
@@ -543,7 +622,9 @@ public class Save_XML extends ObjectFactory {
 					start.setTimezone((hour*60) - minute);
 				}
 			}catch(Exception e){
-				new Warn().setWarn("Warning", "Start Time - Time Zone format is not Correct");
+				warningMessage = warningMessage + "\nStart Time - Time Zone format is not Correct";
+				warningFlag = true;
+				//new Warn().setWarn("Warning", "Start Time - Time Zone format is not Correct");
 			}
 			/*XMLGregorianCalendar start = DatatypeFactory.newInstance().
 					newXMLGregorianCalendar(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH)+1, 
@@ -563,7 +644,9 @@ public class Save_XML extends ObjectFactory {
 			date = df.parse(endTime);
 			endHour = Integer.parseInt(timeModel.getValueAt(1, 4).toString());
 			}catch(Exception e){
-				new Warn().setWarn("Warning","The End Time couldn't be parsed");
+				warningMessage = warningMessage + "\nThe End Time couldn't be parsed";
+				warningFlag = true;
+				//new Warn().setWarn("Warning","The End Time couldn't be parsed");
 			}
 			
 			cal.setTime(date);
@@ -593,7 +676,9 @@ public class Save_XML extends ObjectFactory {
 				}
 				
 			}catch(Exception e){
-				new Warn().setWarn("Warning", "End Time - Time Zone format is not Correct");
+				warningMessage = warningMessage + "\nEnd Time - Time Zone format is not Correct";
+				warningFlag = true;
+			//	new Warn().setWarn("Warning", "End Time - Time Zone format is not Correct");
 			}
 			
 			sch.setStartTime(start);
@@ -603,11 +688,17 @@ public class Save_XML extends ObjectFactory {
 					start.toGregorianCalendar().getTimeInMillis();
 			//Duration dur = DatatypeFactory.newDuration(durMs);
 			if(durMs<=0){
-				new Warn().setWarn("Warning", "The duration for "
-						+ "transmission or reception can't be negative or zero");
+				
+				warningMessage = warningMessage + "\nThe duration for transmission or reception can't be negative or zero";
+				warningFlag = true;
+				/*new Warn().setWarn("Warning", "The duration for "
+						+ "transmission or reception can't be negative or zero");*/
 			}else{
-				new Warn().setWarn("New Information", "The time difference is "
-						+ durMs/(60*60*1000)+ " hrs");
+				
+				warningMessage = warningMessage + "\nNew Information, The time difference is" + durMs/(60*60*1000)+ " hrs";
+				warningFlag = true;
+				/*new Warn().setWarn("New Information", "The time difference is "
+						+ durMs/(60*60*1000)+ " hrs");*/
 			}
 			
 
@@ -643,7 +734,9 @@ public class Save_XML extends ObjectFactory {
 			loc.getPoint().setAltitude(Double.parseDouble(pointModel.getValueAt(0, 2).toString()));
 		
 			}catch(Exception e){
-				new Warn().setWarn("Warning", "The entry in the Location Table should be Numerical");
+				warningMessage = warningMessage + "\nThe entry in the Location Table should be Numerical";
+				warningFlag =  true;
+			//	new Warn().setWarn("Warning", "The entry in the Location Table should be Numerical");
 			}
 		}
 		scmLoc.setLocation(loc);
@@ -654,6 +747,83 @@ public class Save_XML extends ObjectFactory {
 			RxModel.getScmLocation().add(scmLoc);
 		}
 	}
+	
+	
+	/* Adding IMA information to the XML document
+	 * 
+	Requires the corresponding JAXB class for IMA and IMC
+	
+	public void addIMA(IMA ima, String device){
+				
+		SCMPowerMapType power = new SCMPowerMapType();
+		power.setOrientation(new OrientationType());
+		power.setGainMap(new GainMapType());
+		
+		if(powerMap.surface.isSelected()==true){
+			power.getOrientation().setSurface(true);
+			
+			Double elevationData = 0.0;
+			Double azimuthData = 0.0;
+			Double gainData = 0.0;
+			String strData = "";
+			
+			TableModel tableData = powerMap.table.getModel();
+			for (int i = 0; i < tableData.getRowCount(); i++) {
+			try{	
+				
+				power.getGainMap().getGainMapValue().add(new GainMapValueType());
+				
+				strData = tableData.getValueAt(i, 1).toString().replaceAll(" ", "");
+				if(strData.equals(null)  || strData.equals("") || strData.equals(" ")){
+					power.getGainMap().getGainMapValue().get(i).setElevation(elevationData);
+				}else{
+					elevationData = Double.parseDouble(strData);
+					power.getGainMap().getGainMapValue().get(i).setElevation(elevationData);
+				}
+				
+				strData = tableData.getValueAt(i, 2).toString().replaceAll(" ", "");				
+				if(strData.equals(null)  || strData.equals("") || strData.equals(" ")){
+					power.getGainMap().getGainMapValue().get(i).setAzimuth(azimuthData);
+				}else{
+					azimuthData = Double.parseDouble(strData);
+					power.getGainMap().getGainMapValue().get(i).setAzimuth(azimuthData);
+				}
+				
+				strData = tableData.getValueAt(i, 3).toString().replaceAll(" ", "");
+				if(strData.equals(null)  || strData.equals("") || strData.equals(" ")){
+					power.getGainMap().getGainMapValue().get(i).setGain(gainData);
+				}else{
+					gainData = Double.parseDouble(strData);
+					power.getGainMap().getGainMapValue().get(i).setGain(gainData);
+				}		
+				
+			}catch(Exception e){
+				new Warn().setWarn("Warning", "The entry in row: "+ (i+1) 
+						+ " in the Power Map table should be numeric");
+			}
+			}
+			
+			if(device.equals("Tx")){
+				TxModel.getScmPowerMap().add(power);
+			}else{
+				RxModel.getScmPowerMap().add(power);
+			}
+			
+		}
+			
+		if(powerMap.reference.isSelected()==true){
+			power.setOrientation(new OrientationType());
+			power.getOrientation().setTowardReferencePoint(new TowardReferencePointType());
+		}
+		
+		if(powerMap.relative.isSelected()==true){
+			power.setOrientation(new OrientationType());
+			power.getOrientation().setRelativeToPlatform(new RelativeToPlatformType());
+		}
+	}
+	
+	*/
+	
 	
 	/* Concluding all information added to the xml document and saving it, 
 	 * based on the provided schema

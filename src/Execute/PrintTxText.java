@@ -38,14 +38,15 @@ import org.ieee.dyspansc._1900._5.scm.TxModelType;
 
 public class PrintTxText extends PrintText{
 
-	public void printText(TxModelType model, String SaveName){
+	public String printText(TxModelType model, String SaveName){
 		
-		
+		String warningMessage= "\n";
 		PrintWriter printfile;
 			try {
 				System.out.println("Tx Printing");
-				printfile = new PrintWriter ("Octave/" + SaveName);
-					
+				//printfile = new PrintWriter ("Octave/" + SaveName);
+				//Adding the Output folder for storing the output files
+				printfile = new PrintWriter ("Output/" + SaveName);	
 					int o = 0;
 					if(model.getSpectrumMask().get(o) != null){
 						System.out.println("Spec");
@@ -134,16 +135,19 @@ public class PrintTxText extends PrintText{
 							
 						}
 					}
-					printReferencePower(model.getReferencePower().get(o), printfile, "Tx");
-					printPowerMap(model.getScmPowerMap().get(o),printfile,"Tx");
-					printPropagationMap(model.getScmPropagationMap().get(o),printfile,"Tx");
+					warningMessage= warningMessage + printReferencePower(model.getReferencePower().get(o), printfile, "Tx");
+					warningMessage= warningMessage +printPowerMap(model.getScmPowerMap().get(o),printfile,"Tx");
+					warningMessage= warningMessage +printPropagationMap(model.getScmPropagationMap().get(o),printfile,"Tx");
 					printLocation(model.getScmLocation().get(o),printfile,"Tx");
 					printTime(model.getScmSchedule().get(o),printfile,"Tx");
 					
 					printfile.close ();
 				}catch(Exception e){
-					new Warn().setWarn("Error", "Couldn't save the Transmitter data correctly");
+					
+					warningMessage = warningMessage + "\nERROR- Couldn't save the Transmitter data correctly";
+					//new Warn().setWarn("Error", "Couldn't save the Transmitter data correctly");
 				}
+			return warningMessage;
 	}
 
 }

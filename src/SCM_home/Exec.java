@@ -71,6 +71,8 @@ public class Exec {
 	JFileChooser fcTx = new JFileChooser();
 	ArrayList<Model> TxArray = new ArrayList<Model>();
 	
+	//Maintaining the variable for updating the warnings
+	MethodAnalysis methAn = new MethodAnalysis();
 	// Creating the list box for Receivers
 	
     DefaultListModel<String> RxListModel = new DefaultListModel<>();
@@ -201,7 +203,10 @@ public class Exec {
 					TxData.add(TxElement.getValue());
 					System.out.println(TxData.get(i).toString());
 					}catch(Exception exp){
-						new Warn().setWarn("Incorrect Format", "File is of invalid format");
+						methAn.warningFlag = true;
+						methAn.warningMessage = methAn.warningMessage + "\nIncorrect Format - File is of invalid format";
+						
+						//new Warn().setWarn("Incorrect Format", "File is of invalid format");
 					}
 				}
 	
@@ -230,7 +235,11 @@ public class Exec {
 					RxData.add(RxElement.getValue());
 					System.out.println(RxData.get(i).toString());
 					}catch(Exception exp){
-						new Warn().setWarn("Incorrect Format", "File is of invalid format");
+						methAn.warningFlag = true;
+						methAn.warningMessage = methAn.warningMessage + "\n Incorrect Format -File is of invalid format";
+						
+						
+						//new Warn().setWarn("Incorrect Format", "File is of invalid format");
 					}
 				}
 				
@@ -239,13 +248,23 @@ public class Exec {
 				 * analysis.
 				 */
 				try{
-					MethodAnalysis methAn = new MethodAnalysis();
+					//MethodAnalysis methAn = new MethodAnalysis();
 					String ratedMethod=methAn.analyseRatedMethod(TxData,RxData);
 					System.out.println(ratedMethod);
 					methAn.execCompat(ratedMethod, txBoxIndices, TxData, TxArray, 
 							rxBoxIndices, RxData, RxArray);
+					if(methAn.warningFlag)
+					{
+						new Warn().showWarnings("Systems Compatible", methAn.warningMessage);
+						methAn.warningFlag = false;
+						methAn.warningMessage = "\n";
+					}
+					
+					
 				}catch(Exception exp){
-					new Warn().setWarn("Warning", "Systems are not compatible");
+					new Warn().showWarnings("Warning", methAn.warningMessage);
+					methAn.warningFlag = false;
+					methAn.warningMessage = "\n";
 				}				
 				
 			}        	

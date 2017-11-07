@@ -41,7 +41,7 @@ import javax.swing.JLabel;
 
 public class ExecuteFrame {
 	
-	String plotPath = "Octave/CompatAnalysis.png";
+	String plotPath = "Output/CompatAnalysis.png";
 	JFrame frame;
 	JLabel picLabel;
 	

@@ -40,10 +40,10 @@ import org.ieee.dyspansc._1900._5.scm.SCMScheduleType;
 
 public class PrintText {
 	
-	public void printReferencePower(ReferencePowerType refPower, 
+	public String printReferencePower(ReferencePowerType refPower, 
 			PrintWriter printfile, 
 			String device){
-		
+		 String warningMessage="\n";
 		try{			
 			Double data = refPower.getValue();
 			printfile.println("# name: "+device+"_TotPow");
@@ -53,14 +53,17 @@ public class PrintText {
 			printfile.println("");
 		}catch(Exception e){
 			e.printStackTrace();
-			new Warn().setWarn("Inconsistent Data", "the data for reference power is inconsisent");
-		}		
+			warningMessage = warningMessage + "\nIn the "+device +" model, Inconsistent Data, the data for reference power is inconsisent";
+			
+			//new Warn().setWarn("Inconsistent Data", "the data for reference power is inconsisent");
+		}	
+		return warningMessage;
 	}
 	
-	public void printPowerMap(SCMPowerMapType powMap,
+	public String printPowerMap(SCMPowerMapType powMap,
 			PrintWriter printfile,
 			String device){
-		
+		 String warningMessage= "\n";
 		if(powMap.getGainMap()!=null){
 			String PowerPrintData;
 			try{
@@ -100,7 +103,9 @@ public class PrintText {
 			    	PowerPrintData="0 0";
 			    }
 			}catch(Exception e){
-				new Warn().setWarn("Inconsistent Data", "the data for power map is inconsistent or necessary");
+				warningMessage = warningMessage +"\nIn the "+device+" model, Inconsistent Data, the data for power map is inconsistent or necessary";
+				
+				//new Warn().setWarn("Inconsistent Data", "the data for power map is inconsistent or necessary");
 				PowerPrintData="0 0";
 			}
 			
@@ -114,12 +119,14 @@ public class PrintText {
 			printfile.println("");
 			
 		}
+		return warningMessage;
 	}
 			
-	public void printPropagationMap(SCMPropagationMapType propMap,
+	public String printPropagationMap(SCMPropagationMapType propMap,
 			PrintWriter printfile,
 			String device){
 		
+		 String warningMessage="\n";
 		if(propMap.getPropMap()!=null){
 			String propPrintData;
 			try{
@@ -175,7 +182,9 @@ public class PrintText {
 			    	propPrintData="0 0";
 			    }
 			}catch(Exception e){
-				new Warn().setWarn("Inconsistent Data", "the data for power map is inconsistent or necessary");
+				warningMessage = warningMessage + "\n In the "+device+" model, Inconsistent Data, the data for power map is inconsistent or necessary";
+				
+				//new Warn().setWarn("Inconsistent Data", "the data for power map is inconsistent or necessary");
 				propPrintData="0 0";
 			}
 			
@@ -188,6 +197,7 @@ public class PrintText {
 		    printfile.println("");
 			printfile.println("");
 		}
+		return warningMessage;
 	}
 	
 	public void printLocation(SCMLocationType loc,
