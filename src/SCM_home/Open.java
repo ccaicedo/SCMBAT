@@ -48,6 +48,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.stream.StreamSource;
 
+import org.apache.log4j.Logger;
 import org.ieee.dyspansc._1900._5.scm.RxModelType;
 import org.ieee.dyspansc._1900._5.scm.TxModelType;
 import org.w3c.dom.Document;
@@ -76,9 +77,10 @@ public class Open {
 	//Holding the index of the selected Model
 	int Index = -1;
 	
+	final Logger logger = Logger.getLogger(Open.class);
 	
 	public JPanel getPanel(){
-		
+		logger.addAppender(Home.appender);
 		panel.setBorder(new TitledBorder(null, "Open a SCM Model", TitledBorder.LEADING, TitledBorder.TOP, null, null));
         panel.setLayout(null);
         
@@ -114,6 +116,8 @@ public class Open {
 		            Box.addItem(modelName);
 		            Box.setSelectedIndex(Box.getItemCount()-1);
 		            System.out.println(modelName);
+		            logger.info("Model Name   "+modelName);
+		            
 		        } else {
 		        }
 				
@@ -150,6 +154,7 @@ public class Open {
 				File file = new File(filePath);
 				if(file.exists() && !file.isDirectory()){
 					System.out.println("File Exists");
+					logger.info("File Exists");
 				}
 				
 				try{

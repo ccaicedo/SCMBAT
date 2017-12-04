@@ -154,6 +154,10 @@ public JLabel HeightLabel = new JLabel("Height (meters)");
 public JTextField HeightField = new JTextField();
 public JLabel ReferenceLabel = new JLabel("Reference: ");
 
+
+public JLabel transmitterLabel = new JLabel("Transmitter Density");
+public JTextField transmitterField = new JTextField();
+
 //Path 
 
 Object pathRow[][] = { { "1","","","",""} };
@@ -383,6 +387,8 @@ public int index =0;
 		panel.remove(HeightField);
 		panel.remove(periodField);
 		panel.remove(periodLabel);
+		panel.remove(transmitterLabel);
+		panel.remove(transmitterField);
 		panel.remove(add);
 		panel.remove(del);
 		panel.remove(save);
@@ -399,6 +405,7 @@ public int index =0;
 		Dimension headSize = head.getPreferredSize();
 		head.setBounds(25, 200, headSize.width, headSize.height);
 		pointTable.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
+		pointTable.setCellSelectionEnabled(true);
 		
 		table=pointTable;
 		tableContainer = new JScrollPane(table);
@@ -430,6 +437,7 @@ public int index =0;
 		head.setBounds(25, 200, headSize.width, headSize.height);
 
 		table=pointSurfaceTable;
+		table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
 		tableContainer = new JScrollPane(table);
 		Dimension containerSize = tableContainer.getPreferredSize();
         tableContainer.setBounds(25, 240, 
@@ -484,6 +492,7 @@ public int index =0;
 		head.setBounds(25, 200, headSize.width, headSize.height);
 	
 		table=circularTable;
+		table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
 		tableContainer = new JScrollPane(table);
 		Dimension containerSize = tableContainer.getPreferredSize();
         tableContainer.setBounds(25, 240, 
@@ -516,6 +525,13 @@ public int index =0;
         Dimension HAATSize = HAAT.getPreferredSize();
         HAAT.setBounds(350, 150 + 280, HAATSize.width, HAATSize.height);
         
+        Dimension transmitterSize = transmitterLabel.getPreferredSize();
+        transmitterLabel.setBounds(25, 130 + 320, transmitterSize.width + 20, transmitterSize.height);
+        
+        Dimension transmitterFieldSize = transmitterField.getPreferredSize();
+        transmitterField.setBounds(180, 130 + 320, transmitterFieldSize.width + 50, transmitterFieldSize.height);
+        
+        
         panel.add(save);
         panel.add(saveExit);
         panel.add(exit);
@@ -531,6 +547,8 @@ public int index =0;
         panel.add(ReferenceLabel);
 		
 		
+        panel.add(transmitterLabel);
+        panel.add(transmitterField);
 		panel.add(head);
 		panel.repaint();
 		panel.revalidate();
@@ -543,6 +561,7 @@ public int index =0;
 		head.setBounds(25, 200, headSize.width, headSize.height);
 	
 		table=polygonTable;
+		table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
 		tableContainer = new JScrollPane(table);
 		Dimension containerSize = tableContainer.getPreferredSize();
         tableContainer.setBounds(25, 240, 
@@ -574,6 +593,14 @@ public int index =0;
         Dimension HAATSize = HAAT.getPreferredSize();
         HAAT.setBounds(350, 150 + 280, HAATSize.width, HAATSize.height);
         
+        Dimension transmitterSize = transmitterLabel.getPreferredSize();
+        transmitterLabel.setBounds(25, 130 + 320, transmitterSize.width + 20, transmitterSize.height);
+        
+        Dimension transmitterFieldSize = transmitterField.getPreferredSize();
+        transmitterField.setBounds(180, 130 + 320, transmitterFieldSize.width + 50, transmitterFieldSize.height);
+        
+        
+        
         panel.add(save);
         panel.add(saveExit);
         panel.add(exit);
@@ -590,7 +617,9 @@ public int index =0;
         panel.add(HeightField);
         panel.add(ReferenceLabel);
 		
-		
+		panel.add(transmitterLabel);
+		panel.add(transmitterField);
+        
 		panel.add(head);
 		panel.repaint();
 		panel.revalidate();
@@ -603,6 +632,7 @@ public int index =0;
 		head.setBounds(25, 200, headSize.width, headSize.height);
 	
 		table=cylinderTable;
+		table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
 		tableContainer = new JScrollPane(table);
 		Dimension containerSize = tableContainer.getPreferredSize();
         tableContainer.setBounds(25, 240, 
@@ -634,6 +664,14 @@ public int index =0;
         Dimension HAATSize = HAAT.getPreferredSize();
         HAAT.setBounds(350, 150 + 280, HAATSize.width, HAATSize.height);
         
+        Dimension transmitterSize = transmitterLabel.getPreferredSize();
+        transmitterLabel.setBounds(25, 130 + 320, transmitterSize.width + 20, transmitterSize.height);
+        
+        Dimension transmitterFieldSize = transmitterField.getPreferredSize();
+        transmitterField.setBounds(180, 130 + 320, transmitterFieldSize.width + 50, transmitterFieldSize.height);
+        
+        
+        
         ButtonGroup group2 = new ButtonGroup();
         group2.add(AGL);
         group2.add(HAAT);
@@ -648,7 +686,9 @@ public int index =0;
         panel.add(HeightField);
         panel.add(ReferenceLabel);
 		
-		
+		panel.add(transmitterLabel);
+		panel.add(transmitterField);
+        
 		panel.add(head);
 		panel.repaint();
 		panel.revalidate();
@@ -661,6 +701,9 @@ public int index =0;
 		head.setBounds(25, 200, headSize.width, headSize.height);
 
 		table=polyhedronTable;
+		table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
+		heightTable.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
+		
 		tableContainer = new JScrollPane(table);
 		Dimension containerSize = tableContainer.getPreferredSize();
         tableContainer.setBounds(25, 270, 
@@ -703,6 +746,12 @@ public int index =0;
         Dimension HAATSize = HAAT.getPreferredSize();
         HAAT.setBounds(350, 150 + 500, HAATSize.width, HAATSize.height);
         
+        Dimension transmitterSize = transmitterLabel.getPreferredSize();
+        transmitterLabel.setBounds(25, 130 + 530, transmitterSize.width, transmitterSize.height);
+        
+        Dimension transmitterFieldSize = HeightField.getPreferredSize();
+        transmitterField.setBounds(180, 130 + 530, transmitterFieldSize.width + 50, transmitterFieldSize.height);
+        
         
         ButtonGroup group2 = new ButtonGroup();
         group2.add(AGL);
@@ -722,6 +771,9 @@ public int index =0;
 		panel.add(ReferenceLabel);
 		panel.add(HeightLabel);
 		panel.add(HeightField);
+		panel.add(transmitterLabel);
+		panel.add(transmitterField);
+		
 		panel.repaint();
 		panel.revalidate();
 	}
@@ -733,6 +785,7 @@ public int index =0;
 		head.setBounds(25, 200, headSize.width, headSize.height);
 		
 		table=pathTable;
+		table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
 		tableContainer = new JScrollPane(table);
 		Dimension containerSize = tableContainer.getPreferredSize();
         tableContainer.setBounds(25, 240, 
@@ -793,5 +846,4 @@ public int index =0;
 		panel.repaint();
 		panel.revalidate();
 	}
-
 }

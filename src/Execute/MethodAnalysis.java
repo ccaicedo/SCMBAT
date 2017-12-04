@@ -29,12 +29,16 @@ package Execute;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.GregorianCalendar;
-
+import java.util.Map;
+import java.util.Set;
 
 import org.ieee.dyspansc._1900._5.scm.RatingType;
 import org.ieee.dyspansc._1900._5.scm.RxModelType;
@@ -58,7 +62,62 @@ public class MethodAnalysis {
 	//the warning message containing all the warnings
 	public  String warningMessage = "\n";
 	
-// Analysing which compatibility method to use based on Model types.
+	
+	//For environment variables
+	 ProcessBuilder pb = new ProcessBuilder("echo", "");
+     Map<String, String> envMap = pb.environment();
+	
+	//Finding the path where the script files are stored and setting the environment variable
+	private void setFilePathEnvironment()
+	{
+		String line;
+		String homeDirectoryPath="";
+		try {
+            FileReader filereader =  new FileReader("HomeDirectoryPath.txt");
+
+            BufferedReader bufferedReader = new BufferedReader(filereader);
+
+            while((line = bufferedReader.readLine()) != null) {
+              homeDirectoryPath =  line.split("=")[1];
+            }   
+
+            // Always close files.
+            bufferedReader.close();
+            
+            //Setting the environment variable for the complete path
+           
+            envMap.put("SCM_PATH", homeDirectoryPath);
+        }
+        catch(FileNotFoundException ex) {
+            ex.printStackTrace();             
+        }
+        catch(IOException ex) {
+           ex.printStackTrace();
+        }
+		
+	}
+	//Getting the environment variable 
+	public String getFilePath()
+	{
+		String directoryPath = "";
+		 Set<String> keys = envMap.keySet();
+		    for(String key:keys){
+		    	if(key.equals("SCM_PATH"))
+		    	{
+		    		directoryPath = envMap.get(key);
+			        System.out.println(key+" ==> "+directoryPath);
+			        return directoryPath;
+		    	}
+		    }
+		    return directoryPath;
+	}
+	
+	public MethodAnalysis()
+	{
+		//Set the environment variable
+		setFilePathEnvironment();
+	}
+	// Analysing which compatibility method to use based on Model types.
 	public String analyseRatedMethod(ArrayList<TxModelType> TxData,ArrayList<RxModelType> RxData){
 		
 		String ratedMethod = "null";
@@ -105,7 +164,7 @@ public class MethodAnalysis {
 		String Command1=null;
 		String CompatStat=null;
 		String PowerMargin=null;
-		
+			
 		switch(method){
 		case "TotalPower": System.out.println("Total Power Method being executed");
 			warningMessage= warningMessage + printTx.printText(TxData.get(0),"SCM_transmitter_java.txt");
@@ -127,8 +186,11 @@ public class MethodAnalysis {
 			//	new Warn().setWarn("Systems Compatible", "Systems are compatible due to non-overlapping schedules");
 				
 			}else{
-				Command0 = "chmod u+x TotPow.sh";
-				Command1 = "./TotPow.sh";
+				String dirName = getFilePath();
+				String totPowFile = dirName+"TotPow.sh "+dirName;
+				Command0 = "chmod u+x "+totPowFile;
+				Command1 = totPowFile;
+				
 				
 				Process p1;
 				try{
@@ -141,6 +203,7 @@ public class MethodAnalysis {
 					ArrayList<String> dispData = new ArrayList<String>();
 					try {
 						while((line = br.readLine())!=null){
+							System.out.println(line);
 						dispData.add(line);
 						}
 					} catch (Exception e) {
@@ -179,9 +242,10 @@ public class MethodAnalysis {
 			//	new Warn().setWarn("Systems Compatible", "Systems are compatible due to non-overlapping schedules");
 				
 			}else{
-				Command0 = "chmod u+x MaxPow.sh";
-				Command1 = "./MaxPow.sh";
-				
+				String dirName = getFilePath();
+				String maxPowFile = dirName+"MaxPow.sh "+dirName;
+				Command0 = "chmod u+x "+maxPowFile;
+				Command1 = maxPowFile;			
 				Process p2;
 				try{
 					p2 = Runtime.getRuntime().exec(Command0);

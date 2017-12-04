@@ -62,6 +62,10 @@ public class IMA {
     
     Object rowData[][] = { { "1","",""} };
     Object columnNames[] = {"#","Frequency (MHz)","Relative Power (dB)"};
+    
+    //Adding the order field to store into the XML
+    JTextField imOrderField = new JTextField();
+    
     TableModel table_model = new DefaultTableModel(rowData, columnNames) {
     	
 		private static final long serialVersionUID = 797660903338719428L;
@@ -129,7 +133,7 @@ public class IMA {
         
         JLabel imOrderLabel = new JLabel("IM order for the mask: ");
         imOrderLabel.setFont(font);
-        JTextField imOrderField = new JTextField();
+       
         
         Dimension imOrderLabelSize = imOrderLabel.getPreferredSize();
         Dimension imOrderFieldSize = imOrderField.getPreferredSize();
@@ -140,25 +144,33 @@ public class IMA {
         		imOrderFieldSize.width + 50, imOrderFieldSize.height);
         
         panel.add(tableContainer, BorderLayout.CENTER);
-        panel.add(TableLabel);
-        panel.add(imOrderLabel);
-        panel.add(imOrderField);
+     //   panel.add(TableLabel);
+   
+        /*Considering that the order is inherited from the INtermodulation Mask tab removing it from this panel*/
+       
+        //panel.add(imOrderLabel);
+       //panel.add(imOrderField);
 
         // Center Frequency data
         
         Dimension relBtnSize = relFreqBtn.getPreferredSize();
         relFreqBtn.setBounds(25, 210-60, relBtnSize.width, relBtnSize.height);
+     
         panel.add(relFreqBtn);
         
         RelFreq.setFont(font);
         Dimension sizeLabel = RelFreq.getPreferredSize();
         RelFreq.setBounds(75, 260-60, sizeLabel.width, sizeLabel.height);
+     
+
         panel.add(RelFreq);
 
         // Creating reference frequency text field
 
         RelFreqField.setColumns(1);
         RelFreqField.setBounds(255 + 0, 260-60, sizeLabel.width - 120, 5 + sizeLabel.height);
+       
+
         panel.add(RelFreqField);          
         
         if(relFreqBtn.isSelected()==false){
@@ -210,10 +222,12 @@ public class IMA {
         panel.add(b1);
         panel.add(b2);
         panel.add(b3);
-        panel.add(b4);        
-        panel.add(NewMap);
-        panel.add(Previous);
-        panel.add(Next);
+        panel.add(b4);    
+        
+        /*Considering that the relativeFrequency is inherited from the Intermodulation Mask tab removing it from this panel*/
+        //panel.add(NewMap);
+        //panel.add(Previous);
+        //panel.add(Next);
         
         // Add and Remove Rows actions
         

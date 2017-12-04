@@ -26,12 +26,25 @@ along with program.  If not, see <http://www.gnu.org/licenses/>.
 
 package SCM_home;
 
-import java.awt.*;
+import java.awt.CardLayout;
+import java.awt.Dimension;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+import org.apache.log4j.Logger;
+import org.apache.log4j.PatternLayout;
+import org.apache.log4j.RollingFileAppender;
+
+import Execute.MethodAnalysis;
 
 
 public class Home {
@@ -45,7 +58,15 @@ public class Home {
 	private Exec exec = new Exec();
     public Open open = new Open(); 
     
+   
+    final Logger LOGGER = Logger.getLogger(Home.class);
+	static String LOG_FILE_NAME= "./resources/logging.properties";
+	public static RollingFileAppender appender =null;
+	
+    
+    
 	public Home(){
+		initializeLogger();
 		design();
 	}
     public void design() {
@@ -178,6 +199,36 @@ public class Home {
         MainPanel.add(ExecPanel, "Card 3");
         MainPanel.add(OpenPanel, "Card 4");
         frame.getContentPane().add(MainPanel);
+    }
+    //Initializing the logs
+    private void initializeLogger()
+    {
+    	
+    	DateFormat dateFormat = new SimpleDateFormat("yyyy-dd-MM");
+    	Date date = new Date();
+    	String curDate = dateFormat.format(date);
+    	MethodAnalysis meth = new MethodAnalysis();
+
+    	String filename = meth.getFilePath()+"logs/SCM_logFile_"+curDate+".log";//+"_"+log_number+".log";
+        try
+        {
+        	 PatternLayout layout = new PatternLayout(); 
+        	 layout.setConversionPattern("%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n");
+             appender =  new RollingFileAppender();
+             appender.setAppend(true);
+             appender.setMaxFileSize("10MB");
+             appender.setMaxBackupIndex(2);
+             appender.setFile(filename);
+             appender.setLayout(layout);
+             appender.activateOptions(); 
+             LOGGER.addAppender(appender);
+            
+        }
+        catch(Exception e)
+        {
+        	
+        	System.out.println("Exception in loading the logger in the Home");
+        }
     }
     
     public static void main(String[] args) {

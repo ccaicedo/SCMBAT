@@ -47,10 +47,15 @@ public class PrintRxText extends PrintText{
 		PrintWriter printfile;
 		try{
 			System.out.println("Rx Printing");
+			MethodAnalysis meth = new MethodAnalysis();
+			printfile = new PrintWriter (meth.getFilePath()+"Octave/" + SaveName);	
 		//	printfile = new PrintWriter ("Octave/" + SaveName);
 			
+			//Create the file name
+	//		String savefileName = SaveName_getCurrentDate;
+			
 			//Adding the new Directory for adding the output files
-			printfile = new PrintWriter ("Output/" + SaveName);
+			//printfile = new PrintWriter ("CompatabilityAnalysis/" + SaveName);
 			int o=0;
 			
 			if(model.getUnderlayMask().get(o)!=null){

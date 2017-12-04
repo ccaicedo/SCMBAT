@@ -108,8 +108,8 @@ public class Save extends Save_XML{
 		        UnderlayMask underlay = underlayArray.get(0);
 		        PowerMap power = powerArray.get(0);
 		        PropMap prop = propArray.get(0);
-		        // IMC imc = imcArray.get(0);  *IMC not implemented in the current version
-		        // IMA ima = imaArray.get(0);  *IMA not implemented in the current version
+		        IMC imc = imcArray.get(0); /*IMC not implemented in the current version*/
+		        IMA ima = imaArray.get(0); /*IMA not implemented in the current version*/
 		        Location location = locationArray.get(0);
 		        // Platform platform = platformArray.get(0); *platform not implemented in the current version
 		        Schedule schedule = scheduleArray.get(0);
@@ -128,6 +128,8 @@ public class Save extends Save_XML{
 				addSpec(spec); 
 				addUnderlay(underlay,device);				
 				addPropMap(prop);
+				addIMC(imc);
+				addIMA(imc);
 				
 				}else{
 					if(device.equals("Rx")){

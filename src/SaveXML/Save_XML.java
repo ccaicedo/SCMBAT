@@ -47,12 +47,15 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.ieee.dyspansc._1900._5.scm.AntennaHeightType;
 import org.ieee.dyspansc._1900._5.scm.BTPRatedListType;
 import org.ieee.dyspansc._1900._5.scm.BTPRatingType;
 import org.ieee.dyspansc._1900._5.scm.BWRatedListType;
 import org.ieee.dyspansc._1900._5.scm.BWRatingType;
 import org.ieee.dyspansc._1900._5.scm.BandListType;
 import org.ieee.dyspansc._1900._5.scm.BandType;
+import org.ieee.dyspansc._1900._5.scm.CircularSurfaceType;
+import org.ieee.dyspansc._1900._5.scm.CylinderType;
 import org.ieee.dyspansc._1900._5.scm.DCRatedListType;
 import org.ieee.dyspansc._1900._5.scm.DCRatingType;
 import org.ieee.dyspansc._1900._5.scm.FrequencyListType;
@@ -60,11 +63,17 @@ import org.ieee.dyspansc._1900._5.scm.GainMapType;
 import org.ieee.dyspansc._1900._5.scm.GainMapValueType;
 import org.ieee.dyspansc._1900._5.scm.HoppingDataType;
 import org.ieee.dyspansc._1900._5.scm.InflectionPointType;
+import org.ieee.dyspansc._1900._5.scm.IntermodulationMaskType;
 import org.ieee.dyspansc._1900._5.scm.LocationType;
 import org.ieee.dyspansc._1900._5.scm.ObjectFactory;
 import org.ieee.dyspansc._1900._5.scm.OrientationType;
+import org.ieee.dyspansc._1900._5.scm.PathPointType;
+import org.ieee.dyspansc._1900._5.scm.PathType;
 import org.ieee.dyspansc._1900._5.scm.PiecewiseLinearType;
+import org.ieee.dyspansc._1900._5.scm.PointSurfaceType;
 import org.ieee.dyspansc._1900._5.scm.PointType;
+import org.ieee.dyspansc._1900._5.scm.PolygonSurfaceType;
+import org.ieee.dyspansc._1900._5.scm.PolyhedronType;
 import org.ieee.dyspansc._1900._5.scm.PropMapType;
 import org.ieee.dyspansc._1900._5.scm.PropMapValueType;
 import org.ieee.dyspansc._1900._5.scm.PropagationModelType;
@@ -74,15 +83,18 @@ import org.ieee.dyspansc._1900._5.scm.RelativeToPlatformType;
 import org.ieee.dyspansc._1900._5.scm.RxModelType;
 import org.ieee.dyspansc._1900._5.scm.SCMLocationType;
 import org.ieee.dyspansc._1900._5.scm.SCMMaskType;
+import org.ieee.dyspansc._1900._5.scm.SCMPolygonType;
 import org.ieee.dyspansc._1900._5.scm.SCMPowerMapType;
 import org.ieee.dyspansc._1900._5.scm.SCMPropagationMapType;
 import org.ieee.dyspansc._1900._5.scm.SCMScheduleType;
+import org.ieee.dyspansc._1900._5.scm.SideType;
 import org.ieee.dyspansc._1900._5.scm.SpectrumMaskType;
 import org.ieee.dyspansc._1900._5.scm.TowardReferencePointType;
 import org.ieee.dyspansc._1900._5.scm.TxModelType;
 import org.ieee.dyspansc._1900._5.scm.UnderlayMaskType;
 import org.w3c.dom.Document;
 
+import SCM_gui.IMC;
 import SCM_gui.Location;
 import SCM_gui.PowerMap;
 import SCM_gui.PropMap;
@@ -739,6 +751,280 @@ public class Save_XML extends ObjectFactory {
 			//	new Warn().setWarn("Warning", "The entry in the Location Table should be Numerical");
 			}
 		}
+		
+		else if(locData.LocCombo.getItemAt(locData.LocCombo.getSelectedIndex()).equals("Point Surface")) {
+			
+			TableModel pointSurfaceModel = locData.pointSurfaceTable.getModel();
+			loc.setPointSurface(new PointSurfaceType());
+			loc.getPointSurface().setPoint( new PointType());
+			loc.getPointSurface().setAntennaHeight(new AntennaHeightType());	
+			
+			for (int i=0; i<pointSurfaceModel.getRowCount(); i++){
+				
+				try{
+				Double longitude = Double.parseDouble(pointSurfaceModel.getValueAt(i, 0).toString());
+				Double latitude = Double.parseDouble(pointSurfaceModel.getValueAt(i, 1).toString());
+				Double altitude = Double.parseDouble(pointSurfaceModel.getValueAt(i, 2).toString());
+				loc.getPointSurface().getPoint().setLongitude(longitude);
+				loc.getPointSurface().getPoint().setLatitude(latitude);
+				loc.getPointSurface().getPoint().setAltitude(altitude);
+				
+				}catch(Exception e){
+					
+					warningMessage = warningMessage + "\nThe entry at row: "+(i+1)+ "in the POint Surface table should be numeric";
+					warningFlag = true;
+					/*
+					new Warn().setWarn("warning", "The entry at row: "+(i+1)+
+							" in the Underlay Mask table should be numeric");*/
+				}
+			}
+			loc.getPointSurface().getAntennaHeight().setHeight(Double.parseDouble(locData.HeightField.getText()));
+			String val = "";
+			if(locData.AGL.isSelected())
+			{
+				val = "AGL";
+			}
+			else if(locData.HAAT.isSelected())
+			{
+				val="HAAT";
+			}
+			
+
+			loc.getPointSurface().getAntennaHeight().setReference(val);
+		}
+		else if(locData.LocCombo.getItemAt(locData.LocCombo.getSelectedIndex()).equals("Circular Surface")) {
+			
+			TableModel circularTable = locData.circularTable.getModel();
+			loc.setCircularSurface(new CircularSurfaceType());
+			loc.getCircularSurface().setPoint(new PointType());
+			loc.getCircularSurface().setAntennaHeight(new AntennaHeightType());	
+			
+				try{
+				Double longitude = Double.parseDouble(circularTable.getValueAt(0, 0).toString());
+				Double latitude = Double.parseDouble(circularTable.getValueAt(0, 1).toString());
+				Double altitude = Double.parseDouble(circularTable.getValueAt(0, 2).toString());
+				Double radius = Double.parseDouble(circularTable.getValueAt(0, 3).toString());
+				Double perAttenuation = Double.parseDouble(circularTable.getValueAt(0,4).toString());
+				
+				loc.getCircularSurface().getPoint().setLongitude(longitude);
+				loc.getCircularSurface().getPoint().setLatitude(latitude);
+				loc.getCircularSurface().getPoint().setAltitude(altitude);
+				loc.getCircularSurface().setRadius(radius);
+				loc.getCircularSurface().setPerimeterAttenuation(perAttenuation);
+				
+				}catch(Exception e){
+					
+					warningMessage = warningMessage + "\nThe value stored in the Circular Surface table has to be numeric";
+					warningFlag = true;
+				}
+			
+			loc.getCircularSurface().getAntennaHeight().setHeight(Double.parseDouble(locData.HeightField.getText()));
+			String val = "";
+			if(locData.AGL.isSelected())
+			{
+				val = "AGL";
+			}
+			else if(locData.HAAT.isSelected())
+			{
+				val="HAAT";
+			}
+			
+			loc.getCircularSurface().getAntennaHeight().setReference(val);
+			
+			loc.getCircularSurface().setTransmitterDensity(Double.parseDouble(locData.transmitterField.getText().toString()));
+			
+		}	
+		else if(locData.LocCombo.getItemAt(locData.LocCombo.getSelectedIndex()).equals("Polygon Surface")) {
+			TableModel polygonTable = locData.polygonTable.getModel();
+			loc.setPolygonSurface(new PolygonSurfaceType());
+			loc.getPolygonSurface().setScmPolygon(new SCMPolygonType());
+			
+			
+			loc.getPolygonSurface().setAntennaHeight(new AntennaHeightType());	
+			
+			for (int i=0; i<polygonTable.getRowCount(); i++){
+				
+				try{
+				Double longitude = Double.parseDouble(polygonTable.getValueAt(i, 1).toString());
+				Double latitude = Double.parseDouble(polygonTable.getValueAt(i, 2).toString());
+				Double altitude = Double.parseDouble(polygonTable.getValueAt(i, 3).toString());
+				Double sideatten = Double.parseDouble(polygonTable.getValueAt(i, 4).toString());
+				
+				SideType sideType = new SideType();
+				sideType.setPoint(new PointType());
+				loc.getPolygonSurface().getScmPolygon().getSide().add(sideType);
+				
+				sideType.getPoint().setLongitude(longitude);
+				sideType.getPoint().setLatitude(latitude);
+				sideType.getPoint().setAltitude(altitude);
+				sideType.setSideAttenuation(sideatten);
+				
+				
+				
+				}catch(Exception e){
+					
+					warningMessage = warningMessage + "\nThe entry at row: "+(i+1)+ "in the Polygon Surface table should be numeric";
+					warningFlag = true;
+					
+				}
+			}
+			loc.getPolygonSurface().getAntennaHeight().setHeight(Double.parseDouble(locData.HeightField.getText()));
+			String val = "";
+			if(locData.AGL.isSelected())
+			{
+				val = "AGL";
+			}
+			else if(locData.HAAT.isSelected())
+			{
+				val="HAAT";
+			}
+			
+			loc.getPolygonSurface().getAntennaHeight().setReference(val);
+			loc.getPolygonSurface().setTransmitterDensity(Double.parseDouble(locData.transmitterField.getText().toString()));
+
+		}
+		else if(locData.LocCombo.getItemAt(locData.LocCombo.getSelectedIndex()).equals("Cylinder")) {
+			TableModel cylinderTable = locData.cylinderTable.getModel();
+			loc.setCylinder(new CylinderType());
+			loc.getCylinder().setPoint(new PointType());
+				
+			
+			for (int i=0; i<cylinderTable.getRowCount(); i++){
+				
+				try{
+				Double longitude = Double.parseDouble(cylinderTable.getValueAt(i, 0).toString());
+				Double latitude = Double.parseDouble(cylinderTable.getValueAt(i, 1).toString());
+				Double altitude = Double.parseDouble(cylinderTable.getValueAt(i, 2).toString());
+				Double radius = Double.parseDouble(cylinderTable.getValueAt(i, 3).toString());
+				Double permAtten = Double.parseDouble(cylinderTable.getValueAt(i, 4).toString());
+			//	Double height = Double.parseDouble(cylinderTable.getValueAt(i, 5).toString());
+				Double topSurf = Double.parseDouble(cylinderTable.getValueAt(i, 6).toString());
+				
+				loc.getCylinder().getPoint().setLongitude(longitude);
+				loc.getCylinder().getPoint().setLatitude(latitude);
+				loc.getCylinder().getPoint().setAltitude(altitude);
+				
+				loc.getCylinder().setPerimeterAttenuation(permAtten);
+				loc.getCylinder().setTopAttenuation(topSurf);
+				loc.getCylinder().setRadius(radius);
+				//Bottom Attenuation and transmitterDensity
+				
+				
+				}catch(Exception e){
+					
+					warningMessage = warningMessage + "\nThe entry at row: "+(i+1)+ "in the Cylinder table should be numeric";
+					warningFlag = true;
+					
+				}
+				loc.getCylinder().setTransmitterDensity(Double.parseDouble(locData.transmitterField.getText().toString()));
+				loc.getCylinder().setHeight(Double.parseDouble(locData.HeightField.getText().toString()));
+			}			
+		}
+		else if(locData.LocCombo.getItemAt(locData.LocCombo.getSelectedIndex()).equals("Polyhedron")) {
+			TableModel polyhedronTable = locData.polyhedronTable.getModel();
+			TableModel heightTable = locData.heightTable.getModel();
+			
+			loc.setPolyhedron(new PolyhedronType());
+			loc.getPolyhedron().setScmPolygon(new SCMPolygonType());
+			
+				
+			
+			for (int i=0; i<polyhedronTable.getRowCount(); i++){
+				
+				try{
+					
+				SideType sideType = new SideType();
+				PointType pointType = new PointType();
+				
+					
+				Double longitude = Double.parseDouble(polyhedronTable.getValueAt(i, 1).toString());
+				Double latitude = Double.parseDouble(polyhedronTable.getValueAt(i, 2).toString());
+				Double altitude = Double.parseDouble(polyhedronTable.getValueAt(i, 3).toString());
+				
+				pointType.setLongitude(longitude);
+				pointType.setLatitude(latitude);
+				pointType.setAltitude(altitude);
+				
+				Double sideAtten = Double.parseDouble(polyhedronTable.getValueAt(i, 4).toString());
+				
+				sideType.setSideAttenuation(sideAtten);
+				
+				sideType.setPoint(pointType);
+				loc.getPolyhedron().getScmPolygon().getSide().add(sideType);
+				
+				//Height in the table and the one below ; transmitterDensity
+				
+				
+				}catch(Exception e){
+					
+					warningMessage = warningMessage + "\nThe entry at row: "+(i+1)+ "in the Polyhedron table should be numeric";
+					warningFlag = true;
+					
+				}
+				try {
+					
+					
+					//Since these are set only once the first row is used to retrieve the values
+					Double height = Double.parseDouble(heightTable.getValueAt(0, 0).toString());
+					Double bottomAtten = Double.parseDouble(heightTable.getValueAt(0, 1).toString());
+					Double topAtten = Double.parseDouble(heightTable.getValueAt(0, 2).toString());
+					
+					loc.getPolyhedron().setHeight(height);
+					loc.getPolyhedron().setTopAttenuation(topAtten);
+					loc.getPolyhedron().setBottomAttenuation(bottomAtten);
+					
+				}
+				catch(Exception e)
+				{
+
+					warningMessage = warningMessage + "\nThe entry at row: 1 in the Polyhedron table for Height should be numeric";
+					warningFlag = true;
+				}
+			}	
+			loc.getPolyhedron().setTransmitterDensity(Double.parseDouble(locData.transmitterField.getText().toString()));
+
+		}
+		else if(locData.LocCombo.getItemAt(locData.LocCombo.getSelectedIndex()).equals("Path")) {
+			
+			TableModel pathTable = locData.pathTable.getModel();
+			loc.setPath(new PathType());
+			
+			
+			PathPointType pathPointType = new PathPointType();
+			pathPointType.setPoint(new PointType());
+			loc.getPath().getPathPoint().add(pathPointType);
+			
+				
+			
+			for (int i=0; i<locData.pathTable.getRowCount(); i++){
+				
+				try{
+				Double longitude = Double.parseDouble(pathTable.getValueAt(i, 1).toString());
+				Double latitude = Double.parseDouble(pathTable.getValueAt(i, 2).toString());
+				Double altitude = Double.parseDouble(pathTable.getValueAt(i, 3).toString());
+				XMLGregorianCalendar time = DatatypeFactory.newInstance().newXMLGregorianCalendar(pathTable.getValueAt(i, 4).toString());
+				
+				
+				pathPointType.getPoint().setLongitude(longitude);
+				
+				pathPointType.getPoint().setLatitude(latitude);
+				pathPointType.getPoint().setAltitude(altitude);
+				
+				pathPointType.setTime(time);
+				
+				}catch(Exception e){
+					
+					warningMessage = warningMessage + "\nThe entry at row: "+(i+1)+ " in the Path table of Location tab should be numeric";
+					warningFlag = true;
+					
+				}
+			}	
+			
+		}
+			
+		
+		
+		
 		scmLoc.setLocation(loc);
 		
 		if(device.equals("Tx")){
@@ -747,87 +1033,109 @@ public class Save_XML extends ObjectFactory {
 			RxModel.getScmLocation().add(scmLoc);
 		}
 	}
-	
-	
-	/* Adding IMA information to the XML document
-	 * 
-	Requires the corresponding JAXB class for IMA and IMC
-	
-	public void addIMA(IMA ima, String device){
-				
-		SCMPowerMapType power = new SCMPowerMapType();
-		power.setOrientation(new OrientationType());
-		power.setGainMap(new GainMapType());
+	/*
+	 * Adding the IMA information to the XML document
+	 */
+	public void addIMA(IMC imc)
+	{
+		int o = 0;
+		//First check if the IMA was set from Intermodulation Mask tab. Otherwise return
+		if(imc.IMANo.isSelected())
+		{
+			return;
+		}
+		SCMMaskType imaMask = new SCMMaskType();
+		TxModel.getIntermodulationMask().get(o).setImAmplificationMask(imaMask);
 		
-		if(powerMap.surface.isSelected()==true){
-			power.getOrientation().setSurface(true);
+		try{
+			TxModel.getIntermodulationMask().get(o).getImAmplificationMask().setRefFrequency(Double.parseDouble(imc.RelFreqField.getText()));
+		}catch(Exception e){
+			TxModel.getIntermodulationMask().get(o).getImAmplificationMask().setRefFrequency(0.0);
+		}
+		
+		TableModel Sdata = imc.imatable.getModel();
+		for (int i = 0; i < Sdata.getRowCount(); i++) {
+			try{
+			InflectionPointType ifPoint = new InflectionPointType();
+			TxModel.getIntermodulationMask().get(o).getImAmplificationMask().getInflectionPoint().add(ifPoint);
 			
-			Double elevationData = 0.0;
-			Double azimuthData = 0.0;
-			Double gainData = 0.0;
-			String strData = "";
-			
-			TableModel tableData = powerMap.table.getModel();
-			for (int i = 0; i < tableData.getRowCount(); i++) {
-			try{	
-				
-				power.getGainMap().getGainMapValue().add(new GainMapValueType());
-				
-				strData = tableData.getValueAt(i, 1).toString().replaceAll(" ", "");
-				if(strData.equals(null)  || strData.equals("") || strData.equals(" ")){
-					power.getGainMap().getGainMapValue().get(i).setElevation(elevationData);
-				}else{
-					elevationData = Double.parseDouble(strData);
-					power.getGainMap().getGainMapValue().get(i).setElevation(elevationData);
-				}
-				
-				strData = tableData.getValueAt(i, 2).toString().replaceAll(" ", "");				
-				if(strData.equals(null)  || strData.equals("") || strData.equals(" ")){
-					power.getGainMap().getGainMapValue().get(i).setAzimuth(azimuthData);
-				}else{
-					azimuthData = Double.parseDouble(strData);
-					power.getGainMap().getGainMapValue().get(i).setAzimuth(azimuthData);
-				}
-				
-				strData = tableData.getValueAt(i, 3).toString().replaceAll(" ", "");
-				if(strData.equals(null)  || strData.equals("") || strData.equals(" ")){
-					power.getGainMap().getGainMapValue().get(i).setGain(gainData);
-				}else{
-					gainData = Double.parseDouble(strData);
-					power.getGainMap().getGainMapValue().get(i).setGain(gainData);
-				}		
-				
+			Double data = Double.parseDouble(Sdata.getValueAt(i, 1).toString());
+			TxModel.getIntermodulationMask().get(o).getImAmplificationMask().getInflectionPoint().get(i).setFrequency(data);
+			data = Double.parseDouble(Sdata.getValueAt(i, 2).toString());
+			TxModel.getIntermodulationMask().get(o).getImAmplificationMask().getInflectionPoint().get(i).setRelativePower(data);
+		
 			}catch(Exception e){
-				new Warn().setWarn("Warning", "The entry in row: "+ (i+1) 
-						+ " in the Power Map table should be numeric");
+				warningMessage = warningMessage + "\nThe entry at row: " +(i+1)+" in the IMA table should be numerical";
+				warningFlag = true;
 			}
-			}
-			
-			if(device.equals("Tx")){
-				TxModel.getScmPowerMap().add(power);
-			}else{
-				RxModel.getScmPowerMap().add(power);
-			}
-			
-		}
-			
-		if(powerMap.reference.isSelected()==true){
-			power.setOrientation(new OrientationType());
-			power.getOrientation().setTowardReferencePoint(new TowardReferencePointType());
-		}
+		}	
 		
-		if(powerMap.relative.isSelected()==true){
-			power.setOrientation(new OrientationType());
-			power.getOrientation().setRelativeToPlatform(new RelativeToPlatformType());
-		}
 	}
 	
-	*/
 	
+	/* Adding Intermodulation Mask information to the XML document*/
 	
-	/* Concluding all information added to the xml document and saving it, 
-	 * based on the provided schema
-	 */
+	public void addIMC(IMC imc){
+				
+		int o = 0;
+		
+		IntermodulationMaskType imask = new IntermodulationMaskType();
+		TxModel.getIntermodulationMask().add(imask);
+		TxModel.getIntermodulationMask().get(o).setImCombiningMask(new SCMMaskType());
+		
+		//Set the Center frequency for the intermediate frequency
+		try {
+		TxModel.getIntermodulationMask().get(o).setIntermediateFrequency(Double.parseDouble(imc.IFField.getText()));
+		}catch(Exception e)
+		{
+			TxModel.getIntermodulationMask().get(o).setIntermediateFrequency(0.0);
+
+		}
+		
+		try{
+			TxModel.getIntermodulationMask().get(o).getImCombiningMask().setRefFrequency(Double.parseDouble(imc.RelFreqField.getText()));
+		}catch(Exception e){
+			TxModel.getIntermodulationMask().get(o).getImCombiningMask().setRefFrequency(0.0);
+		}
+		
+		TableModel Sdata = imc.table.getModel();
+		for (int i = 0; i < Sdata.getRowCount(); i++) {
+			try{
+			InflectionPointType ifPoint = new InflectionPointType();
+			TxModel.getIntermodulationMask().get(o).getImCombiningMask().getInflectionPoint().add(ifPoint);
+			
+			Double data = Double.parseDouble(Sdata.getValueAt(i, 1).toString());
+			TxModel.getIntermodulationMask().get(o).getImCombiningMask().getInflectionPoint().get(i).setFrequency(data);
+			data = Double.parseDouble(Sdata.getValueAt(i, 2).toString());
+			TxModel.getIntermodulationMask().get(o).getImCombiningMask().getInflectionPoint().get(i).setRelativePower(data);
+		
+			}catch(Exception e){
+				warningMessage = warningMessage + "\nThe entry at row: " +(i+1)+" in the Spectrum Mask table should be numerical";
+				warningFlag = true;
+			}
+		}    	
+		try{
+		TxModel.getIntermodulationMask().get(o).setOrder(imc.imOrderField.getText());
+		}catch(Exception e){
+			warningMessage = warningMessage + "\nThe entry in IM Order field in the Intermodulation mask should be numeric";
+			warningFlag = true;
+			
+		//	new Warn().setWarn("Warning", "The entry in Resolution BW field should be numeric");
+		}
+		// If there is highSideInjection to be stored
+		try{
+			TxModel.getIntermodulationMask().get(o).setHighSideInjection(imc.IFYes.isSelected());
+			}catch(Exception e){
+				warningMessage = warningMessage + "\nThe entry for highSideInjection field in the Intermodulation mask must be set properly";
+				warningFlag = true;
+				
+			//	new Warn().setWarn("Warning", "The entry in Resolution BW field should be numeric");
+			}
+		
+		
+	
+		}
+		
 	public void concludeXML(String saveName, String device){
 		try {
 			

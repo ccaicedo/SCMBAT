@@ -176,6 +176,8 @@ public class ExecuteBWRated {
 					System.out.println(mpsdListDouble[i]);
 					System.out.println("");
 					
+					//Adding the logs
+				//	Home.LOGGER.log(Level.INFO, "Bandwidth Mask list item "+bwListDouble[i]+" "+ mpsdListDouble[i]);
 					
 				}
 				

@@ -46,8 +46,13 @@ import javax.swing.JRadioButton;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
+//import org.apache.log4j.Logger;
+
+
 public class SCM_MainWindow {
 
+   
+	
 	public JTextField SaveField;
 	public JTextField textField_1_conf;
 	public JTextField minPSFDfield = new JTextField();
@@ -84,6 +89,10 @@ public class SCM_MainWindow {
     
 	public SCMControl control = new SCMControl();
 	
+	//Maintain a static variable to hold the tabbedPane
+	public  static JTabbedPane tabbedPane = new JTabbedPane();  
+	
+	
 	//OpenedModels HahhMap
 	HashMap<Integer, Boolean> openedModels = new HashMap<Integer, Boolean>();
 	
@@ -97,7 +106,7 @@ public class SCM_MainWindow {
 	}
 	
     public void design(int Index) {
-    
+
     	final JFrame frame = new JFrame("Spectrum Consumption Model Builder - "+SaveName);
     	
     	frame.addWindowListener(new WindowAdapter() {
@@ -123,37 +132,65 @@ public class SCM_MainWindow {
                       900 + insets.top + insets.bottom);
         frame.setVisible(true);
     	
-        final JTabbedPane tabbedPane = new JTabbedPane();        
-
+       // final JTabbedPane tabbedPane = new JTabbedPane();  
+        
+        
         // Creating Tabs for various SCM constructs
         
         final JPanel panel = new JPanel();
         panel.setLayout(null);
+        
+        if(tabbedPane.indexOfTab("Reference Power")==-1)
         tabbedPane.addTab("Reference Power", panel);
         
         panel2 = spec.getPanel();
         
         UnderlayPanel = underlay.getPanel();
         
+        
+        
         JPanel panel3 = power.getPanel();
+        if(tabbedPane.indexOfTab("Power Map")==-1)
         tabbedPane.addTab("Power Map", panel3);
         
         final JPanel panel4 = prop.getPanel();
         control.initializeCard("prop", panel4);
         
+        //Changing the Panel title to Intermodulation  Mask from IMC
         JPanel panel5 = imc.getPanel();
-        tabbedPane.addTab("IMC Mask",panel5);
+        if(tabbedPane.indexOfTab("Intermodulation Mask")==-1)
+        tabbedPane.addTab("Intermodulation Mask",panel5);
+       /******************************************************/
         
-        JPanel panel6 = ima.getPanel();
-        tabbedPane.addTab("IMA Mask",panel6);
+        
+       /* JPanel panel6 = ima.getPanel();
+        tabbedPane.addTab("IMA Mask", panel6);
+        
+        
+        int tabIndex = tabbedPane.indexOfTab("IMA Mask");
 
+      //Only if the IMA is enabled allow the edit and save  
+        if(imc.IMAYes.isSelected())
+        {
+        	tabbedPane.setSelectedIndex(tabIndex);
+        	tabbedPane.setEnabledAt(tabIndex,true);
+			
+        }
+        else
+        {
+        	tabbedPane.setEnabledAt(tabIndex,false);
+        }
+        */
         JPanel panel7 = platform.getPanel();
+        if(tabbedPane.indexOfTab("Platform")==-1)
         tabbedPane.addTab("Platform",panel7);
         
         JPanel panel8 = location.getPanel();
+        if(tabbedPane.indexOfTab("Location")==-1)
         tabbedPane.add("Location", panel8);
         
         JPanel panel9 = schedule.getPanel();
+        if(tabbedPane.indexOfTab("Schedule")==-1)
         tabbedPane.add("Schedule", panel9);
         
         frame.getContentPane().add(tabbedPane);
@@ -213,11 +250,14 @@ public class SCM_MainWindow {
         panel.add(dB);
         
         //Default operations and radio button operations
-        
+        if(tabbedPane.indexOfTab("Spectrum Mask")==-1)
         tabbedPane.insertTab("Spectrum Mask",null , panel2, null, 1);
+        
+        if(tabbedPane.indexOfTab("Underlay Mask")==-1)
         tabbedPane.insertTab("Underlay Mask",null , UnderlayPanel, null, 2);
 		
         // setting up Propagation Map for Transmitter option
+        if(tabbedPane.indexOfTab("Propagation Map")==-1)
 		tabbedPane.insertTab("Propagation Map",null, panel4,null,3);// Setting up the Propagation Map Tab
         
 
@@ -241,6 +281,7 @@ public class SCM_MainWindow {
 				panel.add(minPSFD);
 				panel.add(minPSFDfield);
 				
+				if(tabbedPane.indexOfTab("Propagation Map")==-1)
 				tabbedPane.insertTab("Propagation Map",null, panel4,null,3);// Setting up the Propagation Map Tab			   
 				
 				}
@@ -254,11 +295,13 @@ public class SCM_MainWindow {
 				control.file.SaveReceiver();
 				tabbedPane.removeTabAt(1);
 				MaskType = "Underlay Mask";
+				if(tabbedPane.indexOfTab("Underlay Mask")==-1)
 				tabbedPane.insertTab(MaskType,null , UnderlayPanel, null, 1);				
 				
-				tabbedPane.removeTabAt(2);
-				tabbedPane.removeTabAt(3);
-				tabbedPane.removeTabAt(3);
+				tabbedPane.removeTabAt(tabbedPane.indexOfTab("Propagation Map"));
+				tabbedPane.removeTabAt(tabbedPane.indexOfTab("Intermodulation Mask"));
+				if(tabbedPane.indexOfTab("IMA")!=-1)
+				tabbedPane.removeTabAt(tabbedPane.indexOfTab("IMA"));
 				 
 			}
 		
@@ -367,8 +410,9 @@ public class SCM_MainWindow {
         underlay.b3.addActionListener(control.saveAction);
         power.b3.addActionListener(control.saveAction);        
         prop.b3.addActionListener(control.saveAction);        
-        imc.b3.addActionListener(control.saveAction);           
-        ima.b3.addActionListener(control.saveAction);
+        imc.b3.addActionListener(control.saveAction);  
+        imc.imab3.addActionListener(control.saveAction);
+    //    ima.b3.addActionListener(control.saveAction);
         location.save.addActionListener(control.saveAction);
         platform.b1.addActionListener(control.saveAction);
         schedule.b1.addActionListener(control.saveAction);
@@ -380,7 +424,8 @@ public class SCM_MainWindow {
         power.b4.addActionListener(exitAction);
         prop.b4.addActionListener(exitAction);
         imc.b4.addActionListener(exitAction);
-        ima.b4.addActionListener(exitAction);
+        imc.imab4.addActionListener(exitAction);
+       // ima.b4.addActionListener(exitAction);
         location.exit.addActionListener(exitAction);
         platform.b2.addActionListener(exitAction);
         schedule.b3.addActionListener(exitAction);
@@ -388,23 +433,32 @@ public class SCM_MainWindow {
         //All create new mask Operations
         
         prop.NewMap.addActionListener(control.new createListener("prop",tabbedPane));
+        
         imc.NewMap.addActionListener(control.new createListener("imc",tabbedPane));
-        ima.NewMap.addActionListener(control.new createListener("ima",tabbedPane));
+        //ima.NewMap.addActionListener(control.new createListener("ima",tabbedPane));
+        
         location.NewMap.addActionListener(control.new createListener("location",tabbedPane));
         schedule.NewSched.addActionListener(control.new createListener("schedule",tabbedPane));
         
         prop.Next.addActionListener(control.new NextListener("prop",tabbedPane));
         imc.Next.addActionListener(control.new NextListener("imc",tabbedPane));
-        ima.Next.addActionListener(control.new NextListener("ima",tabbedPane));
+        imc.imaNext.addActionListener(control.new NextListener("ima",tabbedPane));
+      //  ima.Next.addActionListener(control.new NextListener("ima",tabbedPane));
         location.Next.addActionListener(control.new NextListener("location",tabbedPane));
         schedule.Next.addActionListener(control.new NextListener("schedule",tabbedPane));
         
         prop.Previous.addActionListener(control.new PrevListener("prop",tabbedPane));
         imc.Previous.addActionListener(control.new PrevListener("imc",tabbedPane));
-        ima.Previous.addActionListener(control.new PrevListener("ima",tabbedPane));
+        imc.imaPrevious.addActionListener(control.new PrevListener("ima",tabbedPane));
+       // ima.Previous.addActionListener(control.new PrevListener("ima",tabbedPane));
         location.Previous.addActionListener(control.new PrevListener("location",tabbedPane));
         schedule.Previous.addActionListener(control.new PrevListener("schedule",tabbedPane));
         
+    }
+    
+    public JTabbedPane getTabbedPane()
+    {
+    	return tabbedPane;
     }
    
 }

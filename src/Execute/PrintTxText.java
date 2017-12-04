@@ -46,7 +46,9 @@ public class PrintTxText extends PrintText{
 				System.out.println("Tx Printing");
 				//printfile = new PrintWriter ("Octave/" + SaveName);
 				//Adding the Output folder for storing the output files
-				printfile = new PrintWriter ("Output/" + SaveName);	
+				
+				MethodAnalysis meth = new MethodAnalysis();
+				printfile = new PrintWriter (meth.getFilePath()+"Octave/" + SaveName);	
 					int o = 0;
 					if(model.getSpectrumMask().get(o) != null){
 						System.out.println("Spec");
