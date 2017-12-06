@@ -90,31 +90,31 @@ public class SCM_MainWindow {
 	public SCMControl control = new SCMControl();
 	
 	//Maintain a static variable to hold the tabbedPane
-	public  static JTabbedPane tabbedPane = new JTabbedPane();  
+	public  JTabbedPane tabbedPane = new JTabbedPane();  
 	
 	
 	//OpenedModels HahhMap
-	HashMap<Integer, Boolean> openedModels = new HashMap<Integer, Boolean>();
+	HashMap<String, Boolean> openedModels = new HashMap<String, Boolean>();
+	final JFrame frame = new JFrame();
 	
 	public SCM_MainWindow()
 	{
 		
 	}
-	public SCM_MainWindow(HashMap<Integer, Boolean> openedModels)
+	public SCM_MainWindow(HashMap<String, Boolean> openedModels)
 	{
 		this.openedModels = openedModels;
 	}
 	
     public void design(int Index) {
-
-    	final JFrame frame = new JFrame("Spectrum Consumption Model Builder - "+SaveName);
+    	frame.setTitle("Spectrum Consumption Model Builder - "+SaveName);
     	
     	frame.addWindowListener(new WindowAdapter() {
     		   public void windowClosing(WindowEvent evt) {
     			   //If the create operation is trying to open the window
     			   if(Index!=-1)
     			   {
-    	    		     openedModels.put(Index, false);  
+    	    		     openedModels.put("Current", false);  
     			   }
     		   }
     		  });
@@ -122,6 +122,7 @@ public class SCM_MainWindow {
     		public void actionPerformed(ActionEvent e) {
     			frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
     			frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    			
     		}        	
         }; 
     	

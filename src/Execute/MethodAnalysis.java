@@ -40,11 +40,13 @@ import java.util.GregorianCalendar;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
 import org.ieee.dyspansc._1900._5.scm.RatingType;
 import org.ieee.dyspansc._1900._5.scm.RxModelType;
 import org.ieee.dyspansc._1900._5.scm.SCMScheduleType;
 import org.ieee.dyspansc._1900._5.scm.TxModelType;
 
+import SCM_home.Home;
 import dk.ange.octave.OctaveEngine;
 import dk.ange.octave.OctaveEngineFactory;
 import dk.ange.octave.type.OctaveDouble;
@@ -55,6 +57,8 @@ public class MethodAnalysis {
 	PrintTxText printTx = new PrintTxText();
 	PrintRxText printRx = new PrintRxText();	
 	Warn warningDisplay = new Warn();
+	
+	final Logger logger = Logger.getLogger(MethodAnalysis.class);
 	
 	//Adding the flag required for showing the warnings in a single window
 	public boolean warningFlag = false;
@@ -105,7 +109,7 @@ public class MethodAnalysis {
 		    	if(key.equals("SCM_PATH"))
 		    	{
 		    		directoryPath = envMap.get(key);
-			        System.out.println(key+" ==> "+directoryPath);
+			     //   System.out.println(key+" ==> "+directoryPath);
 			        return directoryPath;
 		    	}
 		    }
@@ -116,6 +120,7 @@ public class MethodAnalysis {
 	{
 		//Set the environment variable
 		setFilePathEnvironment();
+		logger.addAppender(Home.appender);
 	}
 	// Analysing which compatibility method to use based on Model types.
 	public String analyseRatedMethod(ArrayList<TxModelType> TxData,ArrayList<RxModelType> RxData){
@@ -167,6 +172,7 @@ public class MethodAnalysis {
 			
 		switch(method){
 		case "TotalPower": System.out.println("Total Power Method being executed");
+							logger.info("Total Power Method being executed");
 			warningMessage= warningMessage + printTx.printText(TxData.get(0),"SCM_transmitter_java.txt");
 			warningMessage = warningMessage + printRx.printText(RxData.get(0),"SCM_receiver_java.txt");
 			
@@ -204,6 +210,8 @@ public class MethodAnalysis {
 					try {
 						while((line = br.readLine())!=null){
 							System.out.println(line);
+							
+							logger.info(line);
 						dispData.add(line);
 						}
 					} catch (Exception e) {
@@ -223,6 +231,7 @@ public class MethodAnalysis {
 			
 			break;
 		case "MaximumPowerDensity": System.out.println("Max Power Density Method being executed");
+				logger.info("Max Power Density Method being executed");
 		warningMessage= warningMessage+printTx.printText(TxData.get(0),"SCM_transmitter_java.txt");
 		warningMessage = warningMessage + printRx.printText(RxData.get(0),"SCM_receiver_java.txt");
 			
@@ -279,6 +288,7 @@ public class MethodAnalysis {
 // Rated BW Analysis
 			
 		case "ratedBW":	System.out.println("Rated BW Analysis Running");
+						logger.info("Rated BW Analysis Running");
 		
 		warningMessage = warningMessage + printRx.printText(RxData.get(0),"SCM_receiver_java.txt");
 		
@@ -379,6 +389,7 @@ public class MethodAnalysis {
 // bw Rated List
 		
 		case "bwRatedList":System.out.println("BW Rated List ANalysis Running"); 
+		logger.info("BW Rated List ANalysis Running");
 			
 		warningMessage = warningMessage + printRx.printText(RxData.get(0),"SCM_receiver_java.txt");
 				
@@ -480,6 +491,7 @@ public class MethodAnalysis {
 		break;
 
 		case "ratedBTP": System.out.println("Rated BTP Analysis Running");
+		logger.info("Rated BTP Analysis Running");
 		
 		warningMessage = warningMessage + printRx.printText(RxData.get(0),"SCM_receiver_java.txt");
 		
@@ -578,7 +590,7 @@ public class MethodAnalysis {
 		
 // BTP Rated List Analysis		
 		case "btpRatedList": System.out.println("BTP Rated List Analysis Running");
-		
+		logger.info("BTP Rated List Analysis Running");
 		warningMessage = warningMessage + printRx.printText(RxData.get(0),"SCM_receiver_java.txt");
 		
 		o = 0;
@@ -677,6 +689,7 @@ public class MethodAnalysis {
 				break;
 
 		case "dcRatedList": System.out.println("DC Rated List Analysis Running");
+		logger.info("DC Rated List Analysis Running");
 		
 		warningMessage = warningMessage + printRx.printText(RxData.get(0),"SCM_receiver_java.txt");
 		

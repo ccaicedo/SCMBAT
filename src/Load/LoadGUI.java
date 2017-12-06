@@ -27,6 +27,7 @@ along with program.  If not, see <http://www.gnu.org/licenses/>.
 package Load;
 
 import SCM_gui.SCM_MainWindow;
+import SCM_home.Home;
 
 import java.util.List;
 import java.util.TimeZone;
@@ -36,10 +37,14 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import org.apache.log4j.Logger;
 import org.ieee.dyspansc._1900._5.scm.*;
+
+import Execute.MethodAnalysis;
 
 public abstract class LoadGUI {
 	
+	final Logger logger = Logger.getLogger(MethodAnalysis.class);
 	public abstract void setData(SCM_MainWindow scm, TxModelType txModel);
 	public void setData(SCM_MainWindow scm, RxModelType rxModel){};
 	
@@ -264,7 +269,7 @@ public void setUnderlay(SCM_MainWindow scm, UnderlayMaskType underlay){
 
 // Loading Schedule construct.
 	public void setSchedule(SCM_MainWindow scm, SCMScheduleType sched){
-		
+		logger.addAppender(Home.appender);
 		XMLGregorianCalendar time = sched.getStartTime();
 		DefaultTableModel model = (DefaultTableModel) scm.schedule.table1.getModel();
 		model.setRowCount(0);
@@ -286,7 +291,10 @@ public void setUnderlay(SCM_MainWindow scm, UnderlayMaskType underlay){
 			String second = String.valueOf(time.getSecond());
 			
 			TimeZone tz = time.getTimeZone(time.getTimezone());
+			
 			System.out.println("TimeZone: " + tz.getDisplayName());
+			
+			logger.info("TimeZone: " + tz.getDisplayName());
 			long tzHours = TimeUnit.MILLISECONDS.toHours(tz.getRawOffset());
 			long tzMinutes = TimeUnit.MILLISECONDS.toMinutes(tz.getRawOffset())
 			      - TimeUnit.HOURS.toMinutes(tzHours);

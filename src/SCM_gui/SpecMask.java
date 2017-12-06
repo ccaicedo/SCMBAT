@@ -31,6 +31,11 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
+import org.apache.log4j.Logger;
+
+import Execute.MethodAnalysis;
+import SCM_home.Home;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
@@ -49,6 +54,7 @@ import javax.swing.JTextField;
  
 public class SpecMask {
 	
+	final Logger logger = Logger.getLogger(SpecMask.class);
 	final JPanel SpecPanel = new JPanel();
 	
 	public JRadioButton FreqListBtn = new JRadioButton("Center frequency list");
@@ -101,6 +107,7 @@ public class SpecMask {
     
 	public JPanel getPanel(){
 
+		logger.addAppender(Home.appender);
 		SpecHop.SpecHop();
         SpecPanel.setLayout(null);
         
@@ -166,6 +173,7 @@ public class SpecMask {
 				
 					if(FreqListBtn.isSelected()==true){
 						System.out.println("Frequency List selected");
+						logger.info("Frequency List selected");
 						SpecHop.removeBandList(SpecPanel);
 						SpecPanel.revalidate();
 						SpecPanel.repaint();
@@ -185,6 +193,7 @@ public class SpecMask {
 			public void actionPerformed(ActionEvent e) {
 				BandListBtn.setSelected(true);
 				if(BandListBtn.isSelected()==true){
+					logger.info("Band List selected");
 					System.out.println("Band List selected");
 					SpecHop.removeFreqList(SpecPanel);
 					SpecPanel.revalidate();

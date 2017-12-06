@@ -30,20 +30,26 @@ package Execute;
 import java.io.PrintWriter;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.ieee.dyspansc._1900._5.scm.BandType;
 import org.ieee.dyspansc._1900._5.scm.HoppingDataType;
 import org.ieee.dyspansc._1900._5.scm.InflectionPointType;
 import org.ieee.dyspansc._1900._5.scm.TxModelType;
 
+import SCM_home.Home;
+
 
 public class PrintTxText extends PrintText{
-
+	
+	final Logger logger = Logger.getLogger(MethodAnalysis.class);
 	public String printText(TxModelType model, String SaveName){
 		
+		logger.addAppender(Home.appender);
 		String warningMessage= "\n";
 		PrintWriter printfile;
 			try {
 				System.out.println("Tx Printing");
+				logger.info("Tx Printing");
 				//printfile = new PrintWriter ("Octave/" + SaveName);
 				//Adding the Output folder for storing the output files
 				
@@ -52,6 +58,7 @@ public class PrintTxText extends PrintText{
 					int o = 0;
 					if(model.getSpectrumMask().get(o) != null){
 						System.out.println("Spec");
+						logger.info("Spec");
 						printfile.println("# name: "+"Tx_SpecMask");
 						printfile.println("# type: matrix");
 						printfile.println("# rows: 1");

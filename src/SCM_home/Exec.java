@@ -45,6 +45,7 @@ import javax.xml.bind.JAXBElement;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.stream.StreamSource;
 
+import org.apache.log4j.Logger;
 import org.ieee.dyspansc._1900._5.scm.RxModelType;
 import org.ieee.dyspansc._1900._5.scm.TxModelType;
 
@@ -59,7 +60,7 @@ public class Exec {
 	JButton Execute = new JButton("Execute");
 	JButton Exit = new JButton("Exit");
 	
-	
+	final Logger logger = Logger.getLogger(Exec.class);
 	String[] nullString = null;
     
 	// Creating the list box for Transmitters
@@ -86,6 +87,7 @@ public class Exec {
 	
 		public JPanel getPanel(){
 		
+			logger.addAppender(Home.appender);
 		panel.setBorder(new TitledBorder(null, "Execute Compatibility Test", TitledBorder.LEADING, TitledBorder.TOP, null, null));
         panel.setLayout(null);
         
@@ -183,6 +185,7 @@ public class Exec {
 				int[] indices = TxBox.getSelectedIndices();
 				ArrayList<TxModelType> TxData = new ArrayList<TxModelType>();
 				System.out.println(indices.length);
+				logger.debug(indices.length);
 				
 				for(int i=0;i<indices.length;i++){
 					
@@ -193,6 +196,7 @@ public class Exec {
 					File file = new File(filePath);
 					if(file.exists() && !file.isDirectory()){
 						System.out.println("File Exists");
+						logger.info("File Exists");
 					}
 					try{
 					JAXBContext TxContext = JAXBContext.newInstance(TxModelType.class);
@@ -202,6 +206,7 @@ public class Exec {
 					
 					TxData.add(TxElement.getValue());
 					System.out.println(TxData.get(i).toString());
+					logger.debug(TxData.get(i).toString());
 					}catch(Exception exp){
 						methAn.warningFlag = true;
 						methAn.warningMessage = methAn.warningMessage + "\nIncorrect Format - File is of invalid format";
@@ -225,6 +230,8 @@ public class Exec {
 					File file = new File(filePath);
 					if(file.exists() && !file.isDirectory()){
 						System.out.println("File Exists");
+						logger.info("File Exists");
+						
 					}
 					try{
 					JAXBContext RxContext = JAXBContext.newInstance(RxModelType.class);
@@ -234,6 +241,7 @@ public class Exec {
 					
 					RxData.add(RxElement.getValue());
 					System.out.println(RxData.get(i).toString());
+					logger.debug(RxData.get(i).toString());
 					}catch(Exception exp){
 						methAn.warningFlag = true;
 						methAn.warningMessage = methAn.warningMessage + "\n Incorrect Format -File is of invalid format";
@@ -251,6 +259,7 @@ public class Exec {
 					//MethodAnalysis methAn = new MethodAnalysis();
 					String ratedMethod=methAn.analyseRatedMethod(TxData,RxData);
 					System.out.println(ratedMethod);
+					logger.debug(ratedMethod);
 					methAn.execCompat(ratedMethod, txBoxIndices, TxData, TxArray, 
 							rxBoxIndices, RxData, RxArray);
 					if(methAn.warningFlag)

@@ -32,7 +32,8 @@ import org.ieee.dyspansc._1900._5.scm.TxModelType;
 import SCM_gui.SCM_MainWindow;
 
 public class LoadRxModel extends LoadGUI{
-
+	
+	//final Logger logger = Logger.getLogger(LoadRxModel.class);
 	@Override
 	public void setData(SCM_MainWindow scm, TxModelType txModel) {
 		
@@ -40,7 +41,7 @@ public class LoadRxModel extends LoadGUI{
 
 	@Override
 	public void setData(SCM_MainWindow scm, RxModelType rxModel) {
-		
+	//	logger.info("This is a Receiver");
 		System.out.println("This is a Receiver");
 		
 		int o=0;

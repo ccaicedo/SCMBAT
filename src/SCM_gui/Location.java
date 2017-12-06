@@ -42,10 +42,15 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
+import org.apache.log4j.Logger;
+
+import SCM_home.Home;
+
 public class Location {
 	
 JPanel panel = new JPanel();
-	
+
+final Logger logger = Logger.getLogger(Location.class);
 public JButton NewMap = new JButton("Add new location");
 public JButton Previous = new JButton("Previous");
 public JButton Next = new JButton("Next");
@@ -203,6 +208,7 @@ public int index =0;
 
 	public JPanel getPanel(){
 	
+		logger.addAppender(Home.appender);
 		panel.setLayout(null);
 		
 // Panel for Confidence
@@ -279,7 +285,7 @@ public int index =0;
 				String selectedItem = (String) LocCombo.getSelectedItem();
 		        
 				System.out.println(selectedItem);
-				
+				logger.info(selectedItem);
 		        switch(selectedItem){
 		        
 		        case "Point": clearAll(); 

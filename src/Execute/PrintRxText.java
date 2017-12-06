@@ -29,6 +29,7 @@ package Execute;
 import java.io.PrintWriter;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.ieee.dyspansc._1900._5.scm.BTPRatedListType;
 import org.ieee.dyspansc._1900._5.scm.BTPRatingType;
 import org.ieee.dyspansc._1900._5.scm.BWRatedListType;
@@ -39,14 +40,19 @@ import org.ieee.dyspansc._1900._5.scm.InflectionPointType;
 import org.ieee.dyspansc._1900._5.scm.RatingType;
 import org.ieee.dyspansc._1900._5.scm.RxModelType;
 
-public class PrintRxText extends PrintText{
+import SCM_home.Home;
 
+public class PrintRxText extends PrintText{
+	
+	final Logger logger = Logger.getLogger(PrintRxText.class);
 	public String printText(RxModelType model, String SaveName){
 		
+		logger.addAppender(Home.appender);
 		String warningMessage = "\n";
 		PrintWriter printfile;
 		try{
 			System.out.println("Rx Printing");
+			logger.info("Rx Printing");
 			MethodAnalysis meth = new MethodAnalysis();
 			printfile = new PrintWriter (meth.getFilePath()+"Octave/" + SaveName);	
 		//	printfile = new PrintWriter ("Octave/" + SaveName);
@@ -60,7 +66,7 @@ public class PrintRxText extends PrintText{
 			
 			if(model.getUnderlayMask().get(o)!=null){
 				System.out.println("Underlay Mask Printing");
-				
+				logger.info("Underlay Mask Printing");
 				printfile.println("# name: Rx_UnderlayMask");
 				printfile.println("# type: matrix");
 				printfile.println("# rows: 1");

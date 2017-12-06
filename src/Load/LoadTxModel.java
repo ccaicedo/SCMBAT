@@ -40,10 +40,11 @@ import org.ieee.dyspansc._1900._5.scm.TxModelType;
 import SCM_gui.SCM_MainWindow;
 
 public class LoadTxModel extends LoadGUI {
-
+	
+	//final Logger logger = Logger.getLogger(LoadTxModel.class);
 	@Override
 	public void setData(SCM_MainWindow scm, TxModelType txModel) {		
-		
+	//	logger.info("This is Transmitter");
 		System.out.println("This is Transmitter");
 		
 		//Loading Spectrum Mask Data

@@ -72,7 +72,7 @@ public class Open {
 	protected RxModelType RxModel;
 	
 	//Maintaining the HashMap for the already opened Models
-	HashMap<Integer,Boolean> openedModels = new HashMap<Integer, Boolean>();
+	HashMap<String,Boolean> openedModels = new HashMap<String, Boolean>();
 	
 	//Holding the index of the selected Model
 	int Index = -1;
@@ -200,7 +200,7 @@ public class Open {
 				// Load Operations
 				
 				SCM_MainWindow scm = new SCM_MainWindow(openedModels);
-				
+			
 				if(device.equals("Tx")){
 					
 					LoadGUI load = new LoadTxModel();
@@ -217,14 +217,15 @@ public class Open {
 					load.setData(scm, RxModel);
 				}	
 				
-			if(!openedModels.containsKey(Index) || openedModels.get(Index)==false)
+			if(!openedModels.containsKey("Current") || openedModels.get("Current")==false)
 			{
 				scm.design(Index);
-				openedModels.put(Index,true);
+				openedModels.put("Current",true);
+				
 			}
 			else
 			{
-			String message = "The selected Model is already open.";
+			String message = "A Model is already open";
 			JOptionPane.showMessageDialog(new JFrame(), message, "Dialog",
 				        JOptionPane.ERROR_MESSAGE);
 			}
