@@ -30,25 +30,35 @@ package Execute;
 import java.io.PrintWriter;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.ieee.dyspansc._1900._5.scm.BandType;
 import org.ieee.dyspansc._1900._5.scm.HoppingDataType;
 import org.ieee.dyspansc._1900._5.scm.InflectionPointType;
 import org.ieee.dyspansc._1900._5.scm.TxModelType;
 
+import SCM_home.Home;
+
 
 public class PrintTxText extends PrintText{
-
-	public void printText(TxModelType model, String SaveName){
+	
+	final Logger logger = Logger.getLogger(MethodAnalysis.class);
+	public String printText(TxModelType model, String SaveName){
 		
-		
+		logger.addAppender(Home.appender);
+		String warningMessage= "\n";
 		PrintWriter printfile;
 			try {
 				System.out.println("Tx Printing");
-				printfile = new PrintWriter ("Octave/" + SaveName);
-					
+				logger.info("Tx Printing");
+				//printfile = new PrintWriter ("Octave/" + SaveName);
+				//Adding the Output folder for storing the output files
+				
+				MethodAnalysis meth = new MethodAnalysis();
+				printfile = new PrintWriter (meth.getFilePath()+"Octave/" + SaveName);	
 					int o = 0;
 					if(model.getSpectrumMask().get(o) != null){
 						System.out.println("Spec");
+						logger.info("Spec");
 						printfile.println("# name: "+"Tx_SpecMask");
 						printfile.println("# type: matrix");
 						printfile.println("# rows: 1");
@@ -134,16 +144,19 @@ public class PrintTxText extends PrintText{
 							
 						}
 					}
-					printReferencePower(model.getReferencePower().get(o), printfile, "Tx");
-					printPowerMap(model.getScmPowerMap().get(o),printfile,"Tx");
-					printPropagationMap(model.getScmPropagationMap().get(o),printfile,"Tx");
+					warningMessage= warningMessage + printReferencePower(model.getReferencePower().get(o), printfile, "Tx");
+					warningMessage= warningMessage +printPowerMap(model.getScmPowerMap().get(o),printfile,"Tx");
+					warningMessage= warningMessage +printPropagationMap(model.getScmPropagationMap().get(o),printfile,"Tx");
 					printLocation(model.getScmLocation().get(o),printfile,"Tx");
 					printTime(model.getScmSchedule().get(o),printfile,"Tx");
 					
 					printfile.close ();
 				}catch(Exception e){
-					new Warn().setWarn("Error", "Couldn't save the Transmitter data correctly");
+					
+					warningMessage = warningMessage + "\nERROR- Couldn't save the Transmitter data correctly";
+					//new Warn().setWarn("Error", "Couldn't save the Transmitter data correctly");
 				}
+			return warningMessage;
 	}
 
 }

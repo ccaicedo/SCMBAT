@@ -31,6 +31,11 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
+import org.apache.log4j.Logger;
+
+import Execute.MethodAnalysis;
+import SCM_home.Home;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
@@ -49,6 +54,7 @@ import javax.swing.JTextField;
  
 public class SpecMask {
 	
+	final Logger logger = Logger.getLogger(SpecMask.class);
 	final JPanel SpecPanel = new JPanel();
 	
 	public JRadioButton FreqListBtn = new JRadioButton("Center frequency list");
@@ -69,7 +75,24 @@ public class SpecMask {
     
     String column_names[] = {"#","Frequency (MHz)", "Power (dB)"};
     Object rowData[][] = { { "1","",""} };
-    TableModel table_model = new DefaultTableModel(rowData,column_names);
+    TableModel table_model = new DefaultTableModel(rowData,column_names) {
+    	
+		private static final long serialVersionUID = 8235600107489275732L;
+
+		@Override
+        public boolean isCellEditable(int row, int column)
+        {
+            // make read only column
+			if(column ==0 )
+			{
+				return false;
+			}
+			else
+			{
+				return true;
+			}
+        }
+    };
     public JTable table = new JTable(table_model);	
 	JScrollPane tableContainer = new JScrollPane(table);
     
@@ -84,6 +107,7 @@ public class SpecMask {
     
 	public JPanel getPanel(){
 
+		logger.addAppender(Home.appender);
 		SpecHop.SpecHop();
         SpecPanel.setLayout(null);
         
@@ -149,6 +173,7 @@ public class SpecMask {
 				
 					if(FreqListBtn.isSelected()==true){
 						System.out.println("Frequency List selected");
+						logger.info("Frequency List selected");
 						SpecHop.removeBandList(SpecPanel);
 						SpecPanel.revalidate();
 						SpecPanel.repaint();
@@ -168,6 +193,7 @@ public class SpecMask {
 			public void actionPerformed(ActionEvent e) {
 				BandListBtn.setSelected(true);
 				if(BandListBtn.isSelected()==true){
+					logger.info("Band List selected");
 					System.out.println("Band List selected");
 					SpecHop.removeFreqList(SpecPanel);
 					SpecPanel.revalidate();
@@ -376,7 +402,31 @@ public class SpecMask {
 			public void actionPerformed(ActionEvent arg0) {
 			
 				DefaultTableModel model = (DefaultTableModel) table.getModel();
-				model.removeRow(model.getRowCount() - 1);
+				//model.removeRow(model.getRowCount() - 1);
+				/*
+				 * Allowing the deletion of selected rows
+				 */
+				int[] selectedRows = table.getSelectedRows();
+				   for(int row=selectedRows.length-1;row>=0;row--){
+					int rowNum = selectedRows[row];
+				     model.removeRow(rowNum);
+				     //Updating the index column - count variable appropriately
+				     if(rowNum!=table.getRowCount())
+				     {
+				    	 table.getModel().setValueAt(rowNum+1,rowNum ,0 );
+				     }
+				     
+				   }
+			//	model.removeRow(model.getRowCount() - 1);		 
+				   for(int i=table.getRowCount()-1;i>=0;i--)
+				   {
+					   int curVal = Integer.parseInt(table.getModel().getValueAt(i, 0).toString());
+					   if(curVal!= i+1)
+					   {
+						   table.getModel().setValueAt(i+1, i, 0);
+					   }
+				   }
+				
 			}
 		});
         

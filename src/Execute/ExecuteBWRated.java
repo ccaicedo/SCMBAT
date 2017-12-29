@@ -46,6 +46,10 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 
+import org.apache.log4j.Logger;
+
+import SCM_home.Home;
+import SCM_home.Open;
 import dk.ange.octave.OctaveEngine;
 import dk.ange.octave.OctaveEngineFactory;
 import dk.ange.octave.type.OctaveDouble;
@@ -71,10 +75,12 @@ public class ExecuteBWRated {
 	
 	JButton CombButton = new JButton("Combinational Compatibility");
     
+	final Logger logger = Logger.getLogger(ExecuteBWRated.class);
 	
 	public JFrame getFrame(final ArrayList<OctaveDouble> bW, 
 			final ArrayList<OctaveDouble> pSD, 
 			final ArrayList<Integer> indexList){
+		logger.addAppender(Home.appender);
 		frame = new JFrame("Compatibility Analysis Report");
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -177,6 +183,13 @@ public class ExecuteBWRated {
 					System.out.println("");
 					
 					
+					
+					  logger.info(bwListDouble[i]);
+					  logger.info(mpsdListDouble[i]);
+					  logger.info("");
+					//Adding the logs
+				//	Home.LOGGER.log(Level.INFO, "Bandwidth Mask list item "+bwListDouble[i]+" "+ mpsdListDouble[i]);
+					
 				}
 				
 				OctaveDouble bwList = new OctaveDouble(bwListDouble,1,selectedIndices.length);
@@ -192,6 +205,8 @@ public class ExecuteBWRated {
 				for(int i=0; i<compatBWList.length; i++){				
 					compatBWStringList.add(String.valueOf(compatBWList[i])+ " ");
 					System.out.println(compatBWList[i]);
+					
+					  logger.info(compatBWList[i]);
 				}
 				
 				status = compatBWStringList.toString();

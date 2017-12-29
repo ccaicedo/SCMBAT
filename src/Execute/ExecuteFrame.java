@@ -34,18 +34,27 @@ import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
+
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
+import org.apache.log4j.Logger;
+
+import SCM_home.Home;
+
 public class ExecuteFrame {
 	
-	String plotPath = "Octave/CompatAnalysis.png";
+	MethodAnalysis meth = new MethodAnalysis();
+	String plotPath = meth.getFilePath()+"/Octave/CompatAnalysis.png";
 	JFrame frame;
 	JLabel picLabel;
+	final Logger logger = Logger.getLogger(ExecuteFrame.class);
+	
 	
 	public JFrame getFrame(String CompatStat,String PowerMargin){
+		logger.addAppender(Home.appender);
 		frame = new JFrame("Compatibility Analysis Report");
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -97,6 +106,8 @@ public class ExecuteFrame {
         frame.add(pMarginLabel);
         
         System.out.println(CompatStat);
+        
+        logger.debug(CompatStat);
         
 		return frame;
 		

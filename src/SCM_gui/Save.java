@@ -27,7 +27,6 @@ along with program.  If not, see <http://www.gnu.org/licenses/>.
 package SCM_gui;
 
 import java.awt.Dimension;
-
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -39,7 +38,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-
+import Execute.Warn;
 import SaveXML.Save_XML;
 
 public class Save extends Save_XML{
@@ -51,6 +50,7 @@ public class Save extends Save_XML{
 	public JTextField SField;
 	public SpecMask_Hop SpecHop = new SpecMask_Hop();
 		
+	
 	public void SaveTransmitter(){
 		device="Tx";	
 	}
@@ -108,8 +108,8 @@ public class Save extends Save_XML{
 		        UnderlayMask underlay = underlayArray.get(0);
 		        PowerMap power = powerArray.get(0);
 		        PropMap prop = propArray.get(0);
-		        // IMC imc = imcArray.get(0);  *IMC not implemented in the current version
-		        // IMA ima = imaArray.get(0);  *IMA not implemented in the current version
+		        IMC imc = imcArray.get(0); /*IMC not implemented in the current version*/
+		        IMA ima = imaArray.get(0); /*IMA not implemented in the current version*/
 		        Location location = locationArray.get(0);
 		        // Platform platform = platformArray.get(0); *platform not implemented in the current version
 		        Schedule schedule = scheduleArray.get(0);
@@ -128,6 +128,8 @@ public class Save extends Save_XML{
 				addSpec(spec); 
 				addUnderlay(underlay,device);				
 				addPropMap(prop);
+				addIMC(imc);
+				addIMA(imc);
 				
 				}else{
 					if(device.equals("Rx")){
@@ -148,6 +150,17 @@ public class Save extends Save_XML{
 				addPowerMap(power, device);				
 				addLocation(location,device);
 				addTime(schedule,device);
+				
+				if(warningFlag)
+				{
+					new Warn().showWarnings("Warnings",warningMessage);
+					//Setting it back to false
+					warningFlag = false;
+					
+					//Resetting the warning message
+					warningMessage = "\n";
+				}
+				
 				
 				// Conclude saving all construct information and saving the XML file.
 				concludeXML(SaveName, device); 

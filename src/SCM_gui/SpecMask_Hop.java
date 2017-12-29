@@ -65,12 +65,46 @@ public class SpecMask_Hop {
 	
 	Object rowData2[][] = { { "1",""} };
     Object columnNames2[] = { "#", "Frequency List"};
-    TableModel table_model2 = new DefaultTableModel(rowData2, columnNames2);
+    TableModel table_model2 = new DefaultTableModel(rowData2, columnNames2) {
+    	
+		private static final long serialVersionUID = -4822847901842739752L;
+
+		@Override
+        public boolean isCellEditable(int row, int column)
+        {
+            // make read only column
+			if(column ==0 )
+			{
+				return false;
+			}
+			else
+			{
+				return true;
+			}
+        }
+    };
     public JTable table2 = new JTable(table_model2);
     
     Object rowData3[][] = { { "1","",""} };
     Object columnNames3[] = {"#","Start Freq", "End Freq"};
-    TableModel table_model3 = new DefaultTableModel(rowData3, columnNames3);
+    TableModel table_model3 = new DefaultTableModel(rowData3, columnNames3) {
+    	
+		private static final long serialVersionUID = 5751769122720240901L;
+
+		@Override
+        public boolean isCellEditable(int row, int column)
+        {
+            // make read only column
+			if(column ==0 )
+			{
+				return false;
+			}
+			else
+			{
+				return true;
+			}
+        }
+    };
 	public JTable table3 = new JTable(table_model3);
 	
 	Object rowData4[][] = { { "","",""} };
@@ -151,8 +185,38 @@ public class SpecMask_Hop {
 		Remove2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 			
-				((DefaultTableModel) table_model2).removeRow(table_model2.getRowCount() - 1);
-				count2 = count2 - 1;
+			//	((DefaultTableModel) table_model2).removeRow(table_model2.getRowCount() - 1);
+				DefaultTableModel model = (DefaultTableModel) table2.getModel();
+
+				/*
+				 * Allowing the deletion of selected rows
+				 */
+				int[] selectedRows =  table2.getSelectedRows();
+				int numberOfRows = selectedRows.length;
+				   for(int row=selectedRows.length-1;row>=0;row--){
+					int rowNum = selectedRows[row];
+					model.removeRow(rowNum);
+				     //Updating the index column - count variable appropriately
+				     if(rowNum!=((DefaultTableModel) table_model2).getRowCount())
+				     {
+				    	 model.setValueAt(rowNum+1,rowNum ,0 );
+				     }
+				     
+				   }
+			//	model.removeRow(model.getRowCount() - 1);
+				   
+				   count2 = count2 - numberOfRows;
+				   for(int i=count2;i>=0;i--)
+				   {
+					   int curVal = Integer.parseInt(model.getValueAt(i, 0).toString());
+					   if(curVal!= i+1)
+					   {
+						   model.setValueAt(i+1, i, 0);
+					   }
+				   }
+			
+				
+				//count2 = count2 - 1;
 			}
 		});
 	
@@ -200,8 +264,38 @@ public class SpecMask_Hop {
 		Remove3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 			
-				((DefaultTableModel) table_model3).removeRow(table_model3.getRowCount() - 1);
-				count3 = count3 - 1;
+				//((DefaultTableModel) table_model3).removeRow(table_model3.getRowCount() - 1);
+				DefaultTableModel model = (DefaultTableModel) table3.getModel();
+
+				/*
+				 * Allowing the deletion of selected rows
+				 */
+				int[] selectedRows =  table3.getSelectedRows();
+				int numberOfRows = selectedRows.length;
+				   for(int row=selectedRows.length-1;row>=0;row--){
+					int rowNum = selectedRows[row];
+					model.removeRow(rowNum);
+				     //Updating the index column - count variable appropriately
+				     if(rowNum!=((DefaultTableModel) table_model3).getRowCount())
+				     {
+				    	 model.setValueAt(rowNum+1,rowNum ,0 );
+				     }
+				     
+				   }
+			//	model.removeRow(model.getRowCount() - 1);
+				   
+				   count3 = count3 - numberOfRows;
+				   for(int i=count3;i>=0;i--)
+				   {
+					   int curVal = Integer.parseInt(model.getValueAt(i, 0).toString());
+					   if(curVal!= i+1)
+					   {
+						   model.setValueAt(i+1, i, 0);
+					   }
+				   }
+			
+			
+			//	count3 = count3 - 1;
 			}
 		});		
 		

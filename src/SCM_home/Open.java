@@ -31,11 +31,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 import javax.xml.bind.JAXBContext;
@@ -45,12 +48,15 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.stream.StreamSource;
 
+import org.apache.log4j.Logger;
+import org.ieee.dyspansc._1900._5.scm.RxModelType;
+import org.ieee.dyspansc._1900._5.scm.TxModelType;
+import org.w3c.dom.Document;
+
 import Load.LoadGUI;
 import Load.LoadRxModel;
 import Load.LoadTxModel;
 import SCM_gui.SCM_MainWindow;
-import org.ieee.dyspansc._1900._5.scm.*;
-import org.w3c.dom.Document;
 
 public class Open {
 
@@ -65,8 +71,16 @@ public class Open {
 	protected TxModelType TxModel;
 	protected RxModelType RxModel;
 	
+	//Maintaining the HashMap for the already opened Models
+	HashMap<String,Boolean> openedModels = new HashMap<String, Boolean>();
+	
+	//Holding the index of the selected Model
+	int Index = -1;
+	
+	final Logger logger = Logger.getLogger(Open.class);
+	
 	public JPanel getPanel(){
-		
+		logger.addAppender(Home.appender);
 		panel.setBorder(new TitledBorder(null, "Open a SCM Model", TitledBorder.LEADING, TitledBorder.TOP, null, null));
         panel.setLayout(null);
         
@@ -102,6 +116,8 @@ public class Open {
 		            Box.addItem(modelName);
 		            Box.setSelectedIndex(Box.getItemCount()-1);
 		            System.out.println(modelName);
+		            logger.info("Model Name   "+modelName);
+		            
 		        } else {
 		        }
 				
@@ -121,11 +137,13 @@ public class Open {
         Exit.setBounds(450, 350, ExitSize.width, ExitSize.height);
         panel.add(Exit);
         
+       
+        
         // Setting the operation opening a SCM model.
         ActionListener openOp = new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				
-				int Index = Box.getSelectedIndex();
+			    Index = Box.getSelectedIndex();
 				Model model = modelArray.get(Index);
 				
 				// Read Operations  
@@ -136,6 +154,7 @@ public class Open {
 				File file = new File(filePath);
 				if(file.exists() && !file.isDirectory()){
 					System.out.println("File Exists");
+					logger.info("File Exists");
 				}
 				
 				try{
@@ -180,8 +199,8 @@ public class Open {
 				
 				// Load Operations
 				
-				SCM_MainWindow scm = new SCM_MainWindow();
-				
+				SCM_MainWindow scm = new SCM_MainWindow(openedModels);
+			
 				if(device.equals("Tx")){
 					
 					LoadGUI load = new LoadTxModel();
@@ -196,12 +215,26 @@ public class Open {
 					scm.SaveName=model.ModelName;
 					scm.mode=false;
 					load.setData(scm, RxModel);
-				}
-			scm.design();
+				}	
+				
+			if(!openedModels.containsKey("Current") || openedModels.get("Current")==false)
+			{
+				scm.design(Index);
+				openedModels.put("Current",true);
+				
+			}
+			else
+			{
+			String message = "A Model is already open";
+			JOptionPane.showMessageDialog(new JFrame(), message, "Dialog",
+				        JOptionPane.ERROR_MESSAGE);
+			}
+			
 			}        	
         };
         
         openBtn.addActionListener(openOp);
+        
         
         return panel;
         

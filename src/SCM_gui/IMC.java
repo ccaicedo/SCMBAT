@@ -36,6 +36,8 @@ import java.awt.Font;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -69,21 +71,88 @@ public class IMC {
     
     Object rowData[][] = { { "1","",""} };
     Object columnNames[] = {"#","Frequency (MHz)","Relative Power (dB)"};
-    TableModel table_model = new DefaultTableModel(rowData, columnNames);    
+    
+    //Adding the order field to save into the XML
+    public JTextField imOrderField = new JTextField();
+    
+    TableModel table_model = new DefaultTableModel(rowData, columnNames) {
+    	
+		private static final long serialVersionUID = 1848549027172860034L;
+
+		@Override
+        public boolean isCellEditable(int row, int column)
+        {
+            // make read only column
+			if(column ==0 )
+			{
+				return false;
+			}
+			else
+			{
+				return true;
+			}
+        }
+    };
     public JTable table = new JTable(table_model);
 	JScrollPane tableContainer = new JScrollPane(table);
     
+	/*
+	 *Adding the IMA UI Controls
+	 */
+	public JTextField imaRelFreqField = new JTextField();
+	JLabel imaRelFreq = new JLabel("Center Frequency (MHz)");
+	JRadioButton imarelFreqBtn = new JRadioButton("Use relative frequency values");
+
+    JButton imab3 = new JButton("Save Data");
+    JButton imab4 = new JButton("Exit");
+ 
+    JButton imab1 = new JButton("Add Row");
+    JButton imab2 = new JButton("Delete Row");
+
+    JButton imaNewMap = new JButton("Add new mask");
+    JButton imaPrevious = new JButton("Previous");
+    JButton imaNext = new JButton("Next");
+    
+    Object imarowData[][] = { { "1","",""} };
+    Object imacolumnNames[] = {"#","Frequency (MHz)","Relative Power (dB)"};
+    
+    
+    TableModel imatable_model = new DefaultTableModel(imarowData, imacolumnNames) {
+    	
+		private static final long serialVersionUID = 797660903338719428L;
+
+		@Override
+        public boolean isCellEditable(int row, int column)
+        {
+            // make read only column
+			if(column ==0 )
+			{
+				return false;
+			}
+			else
+			{
+				return true;
+			}
+        }
+    };
+    public JTable imatable = new JTable(imatable_model);
+	JScrollPane imatableContainer = new JScrollPane(imatable);
+	
+	
+	////////////////////
+	
+	
+	
 	JLabel heteroLabel = new JLabel("If this is a superheterodyne receiver, do you want to evaluate image");
     JLabel heteroLabel2 = new JLabel("frequencies produced in it?");
      
     JRadioButton no = new JRadioButton("No");
-    JRadioButton yes = new JRadioButton("Yes");
+    public JRadioButton yes = new JRadioButton("Yes");
 	
     JLabel IFTitle = new JLabel("IF and local oscillator details");
     JLabel IFText1 = new JLabel("Center frequency of the intermediate"
     		+ "frequency (IF) Filter (MHz): ");
-    JLabel IFText2 = new JLabel("The local"
-    		+ " oscillator frequency is above the received signal frequency");
+    JLabel IFText2 = new JLabel("Is the local oscillator frequency above the receive frequency? (High Side Injection)");
     public JRadioButton IFYes = new JRadioButton("Yes");
     public JRadioButton IFNo = new JRadioButton("No");
     
@@ -91,12 +160,20 @@ public class IMC {
     
 	JPanel panel = new JPanel();
 
-
-	public int index =0;
+	//Adding the panel for defining the IMA
+	JPanel imapanel = new IMA().getPanel();
+    JFrame imaframe = new JFrame();
     
+    
+	public int index =0;
+	//Add the IMA button for defining IMA
+	public JRadioButton IMAYes = new JRadioButton("Yes");
+    public JRadioButton IMANo = new JRadioButton("No");
+    public JLabel IMAText  = new JLabel("Define IMA");
+    		
 	public JPanel getPanel(){
 		
-
+		
         panel.setLayout(null);
         
         // Basic Font
@@ -126,11 +203,11 @@ public class IMC {
         Dimension noSize = no.getPreferredSize();
         Dimension yesSize = yes.getPreferredSize();
         
-        heteroLabel.setBounds(25, 80, heteroSize1.width, heteroSize1.height);
-        heteroLabel2.setBounds(25, 100, heteroSize2.width, heteroSize2.height);
+        heteroLabel.setBounds(25, 160, heteroSize1.width, heteroSize1.height);
+        heteroLabel2.setBounds(25, 180, heteroSize2.width, heteroSize2.height);
         
-        no.setBounds(550, 80, noSize.width, yesSize.height);
-        yes.setBounds(600, 80, yesSize.width, yesSize.height);
+        no.setBounds(550, 160, noSize.width, yesSize.height);
+        yes.setBounds(600, 160, yesSize.width, yesSize.height);
         
         ButtonGroup group = new ButtonGroup();
         group.add(yes);
@@ -138,35 +215,39 @@ public class IMC {
         
         no.setSelected(true);
         
-        panel.add(heteroLabel);
+        /*panel.add(heteroLabel);
         panel.add(heteroLabel2);
         panel.add(no);
         panel.add(yes);
-
+*/
         
         // IMC Mask Table content
         
         JLabel TableLabel = new JLabel("IM Mask");
         Dimension TableLabelSize = TableLabel.getPreferredSize();
-        TableLabel.setBounds(25, 140 + 100, TableLabelSize.width, TableLabelSize.height);    
+        TableLabel.setBounds(25, 60, TableLabelSize.width, TableLabelSize.height);    
         
         TableColumn col = table.getColumnModel().getColumn(0);
         col.setPreferredWidth(5);
+        
+        //Setting the property for the table to save the fields when out of focus
+		table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
+
         
         Dimension tableSize = tableContainer.getPreferredSize();
         tableContainer.setBounds(25, 160 + 40 +200, 
         		tableSize.width , tableSize.height - 200);
         
         JLabel imOrderLabel = new JLabel("IM order for the mask: ");
-        JTextField imOrderField = new JTextField();
+    //    JTextField imOrderField = new JTextField();
         
         imOrderLabel.setFont(font);
         Dimension imOrderLabelSize = imOrderLabel.getPreferredSize();
         Dimension imOrderFieldSize = imOrderField.getPreferredSize();
         
-        imOrderLabel.setBounds(25, 160 + 100,
+        imOrderLabel.setBounds(25, 80,
         		imOrderLabelSize.width, imOrderLabelSize.height);
-        imOrderField.setBounds(200, 160 + 100,
+        imOrderField.setBounds(200, 80,
         		imOrderFieldSize.width + 50, imOrderFieldSize.height);
         
         panel.add(tableContainer, BorderLayout.CENTER);
@@ -228,13 +309,13 @@ public class IMC {
 	                 size2.width, size2.height);       
         
 	    Dimension NewMapSize = NewMap.getPreferredSize();
-	    NewMap.setBounds(450 + 10, 110 + 30 + 100, NewMapSize.width, NewMapSize.height);
+	    NewMap.setBounds(450 + 10, 80, NewMapSize.width, NewMapSize.height);
 	    
 	    Dimension PreviousSize = Previous.getPreferredSize();
-	    Previous.setBounds(600 + 10, 110 + 30 + 100, PreviousSize.width, PreviousSize.height);
+	    Previous.setBounds(600 + 10,80, PreviousSize.width, PreviousSize.height);
 	    
 	    Dimension NextSize = Next.getPreferredSize();
-	    Next.setBounds(705 + 10, 110 + 30 + 100, NextSize.width, NextSize.height);
+	    Next.setBounds(705 + 10, 80, NextSize.width, NextSize.height);
 	    
         panel.add(b1);
         panel.add(b2);
@@ -262,33 +343,59 @@ public class IMC {
 			public void actionPerformed(ActionEvent arg0) {
 			
 				DefaultTableModel model = (DefaultTableModel) table.getModel();
-				model.removeRow(model.getRowCount() - 1);
+			//	model.removeRow(model.getRowCount() - 1);
+				/*
+				 * Allowing the deletion of selected rows
+				 */
+				int[] selectedRows = table.getSelectedRows();
+				   for(int row=selectedRows.length-1;row>=0;row--){
+					int rowNum = selectedRows[row];
+				     model.removeRow(rowNum);
+				     //Updating the index column - count variable appropriately
+				     if(rowNum!=table.getRowCount())
+				     {
+				    	 table.getModel().setValueAt(rowNum+1,rowNum ,0 );
+				     }
+				     
+				   }
+			//	model.removeRow(model.getRowCount() - 1);
+				   
+				   
+				   for(int i=table.getRowCount()-1;i>=0;i--)
+				   {
+					   int curVal = Integer.parseInt(table.getModel().getValueAt(i, 0).toString());
+					   if(curVal!= i+1)
+					   {
+						   table.getModel().setValueAt(i+1, i, 0);
+					   }
+				   }
+			
 			}
 		});
 	
 		// IF Frequency area
 		
 		Dimension IFTitleSize = IFTitle.getPreferredSize();
-		IFTitle.setBounds(25, 140, IFTitleSize.width, IFTitleSize.height);
+		IFTitle.setBounds(25, 210, IFTitleSize.width, IFTitleSize.height);
 		
 		IFText1.setFont(font);
 		Dimension IFText1Size = IFText1.getPreferredSize();
-		IFText1.setBounds(25, 160, IFText1Size.width, IFText1Size.height);
+		IFText1.setBounds(25, 230, IFText1Size.width, IFText1Size.height);
 		
 		IFText2.setFont(font);
 		Dimension IFText2Size = IFText2.getPreferredSize();
-		IFText2.setBounds(25, 180, IFText2Size.width, IFText2Size.height);
+		IFText2.setBounds(22, 250, IFText2Size.width, IFText2Size.height);
 		
 		Dimension IFFieldSize = IFField.getPreferredSize();
-		IFField.setBounds(480, 157, IFFieldSize.width + 50, IFFieldSize.height);
+		IFField.setBounds(450, 225, IFFieldSize.width + 60, IFFieldSize.height);
 		
 		IFYes.setFont(font);
 		Dimension IFYesSize = IFYes.getPreferredSize();
-		IFYes.setBounds(580, 177, IFYesSize.width, IFYesSize.height);
+		IFYes.setBounds(590, 248, IFYesSize.width, IFYesSize.height);
 		
 		IFNo.setFont(font);
 		Dimension IFNoSize = IFNo.getPreferredSize();
-		IFNo.setBounds(530, 177, IFNoSize.width, IFNoSize.height);
+		IFNo.setBounds(540, 248, IFNoSize.width, IFNoSize.height);
 		
 		ButtonGroup group2 = new ButtonGroup();
 		group2.add(IFNo);
@@ -333,7 +440,281 @@ public class IMC {
 			}
 			
 		});
+		//IMA panel area
+		//Define the action listener for toggle button
+		 
+		 
+		 
+		 IMAText.setFont(new Font("Arial", Font.BOLD, 14));
+		 IMAYes.setFont(new Font("Arial", Font.BOLD, 14));
+		 IMANo.setFont(new Font("Arial", Font.BOLD, 14));
+		 IMAText.setBounds(100 + 10,200+440,size2.width, size2.height);
+		 IMAYes.setBounds(210,200+440,size2.width, size2.height);
+		 IMANo.setBounds(250 + 90,200+440,size2.width, size2.height);
+		 
+		 panel.add(IMAText);
+		 panel.add(IMAYes);
+		 panel.add(IMANo);
+		 imaframe.setTitle("IMA");
+		 
+		// JTabbedPane tabPane = new SCM_MainWindow().getTabbedPane();
+		 
+		 IMAYes.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				
+				/*SCM_MainWindow.tabbedPane.add("IMA", imapanel);
+				int tabIndex = SCM_MainWindow.tabbedPane.indexOfTab("IMA");
+				SCM_MainWindow.tabbedPane.setSelectedIndex(tabIndex);
+				*/
+				addIMAPanel();
+                IMAYes.setSelected(true);
+                IMANo.setSelected(false);
+                
+			}
+		});
+		IMANo.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				/*tabPane.setEnabledAt(tabPane.indexOfTab("IMA Mask"),false);
+				int tabIndex = tabPane.indexOfTab("Intermodulation Mask");				
+				tabPane.setSelectedIndex(tabIndex);*/
+				panel.remove(imaRelFreq);
+				panel.remove(imarelFreqBtn);
+				panel.remove(imaRelFreqField);
+				panel.remove(imatable);
+				panel.remove(imatableContainer);
+				panel.remove(imab1);
+				panel.remove(imab2);
+				panel.remove(imab3);
+				panel.remove(imab4);
+				panel.repaint();
+				panel.revalidate();
+                IMANo.setSelected(true);
+                IMAYes.setSelected(false);
+                
+			}
+		});
+	
 		
-		return panel;
+		//Checking if the IM order=1, and displaying the adjusting view for intermediate frequency values
+		imOrderField.addKeyListener(new KeyListener() {
+			
+			@Override
+			public void keyTyped(KeyEvent e) {
+			//do nothing	
+			}
+			
+			@Override
+			public void keyReleased(KeyEvent e) {
+				if(imOrderField.getText().equals("1"))
+				{
+					panel.add(heteroLabel);
+			        panel.add(heteroLabel2);
+			        panel.add(no);
+			        panel.add(yes);
+			        if(yes.isSelected()==true)
+			        {
+			        panel.add(IFTitle);
+					panel.add(IFText1);
+					panel.add(IFText2);
+					panel.add(IFField);
+					panel.add(IFNo);
+					panel.add(IFYes);
+			        }
+					panel.repaint();
+					panel.revalidate();
+
+				}
+				else
+				{
+					panel.remove(heteroLabel);
+			        panel.remove(heteroLabel2);
+			        panel.remove(no);
+			        panel.remove(yes);
+			        panel.remove(IFTitle);
+					panel.remove(IFText1);
+					panel.remove(IFText2);
+					panel.remove(IFField);
+					panel.remove(IFNo);
+					panel.remove(IFYes);
+					panel.repaint();
+					panel.revalidate();
+
+					
+				}
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
+		
+		
+		panel.setAutoscrolls(true);
+		panel.setPreferredSize(new Dimension(1180, 1000));
+		panel.repaint();
+		panel.revalidate();
+			
+		
+		JScrollPane scrollPane=new JScrollPane(panel, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,  
+				   ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		
+		scrollPane.setWheelScrollingEnabled(true); 
+		scrollPane.getViewport().setPreferredSize(new Dimension(1180, 600));
+		scrollPane.repaint();
+		scrollPane.revalidate();
+		
+		
+		JPanel mainPanel = new JPanel();
+				
+		
+		mainPanel.add(scrollPane, BorderLayout.CENTER);
+		mainPanel.repaint();
+		mainPanel.revalidate();
+		
+		
+		return mainPanel;
+	}
+	
+	private void addIMAPanel()
+	{
+		// Basic Font
+        Font font = new Font("Arial", Font.PLAIN, 12);
+		JLabel TableLabel = new JLabel("IM Mask");
+        Dimension TableLabelSize = TableLabel.getPreferredSize();
+        TableLabel.setBounds(25, 760 , TableLabelSize.width, TableLabelSize.height);    
+        
+        TableColumn col = imatable.getColumnModel().getColumn(0);
+        col.setPreferredWidth(5);
+        
+        imatable.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
+        
+        Dimension tableSize = imatableContainer.getPreferredSize();
+        imatableContainer.setBounds(25, 60 + 700, 
+        		tableSize.width , tableSize.height - 200);
+        panel.add(imatableContainer, BorderLayout.CENTER);
+        
+        Dimension relBtnSize = imarelFreqBtn.getPreferredSize();
+        imarelFreqBtn.setBounds(25,660 , relBtnSize.width, relBtnSize.height);
+     
+        panel.add(imarelFreqBtn);
+        
+        imaRelFreq.setFont(font);
+        Dimension sizeLabel = imaRelFreq.getPreferredSize();
+        imaRelFreq.setBounds(75, 700, sizeLabel.width, sizeLabel.height);
+     
+
+        panel.add(imaRelFreq);
+
+        // Creating reference frequency text field
+
+        imaRelFreqField.setColumns(1);
+        imaRelFreqField.setBounds(255 + 0, 710, sizeLabel.width - 120, 5 + sizeLabel.height);
+       
+
+        panel.add(imaRelFreqField);          
+        
+        if(imarelFreqBtn.isSelected()==false){
+	    	   
+        	imaRelFreq.setEnabled(false);
+        	imaRelFreqField.setEnabled(false);
+	       }else{
+	    	   imaRelFreq.setEnabled(true);
+	    	   imaRelFreqField.setEnabled(true);
+	   }
+        
+        imarelFreqBtn.addActionListener(new ActionListener(){
+     	   public void actionPerformed(ActionEvent e){
+     		  
+     		   if("disabled".equals(e.getActionCommand())){
+     			   if(imarelFreqBtn.isSelected()==false){
+     		    	   
+     				  imaRelFreq.setEnabled(false);
+     				 imaRelFreqField.setEnabled(false);
+     		       }
+     		   }else{
+     			  imaRelFreq.setEnabled(true);
+     			 imaRelFreqField.setEnabled(true);
+     		   }
+     	   }
+        });
+        
+        // Placing buttons for the panel
+        
+        Dimension size2 = imab2.getPreferredSize();
+        imab1.setBounds(500 + 10, 160 + 720,
+	                 size2.width, size2.height);
+        imab2.setBounds(500 + 10, 210 + 720,
+	                 size2.width, size2.height);
+        imab3.setBounds(630 + 10, 160 + 720,
+	                 size2.width, size2.height);
+        imab4.setBounds(630 + 10, 210 + 720,
+	                 size2.width, size2.height);       
+        
+        panel.add(imab1);
+        panel.add(imab2);
+        panel.add(imab3);
+        panel.add(imab4);    
+        
+        /*Considering that the relativeFrequency is inherited from the Intermodulation Mask tab removing it from this panel*/
+        //panel.add(NewMap);
+        //panel.add(Previous);
+        //panel.add(Next);
+        
+        // Add and Remove Rows actions
+        
+        imab1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			
+				DefaultTableModel model = (DefaultTableModel) imatable.getModel();
+				int count = model.getRowCount();
+				model.addRow(new Object[]{count+1, "", ""});	
+
+			}
+		});
+		
+		
+		
+        imab2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			
+				DefaultTableModel model = (DefaultTableModel) imatable.getModel();
+				
+				/*
+				 * Allowing the deletion of selected rows
+				 */
+				int[] selectedRows = imatable.getSelectedRows();
+				   for(int row=selectedRows.length-1;row>=0;row--){
+					int rowNum = selectedRows[row];
+				     model.removeRow(rowNum);
+				     //Updating the index column - count variable appropriately
+				     if(rowNum!=imatable.getRowCount())
+				     {
+				    	 imatable.getModel().setValueAt(rowNum+1,rowNum ,0 );
+				     }
+				     
+				   }
+			//	model.removeRow(model.getRowCount() - 1);
+				   
+				   
+				   for(int i=imatable.getRowCount()-1;i>=0;i--)
+				   {
+					   int curVal = Integer.parseInt(imatable.getModel().getValueAt(i, 0).toString());
+					   if(curVal!= i+1)
+					   {
+						   imatable.getModel().setValueAt(i+1, i, 0);
+					   }
+				   }
+			}
+		});
+        
 	}
 }

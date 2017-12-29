@@ -29,18 +29,24 @@ package Execute;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.GregorianCalendar;
+import java.util.Map;
+import java.util.Set;
 
-
+import org.apache.log4j.Logger;
 import org.ieee.dyspansc._1900._5.scm.RatingType;
 import org.ieee.dyspansc._1900._5.scm.RxModelType;
 import org.ieee.dyspansc._1900._5.scm.SCMScheduleType;
 import org.ieee.dyspansc._1900._5.scm.TxModelType;
 
+import SCM_home.Home;
 import dk.ange.octave.OctaveEngine;
 import dk.ange.octave.OctaveEngineFactory;
 import dk.ange.octave.type.OctaveDouble;
@@ -52,7 +58,71 @@ public class MethodAnalysis {
 	PrintRxText printRx = new PrintRxText();	
 	Warn warningDisplay = new Warn();
 	
-// Analysing which compatibility method to use based on Model types.
+	final Logger logger = Logger.getLogger(MethodAnalysis.class);
+	
+	//Adding the flag required for showing the warnings in a single window
+	public boolean warningFlag = false;
+	
+	//the warning message containing all the warnings
+	public  String warningMessage = "\n";
+	
+	
+	//For environment variables
+	 ProcessBuilder pb = new ProcessBuilder("echo", "");
+     Map<String, String> envMap = pb.environment();
+	
+	//Finding the path where the script files are stored and setting the environment variable
+	private void setFilePathEnvironment()
+	{
+		String line;
+		String homeDirectoryPath="";
+		try {
+            FileReader filereader =  new FileReader("HomeDirectoryPath.txt");
+
+            BufferedReader bufferedReader = new BufferedReader(filereader);
+
+            while((line = bufferedReader.readLine()) != null) {
+              homeDirectoryPath =  line.split("=")[1];
+            }   
+
+            // Always close files.
+            bufferedReader.close();
+            
+            //Setting the environment variable for the complete path
+           
+            envMap.put("SCM_PATH", homeDirectoryPath);
+        }
+        catch(FileNotFoundException ex) {
+            ex.printStackTrace();             
+        }
+        catch(IOException ex) {
+           ex.printStackTrace();
+        }
+		
+	}
+	//Getting the environment variable 
+	public String getFilePath()
+	{
+		String directoryPath = "";
+		 Set<String> keys = envMap.keySet();
+		    for(String key:keys){
+		    	if(key.equals("SCM_PATH"))
+		    	{
+		    		directoryPath = envMap.get(key);
+			     //   System.out.println(key+" ==> "+directoryPath);
+			        return directoryPath;
+		    	}
+		    }
+		    return directoryPath;
+	}
+	
+	public MethodAnalysis()
+	{
+		//Set the environment variable
+		setFilePathEnvironment();
+		logger.addAppender(Home.appender);
+	}
+	// Analysing which compatibility method to use based on Model types.
 	public String analyseRatedMethod(ArrayList<TxModelType> TxData,ArrayList<RxModelType> RxData){
 		
 		String ratedMethod = "null";
@@ -99,11 +169,12 @@ public class MethodAnalysis {
 		String Command1=null;
 		String CompatStat=null;
 		String PowerMargin=null;
-		
+			
 		switch(method){
 		case "TotalPower": System.out.println("Total Power Method being executed");
-			printTx.printText(TxData.get(0),"SCM_transmitter_java.txt");
-			printRx.printText(RxData.get(0),"SCM_receiver_java.txt");
+							logger.info("Total Power Method being executed");
+			warningMessage= warningMessage + printTx.printText(TxData.get(0),"SCM_transmitter_java.txt");
+			warningMessage = warningMessage + printRx.printText(RxData.get(0),"SCM_receiver_java.txt");
 			
 			int o = 0;
 			SCMScheduleType rxSched = RxData.get(0).getScmSchedule().get(o); 
@@ -116,11 +187,16 @@ public class MethodAnalysis {
 			if((Tx_Start_time.before(Rx_Start_time) && Tx_End_time.before(Rx_Start_time)) 
 					|| (Tx_Start_time.after(Rx_End_time) && Tx_End_time.after(Rx_End_time)) ){
 				
-				new Warn().setWarn("Systems Compatible", "Systems are compatible due to non-overlapping schedules");
+				warningFlag = true;
+				warningMessage = warningMessage + "\nSystems are compatible due to non-overlapping schedules";
+			//	new Warn().setWarn("Systems Compatible", "Systems are compatible due to non-overlapping schedules");
 				
 			}else{
-				Command0 = "chmod u+x TotPow.sh";
-				Command1 = "./TotPow.sh";
+				String dirName = getFilePath();
+				String totPowFile = dirName+"TotPow.sh "+dirName;
+				Command0 = "chmod u+x "+totPowFile;
+				Command1 = totPowFile;
+				
 				
 				Process p1;
 				try{
@@ -133,6 +209,9 @@ public class MethodAnalysis {
 					ArrayList<String> dispData = new ArrayList<String>();
 					try {
 						while((line = br.readLine())!=null){
+							System.out.println(line);
+							
+							logger.info(line);
 						dispData.add(line);
 						}
 					} catch (Exception e) {
@@ -152,8 +231,9 @@ public class MethodAnalysis {
 			
 			break;
 		case "MaximumPowerDensity": System.out.println("Max Power Density Method being executed");
-			printTx.printText(TxData.get(0),"SCM_transmitter_java.txt");
-			printRx.printText(RxData.get(0),"SCM_receiver_java.txt");
+				logger.info("Max Power Density Method being executed");
+		warningMessage= warningMessage+printTx.printText(TxData.get(0),"SCM_transmitter_java.txt");
+		warningMessage = warningMessage + printRx.printText(RxData.get(0),"SCM_receiver_java.txt");
 			
 			o = 0;
 			SCMScheduleType rxSched2 = RxData.get(0).getScmSchedule().get(o); 
@@ -166,12 +246,15 @@ public class MethodAnalysis {
 			if((Tx_Start_time2.before(Rx_Start_time2) && Tx_End_time2.before(Rx_Start_time2)) 
 					|| (Tx_Start_time2.after(Rx_End_time2) && Tx_End_time2.after(Rx_End_time2)) ){
 				
-				new Warn().setWarn("Systems Compatible", "Systems are compatible due to non-overlapping schedules");
+				warningFlag = true;
+				warningMessage = warningMessage + "\nSystems are compatible due to non-overlapping schedules";
+			//	new Warn().setWarn("Systems Compatible", "Systems are compatible due to non-overlapping schedules");
 				
 			}else{
-				Command0 = "chmod u+x MaxPow.sh";
-				Command1 = "./MaxPow.sh";
-				
+				String dirName = getFilePath();
+				String maxPowFile = dirName+"MaxPow.sh "+dirName;
+				Command0 = "chmod u+x "+maxPowFile;
+				Command1 = maxPowFile;			
 				Process p2;
 				try{
 					p2 = Runtime.getRuntime().exec(Command0);
@@ -205,8 +288,9 @@ public class MethodAnalysis {
 // Rated BW Analysis
 			
 		case "ratedBW":	System.out.println("Rated BW Analysis Running");
+						logger.info("Rated BW Analysis Running");
 		
-		printRx.printText(RxData.get(0),"SCM_receiver_java.txt");
+		warningMessage = warningMessage + printRx.printText(RxData.get(0),"SCM_receiver_java.txt");
 		
 		o = 0;
 		SCMScheduleType rxSched_bw = RxData.get(0).getScmSchedule().get(o); 
@@ -219,7 +303,10 @@ public class MethodAnalysis {
 		if((Tx_Start_time_bw.before(Rx_Start_time_bw) && Tx_End_time_bw.before(Rx_Start_time_bw)) 
 				|| (Tx_Start_time_bw.after(Rx_End_time_bw) && Tx_End_time_bw.after(Rx_End_time_bw)) ){
 			
-			new Warn().setWarn("Systems Compatible", "Systems are compatible due to non-overlapping schedules");
+			warningFlag = true;
+			warningMessage = warningMessage + "\nSystems are compatible due to non-overlapping schedules";
+			
+		//	new Warn().setWarn("Systems Compatible", "Systems are compatible due to non-overlapping schedules");
 			
 		}else{
 
@@ -242,7 +329,7 @@ public class MethodAnalysis {
 				
 				for(int i=0; i<TxData.size(); i++){
 					
-					printTx.printText(TxData.get(i),"SCM_transmitter_java.txt");	
+					warningMessage = warningMessage+printTx.printText(TxData.get(i),"SCM_transmitter_java.txt");	
 								
 					octave.eval("[SpecMask,PSD,BW,compatBWList] = TxMPSD();");
 					SpecMask.add(octave.get(OctaveDouble.class, "SpecMask"));
@@ -302,8 +389,9 @@ public class MethodAnalysis {
 // bw Rated List
 		
 		case "bwRatedList":System.out.println("BW Rated List ANalysis Running"); 
+		logger.info("BW Rated List ANalysis Running");
 			
-		printRx.printText(RxData.get(0),"SCM_receiver_java.txt");
+		warningMessage = warningMessage + printRx.printText(RxData.get(0),"SCM_receiver_java.txt");
 				
 		o = 0;
 		SCMScheduleType rxSched3 = RxData.get(0).getScmSchedule().get(o); 
@@ -316,7 +404,10 @@ public class MethodAnalysis {
 		if((Tx_Start_time3.before(Rx_Start_time3) && Tx_End_time3.before(Rx_Start_time3)) 
 				|| (Tx_Start_time3.after(Rx_End_time3) && Tx_End_time3.after(Rx_End_time3)) ){
 			
-			new Warn().setWarn("Systems Compatible", "Systems are compatible due to non-overlapping schedules");
+			warningFlag = true;
+			warningMessage = warningMessage + "\nSystems are compatible due to non-overlapping schedules";
+			
+		//	new Warn().setWarn("Systems Compatible", "Systems are compatible due to non-overlapping schedules");
 			
 		}else{
 			
@@ -339,7 +430,7 @@ public class MethodAnalysis {
 				
 				for(int i=0; i<TxData.size(); i++){
 					
-					printTx.printText(TxData.get(i),"SCM_transmitter_java.txt");	
+					warningMessage= warningMessage+printTx.printText(TxData.get(i),"SCM_transmitter_java.txt");	
 					
 				//	p3 = Runtime.getRuntime().exec(Command0);
 				//	p3 = Runtime.getRuntime().exec(Command1);
@@ -400,8 +491,9 @@ public class MethodAnalysis {
 		break;
 
 		case "ratedBTP": System.out.println("Rated BTP Analysis Running");
+		logger.info("Rated BTP Analysis Running");
 		
-printRx.printText(RxData.get(0),"SCM_receiver_java.txt");
+		warningMessage = warningMessage + printRx.printText(RxData.get(0),"SCM_receiver_java.txt");
 		
 		o = 0;
 		SCMScheduleType rxSched_btp = RxData.get(0).getScmSchedule().get(o); 
@@ -414,7 +506,9 @@ printRx.printText(RxData.get(0),"SCM_receiver_java.txt");
 		if((Tx_Start_time_btp.before(Rx_Start_time_btp) && Tx_End_time_btp.before(Rx_Start_time_btp)) 
 				|| (Tx_Start_time_btp.after(Rx_End_time_btp) && Tx_End_time_btp.after(Rx_End_time_btp)) ){
 			
-			new Warn().setWarn("Systems Compatible", "Systems are compatible due to non-overlapping schedules");
+			warningFlag = true;
+			warningMessage = warningMessage + "\nSystems are compatible due to non-overlapping schedules";
+		//	new Warn().setWarn("Systems Compatible", "Systems are compatible due to non-overlapping schedules");
 			
 		}else{
 			ArrayList<OctaveDouble> Spec_BTP = new ArrayList<OctaveDouble>();
@@ -433,7 +527,7 @@ printRx.printText(RxData.get(0),"SCM_receiver_java.txt");
 					
 						if(TxData.get(i).getSpectrumMask().get(o).getHoppingData()!=null){
 							
-							printTx.printText(TxData.get(i),"SCM_transmitter_java.txt");
+							warningMessage=warningMessage+printTx.printText(TxData.get(i),"SCM_transmitter_java.txt");
 							
 							if(TxData.get(i).getSpectrumMask().get(o).getHoppingData().
 									getFrequencyList()!=null){
@@ -460,8 +554,11 @@ printRx.printText(RxData.get(0),"SCM_receiver_java.txt");
 							compatBTPList.add(octaveBTP.get(OctaveDouble.class,"compatBTPList"));						
 							
 						}else{
-							warningDisplay.setWarn("Warning","Spectrum Mask "+
-						txArray.get(txIndex[i]).ModelName + " is not a hopping system");
+							warningFlag = true;
+							warningMessage = warningMessage + "\nSpectrum Mask "+txArray.get(txIndex[i]).ModelName + " is not a hopping system";
+							
+							/*warningDisplay.setWarn("Warning","Spectrum Mask "+
+						txArray.get(txIndex[i]).ModelName + " is not a hopping system");*/
 						}				
 					}
 				
@@ -493,8 +590,8 @@ printRx.printText(RxData.get(0),"SCM_receiver_java.txt");
 		
 // BTP Rated List Analysis		
 		case "btpRatedList": System.out.println("BTP Rated List Analysis Running");
-		
-		printRx.printText(RxData.get(0),"SCM_receiver_java.txt");
+		logger.info("BTP Rated List Analysis Running");
+		warningMessage = warningMessage + printRx.printText(RxData.get(0),"SCM_receiver_java.txt");
 		
 		o = 0;
 		SCMScheduleType rxSched4 = RxData.get(0).getScmSchedule().get(o); 
@@ -507,7 +604,10 @@ printRx.printText(RxData.get(0),"SCM_receiver_java.txt");
 		if((Tx_Start_time4.before(Rx_Start_time4) && Tx_End_time4.before(Rx_Start_time4)) 
 				|| (Tx_Start_time4.after(Rx_End_time4) && Tx_End_time4.after(Rx_End_time4)) ){
 			
-			new Warn().setWarn("Systems Compatible", "Systems are compatible due to non-overlapping schedules");
+				warningFlag = true;
+				warningMessage = warningMessage + "\nSystems are compatible due to non-overlapping schedules";
+			
+			//new Warn().setWarn("Systems Compatible", "Systems are compatible due to non-overlapping schedules");
 			
 		}else{
 			ArrayList<OctaveDouble> Spec_BTP = new ArrayList<OctaveDouble>();
@@ -526,7 +626,7 @@ printRx.printText(RxData.get(0),"SCM_receiver_java.txt");
 					
 						if(TxData.get(i).getSpectrumMask().get(o).getHoppingData()!=null){
 							
-							printTx.printText(TxData.get(i),"SCM_transmitter_java.txt");
+							warningMessage = warningMessage+printTx.printText(TxData.get(i),"SCM_transmitter_java.txt");
 							
 							if(TxData.get(i).getSpectrumMask().get(o).getHoppingData().
 									getFrequencyList()!=null){
@@ -553,8 +653,12 @@ printRx.printText(RxData.get(0),"SCM_receiver_java.txt");
 							compatBTPList.add(octaveBTP.get(OctaveDouble.class,"compatBTPList"));						
 							
 						}else{
+							
+							warningFlag = true;
+							warningMessage = warningMessage + "\nSpectrum Mask"+txArray.get(txIndex[i]).ModelName + "is not a hopping system";
+							/*
 							warningDisplay.setWarn("Warning","Spectrum Mask "+
-						txArray.get(txIndex[i]).ModelName + " is not a hopping system");
+						txArray.get(txIndex[i]).ModelName + " is not a hopping system");*/
 						}				
 					}
 				
@@ -585,8 +689,9 @@ printRx.printText(RxData.get(0),"SCM_receiver_java.txt");
 				break;
 
 		case "dcRatedList": System.out.println("DC Rated List Analysis Running");
+		logger.info("DC Rated List Analysis Running");
 		
-		printRx.printText(RxData.get(0),"SCM_receiver_java.txt");
+		warningMessage = warningMessage + printRx.printText(RxData.get(0),"SCM_receiver_java.txt");
 		
 		o = 0;
 		SCMScheduleType rxSched_dc = RxData.get(0).getScmSchedule().get(o); 
@@ -598,8 +703,11 @@ printRx.printText(RxData.get(0),"SCM_receiver_java.txt");
 		
 		if((Tx_Start_time_dc.before(Rx_Start_time_dc) && Tx_End_time_dc.before(Rx_Start_time_dc)) 
 				|| (Tx_Start_time_dc.after(Rx_End_time_dc) && Tx_End_time_dc.after(Rx_End_time_dc)) ){
+		
+			warningFlag = true;
+			warningMessage = warningMessage + "\nSystems are compatible due to non-overlapping schedules";
 			
-			new Warn().setWarn("Systems Compatible", "Systems are compatible due to non-overlapping schedules");
+			//new Warn().setWarn("Systems Compatible", "Systems are compatible due to non-overlapping schedules");
 			
 		}else{
 			ArrayList<OctaveDouble> compatDutyList = new ArrayList<OctaveDouble>();
@@ -617,7 +725,7 @@ printRx.printText(RxData.get(0),"SCM_receiver_java.txt");
 				
 				if(TxData.get(i).getSpectrumMask().get(o).getHoppingData()!=null){
 					
-					printTx.printText(TxData.get(i),"SCM_transmitter_java.txt");
+					warningMessage= warningMessage+printTx.printText(TxData.get(i),"SCM_transmitter_java.txt");
 					
 					if(TxData.get(i).getSpectrumMask().get(o).getHoppingData().getFrequencyList()!=null){
 						octaveDuty.eval("[Spec_mask_new,p_Tx_new,compatDutyList] = TxDuty_FreqList();");
@@ -631,8 +739,11 @@ printRx.printText(RxData.get(0),"SCM_receiver_java.txt");
 					compatDutyList.add(octaveDuty.get(OctaveDouble.class,"compatDutyList"));						
 					
 				}else{
+					warningFlag = true;
+					warningMessage = warningMessage + "\nSpectrum Mask "+ txArray.get(txIndex[i]).ModelName+ " is not a hopping system";
+					/*
 					warningDisplay.setWarn("Warning","Spectrum Mask "+ txArray.get(txIndex[i]).ModelName
-							+ " is not a hopping system");
+							+ " is not a hopping system");*/
 				}				
 			}
 					

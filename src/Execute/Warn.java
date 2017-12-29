@@ -33,6 +33,7 @@ import java.awt.Insets;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 public class Warn {
 
@@ -56,5 +57,11 @@ public class Warn {
         
         Newframe.add(lblName2);
         
+	}
+	//Showing the warning messages when the creation of the model fails with incorrect values
+	public void showWarnings(String title, String message)
+	{
+		JOptionPane.showMessageDialog(null, message,title,JOptionPane.WARNING_MESSAGE);
+
 	}
 }

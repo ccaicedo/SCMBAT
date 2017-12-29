@@ -55,7 +55,25 @@ public class UnderlayRated {
     
     Object rowData2[][] = { { "1","",""} };
     Object columnNames2[] = {"#","BandWidth (MHz)","Power Adjustment (dB)"};
-    TableModel table_model2 = new DefaultTableModel(rowData2, columnNames2);
+    TableModel table_model2 = new DefaultTableModel(rowData2, columnNames2)
+    		{
+				private static final long serialVersionUID = -1075393898938351635L;
+
+		@Override
+        public boolean isCellEditable(int row, int column)
+        {
+            // make read only column
+			if(column ==0 )
+			{
+				return false;
+			}
+			else
+			{
+				return true;
+			}
+        }
+    		};
+    		
     public JTable table2 = new JTable(table_model2);
     
     JScrollPane tableContainer2;
@@ -64,7 +82,25 @@ public class UnderlayRated {
     
     Object rowData3[][] = { { "1","",""} };
     Object columnNames3[] = {"#","BTP (MHz x sec)","Power Adjustment (dB)"};
-    TableModel table_model3 = new DefaultTableModel(rowData3, columnNames3);
+    TableModel table_model3 = new DefaultTableModel(rowData3, columnNames3)
+    		{
+    	
+				private static final long serialVersionUID = 5632676225961854776L;
+
+		@Override
+        public boolean isCellEditable(int row, int column)
+        {
+            // make read only column
+			if(column ==0 )
+			{
+				return false;
+			}
+			else
+			{
+				return true;
+			}
+        }
+    		};
     public JTable table3 = new JTable(table_model3);
     
     JScrollPane tableContainer3;
@@ -73,7 +109,25 @@ public class UnderlayRated {
     
     Object rowData4[][] = { { "1","","",""} };
     Object columnNames4[] = {"#","Duty Cycle", "Dwell Time(sec)", "Power Adjustment (dB)"};
-    TableModel table_model4 = new DefaultTableModel(rowData4, columnNames4);
+    TableModel table_model4 = new DefaultTableModel(rowData4, columnNames4)
+    		{
+    	
+				private static final long serialVersionUID = 5713786734782943722L;
+
+		@Override
+        public boolean isCellEditable(int row, int column)
+        {
+            // make read only column
+			if(column ==0 )
+			{
+				return false;
+			}
+			else
+			{
+				return true;
+			}
+        }
+    		};
     public JTable table4 = new JTable(table_model4);
     
     JScrollPane tableContainer4;
@@ -135,7 +189,32 @@ public class UnderlayRated {
         Remove2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 			
-				((DefaultTableModel) table_model2).removeRow(table_model2.getRowCount() - 1);
+				//((DefaultTableModel) table_model2).removeRow(table_model2.getRowCount() - 1);
+				DefaultTableModel model = (DefaultTableModel) table2.getModel();
+				//model.removeRow(model.getRowCount() - 1);
+				/*
+				 * Allowing the deletion of selected rows
+				 */
+				int[] selectedRows = table2.getSelectedRows();
+				   for(int row=selectedRows.length-1;row>=0;row--){
+					int rowNum = selectedRows[row];
+				     model.removeRow(rowNum);
+				     //Updating the index column - count variable appropriately
+				     if(rowNum!=table2.getRowCount())
+				     {
+				    	 table2.getModel().setValueAt(rowNum+1,rowNum ,0 );
+				     }
+				     
+				   }
+			//	model.removeRow(model.getRowCount() - 1);		 
+				   for(int i=table2.getRowCount()-1;i>=0;i--)
+				   {
+					   int curVal = Integer.parseInt(table2.getModel().getValueAt(i, 0).toString());
+					   if(curVal!= i+1)
+					   {
+						   table2.getModel().setValueAt(i+1, i, 0);
+					   }
+				   }
 			}
 		});
 	
@@ -183,7 +262,32 @@ public class UnderlayRated {
 		Remove3.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					
-				((DefaultTableModel) table_model3).removeRow(table_model3.getRowCount() - 1);
+					DefaultTableModel model = (DefaultTableModel) table3.getModel();
+					//model.removeRow(model.getRowCount() - 1);
+					/*
+					 * Allowing the deletion of selected rows
+					 */
+					int[] selectedRows = table3.getSelectedRows();
+					   for(int row=selectedRows.length-1;row>=0;row--){
+						int rowNum = selectedRows[row];
+					     model.removeRow(rowNum);
+					     //Updating the index column - count variable appropriately
+					     if(rowNum!=table3.getRowCount())
+					     {
+					    	 table3.getModel().setValueAt(rowNum+1,rowNum ,0 );
+					     }
+					     
+					   }
+				//	model.removeRow(model.getRowCount() - 1);		 
+					   for(int i=table3.getRowCount()-1;i>=0;i--)
+					   {
+						   int curVal = Integer.parseInt(table3.getModel().getValueAt(i, 0).toString());
+						   if(curVal!= i+1)
+						   {
+							   table3.getModel().setValueAt(i+1, i, 0);
+						   }
+					   }
+		
 					}
 				});
 			
@@ -232,8 +336,35 @@ public class UnderlayRated {
 				Remove4.addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent arg0) {
 							
-						((DefaultTableModel) table_model4).removeRow(table_model4.getRowCount() - 1);
-							}
+					//	((DefaultTableModel) table_model4).removeRow(table_model4.getRowCount() - 1);
+							DefaultTableModel model = (DefaultTableModel) table4.getModel();
+							//model.removeRow(model.getRowCount() - 1);
+							/*
+							 * Allowing the deletion of selected rows
+							 */
+							int[] selectedRows = table4.getSelectedRows();
+							   for(int row=selectedRows.length-1;row>=0;row--){
+								int rowNum = selectedRows[row];
+							     model.removeRow(rowNum);
+							     //Updating the index column - count variable appropriately
+							     if(rowNum!=table4.getRowCount())
+							     {
+							    	 table4.getModel().setValueAt(rowNum+1,rowNum ,0 );
+							     }
+							     
+							   }
+						//	model.removeRow(model.getRowCount() - 1);		 
+							   for(int i=table4.getRowCount()-1;i>=0;i--)
+							   {
+								   int curVal = Integer.parseInt(table4.getModel().getValueAt(i, 0).toString());
+								   if(curVal!= i+1)
+								   {
+									   table4.getModel().setValueAt(i+1, i, 0);
+								   }
+							   }
+				
+						
+						}
 						});
 					
 				table_model4 = (DefaultTableModel) table4.getModel();

@@ -187,7 +187,7 @@ public class SCMControl {
 			tempIMC=imcArray.get(imcIndex);
 			
 			pane.removeTabAt(4);
-			pane.insertTab("IMC Mask",null, 
+			pane.insertTab("Intermodulation Mask",null, 
 					imcArray.get(imcIndex).getPanel(),null,4);
 			pane.setSelectedIndex(4);
 			pane.repaint();
