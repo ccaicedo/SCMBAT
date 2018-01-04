@@ -207,6 +207,9 @@ public class PropMap {
         PropPanel.add(AntennaHeightLabel);
         PropPanel.add(antHeightYes);
         PropPanel.add(antHeightNo);
+     
+        //To allow the element on the last edit to be saved
+        table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
         
         // Table Content
         

@@ -155,7 +155,13 @@ public class SpecMask_Hop {
 		Dimension FreqLabSize = FreqListLabel.getPreferredSize();
 		FreqListLabel.setBounds(25, 450, FreqLabSize.width, FreqLabSize.height);
         
-		tableContainer2 = new JScrollPane(table2);
+		//To allow the element on the last edit to be saved
+        table2.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
+        table3.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
+        table4.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
+
+
+        tableContainer2 = new JScrollPane(table2);
         Dimension size4 = tableContainer2.getPreferredSize();
         
         table2.getTableHeader().setReorderingAllowed(true);

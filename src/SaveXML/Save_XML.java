@@ -1039,8 +1039,8 @@ public class Save_XML extends ObjectFactory {
 	public void addIMA(IMC imc)
 	{
 		int o = 0;
-		//First check if the IMA was set from Intermodulation Mask tab. Otherwise return
-		if(imc.IMANo.isSelected())
+		//First check if the IMA was set from Intermodulation Mask tab (Sometimes, both may not be enabled). Otherwise return
+		if(imc.IMANo.isSelected() ||( !imc.IMAYes.isSelected() && !imc.IMANo.isSelected()))
 		{
 			return;
 		}
@@ -1110,7 +1110,7 @@ public class Save_XML extends ObjectFactory {
 			TxModel.getIntermodulationMask().get(o).getImCombiningMask().getInflectionPoint().get(i).setRelativePower(data);
 		
 			}catch(Exception e){
-				warningMessage = warningMessage + "\nThe entry at row: " +(i+1)+" in the Spectrum Mask table should be numerical";
+				warningMessage = warningMessage + "\nThe entry at row: " +(i+1)+" in the IM Combining Mask table should be numerical";
 				warningFlag = true;
 			}
 		}    	
