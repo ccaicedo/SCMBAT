@@ -257,6 +257,10 @@ public class Save_XML extends ObjectFactory {
 		for (int i=0; i<Sdata.getRowCount(); i++){
 			InflectionPointType ifPoint = new InflectionPointType();
 			try{
+			if(Sdata.getValueAt(i, 1).toString().equals("")&& Sdata.getValueAt(i, 2).toString().equals(""))
+			{
+				break;
+			}
 			data = Double.parseDouble(Sdata.getValueAt(i, 1).toString());
 			ifPoint.setFrequency(data);
 			data = Double.parseDouble(Sdata.getValueAt(i, 2).toString());
@@ -1103,6 +1107,11 @@ public class Save_XML extends ObjectFactory {
 			try{
 			InflectionPointType ifPoint = new InflectionPointType();
 			TxModel.getIntermodulationMask().get(o).getImCombiningMask().getInflectionPoint().add(ifPoint);
+			
+			if(Sdata.getValueAt(i, 1).toString().equals("")&& Sdata.getValueAt(i, 2).toString().equals(""))
+			{
+				break;
+			}
 			
 			Double data = Double.parseDouble(Sdata.getValueAt(i, 1).toString());
 			TxModel.getIntermodulationMask().get(o).getImCombiningMask().getInflectionPoint().get(i).setFrequency(data);
