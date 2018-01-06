@@ -8,4 +8,5 @@ https://github.com/mohanarnav
 Lead developer – SCMBAT v1.0
 
 #### Code contributors
-To be listed in alphabetical order
+Listed in alphabetical order (of lastname)
+- Sanjana Rajagopala - Syracuse University
