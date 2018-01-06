@@ -218,6 +218,11 @@ public class UnderlayRated {
 			}
 		});
 	
+      //To allow the element on the last edit to be saved
+      table2.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
+      table3.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
+      table4.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
+    
 		table_model2 = (DefaultTableModel) table2.getModel();
 		
 		// BTP Rated Field

@@ -106,7 +106,7 @@ public class SCM_MainWindow {
 		this.openedModels = openedModels;
 	}
 	
-    public void design(int Index) {
+    public void design(final int Index) {
     	frame.setTitle("Spectrum Consumption Model Builder - "+SaveName);
     	
     	frame.addWindowListener(new WindowAdapter() {

@@ -376,6 +376,10 @@ public class UnderlayMask {
         
         Dimension size3 = tableContainer.getPreferredSize();
         
+      //To allow the element on the last edit to be saved
+      table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
+  
+        
         table.getTableHeader().setReorderingAllowed(true);
         table.getColumnModel().getColumn(0).setPreferredWidth(15);
         table.getColumnModel().getColumn(0);

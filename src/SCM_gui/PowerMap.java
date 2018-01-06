@@ -202,6 +202,12 @@ public class PowerMap {
         relativeTable.getColumnModel().getColumn(0).setPreferredWidth(30);
         referenceTable.getColumnModel().getColumn(1).setPreferredWidth(40);
         
+      //To allow the element on the last edit to be saved
+        relativeTable.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
+        referenceTable.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
+        ScanTable.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
+        
+        
         scanYes.setFont(font);
         Dimension yesSize = scanYes.getPreferredSize();
         scanYes.setBounds(600,115, yesSize.width, yesSize.height);
@@ -265,6 +271,9 @@ public class PowerMap {
 	    table1.getColumnModel().getColumn(3).setPreferredWidth(30);
 	    
 	    table = table1;
+	  //To allow the element on the last edit to be saved
+	    table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
+	    
 	    count = count1;
 	    tableContainer1 = new JScrollPane(table1);
 	    Dimension sizeContainer1 = tableContainer1.getPreferredSize();

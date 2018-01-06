@@ -54,13 +54,48 @@ public class Schedule {
 	
 	Object rowData1[][] = { { "Start Time","","","","","",""}, { "End Time","","","","","",""} };
     Object columnNames1[] = {"", "Year", "Month", "Day", "Hours", "Minutes", "Seconds"};
-    TableModel table_model1 = new DefaultTableModel(rowData1, columnNames1);    
+    TableModel table_model1 = new DefaultTableModel(rowData1, columnNames1) {
+    	
+		private static final long serialVersionUID = 1L;
+
+			@Override
+            public boolean isCellEditable(int row, int column)
+            {
+                // make read only column
+    			if(column ==0 )
+    			{
+    				return false;
+    			}
+    			else
+    			{
+    				return true;
+    			}
+            }
+        };   
     public JTable table1 = new JTable(table_model1);
 	JScrollPane tableContainer1 = new JScrollPane(table1);
 	
 	Object rowData2[][] = { { "Start Time","",""}, { "End Time","",""} };
     Object columnNames2[] = {"", "Hours", "Minutes"};
-    TableModel table_model2 = new DefaultTableModel(rowData2, columnNames2);    
+    TableModel table_model2 = new DefaultTableModel(rowData2, columnNames2) {
+    	
+		private static final long serialVersionUID = 1L;
+
+		@Override
+        public boolean isCellEditable(int row, int column)
+        {
+            // make read only column
+			if(column ==0 )
+			{
+				return false;
+			}
+			else
+			{
+				return true;
+			}
+        }
+    };
+    
     public JTable table2 = new JTable(table_model2);
 	JScrollPane tableContainer2 = new JScrollPane(table2);
 	
@@ -130,6 +165,11 @@ public class Schedule {
         SchedLabel.setBounds(25, 110, 
         		SchedLabelSize.width, SchedLabelSize.height);
         
+      //To allow the element on the last edit to be saved
+        table1.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
+        table2.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
+        table3.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
+
         
         Dimension table1Size = tableContainer1.getPreferredSize();
         tableContainer1.setBounds(25, 150, 

@@ -257,6 +257,10 @@ public class Save_XML extends ObjectFactory {
 		for (int i=0; i<Sdata.getRowCount(); i++){
 			InflectionPointType ifPoint = new InflectionPointType();
 			try{
+			if(Sdata.getValueAt(i, 1).toString().equals("")&& Sdata.getValueAt(i, 2).toString().equals(""))
+			{
+				break;
+			}
 			data = Double.parseDouble(Sdata.getValueAt(i, 1).toString());
 			ifPoint.setFrequency(data);
 			data = Double.parseDouble(Sdata.getValueAt(i, 2).toString());
@@ -1039,8 +1043,8 @@ public class Save_XML extends ObjectFactory {
 	public void addIMA(IMC imc)
 	{
 		int o = 0;
-		//First check if the IMA was set from Intermodulation Mask tab. Otherwise return
-		if(imc.IMANo.isSelected())
+		//First check if the IMA was set from Intermodulation Mask tab (Sometimes, both may not be enabled). Otherwise return
+		if(imc.IMANo.isSelected() ||( !imc.IMAYes.isSelected() && !imc.IMANo.isSelected()))
 		{
 			return;
 		}
@@ -1104,13 +1108,18 @@ public class Save_XML extends ObjectFactory {
 			InflectionPointType ifPoint = new InflectionPointType();
 			TxModel.getIntermodulationMask().get(o).getImCombiningMask().getInflectionPoint().add(ifPoint);
 			
+			if(Sdata.getValueAt(i, 1).toString().equals("")&& Sdata.getValueAt(i, 2).toString().equals(""))
+			{
+				break;
+			}
+			
 			Double data = Double.parseDouble(Sdata.getValueAt(i, 1).toString());
 			TxModel.getIntermodulationMask().get(o).getImCombiningMask().getInflectionPoint().get(i).setFrequency(data);
 			data = Double.parseDouble(Sdata.getValueAt(i, 2).toString());
 			TxModel.getIntermodulationMask().get(o).getImCombiningMask().getInflectionPoint().get(i).setRelativePower(data);
 		
 			}catch(Exception e){
-				warningMessage = warningMessage + "\nThe entry at row: " +(i+1)+" in the Spectrum Mask table should be numerical";
+				warningMessage = warningMessage + "\nThe entry at row: " +(i+1)+" in the IM Combining Mask table should be numerical";
 				warningFlag = true;
 			}
 		}    	

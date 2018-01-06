@@ -118,6 +118,9 @@ public class IMA {
         
         panel.add(ConfBtn);
 
+      //To allow the element on the last edit to be saved
+        table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
+        
         // IMA Table content
         
         JLabel TableLabel = new JLabel("IM Mask");
