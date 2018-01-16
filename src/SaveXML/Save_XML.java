@@ -100,7 +100,6 @@ import SCM_gui.PowerMap;
 import SCM_gui.PropMap;
 import SCM_gui.Schedule;
 import SCM_gui.SpecMask;
-import SCM_gui.UnderlayMask;
 
 
 public class Save_XML extends ObjectFactory {
@@ -241,11 +240,16 @@ public class Save_XML extends ObjectFactory {
 	/* Adding Underlay Mask information to the XML document
 	 * (Considering that we are adding a single Underlay Mask)
 	 */
-	public void addUnderlay(UnderlayMask underlayMask, String device) {
+	public void addUnderlay(SpecMask spec, String device) {
 		
 		UnderlayMaskType under = new UnderlayMaskType();
+		//First check if the Underlay Mask was set from Spec Mask tab (Sometimes, both may not be enabled). Otherwise return
+		if(spec.underlayNoButton.isSelected() ||( !spec.underlayYesButton.isSelected() && !spec.underlayNoButton.isSelected()))
+		{
+			return;
+		}
 		try{
-		under.setResolutionBW(Double.parseDouble(underlayMask.ResTextField.getText()));}
+		under.setResolutionBW(Double.parseDouble(spec.underlayResTextField.getText()));}
 		catch(Exception e){
 			warningMessage= warningMessage + "\nThe entry in the Resolution BW field should be numeric";
 			warningFlag = true;
@@ -253,7 +257,7 @@ public class Save_XML extends ObjectFactory {
 		under.setScmMask(new SCMMaskType());
 		
 		Double data = 0.0;
-		TableModel Sdata = underlayMask.table.getModel();
+		TableModel Sdata = spec.underlayTable.getModel();
 		for (int i=0; i<Sdata.getRowCount(); i++){
 			InflectionPointType ifPoint = new InflectionPointType();
 			try{
@@ -277,22 +281,22 @@ public class Save_XML extends ObjectFactory {
 		}
 		
 		
-		if(underlayMask.MaxPowBtn.isSelected()==true){
+		if(spec.MaxPowBtn.isSelected()==true){
 			under.setMaskPowerMarginMethod("MaximumPowerDensity");
 		}else{
 			under.setMaskPowerMarginMethod("TotalPower");
 		}
 		
 		// If Underlay Mask is rated		
-		if(underlayMask.yes.isSelected()==true){
+		if(spec.underlayyes.isSelected()==true){
 			   
 			   under.setRating(new RatingType());
-		       int index = underlayMask.box.getSelectedIndex();
+		       int index = spec.box.getSelectedIndex();
 		       
 		       switch(index){
 		       
 		       case 0: try{under.getRating().
-		       	setRatedBW(Double.parseDouble(underlayMask.underlayRated.BandRatField.getText().toString()));
+		       	setRatedBW(Double.parseDouble(spec.underlayRated.BandRatField.getText().toString()));
 		       }catch(Exception e){
 		    	   
 		    	   warningMessage = warningMessage + "\nBW Rating number should be a number";
@@ -303,7 +307,7 @@ public class Save_XML extends ObjectFactory {
 		       
 		       case 1: BWRatedListType bwRatedList = new BWRatedListType(); 
 		    	data = 0.0;		       
-				Sdata = underlayMask.underlayRated.table2.getModel();
+				Sdata = spec.underlayRated.table2.getModel();
 
 				for (int i=0; i<Sdata.getRowCount(); i++){
 					
@@ -326,7 +330,7 @@ public class Save_XML extends ObjectFactory {
 				break;
 
 		       case 2: try{under.getRating().
-		       	setRatedBTP(Double.parseDouble(underlayMask.underlayRated.BTPRatingField.getText().toString()));
+		       	setRatedBTP(Double.parseDouble(spec.underlayRated.BTPRatingField.getText().toString()));
 		       }catch(Exception e){
 		    	   
 		    	 warningMessage = warningMessage  + "\nThe entry in BTP Rated field should be numerical";
@@ -337,7 +341,7 @@ public class Save_XML extends ObjectFactory {
 		       
 		       case 3: BTPRatedListType btpRatedList = new BTPRatedListType();
 		       data = 0.0;
-		       Sdata = underlayMask.underlayRated.table3.getModel();
+		       Sdata = spec.underlayRated.table3.getModel();
 		       
 		       for (int i=0; i<Sdata.getRowCount(); i++){
 		    	   
@@ -361,7 +365,7 @@ public class Save_XML extends ObjectFactory {
 		       
 		       case 4: DCRatedListType dcRatedList = new DCRatedListType();
 		       data = 0.0;
-		       Sdata = underlayMask.underlayRated.table4.getModel();
+		       Sdata = spec.underlayRated.table4.getModel();
 		       
 		       for(int i=0; i<Sdata.getRowCount(); i++){
 		    	   
@@ -387,7 +391,7 @@ public class Save_XML extends ObjectFactory {
 		       break;
 		       		   
 		       case 5: try{under.getRating().
-		        setPorpIndex(Integer.parseInt(underlayMask.underlayRated.PolicyField.getText().toString()));
+		        setPorpIndex(Integer.parseInt(spec.underlayRated.PolicyField.getText().toString()));
 		       }catch(Exception e){
 		    	   warningMessage = warningMessage + "\nThe entry for PorP Index should be numerical";
 	    		   warningFlag = true;

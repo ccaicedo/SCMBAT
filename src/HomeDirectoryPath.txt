@@ -1,1 +1,1 @@
-HOME_DIR=/home/sanjana/eclipse-workspace/SCMBAT/
+HOME_DIR=/home/sanjana/git/SCMBAT_spring/

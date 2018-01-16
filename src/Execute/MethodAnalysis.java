@@ -104,6 +104,7 @@ public class MethodAnalysis {
 	public String getFilePath()
 	{
 		String directoryPath = "";
+		try {
 		 Set<String> keys = envMap.keySet();
 		    for(String key:keys){
 		    	if(key.equals("SCM_PATH"))
@@ -113,6 +114,10 @@ public class MethodAnalysis {
 			        return directoryPath;
 		    	}
 		    }
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
 		    return directoryPath;
 	}
 	
@@ -169,6 +174,12 @@ public class MethodAnalysis {
 		String Command1=null;
 		String CompatStat=null;
 		String PowerMargin=null;
+		String dirName = getFilePath();
+		if(dirName == "")
+		{
+			warningMessage = warningMessage + "\nError in getting directory path for Compatability Analysis";
+		}
+		
 			
 		switch(method){
 		case "TotalPower": System.out.println("Total Power Method being executed");
@@ -192,7 +203,7 @@ public class MethodAnalysis {
 			//	new Warn().setWarn("Systems Compatible", "Systems are compatible due to non-overlapping schedules");
 				
 			}else{
-				String dirName = getFilePath();
+				
 				String totPowFile = dirName+"TotPow.sh "+dirName;
 				Command0 = "chmod u+x "+totPowFile;
 				Command1 = totPowFile;
@@ -251,7 +262,7 @@ public class MethodAnalysis {
 			//	new Warn().setWarn("Systems Compatible", "Systems are compatible due to non-overlapping schedules");
 				
 			}else{
-				String dirName = getFilePath();
+				
 				String maxPowFile = dirName+"MaxPow.sh "+dirName;
 				Command0 = "chmod u+x "+maxPowFile;
 				Command1 = maxPowFile;			
@@ -315,7 +326,7 @@ public class MethodAnalysis {
 			final ArrayList<OctaveDouble> BW = new ArrayList<OctaveDouble>();
 			ArrayList<OctaveDouble> compatBWList = new ArrayList<OctaveDouble>();
 			
-			File workingDir = new File("Octave");
+			File workingDir = new File(dirName+"Octave");
 
 			OctaveEngineFactory octaveFactory = new OctaveEngineFactory();
 			octaveFactory.setWorkingDir(workingDir);
@@ -377,6 +388,7 @@ public class MethodAnalysis {
 				
 			}
 			
+			execBWRated.setPlotPath(dirName);
 			execBWRated.buildAllCompatList(allCompatModelList);
 			execBWRated.buildCompatList(compatModelList);
 			execBWRated.buildNonCompatList(nonCompatModelList);
@@ -416,7 +428,8 @@ public class MethodAnalysis {
 			final ArrayList<OctaveDouble> BW = new ArrayList<OctaveDouble>();
 			ArrayList<OctaveDouble> compatBWList = new ArrayList<OctaveDouble>();
 			
-			File workingDir = new File("Octave");
+			
+			File workingDir = new File(dirName+"Octave");
 
 			OctaveEngineFactory octaveFactory = new OctaveEngineFactory();
 			octaveFactory.setWorkingDir(workingDir);
@@ -480,7 +493,7 @@ public class MethodAnalysis {
 				}
 				
 			}
-			
+			execBWRated.setPlotPath(dirName);
 			execBWRated.buildAllCompatList(allCompatModelList);
 			execBWRated.buildCompatList(compatModelList);
 			execBWRated.buildNonCompatList(nonCompatModelList);
@@ -514,7 +527,7 @@ public class MethodAnalysis {
 			ArrayList<OctaveDouble> Spec_BTP = new ArrayList<OctaveDouble>();
 			ArrayList<OctaveDouble> compatBTPList = new ArrayList<OctaveDouble>();
 			
-			File workingBTPDir = new File("Octave");
+			File workingBTPDir = new File(dirName+"Octave");
 
 			OctaveEngineFactory BTPoctaveFactory = new OctaveEngineFactory();
 			BTPoctaveFactory.setWorkingDir(workingBTPDir);
@@ -580,6 +593,7 @@ public class MethodAnalysis {
 							}
 					}
 					
+					execBTPRated.setPlotPath(dirName);
 					execBTPRated.buildCompatList(compatList);
 					execBTPRated.buildNonCompatList(nonCompatList);
 					execBTPRated.getFrame();
@@ -613,7 +627,7 @@ public class MethodAnalysis {
 			ArrayList<OctaveDouble> Spec_BTP = new ArrayList<OctaveDouble>();
 			ArrayList<OctaveDouble> compatBTPList = new ArrayList<OctaveDouble>();
 			
-			File workingBTPDir = new File("Octave");
+			File workingBTPDir = new File(dirName+"Octave");
 
 			OctaveEngineFactory BTPoctaveFactory = new OctaveEngineFactory();
 			BTPoctaveFactory.setWorkingDir(workingBTPDir);
@@ -680,6 +694,7 @@ public class MethodAnalysis {
 							}
 					}
 					
+					execBTPRated.setPlotPath(dirName);
 					execBTPRated.buildCompatList(compatList);
 					execBTPRated.buildNonCompatList(nonCompatList);
 					execBTPRated.getFrame();
@@ -712,7 +727,7 @@ public class MethodAnalysis {
 		}else{
 			ArrayList<OctaveDouble> compatDutyList = new ArrayList<OctaveDouble>();
 			
-			File workingDutyDir = new File("Octave");
+			File workingDutyDir = new File(dirName+"Octave");
 
 			OctaveEngineFactory dutyOctaveFactory = new OctaveEngineFactory();
 			dutyOctaveFactory.setWorkingDir(workingDutyDir);
@@ -765,6 +780,7 @@ public class MethodAnalysis {
 							}
 					}
 					
+					execDutyRated.setPlotPath(dirName);
 					execDutyRated.buildCompatList(dutyCompatList);
 					execDutyRated.buildNonCompatList(dutyNonCompatList);
 					execDutyRated.getFrame();

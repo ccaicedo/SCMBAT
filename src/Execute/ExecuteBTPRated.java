@@ -47,6 +47,7 @@ import javax.swing.JScrollPane;
 public class ExecuteBTPRated {
 
 	String plotPath = "Octave/BTPRatedAnalysis.png";
+	
 	JFrame frame;
 	JLabel picLabel;
 	JLabel statusLabel=new JLabel();
@@ -124,6 +125,14 @@ public class ExecuteBTPRated {
 		return frame;
 		
 }
+	public String getPlotPath() {
+		return plotPath;
+	}
+
+	public void setPlotPath(String plotPath) {
+		this.plotPath = plotPath+"Octave/BTPRatedAnalysis.png";
+	}
+
 	
 void buildNonCompatList(ArrayList<String> nonCompatModelList){
 	DefaultListModel<String> listModel = (DefaultListModel<String>) nonCompatList.getModel();

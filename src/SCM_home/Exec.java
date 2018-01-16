@@ -163,6 +163,12 @@ public class Exec {
 		        }
 			}
         });
+        //Adding the help label to select more than one model
+        JLabel modelsLabel = new JLabel("Tip : Use Ctrl button to select more than one model");
+        Dimension modelsLabelSize = modelsLabel.getPreferredSize();
+        modelsLabel.setBounds(25, 320, modelsLabelSize.width, modelsLabelSize.height);
+        panel.add(modelsLabel);
+        
         
         // Placing Back, Execute and Exit operations
         

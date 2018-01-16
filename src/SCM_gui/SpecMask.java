@@ -27,29 +27,29 @@ along with program.  If not, see <http://www.gnu.org/licenses/>.
 package SCM_gui;
 
 
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
-
-import org.apache.log4j.Logger;
-
-import Execute.MethodAnalysis;
-import SCM_home.Home;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+
+import org.apache.log4j.Logger;
+
+import SCM_home.Home;
 
  
 public class SpecMask {
@@ -104,6 +104,78 @@ public class SpecMask {
     public JRadioButton no = new JRadioButton("No");
     public JRadioButton yes = new JRadioButton("Yes");
     public boolean noInitialState = true;
+   
+  //Add the Underlay button for defining Underlay  mask
+  	public JRadioButton underlayYesButton = new JRadioButton("Yes");
+    public JRadioButton underlayNoButton = new JRadioButton("No");
+    public JLabel underlayText  = new JLabel("Define Underlay Mask");
+    
+    
+  //Define the Underlay mask fields
+    
+  //Define a flag for receiver so that the underlay mask is added during "Open Model" otherwise it is set to Default No
+  	public Boolean open_underlay = false;
+	
+	public JTextField underlayResTextField = new JTextField();
+	
+	JLabel ratedLabel = new JLabel("Underlay Mask : This is a rated underlay mask");        
+    final JLabel maskType = new JLabel("Rated Mask Type: ");
+    JLabel PowerMarginLabel = new JLabel("Power Margin method to use: ");
+    JLabel underlayResBW;
+	
+	//Global Buttons
+	JButton underlayb3 = new JButton("Save Data");
+    JButton underlayb4 = new JButton("Exit");
+    
+    
+    JButton underlayb1 = new JButton("Add Row");
+    JButton underlayb2 = new JButton("Remove Row");  
+    
+    String underlaycolumn_names[] = {"#","Frequency (MHz)", "Power (dB)"};
+    Object underlayrowData[][] = { { "1","",""} };
+    TableModel underlayTable_model = new DefaultTableModel(underlayrowData,underlaycolumn_names) {
+    	
+		private static final long serialVersionUID = 6582367260452529797L;
+
+		@Override
+        public boolean isCellEditable(int row, int column)
+        {
+            // make read only column
+			if(column ==0 )
+			{
+				return false;
+			}
+			else
+			{
+				return true;
+			}
+        }
+    };
+    public JTable underlayTable = new JTable(underlayTable_model);	
+	JScrollPane underlaytableContainer = new JScrollPane(underlayTable);
+    
+   
+    public SpecMask_Hop underlaySpecHop = new SpecMask_Hop();
+  //  public JLabel underlayRefFreq;
+  //  public JLabel underlayResBW;
+    public Object[] RatList = {"Bandwidth Rated", 
+    		"Bandwidth Rated List", 
+    		"BTP Rated",
+    		"BTP Rated List",
+    		"Duty Cycle Rated List",
+    		"Policy or Protocol Index"};
+    public JComboBox<Object> box = new JComboBox<Object>(RatList);
+    
+    public UnderlayRated underlayRated = new UnderlayRated();
+    
+    public JRadioButton underlayyes = new JRadioButton("Yes");
+    public JRadioButton underlayno =  new JRadioButton("No");
+    public JRadioButton TotPowerBtn = new JRadioButton("Total Power");
+    public JRadioButton MaxPowBtn= new JRadioButton("Max. Power Density");
+    
+    public boolean underlaynoInitialState=true;
+    public boolean TotPowerInitialState=true;
+    
     
 	public JPanel getPanel(){
 
@@ -119,10 +191,10 @@ public class SpecMask {
         JLabel FreqHopLabel = new JLabel("This is a frequency hopping system");
         
         Dimension HopSize = FreqHopLabel.getPreferredSize();
-        FreqHopLabel.setBounds(25,35+45,HopSize.width, HopSize.height);
+        FreqHopLabel.setBounds(25,40,HopSize.width, HopSize.height);
         Dimension RadBtnSize = yes.getPreferredSize();
-        no.setBounds(330 , 35 + 40, RadBtnSize.width, RadBtnSize.height);
-        yes.setBounds(400 , 35 + 40, RadBtnSize.width, RadBtnSize.height);
+        no.setBounds(330 , 40, RadBtnSize.width, RadBtnSize.height);
+        yes.setBounds(400 , 40, RadBtnSize.width, RadBtnSize.height);
         
         SpecPanel.add(FreqHopLabel);
         SpecPanel.add(no);
@@ -142,10 +214,10 @@ public class SpecMask {
         FreqListBtn.setFont(font);
         BandListBtn.setFont(font);
         
-        HopLabel.setBounds(330, 35 + 80, HopLabelSize.width, HopLabelSize.height);
-        HopLabel2.setBounds(330, 35 + 100, HopLabelSize.width, HopLabelSize.height);
-        FreqListBtn.setBounds(550, 35 + 80, FreqListBtnSize.width, FreqListBtnSize.height);
-        BandListBtn.setBounds(550, 35 + 100, BandListBtnSize.width, BandListBtnSize.height);
+        HopLabel.setBounds(330, 70, HopLabelSize.width, HopLabelSize.height);
+        HopLabel2.setBounds(330, 85, HopLabelSize.width, HopLabelSize.height);
+        FreqListBtn.setBounds(530, 85, FreqListBtnSize.width, FreqListBtnSize.height);
+        BandListBtn.setBounds(700, 85, BandListBtnSize.width, BandListBtnSize.height);
         
         SpecPanel.add(FreqListBtn);
         SpecPanel.add(BandListBtn);
@@ -315,8 +387,8 @@ public class SpecMask {
         Dimension ConfBtnSize = ConfBtn.getPreferredSize();
         Dimension ConfTextSize = ConfText2.getPreferredSize();
         
-        ConfBtn.setBounds(25, 20, ConfBtnSize.width, ConfBtnSize.height);
-        ConfText.setBounds(25,20,ConfTextSize.width,ConfTextSize.height);
+        ConfBtn.setBounds(25, 10, ConfBtnSize.width, ConfBtnSize.height);
+        ConfText.setBounds(25,15,ConfTextSize.width,ConfTextSize.height);
         ConfText2.setBounds(25,40,ConfTextSize.width,ConfTextSize.height);
         
         SpecPanel.add(ConfBtn);
@@ -327,13 +399,13 @@ public class SpecMask {
         JButton b2 = new JButton("Remove Row");        
         
         Dimension size2 = b3.getPreferredSize();
-        b1.setBounds(400 + 0, 130 + 150,
+        b1.setBounds(400 + 0, 210,
                      size2.width + 30, size2.height);        
-        b2.setBounds(400 + 0, 180 + 150,
+        b2.setBounds(400 + 0, 260,
                 size2.width + 30, size2.height);
-        b3.setBounds(550, 180 + 150,
+        b3.setBounds(550, 260,
                 size2.width + 30, size2.height);
-        b4.setBounds(550, 130 + 150, 
+        b4.setBounds(550, 210, 
         		size2.width + 30, size2.height);
         
         Test.setBounds(550, 500, size2.width, size2.height);
@@ -348,15 +420,15 @@ public class SpecMask {
 
         ResBW = new JLabel("Resolution Bandwidth (Mhz)");
         Dimension sizeBW = ResBW.getPreferredSize();
-        ResBW.setBounds(25 + 300, 35 + 150, sizeBW.width, sizeBW.height);
+        ResBW.setBounds(400, 180, sizeBW.width, sizeBW.height);
         SpecPanel.add(ResBW);
      
         ResTextField.setColumns(1);
-        ResTextField.setBounds(235 + 300, 35 + 150, sizeBW.width - 150, 5 + sizeBW.height);
+        ResTextField.setBounds(400 + 220, 180, sizeBW.width - 150, 5 + sizeBW.height);
         SpecPanel.add(ResTextField);
 
         Dimension RelFreqSize = RelFreq.getPreferredSize();
-        RelFreq.setBounds(25, 30 + 150,
+        RelFreq.setBounds(25, 135,
                  RelFreqSize.width, RelFreqSize.height);
         SpecPanel.add(RelFreq);
         
@@ -366,12 +438,12 @@ public class SpecMask {
         // Creating Reference Frequency label
         RefFreq.setFont(font);
         Dimension sizeLabel = RefFreq.getPreferredSize();
-        RefFreq.setBounds(75, 80 + 150, sizeLabel.width, sizeLabel.height);
+        RefFreq.setBounds(75, 180, sizeLabel.width, sizeLabel.height);
         SpecPanel.add(RefFreq);
 
         // Creating reference frequency text field
         TextField.setColumns(1);
-        TextField.setBounds(255 + 0, 80 + 150, sizeLabel.width - 120, 5 + sizeLabel.height);
+        TextField.setBounds(240, 180, sizeLabel.width - 120, 5 + sizeLabel.height);
         SpecPanel.add(TextField);
         
         // Positioning table
@@ -386,7 +458,7 @@ public class SpecMask {
         table.getTableHeader().setReorderingAllowed(true);
         table.getColumnModel().getColumn(0).setPreferredWidth(15);
         table.getColumnModel().getColumn(0);
-        tableContainer.setBounds(25, 130 + 150,
+        tableContainer.setBounds(25, 210,
                 size3.width - 100, size3.height - 300);
         
         SpecPanel.add(tableContainer, BorderLayout.CENTER);
@@ -434,8 +506,118 @@ public class SpecMask {
 				
 			}
 		});
-        
-        return SpecPanel;
 	
+		/**************To add the Underlay Mask**********************/
+		 //underlayText.setFont(new Font("Arial", Font.BOLD, 14));
+		// underlayYesButton.setFont(new Font("Arial", Font.BOLD, 14));
+		 //underlayNoButton.setFont(new Font("Arial", Font.BOLD, 14));
+		 underlayText.setBounds(25,105,size2.width + 120, size2.height);
+		 underlayYesButton.setBounds(220,105,size2.width, size2.height);
+		 underlayNoButton.setBounds(330,105,size2.width, size2.height);
+		 
+		 SpecPanel.add(underlayText);
+		 SpecPanel.add(underlayYesButton);
+		 SpecPanel.add(underlayNoButton);
+		// imaframe.setTitle("IMA");
+		 
+		// JTabbedPane tabPane = new SCM_MainWindow().getTabbedPane();
+		 
+		 underlayYesButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				
+				/*SCM_MainWindow.tabbedPane.add("IMA", imapanel);
+				int tabIndex = SCM_MainWindow.tabbedPane.indexOfTab("IMA");
+				SCM_MainWindow.tabbedPane.setSelectedIndex(tabIndex);
+				*/
+				addUnderlayPanel();
+                underlayYesButton.setSelected(true);
+                underlayNoButton.setSelected(false);
+                
+			}
+		});
+		
+		 underlayNoButton.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					
+				
+					SpecPanel.remove(underlayResTextField);
+					SpecPanel.remove(underlayb3);
+					SpecPanel.remove(underlayb4);
+					SpecPanel.remove(underlayTable);
+					SpecPanel.remove(underlaytableContainer);
+					SpecPanel.remove(box);
+					SpecPanel.remove(underlayyes);
+					SpecPanel.remove(underlayno);
+					SpecPanel.remove(TotPowerBtn);
+					SpecPanel.remove(MaxPowBtn);
+					SpecPanel.remove(maskType);
+					SpecPanel.remove(ratedLabel);
+					SpecPanel.remove(PowerMarginLabel);
+					SpecPanel.remove(underlayb1);
+					SpecPanel.remove(underlayb2);
+					SpecPanel.remove(underlayResBW);
+					
+					underlayRated.removeBR(SpecPanel);
+					underlayRated.removeBRList(SpecPanel);
+					underlayRated.removeBTPList(SpecPanel);
+					underlayRated.removeDutyCycle(SpecPanel);
+					underlayRated.removePolicy(SpecPanel);
+					
+					SpecPanel.repaint();
+					SpecPanel.revalidate();
+	                underlayNoButton.setSelected(true);
+	                underlayYesButton.setSelected(false);
+	                
+				}
+			}); 
+		 
+		 if(open_underlay)
+		 {
+			 addUnderlayPanel();
+			 open_underlay = false;
+		 }
+		 
+		SpecPanel.setAutoscrolls(true);
+		SpecPanel.setPreferredSize(new Dimension(1180, 1300));
+		SpecPanel.repaint();
+		SpecPanel.revalidate();
+			
+		
+		JScrollPane scrollPane=new JScrollPane(SpecPanel, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,  
+				   ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		
+		scrollPane.setWheelScrollingEnabled(true); 
+		scrollPane.getViewport().setPreferredSize(new Dimension(1180, 1000));
+		scrollPane.repaint();
+		scrollPane.revalidate();
+		
+		
+		JPanel mainPanel = new JPanel();
+				
+		
+		mainPanel.add(scrollPane, BorderLayout.CENTER);
+		mainPanel.repaint();
+		mainPanel.revalidate();
+		
+		
+		
+        return mainPanel;
+	
+	}
+	
+	//To add the Underlay Mask fields
+	private void addUnderlayPanel()
+	{
+		UnderlayMask under = new UnderlayMask();
+		this.underlayYesButton.setSelected(true);
+		under.defineElements(this);
+		under.addElements(this);
+		
+		
 	}
 }

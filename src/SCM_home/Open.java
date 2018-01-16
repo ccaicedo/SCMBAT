@@ -214,6 +214,8 @@ public class Open {
 					scm.device="Rx";
 					scm.SaveName=model.ModelName;
 					scm.mode=false;
+					//Allow Underlay Mask to be displayed irrespective of the values
+					scm.spec.open_underlay = true;
 					load.setData(scm, RxModel);
 				}	
 				

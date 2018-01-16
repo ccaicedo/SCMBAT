@@ -455,7 +455,7 @@ public class IMC {
 		 panel.add(IMAText);
 		 panel.add(IMAYes);
 		 panel.add(IMANo);
-		 imaframe.setTitle("IMA");
+		// imaframe.setTitle("IMA");
 		 
 		// JTabbedPane tabPane = new SCM_MainWindow().getTabbedPane();
 		 

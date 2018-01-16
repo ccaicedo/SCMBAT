@@ -49,13 +49,13 @@ import javax.swing.JScrollPane;
 import org.apache.log4j.Logger;
 
 import SCM_home.Home;
-import SCM_home.Open;
 import dk.ange.octave.OctaveEngine;
 import dk.ange.octave.OctaveEngineFactory;
 import dk.ange.octave.type.OctaveDouble;
 
 public class ExecuteBWRated {
 
+	
 	String plotPath = "Octave/BWRatedAnalysis.png";
 	JFrame frame;
 	JLabel picLabel;
@@ -225,7 +225,14 @@ public class ExecuteBWRated {
 		
 	}
 
+	public String getPlotPath() {
+		return plotPath;
+	}
 
+
+	public void setPlotPath(String plotPath) {
+		this.plotPath = plotPath + "Octave/BWRatedAnalysis.png";
+	}
 	JFrame showStatusFrame(){
 		
 		JFrame frame = new JFrame("Compatibility Status");
