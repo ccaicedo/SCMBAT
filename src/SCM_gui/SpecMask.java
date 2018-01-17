@@ -108,7 +108,7 @@ public class SpecMask {
   //Add the Underlay button for defining Underlay  mask
   	public JRadioButton underlayYesButton = new JRadioButton("Yes");
     public JRadioButton underlayNoButton = new JRadioButton("No");
-    public JLabel underlayText  = new JLabel("Define Underlay Mask");
+    public JLabel underlayText  = new JLabel("(Optional) Define Underlay Mask");
     
     
   //Define the Underlay mask fields
@@ -121,7 +121,7 @@ public class SpecMask {
 	JLabel ratedLabel = new JLabel("Underlay Mask : This is a rated underlay mask");        
     final JLabel maskType = new JLabel("Rated Mask Type: ");
     JLabel PowerMarginLabel = new JLabel("Power Margin method to use: ");
-    JLabel underlayResBW;
+    JLabel underlayResBW = new JLabel("Resolution Bandwidth (Mhz)");
 	
 	//Global Buttons
 	JButton underlayb3 = new JButton("Save Data");
@@ -511,13 +511,15 @@ public class SpecMask {
 		 //underlayText.setFont(new Font("Arial", Font.BOLD, 14));
 		// underlayYesButton.setFont(new Font("Arial", Font.BOLD, 14));
 		 //underlayNoButton.setFont(new Font("Arial", Font.BOLD, 14));
-		 underlayText.setBounds(25,105,size2.width + 120, size2.height);
-		 underlayYesButton.setBounds(220,105,size2.width, size2.height);
-		 underlayNoButton.setBounds(330,105,size2.width, size2.height);
+		 underlayText.setBounds(25,510,size2.width + 160, size2.height);
+		 underlayYesButton.setBounds(280,510,size2.width-10, size2.height);
+		 underlayNoButton.setBounds(390,510,size2.width, size2.height);
 		 
 		 SpecPanel.add(underlayText);
 		 SpecPanel.add(underlayYesButton);
 		 SpecPanel.add(underlayNoButton);
+		
+		 
 		// imaframe.setTitle("IMA");
 		 
 		// JTabbedPane tabPane = new SCM_MainWindow().getTabbedPane();
@@ -563,6 +565,7 @@ public class SpecMask {
 					SpecPanel.remove(underlayResBW);
 					
 					underlayRated.removeBR(SpecPanel);
+					underlayRated.removeBTPRating(SpecPanel);
 					underlayRated.removeBRList(SpecPanel);
 					underlayRated.removeBTPList(SpecPanel);
 					underlayRated.removeDutyCycle(SpecPanel);

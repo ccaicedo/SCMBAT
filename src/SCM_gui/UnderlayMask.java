@@ -98,31 +98,31 @@ public class UnderlayMask {
         
         
         Dimension maskTypeSize = spec.maskType.getPreferredSize();
-        spec.maskType.setBounds(490, 505, maskTypeSize.width, maskTypeSize.height);
+        spec.maskType.setBounds(490, 540, maskTypeSize.width, maskTypeSize.height);
         
         Dimension boxSize = spec.box.getPreferredSize();
-        spec.box.setBounds(620, 502, boxSize.width + 50, boxSize.height);
+        spec.box.setBounds(620, 538, boxSize.width + 50, boxSize.height);
         
         Dimension ratedLabelSize = spec.ratedLabel.getPreferredSize();
-        spec.ratedLabel.setBounds(25, 505, ratedLabelSize.width, ratedLabelSize.height);
+        spec.ratedLabel.setBounds(25, 540, ratedLabelSize.width, ratedLabelSize.height);
         
         Dimension noSize = spec.underlayno.getPreferredSize();
         Dimension yesSize = spec.underlayyes.getPreferredSize();
         
-        spec.underlayno.setBounds(380, 500, noSize.width, noSize.height);
-        spec.underlayyes.setBounds(430, 500, yesSize.width, yesSize.height);
+        spec.underlayno.setBounds(380, 536, noSize.width, noSize.height);
+        spec.underlayyes.setBounds(430, 536, yesSize.width, yesSize.height);
         
         // Calculation Method
         
                
         Dimension PowerSize = spec.PowerMarginLabel.getPreferredSize();
-        spec.PowerMarginLabel.setBounds(25, 740, PowerSize.width, PowerSize.height);
+        spec.PowerMarginLabel.setBounds(25, 770, PowerSize.width, PowerSize.height);
         
         Dimension TotPowSize = spec.TotPowerBtn.getPreferredSize();
         Dimension MaxPowSize = spec.MaxPowBtn.getPreferredSize();
         
-        spec.TotPowerBtn.setBounds(250, 740, TotPowSize.width, TotPowSize.height);
-        spec.MaxPowBtn.setBounds(250, 760, MaxPowSize.width, MaxPowSize.height);
+        spec.TotPowerBtn.setBounds(250, 770, TotPowSize.width, TotPowSize.height);
+        spec.MaxPowBtn.setBounds(250, 790, MaxPowSize.width, MaxPowSize.height);
         
         // Positioning Underlay Table
         
@@ -351,13 +351,12 @@ public class UnderlayMask {
         
         // Creating Resolution Bandwidth Label and Text Field
 
-        spec.underlayResBW = new JLabel("Resolution Bandwidth (Mhz)");
         Dimension sizeBW = spec.underlayResBW.getPreferredSize();
-        spec.underlayResBW.setBounds(25, 790, sizeBW.width, sizeBW.height);
+        spec.underlayResBW.setBounds(25, 820, sizeBW.width, sizeBW.height);
         spec.SpecPanel.add(spec.underlayResBW);
      
         spec.underlayResTextField.setColumns(1);
-        spec.underlayResTextField.setBounds(235, 790, sizeBW.width - 150, 5 + sizeBW.height);
+        spec.underlayResTextField.setBounds(235, 820, sizeBW.width - 150, 5 + sizeBW.height);
         spec.SpecPanel.add(spec.underlayResTextField);
 
         spec.SpecPanel.add(spec.underlaytableContainer, BorderLayout.CENTER);
