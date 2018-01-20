@@ -46,12 +46,19 @@ import SCM_home.Home;
 
 public class ExecuteFrame {
 	
-	MethodAnalysis meth = new MethodAnalysis();
-	String plotPath = meth.getFilePath()+"/Octave/CompatAnalysis.png";
+	
+	String plotPath = "";
 	JFrame frame;
 	JLabel picLabel;
 	final Logger logger = Logger.getLogger(ExecuteFrame.class);
 	
+	public String getPlotPath() {
+		return plotPath;
+	}
+
+	public void setPlotPath(String plotPath) {
+		this.plotPath = plotPath;
+	}
 	
 	public JFrame getFrame(String CompatStat,String PowerMargin){
 		logger.addAppender(Home.appender);
@@ -67,7 +74,7 @@ public class ExecuteFrame {
 		
         BufferedImage img = null;
         try{
-        	img = ImageIO.read(new File(plotPath));
+        	img = ImageIO.read(new File(plotPath+"/CompatAnalysis.png"));
         	
         }catch(Exception e){
         	e.printStackTrace();

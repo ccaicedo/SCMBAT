@@ -129,7 +129,7 @@ public class ExecuteDuty {
 	}
 
 	public void setPlotPath(String plotPath) {
-		this.plotPath = plotPath+"Octave/BTPRatedAnalysis.png";
+		this.plotPath = plotPath+"/BTPRatedAnalysis.png";
 	}
 
 void buildNonCompatList(ArrayList<String> nonCompatModelList){

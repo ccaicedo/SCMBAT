@@ -93,7 +93,7 @@ public class ExecuteBWRated {
 		
         BufferedImage img = null;
         try{
-        	img = ImageIO.read(new File(plotPath));
+        	img = ImageIO.read(new File(plotPath + "/BWRatedAnalysis.png"));
         	
         }catch(Exception e){
         	e.printStackTrace();
@@ -160,7 +160,7 @@ public class ExecuteBWRated {
 				
 				String status = "none";
 				
-				File workingDir = new File("Octave");
+				File workingDir = new File(plotPath+"Octave");
 
 				OctaveEngineFactory octaveFactory = new OctaveEngineFactory();
 				octaveFactory.setWorkingDir(workingDir);
@@ -231,7 +231,7 @@ public class ExecuteBWRated {
 
 
 	public void setPlotPath(String plotPath) {
-		this.plotPath = plotPath + "Octave/BWRatedAnalysis.png";
+		this.plotPath = plotPath;
 	}
 	JFrame showStatusFrame(){
 		

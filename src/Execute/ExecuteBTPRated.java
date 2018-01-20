@@ -130,7 +130,7 @@ public class ExecuteBTPRated {
 	}
 
 	public void setPlotPath(String plotPath) {
-		this.plotPath = plotPath+"Octave/BTPRatedAnalysis.png";
+		this.plotPath = plotPath+"/BTPRatedAnalysis.png";
 	}
 
 	

@@ -24,7 +24,7 @@ along with program.  If not, see <http://www.gnu.org/licenses/>.
   Function to perform total power method compatibility computations
 %}
 
-function [Spec_mask_new,Underlay_mask] = DSA_TotPow()
+function [Spec_mask_new,Underlay_mask] = DSA_TotPow(report_directory)
 
 load SCM_transmitter_java.txt;
 load SCM_receiver_java.txt;
@@ -112,6 +112,8 @@ xlabel('Frequency (MHz)');
 ylabel('Power (dB)');
 
 saveas(fig1,'CompatAnalysis.png')
+movefile('CompatAnalysis.png', report_directory)
+	
 
 %SCM compatibility
 [p_Tx_new] = new_spectrum(Spec_mask_new,Underlay_mask);
