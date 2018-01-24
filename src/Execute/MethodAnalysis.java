@@ -809,6 +809,13 @@ public class MethodAnalysis {
 							+ " is not a hopping system");*/
 				}				
 			}
+					octaveDuty.eval("saveas(fig3,'BTPRatedAnalysis.png')");
+			
+					/***** After evaluation, move the images to the respective folder in the Reports directory************/
+					String moveCmd = "movefile('BTPRatedAnalysis.png','"+compatTestDirectory+"')";
+					octaveDuty.eval(moveCmd);
+			
+			
 					
 					octaveDuty.close();
 					
