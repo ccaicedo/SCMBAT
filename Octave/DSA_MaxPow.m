@@ -24,7 +24,7 @@ along with program.  If not, see <http://www.gnu.org/licenses/>.
   Function to perform maximum power compatibility computations 
 %}
 
-function [Spec_mask_new,Underlay_mask] = DSA_MaxPow()
+function [Spec_mask_new,Underlay_mask] = DSA_MaxPow(report_directory)
 
 load SCM_transmitter_java.txt;
 load SCM_receiver_java.txt;
@@ -106,6 +106,7 @@ xlabel('Frequency (MHz)');
 ylabel('Power (dB)');
 
 saveas(fig1,'CompatAnalysis.png')
+movefile('CompatAnalysis.png', report_directory)
 
 %SCM compatibility
 [P_diff] = MaxPow_Diff(Underlay_mask,Spec_mask_new);

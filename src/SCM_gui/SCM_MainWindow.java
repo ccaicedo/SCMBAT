@@ -72,9 +72,9 @@ public class SCM_MainWindow {
 	public Boolean mode = true;	
 	public Action Tx_e;
 		
-    private JPanel panel2; 
-    private JPanel UnderlayPanel;
-    private String MaskType = "Spectrum Mask";
+	private JPanel panel2; 
+  //  private JPanel UnderlayPanel;
+   // private String MaskType = "Spectrum Mask";
     public JPanel propCard = new JPanel(new CardLayout());
     
     public SpecMask spec = new SpecMask();
@@ -146,7 +146,7 @@ public class SCM_MainWindow {
         
         panel2 = spec.getPanel();
         
-        UnderlayPanel = underlay.getPanel();
+      //  UnderlayPanel = underlay.getPanel();
         
         
         
@@ -251,11 +251,11 @@ public class SCM_MainWindow {
         panel.add(dB);
         
         //Default operations and radio button operations
-        if(tabbedPane.indexOfTab("Spectrum Mask")==-1)
+       
         tabbedPane.insertTab("Spectrum Mask",null , panel2, null, 1);
         
-        if(tabbedPane.indexOfTab("Underlay Mask")==-1)
-        tabbedPane.insertTab("Underlay Mask",null , UnderlayPanel, null, 2);
+       /* if(tabbedPane.indexOfTab("Underlay Mask")==-1)
+        tabbedPane.insertTab("Underlay Mask",null , UnderlayPanel, null, 2);*/
 		
         // setting up Propagation Map for Transmitter option
         if(tabbedPane.indexOfTab("Propagation Map")==-1)
@@ -295,10 +295,11 @@ public class SCM_MainWindow {
 					
 				control.file.SaveReceiver();
 				tabbedPane.removeTabAt(1);
-				MaskType = "Underlay Mask";
+				/*MaskType = "Underlay Mask";
 				if(tabbedPane.indexOfTab("Underlay Mask")==-1)
 				tabbedPane.insertTab(MaskType,null , UnderlayPanel, null, 1);				
-				
+				*/
+				tabbedPane.insertTab("Spectrum Mask",null , panel2, null, 1);
 				tabbedPane.removeTabAt(tabbedPane.indexOfTab("Propagation Map"));
 				tabbedPane.removeTabAt(tabbedPane.indexOfTab("Intermodulation Mask"));
 				if(tabbedPane.indexOfTab("IMA")!=-1)
@@ -408,7 +409,7 @@ public class SCM_MainWindow {
         
         Save.addActionListener(control.saveAction);
         spec.b3.addActionListener(control.saveAction);
-        underlay.b3.addActionListener(control.saveAction);
+        spec.underlayb3.addActionListener(control.saveAction);
         power.b3.addActionListener(control.saveAction);        
         prop.b3.addActionListener(control.saveAction);        
         imc.b3.addActionListener(control.saveAction);  
@@ -421,7 +422,7 @@ public class SCM_MainWindow {
         //Exit Operations
         
         spec.b4.addActionListener(exitAction);        
-        underlay.b4.addActionListener(exitAction);
+        spec.underlayb4.addActionListener(exitAction);
         power.b4.addActionListener(exitAction);
         prop.b4.addActionListener(exitAction);
         imc.b4.addActionListener(exitAction);

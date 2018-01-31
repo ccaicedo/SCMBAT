@@ -126,7 +126,7 @@ public class Save extends Save_XML{
 			     */
 				addReferencePower(TotPower, device);				
 				addSpec(spec); 
-				addUnderlay(underlay,device);				
+				addUnderlay(spec,device);				
 				addPropMap(prop);
 				addIMC(imc);
 				addIMA(imc);
@@ -137,7 +137,7 @@ public class Save extends Save_XML{
 				*  Underlay Mask 
 				*  and Propagation Map for Transmitter
 				*/
-				addUnderlay(underlay, device);
+				addUnderlay(spec, device);
 				addReferencePower(TotPower, device);
 				
 					}

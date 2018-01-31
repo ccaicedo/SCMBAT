@@ -152,15 +152,15 @@ public class UnderlayRated {
 		// Bandwidth Rated Field
 		BandRatLabel = new JLabel("Bandwidth rating for this mask (MHz)");
 		Dimension BandRatSize = BandRatLabel.getPreferredSize();
-		BandRatLabel.setBounds(325, 100 + 80, BandRatSize.width, BandRatSize.height);
+		BandRatLabel.setBounds(25, 565, BandRatSize.width, BandRatSize.height);
 		
 		Dimension BandFieldSize = BandRatField.getPreferredSize();
-		BandRatField.setBounds(600, 100 + 80, BandFieldSize.width + 40, 1 + BandFieldSize.height);
+		BandRatField.setBounds(300, 565, BandFieldSize.width + 40, 1 + BandFieldSize.height);
 		
 		// BW List Table
 		BWListLabel = new JLabel("Power adjustment offsets definition:");
 		Dimension BWLabelSize = BWListLabel.getPreferredSize();
-		BWListLabel.setBounds(25, 450, BWLabelSize.width, BWLabelSize.height);
+		BWListLabel.setBounds(25, 565, BWLabelSize.width, BWLabelSize.height);
         
 		tableContainer2 = new JScrollPane(table2);
         Dimension size4 = tableContainer2.getPreferredSize();
@@ -168,15 +168,15 @@ public class UnderlayRated {
         table2.getTableHeader().setReorderingAllowed(true);
         table2.getColumnModel().getColumn(0).setPreferredWidth(5);
         table2.getColumnModel().getColumn(0);
-        tableContainer2.setBounds(700 - 675, 500,
+        tableContainer2.setBounds(700 - 675, 600,
                 size4.width - 50 , size4.height - 250);
 		
         // BW List Buttons
         
         Dimension sizeBtn = Add2.getPreferredSize();
-        Add2.setBounds(900 - 425, 500,
+        Add2.setBounds(900 - 425, 600,
                      sizeBtn.width + 50, sizeBtn.height);
-        Remove2.setBounds(900 - 425, 550,
+        Remove2.setBounds(900 - 425, 645,
                 sizeBtn.width + 50, sizeBtn.height);
         
         Add2.addActionListener(new ActionListener() {
@@ -229,16 +229,16 @@ public class UnderlayRated {
 		
 		BTPRatingLabel = new JLabel("BTP Rating for this mask (MHz x sec)");
 		Dimension BTPRatingSize = BTPRatingLabel.getPreferredSize();
-		BTPRatingLabel.setBounds(325, 100 + 80, BTPRatingSize.width, BTPRatingSize.height);
+		BTPRatingLabel.setBounds(25, 565, BTPRatingSize.width, BTPRatingSize.height);
 		
 		Dimension BTPRatingFieldSize = BTPRatingField.getPreferredSize();
-		BTPRatingField.setBounds(600, 100 + 80, BTPRatingFieldSize.width + 40, 1 + BTPRatingFieldSize.height);
+		BTPRatingField.setBounds(300, 565, BTPRatingFieldSize.width + 40, 1 + BTPRatingFieldSize.height);
 		
 		// BTP Rated List Table
 		
 		BTPListLabel = new JLabel("Power adjustment offsets definition:");
 		Dimension BTPListLabelSize = BTPListLabel.getPreferredSize();
-		BTPListLabel.setBounds(25, 450, BTPListLabelSize.width, BTPListLabelSize.height);
+		BTPListLabel.setBounds(25, 565, BTPListLabelSize.width, BTPListLabelSize.height);
 		        
 		tableContainer3 = new JScrollPane(table3);
 		Dimension table3Size = tableContainer3.getPreferredSize();
@@ -246,15 +246,15 @@ public class UnderlayRated {
 		table3.getTableHeader().setReorderingAllowed(true);
 		table3.getColumnModel().getColumn(0).setPreferredWidth(5);
 		table3.getColumnModel().getColumn(0);
-		tableContainer3.setBounds(700 - 675, 500,
+		tableContainer3.setBounds(700 - 675, 600,
 		         table3Size.width - 50 , table3Size.height - 250);
 				
 		// BTP Rated List Buttons
 		        
 		Dimension sizeBtn3 = Add3.getPreferredSize();
-		Add3.setBounds(900 - 425, 500,
+		Add3.setBounds(900 - 425, 600,
 		             sizeBtn3.width + 50, sizeBtn3.height);
-		Remove3.setBounds(900 - 425, 550,
+		Remove3.setBounds(900 - 425, 645,
 		             sizeBtn3.width + 50, sizeBtn3.height);
 		       
 		Add3.addActionListener(new ActionListener() {
@@ -301,16 +301,16 @@ public class UnderlayRated {
 		// Policy Field
 				PolicyLabel = new JLabel("Policy or Protocol Index");
 				Dimension PolicySize = PolicyLabel.getPreferredSize();
-				PolicyLabel.setBounds(325, 100 + 80, PolicySize.width, PolicySize.height);
+				PolicyLabel.setBounds(25,565, PolicySize.width, PolicySize.height);
 				
 				Dimension PolicyFieldSize = PolicyField.getPreferredSize();
-				PolicyField.setBounds(600, 100 + 80, PolicyFieldSize.width + 40, 1 + PolicyFieldSize.height);
+				PolicyField.setBounds(250, 565, PolicyFieldSize.width + 40, 1 + PolicyFieldSize.height);
 		
 		// Duty Cycle List Table
 		
 				DutyLabel = new JLabel("Power adjustment offsets definition:");
 				Dimension DutyLabelSize = DutyLabel.getPreferredSize();
-				DutyLabel.setBounds(25, 450, DutyLabelSize.width, DutyLabelSize.height);
+				DutyLabel.setBounds(25, 565, DutyLabelSize.width, DutyLabelSize.height);
 				        
 				tableContainer4 = new JScrollPane(table4);
 				Dimension table4Size = tableContainer4.getPreferredSize();
@@ -320,15 +320,15 @@ public class UnderlayRated {
 				table4.getColumnModel().getColumn(1).setPreferredWidth(25);
 				table4.getColumnModel().getColumn(2).setPreferredWidth(50);
 				table4.getColumnModel().getColumn(0);
-				tableContainer4.setBounds(700 - 675, 500,
+				tableContainer4.setBounds(700 - 675, 600,
 				         table4Size.width + 5, table4Size.height - 250);
 						
 				// Duty Cycle List Buttons
 				        
 				Dimension sizeBtn4 = Add4.getPreferredSize();
-				Add4.setBounds(900 - 370, 500,
+				Add4.setBounds(900 - 370, 600,
 				             sizeBtn4.width + 50, sizeBtn4.height);
-				Remove4.setBounds(900 - 370, 550,
+				Remove4.setBounds(900 - 370, 645,
 				             sizeBtn4.width + 50, sizeBtn4.height);
 				       
 				Add4.addActionListener(new ActionListener() {

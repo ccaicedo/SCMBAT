@@ -49,13 +49,13 @@ import javax.swing.JScrollPane;
 import org.apache.log4j.Logger;
 
 import SCM_home.Home;
-import SCM_home.Open;
 import dk.ange.octave.OctaveEngine;
 import dk.ange.octave.OctaveEngineFactory;
 import dk.ange.octave.type.OctaveDouble;
 
 public class ExecuteBWRated {
 
+	
 	String plotPath = "Octave/BWRatedAnalysis.png";
 	JFrame frame;
 	JLabel picLabel;
@@ -93,7 +93,7 @@ public class ExecuteBWRated {
 		
         BufferedImage img = null;
         try{
-        	img = ImageIO.read(new File(plotPath));
+        	img = ImageIO.read(new File(plotPath + "/BWRatedAnalysis.png"));
         	
         }catch(Exception e){
         	e.printStackTrace();
@@ -160,7 +160,7 @@ public class ExecuteBWRated {
 				
 				String status = "none";
 				
-				File workingDir = new File("Octave");
+				File workingDir = new File(plotPath+"Octave");
 
 				OctaveEngineFactory octaveFactory = new OctaveEngineFactory();
 				octaveFactory.setWorkingDir(workingDir);
@@ -225,7 +225,14 @@ public class ExecuteBWRated {
 		
 	}
 
+	public String getPlotPath() {
+		return plotPath;
+	}
 
+
+	public void setPlotPath(String plotPath) {
+		this.plotPath = plotPath;
+	}
 	JFrame showStatusFrame(){
 		
 		JFrame frame = new JFrame("Compatibility Status");
