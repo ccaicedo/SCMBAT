@@ -563,6 +563,9 @@ public class Save_XML extends ObjectFactory {
 				prop.getPropMap().getPropMapValue().get(i).getPropagationModel()
 				.getPiecewiseLinear().setBreakpoint(breakData);
 				
+				//Set the linear value to default value if the piecewiselineartype is set
+				prop.getPropMap().getPropMapValue().get(i).getPropagationModel().setLinear(0.0);
+				
 				strData = tableData.getValueAt(i, 3).toString().replaceAll(" ", "");
 				if(strData.equals(null)  || strData.equals("") || strData.equals(" ")){
 					prop.getPropMap().getPropMapValue().get(i).getPropagationModel()
