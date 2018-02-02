@@ -456,6 +456,9 @@ public class SCM_MainWindow {
         location.Previous.addActionListener(control.new PrevListener("location",tabbedPane));
         schedule.Previous.addActionListener(control.new PrevListener("schedule",tabbedPane));
         
+       /* //Add listener for the location field
+        location.LocationField.addFocusListener(control.new LocIndexListener());
+        */
     }
     
     public JTabbedPane getTabbedPane()

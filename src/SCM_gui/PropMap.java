@@ -26,22 +26,24 @@ along with program.  If not, see <http://www.gnu.org/licenses/>.
 
 package SCM_gui;
 
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
-
-import java.awt.Font;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Vector;
 
+import javax.swing.ButtonGroup;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 public class PropMap {
 
@@ -95,6 +97,11 @@ public class PropMap {
         JTable table = new JTable(table_model);
         return table;
 	}
+	
+	//Location index combo box
+	Vector<String> comboBoxItems = new Vector<String>();
+	DefaultComboBoxModel<String> combomodel = new DefaultComboBoxModel<String>(comboBoxItems);
+	JComboBox<String> comboBox = new JComboBox<String>(combomodel);
     
 	public JPanel getPanel(){
 		
@@ -127,9 +134,11 @@ public class PropMap {
         
         LocationLabel.setBounds(25, 70, LocationLabelSize.width, LocationLabelSize.height);
         LocationField.setBounds(225, 70, LocationFieldSize.width + 50, LocationFieldSize.height);
+        comboBox.setBounds(225, 70, LocationFieldSize.width + 50, LocationFieldSize.height);
         
         PropPanel.add(LocationField);
         PropPanel.add(LocationLabel);
+       // PropPanel.add(comboBox);
         
         // Antenna Height Option
         

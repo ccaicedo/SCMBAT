@@ -86,6 +86,18 @@ public class SCMControl {
 		}
 	}
 	
+	/*public class LocIndexListener implements FocusListener {
+	    
+	    public void focusGained(FocusEvent e) {
+	      };
+	      public void focusLost(FocusEvent e) {
+	        if (!e.isTemporary()) {
+	        	addLocIndexFunc();
+	        }
+	      }
+
+	}	*/	
+	
 	public PropMap tempPropMap = new PropMap();
 	public IMA tempIMA = new IMA();
 	public IMC tempIMC = new IMC();
@@ -167,9 +179,11 @@ public class SCMControl {
     					propArray.get(currentIndex).index = currentIndex;
     					tempPropMap=propArray.get(currentIndex);
     					
-    					pane.removeTabAt(3);
-    					pane.insertTab("Propagation Map",null, propArray.get(currentIndex).getPanel(),null,3);
-    					pane.setSelectedIndex(3);
+    					int propIndex = pane.indexOfTab("Propagation Map");
+    					pane.removeTabAt(propIndex);
+    					pane.insertTab("Propagation Map",null, propArray.get(currentIndex).getPanel(),null,propIndex);
+    				
+					pane.setSelectedIndex(propIndex);
     					pane.repaint();
     					pane.revalidate();
     					
@@ -186,10 +200,11 @@ public class SCMControl {
 			imcArray.get(imcIndex).index = imcIndex;
 			tempIMC=imcArray.get(imcIndex);
 			
-			pane.removeTabAt(4);
+			int imIndex = pane.indexOfTab("Intermodulation Mask");
+			pane.removeTabAt(imIndex);
 			pane.insertTab("Intermodulation Mask",null, 
-					imcArray.get(imcIndex).getPanel(),null,4);
-			pane.setSelectedIndex(4);
+					imcArray.get(imcIndex).getPanel(),null,imIndex);
+			pane.setSelectedIndex(imIndex);
 			pane.repaint();
 			pane.revalidate();
 			
@@ -224,12 +239,15 @@ public class SCMControl {
 			locationArray.add(newLoc);
 			int locIndex = locationArray.size()-1;
 			locationArray.get(locIndex).index = locIndex;
+			//locationArray.get(locIndex).LocationField.addFocusListener(new LocIndexListener());
 			tempLocation=locationArray.get(locIndex);
 			
-			pane.removeTabAt(7);
+			int tabIndex = pane.indexOfTab("Location");
+			pane.removeTabAt(tabIndex);
 			pane.insertTab("Location",null, 
-					locationArray.get(locIndex).getPanel(),null,7);
-			pane.setSelectedIndex(7);
+					locationArray.get(locIndex).getPanel(),null,tabIndex);
+			
+			pane.setSelectedIndex(tabIndex);
 			pane.repaint();
 			pane.revalidate();
 			
@@ -246,10 +264,11 @@ public class SCMControl {
 			scheduleArray.get(schedIndex).index = schedIndex;
 			tempSchedule=scheduleArray.get(schedIndex);
 			
-			pane.removeTabAt(8);
+			int scIndex = pane.indexOfTab("Schedule");
+			pane.removeTabAt(scIndex);
 			pane.insertTab("Schedule",null, 
-					scheduleArray.get(schedIndex).getPanel(),null,8);
-			pane.setSelectedIndex(8);
+					scheduleArray.get(schedIndex).getPanel(),null,scIndex);
+			pane.setSelectedIndex(scIndex);
 			pane.repaint();
 			pane.revalidate();
 			
@@ -267,9 +286,12 @@ public class SCMControl {
     	
     	case "prop": int index = tempPropMap.index-1;
     				 if(index>=0){
-    					 pane.removeTabAt(3);
-    					 pane.insertTab("Propagation Map",null, propArray.get(index).PropPanel,null,3);
-    					 pane.setSelectedIndex(3);
+    					int propIndex = pane.indexOfTab("Propagation Map");
+    					 pane.removeTabAt(propIndex);
+    					 
+    					
+    					 pane.insertTab("Propagation Map",null, propArray.get(index).PropPanel,null,propIndex);
+    					 pane.setSelectedIndex(propIndex);
     					 pane.repaint();
      					 pane.revalidate();
     					 tempPropMap = propArray.get(index);
@@ -279,10 +301,11 @@ public class SCMControl {
     					 
     	case "imc": int imcIndex = tempIMC.index-1;
 		 if(imcIndex>=0){
-			 pane.removeTabAt(4);
-			 pane.insertTab("IMC Mask",null,
-					 imcArray.get(imcIndex).panel,null,4);
-			 pane.setSelectedIndex(4);
+			 int imIndex = pane.indexOfTab("Intermodulation Mask");
+			 pane.removeTabAt(imIndex);
+			 pane.insertTab("Intermodulation Mask",null,
+					 imcArray.get(imcIndex).panel,null,imIndex);
+			 pane.setSelectedIndex(imIndex);
 			 pane.repaint();
 			 pane.revalidate();
 			 tempIMC = imcArray.get(imcIndex);
@@ -305,10 +328,12 @@ public class SCMControl {
 		
     	case "location": int locIndex = tempLocation.index-1;
 		 if(locIndex>=0){
-			 pane.removeTabAt(7);
+			 int tabIndex = pane.indexOfTab("Location");
+			 pane.removeTabAt(tabIndex);
 			 pane.insertTab("Location",null,
-					 locationArray.get(locIndex).panel,null,7);
-			 pane.setSelectedIndex(7);
+					 locationArray.get(locIndex).panel,null,tabIndex);
+			// int tabIndex = pane.indexOfTab("Location");
+			 pane.setSelectedIndex(tabIndex);
 			 pane.repaint();
 			 pane.revalidate();
 			 tempLocation = locationArray.get(locIndex);
@@ -318,10 +343,11 @@ public class SCMControl {
 		 
     	case "schedule": int schedIndex = tempSchedule.index-1;
 		 if(schedIndex>=0){
-			 pane.removeTabAt(8);
+			 int scIndex = pane.indexOfTab("Schedule");
+			 pane.removeTabAt(scIndex);
 			 pane.insertTab("Schedule",null,
-					 scheduleArray.get(schedIndex).panel,null,8);
-			 pane.setSelectedIndex(8);
+					 scheduleArray.get(schedIndex).panel,null,scIndex);
+			 pane.setSelectedIndex(scIndex);
 			 pane.repaint();
 			 pane.revalidate();
 			 tempSchedule = scheduleArray.get(schedIndex);
@@ -342,10 +368,14 @@ public class SCMControl {
     	
     	case "prop": int index = tempPropMap.index + 1;
     				 if(index<propArray.size()){
-    					 pane.removeTabAt(3);
+    					 int propIndex = pane.indexOfTab("Propagation Map");
+    					 pane.removeTabAt(propIndex);
+    					 PropMap prop = propArray.get(index);
     					 pane.insertTab("Propagation Map",null,
-    							 propArray.get(index).PropPanel,null,3);
-    					 pane.setSelectedIndex(3);
+    							 prop.PropPanel,null,propIndex);
+    					 
+    					
+    					 pane.setSelectedIndex(propIndex);
     					 pane.repaint();
      					 pane.revalidate();
     					 tempPropMap = propArray.get(index);
@@ -355,10 +385,11 @@ public class SCMControl {
 
     	case "imc": int IMCindex = tempIMC.index + 1;
 		 if(IMCindex<imcArray.size()){
-			 pane.removeTabAt(4);
+			 int imcIndex = pane.indexOfTab("Intermodulation Mask");
+			 pane.removeTabAt(imcIndex);
 			 pane.insertTab("IMC Mask",null, 
-					 imcArray.get(IMCindex).panel,null,4);
-			 pane.setSelectedIndex(4);
+					 imcArray.get(IMCindex).panel,null,imcIndex);
+			 pane.setSelectedIndex(imcIndex);
 			 pane.repaint();
 			 pane.revalidate();
 			 tempIMC = imcArray.get(IMCindex);
@@ -382,10 +413,12 @@ public class SCMControl {
 		
     	case "location": int locIndex = tempLocation.index + 1;
 		 if(locIndex<locationArray.size()){
-			 pane.removeTabAt(7);
+			 int tabIndex = pane.indexOfTab("Location");
+			 pane.removeTabAt(tabIndex);
 			 pane.insertTab("Location",null, 
-					 locationArray.get(locIndex).panel,null,7);
-			 pane.setSelectedIndex(7);
+					 locationArray.get(locIndex).panel,null,tabIndex);
+			// int tabIndex = pane.indexOfTab("Location");
+			 pane.setSelectedIndex(tabIndex);
 			 pane.repaint();
 			 pane.revalidate();
 			 tempLocation = locationArray.get(locIndex);
@@ -396,10 +429,11 @@ public class SCMControl {
 		 
     	case "schedule": int schedIndex = tempSchedule.index + 1;
 		 if(schedIndex<scheduleArray.size()){
-			 pane.removeTabAt(8);
+			 int tabIndex = pane.indexOfTab("Schedule");
+			 pane.removeTabAt(tabIndex);
 			 pane.insertTab("Schedule",null, 
-					 scheduleArray.get(schedIndex).panel,null,8);
-			 pane.setSelectedIndex(8);
+					 scheduleArray.get(schedIndex).panel,null,tabIndex);
+			 pane.setSelectedIndex(tabIndex);
 			 pane.repaint();
 			 pane.revalidate();
 			 tempSchedule = scheduleArray.get(schedIndex);
@@ -413,6 +447,31 @@ public class SCMControl {
     	}
     }
    
+  /*  //Focus Listener for the Location Index field
+    public void addLocIndexFunc(){
+    	int locsize = locationArray.size();
+    		    	
+     	//Add the location Indices to respective Combo boxes
+   		for(int i =0; i<locsize;i++)
+    	{
+   			Location loc = locationArray.get(i);
+        	String locText = loc.LocationField.getText();
+        	for(int x=0;x<powerArray.size();x++)
+        	{
+        		powerArray.get(x).
+        	}
+        	for(int y=0;y<propArray.size();y++)
+        	{
+        		propArray.get(y).combomodel.insertElementAt(locText, i);
+        	}
+        	for(int z=0;z<scheduleArray.size();z++)
+        	{
+        		scheduleArray.get(z).LocCombo.addItem(locText);
+        	}
+        			
+    	}  		
+    		
+    	}*/
    
 }
 
