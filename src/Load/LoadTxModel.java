@@ -42,6 +42,7 @@ import SCM_gui.SCM_MainWindow;
 public class LoadTxModel extends LoadGUI {
 	
 	//final Logger logger = Logger.getLogger(LoadTxModel.class);
+	
 	@Override
 	public void setData(SCM_MainWindow scm, TxModelType txModel) {		
 	//	logger.info("This is Transmitter");
@@ -138,10 +139,28 @@ public class LoadTxModel extends LoadGUI {
 			// Setting all other constructs.
 			setUnderlay(scm,txModel.getUnderlayMask());
 			setReferencePower(scm,txModel.getReferencePower().get(o));
-			setPowerMap(scm,txModel.getScmPowerMap().get(o));
-			setPropMap(scm,txModel.getScmPropagationMap().get(o));
-			setLocation(scm,txModel.getScmLocation().get(o));
-			setSchedule(scm,txModel.getScmSchedule().get(o));
+			
+			//Set all the location data into the model
+			for(int l=0;l<txModel.getScmLocation().size();l++)
+			{
+				setLocation(scm,txModel.getScmLocation().get(l),l);
+			}
+			scm.location = scm.control.locationArray.get(0);
+			for(int i =0;i<txModel.getScmPowerMap().size();i++)
+			{
+				setPowerMap(scm,txModel.getScmPowerMap().get(i));
+			}
+			scm.power = scm.control.powerArray.get(0);
+			for(int i =0;i<txModel.getScmPropagationMap().size();i++)
+			{
+				setPropMap(scm,txModel.getScmPropagationMap().get(i));
+			}
+			scm.prop = scm.control.propArray.get(0);
+			for(int i =0;i<txModel.getScmSchedule().size();i++)
+			{
+				setSchedule(scm,txModel.getScmSchedule().get(i));
+			}
+			scm.schedule = scm.control.scheduleArray.get(0);
 	}
 
 	

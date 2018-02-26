@@ -32,9 +32,12 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Vector;
 
 import javax.swing.ButtonGroup;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -46,9 +49,9 @@ import javax.swing.table.TableModel;
 
 public class PowerMap {
 
-	JPanel PowerPanel = new JPanel();
+	public JPanel PowerPanel = new JPanel();
 	
-	JButton b3 = new JButton("Save Data");
+	public JButton b3 = new JButton("Save Data");
     JButton b4 = new JButton("Exit");
 
     int count;
@@ -100,7 +103,7 @@ public class PowerMap {
     public JRadioButton scanYes = new JRadioButton("Yes");
     public JRadioButton scanNo = new JRadioButton("No");
     
-    JTextField locationField = new JTextField();
+    public JTextField locationField = new JTextField();
     
     
     JLabel ScanningLabel = new JLabel("Scanning Region");
@@ -112,6 +115,10 @@ public class PowerMap {
     public JTable ScanTable = new JTable(ScanTableModel);
     JScrollPane ScanTableContainer = new JScrollPane(ScanTable);
     
+    //Location index combo box
+  	Vector<String> comboBoxItems = new Vector<String>();
+  	DefaultComboBoxModel<String> combomodel = new DefaultComboBoxModel<String>(comboBoxItems);
+  	public JComboBox<String> comboBox = new JComboBox<String>(combomodel);
     
 	public JPanel getPanel(){
 		
@@ -172,7 +179,8 @@ public class PowerMap {
         locationLabel.setBounds(25, 120, locationSize.width, locationSize.height);
         
         Dimension locationFieldSize = locationField.getPreferredSize();
-        locationField.setBounds(205, 120, locationFieldSize.width + 50, locationFieldSize.height);
+       // locationField.setBounds(205, 120, locationFieldSize.width + 50, locationFieldSize.height);
+        comboBox.setBounds(205, 120, locationFieldSize.width + 50, locationFieldSize.height);
         
         JLabel scanLabel = new JLabel("Do you want to define a scanning region?");
         Dimension scanSize = scanLabel.getPreferredSize();
@@ -230,7 +238,8 @@ public class PowerMap {
         ScanTableContainer.setBounds(25, 510, ScanningTableSize.width, ScanningTableSize.height-300);
 
         PowerPanel.add(locationLabel);
-        PowerPanel.add(locationField);
+      //  PowerPanel.add(locationField);
+        PowerPanel.add(comboBox);
         PowerPanel.add(scanLabel);
         PowerPanel.add(scanYes);
         PowerPanel.add(scanNo);

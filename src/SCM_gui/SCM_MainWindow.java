@@ -118,7 +118,7 @@ public class SCM_MainWindow {
     			   }
     		   }
     		  });
-    	final ActionListener exitAction = new ActionListener(){
+    	 final ActionListener exitAction = new ActionListener(){
     		public void actionPerformed(ActionEvent e) {
     			frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
     			frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -146,51 +146,47 @@ public class SCM_MainWindow {
         
         panel2 = spec.getPanel();
         
-      //  UnderlayPanel = underlay.getPanel();
+        //Create new panel only if it is in Create mode
+        JPanel panel3;
+        JPanel panel4;
+        JPanel panel8;
+        JPanel panel9;
+        if(Index==-1)
+        {
+        	panel3 = power.getPanel();
+        	panel4  = prop.getPanel();
+        	panel8 = location.getPanel();        	
+        	panel9 = schedule.getPanel();
+        }
+        else
+        {
+        	panel3 = control.powerArray.get(0).PowerPanel;
+        	panel4 = control.propArray.get(0).PropPanel;
+        	panel8 = control.locationArray.get(0).panel;
+        	panel9 = control.scheduleArray.get(0).panel;
+        }
         
         
-        
-        JPanel panel3 = power.getPanel();
+       
         if(tabbedPane.indexOfTab("Power Map")==-1)
         tabbedPane.addTab("Power Map", panel3);
         
-        final JPanel panel4 = prop.getPanel();
         control.initializeCard("prop", panel4);
         
         //Changing the Panel title to Intermodulation  Mask from IMC
         JPanel panel5 = imc.getPanel();
         if(tabbedPane.indexOfTab("Intermodulation Mask")==-1)
         tabbedPane.addTab("Intermodulation Mask",panel5);
-       /******************************************************/
-        
-        
-       /* JPanel panel6 = ima.getPanel();
-        tabbedPane.addTab("IMA Mask", panel6);
-        
-        
-        int tabIndex = tabbedPane.indexOfTab("IMA Mask");
-
-      //Only if the IMA is enabled allow the edit and save  
-        if(imc.IMAYes.isSelected())
-        {
-        	tabbedPane.setSelectedIndex(tabIndex);
-        	tabbedPane.setEnabledAt(tabIndex,true);
-			
-        }
-        else
-        {
-        	tabbedPane.setEnabledAt(tabIndex,false);
-        }
-        */
+       
         JPanel panel7 = platform.getPanel();
         if(tabbedPane.indexOfTab("Platform")==-1)
         tabbedPane.addTab("Platform",panel7);
         
-        JPanel panel8 = location.getPanel();
+       
         if(tabbedPane.indexOfTab("Location")==-1)
         tabbedPane.add("Location", panel8);
         
-        JPanel panel9 = schedule.getPanel();
+        
         if(tabbedPane.indexOfTab("Schedule")==-1)
         tabbedPane.add("Schedule", panel9);
         
@@ -396,12 +392,19 @@ public class SCM_MainWindow {
         control.underlayArray.add(underlay);
         control.platformArray.add(platform);
         control.powerArray.add(power);
-        control.propArray.add(prop);
+       
         control.imcArray.add(imc);
         control.imaArray.add(ima);
-        control.locationArray.add(location);
-        control.scheduleArray.add(schedule);
-
+        //If the mode is Open the model, then do avoid adding the location again
+        if(Index==-1)
+        {
+        	control.locationArray.add(location);
+        	control.propArray.add(prop);
+        	control.scheduleArray.add(schedule);
+        	
+        }
+        
+       
         // Save Operations
         
         control.getRefPower(RefPowerField);
@@ -434,31 +437,45 @@ public class SCM_MainWindow {
         
         //All create new mask Operations
         
-        prop.NewMap.addActionListener(control.new createListener("prop",tabbedPane));
         
         imc.NewMap.addActionListener(control.new createListener("imc",tabbedPane));
         //ima.NewMap.addActionListener(control.new createListener("ima",tabbedPane));
         
-        location.NewMap.addActionListener(control.new createListener("location",tabbedPane));
-        schedule.NewSched.addActionListener(control.new createListener("schedule",tabbedPane));
+        if(Index==-1)
+        {
+        	location.NewMap.addActionListener(control.new createListener("location",tabbedPane));
+        	location.Next.addActionListener(control.new NextListener("location",tabbedPane));
+        	location.Previous.addActionListener(control.new PrevListener("location",tabbedPane));
+        	//Add listener for the location field
+            location.LocationField.addFocusListener(control.new LocIndexListener());
+            
+            //Propagation Map listeners
+            prop.NewMap.addActionListener(control.new createListener("prop",tabbedPane));
+        	prop.Next.addActionListener(control.new NextListener("prop",tabbedPane));
+        	prop.Previous.addActionListener(control.new PrevListener("prop",tabbedPane));
+        	
+        	//Schedule Map Listeners
+        	 schedule.NewSched.addActionListener(control.new createListener("schedule",tabbedPane));
+        	 schedule.Next.addActionListener(control.new NextListener("schedule",tabbedPane));
+        	 schedule.Previous.addActionListener(control.new PrevListener("schedule",tabbedPane));
+         }
         
-        prop.Next.addActionListener(control.new NextListener("prop",tabbedPane));
+       
+        
         imc.Next.addActionListener(control.new NextListener("imc",tabbedPane));
         imc.imaNext.addActionListener(control.new NextListener("ima",tabbedPane));
       //  ima.Next.addActionListener(control.new NextListener("ima",tabbedPane));
-        location.Next.addActionListener(control.new NextListener("location",tabbedPane));
-        schedule.Next.addActionListener(control.new NextListener("schedule",tabbedPane));
         
-        prop.Previous.addActionListener(control.new PrevListener("prop",tabbedPane));
+      
+        
         imc.Previous.addActionListener(control.new PrevListener("imc",tabbedPane));
         imc.imaPrevious.addActionListener(control.new PrevListener("ima",tabbedPane));
        // ima.Previous.addActionListener(control.new PrevListener("ima",tabbedPane));
-        location.Previous.addActionListener(control.new PrevListener("location",tabbedPane));
-        schedule.Previous.addActionListener(control.new PrevListener("schedule",tabbedPane));
+       
         
-       /* //Add listener for the location field
-        location.LocationField.addFocusListener(control.new LocIndexListener());
-        */
+        
+        
+        
     }
     
     public JTabbedPane getTabbedPane()

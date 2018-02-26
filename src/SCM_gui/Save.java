@@ -107,12 +107,18 @@ public class Save extends Save_XML{
 				SpecMask spec = specArray.get(0);
 		        UnderlayMask underlay = underlayArray.get(0);
 		        PowerMap power = powerArray.get(0);
+		        /*for(int i=0;i<propArray.size();i++)
+		        {
+		        	 PropMap prop = propArray.get(i);
+		        	 addPropMap(prop);
+		        }
 		        PropMap prop = propArray.get(0);
+		        */
 		        IMC imc = imcArray.get(0); /*IMC not implemented in the current version*/
 		        IMA ima = imaArray.get(0); /*IMA not implemented in the current version*/
-		        Location location = locationArray.get(0);
+		     //   Location location = locationArray.get(0);
 		        // Platform platform = platformArray.get(0); *platform not implemented in the current version
-		        Schedule schedule = scheduleArray.get(0);
+		     //   Schedule schedule = scheduleArray.get(0);
 				
 		        // Saving data to XML file based on the XML Schema 
 				createXML(SaveName, device);
@@ -127,7 +133,11 @@ public class Save extends Save_XML{
 				addReferencePower(TotPower, device);				
 				addSpec(spec); 
 				addUnderlay(spec,device);				
-				addPropMap(prop);
+				for(int i=0;i<propArray.size();i++)
+		        {
+		        	 PropMap prop = propArray.get(i);
+		        	 addPropMap(prop);
+		        }
 				addIMC(imc);
 				addIMA(imc);
 				
@@ -147,9 +157,18 @@ public class Save extends Save_XML{
 				 * Location 
 				 * and Schedule Constructs
 				 */
-				addPowerMap(power, device);				
-				addLocation(location,device);
-				addTime(schedule,device);
+				addPowerMap(power, device);
+				for(int i=0;i<locationArray.size();i++)
+		        {
+		        	 Location loc = locationArray.get(i);
+		        	 addLocation(loc,device);
+		        }
+				for(int i=0;i<scheduleArray.size();i++)
+		        {
+		        	 Schedule sched = scheduleArray.get(i);
+		        	 addTime(sched,device);
+		        }
+				
 				
 				if(warningFlag)
 				{
@@ -169,10 +188,23 @@ public class Save extends Save_XML{
 				Process p;
 				Process p2;
 				try {
-					String Command1 = "mkdir Models/"+SaveName;
-					String Command2 = "mv "
-							+SaveName+".xml "
-							+"Models/"+SaveName;
+				//	String Command1 = "mkdir Models/"+SaveName;
+					//Create the Directory Models only if does not exists
+					String Command1 = "mkdir -p Models";
+					String Command2 ="";
+					if(SaveName.endsWith(".xml"))
+					{
+						 Command2 = "mv -f "
+									+SaveName
+									+" Models";
+					}
+					else
+					{
+						 Command2 = "mv -f "
+									+SaveName+".xml "
+									+"Models";
+					}
+					
 					
 					p = Runtime.getRuntime().exec(Command1);
 					p.waitFor();

@@ -45,11 +45,26 @@ public class LoadRxModel extends LoadGUI{
 		System.out.println("This is a Receiver");
 		
 		int o=0;
+		
 		setUnderlay(scm,rxModel.getUnderlayMask().get(o));
 		setReferencePower(scm,rxModel.getReferencePower().get(o));
-		setPowerMap(scm,rxModel.getScmPowerMap().get(o));
-		setLocation(scm,rxModel.getScmLocation().get(o));
-		setSchedule(scm,rxModel.getScmSchedule().get(o));
+		for(int i =0;i<rxModel.getScmLocation().size();i++)
+		{
+			setLocation(scm,rxModel.getScmLocation().get(i),i);
+		}
+		scm.location = scm.control.locationArray.get(0);
+		for(int i =0;i<rxModel.getScmPowerMap().size();i++)
+		{
+			setPowerMap(scm,rxModel.getScmPowerMap().get(i));
+		}
+		scm.power = scm.control.powerArray.get(0);
+		
+		for(int i =0;i<rxModel.getScmSchedule().size();i++)
+		{
+			setSchedule(scm,rxModel.getScmSchedule().get(i));
+		}
+		scm.schedule = scm.control.scheduleArray.get(0);
+		
 		
 	}	
 }

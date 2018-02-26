@@ -419,6 +419,21 @@ public class Save_XML extends ObjectFactory {
 		SCMPowerMapType power = new SCMPowerMapType();
 		power.setOrientation(new OrientationType());
 		power.setGainMap(new GainMapType());
+		String locindexvalue = String.valueOf(powerMap.comboBox.getSelectedItem());
+		
+		//Save the location index only if it is not empty
+		try
+		{
+		if(locindexvalue!="" && locindexvalue!="null" && locindexvalue!=null )
+		{
+			power.setLocationIndex(Integer.parseInt(locindexvalue));
+		}
+		}
+		catch(NumberFormatException e)
+		{
+			warningFlag = true;
+			warningMessage = warningMessage + "\nException in formatting the location index\n";
+		}
 		
 		if(powerMap.surface.isSelected()==true){
 			power.getOrientation().setSurface(true);
@@ -519,7 +534,21 @@ public class Save_XML extends ObjectFactory {
 		Double n1 = 0.0;
 		Double breakData = 0.0;
 		Double n2 = 0.0;
+		String locindexvalue = String.valueOf(propMap.comboBox.getSelectedItem());
 		
+		//Save the location index only if it is not empty
+		try
+		{
+		if(locindexvalue!="" && locindexvalue!="null" &&locindexvalue!=null)
+		{
+			prop.setLocationIndex(Integer.parseInt(locindexvalue));
+		}
+		}
+		catch(NumberFormatException e)
+		{
+			warningFlag = true;
+			warningMessage = warningMessage + "\nException in formatting the location index\n";
+		}
 		TableModel tableData = propMap.table.getModel();
 		for (int i = 0; i < tableData.getRowCount(); i++) {
 			try{
@@ -607,6 +636,21 @@ public class Save_XML extends ObjectFactory {
 		DefaultTableModel timezoneModel = (DefaultTableModel) sched.table2.getModel();
 		SCMScheduleType sch = new SCMScheduleType();
 
+		String locindexvalue = String.valueOf(sched.comboBox.getSelectedItem());
+		
+		//Save the location index only if it is not empty
+		try
+		{
+		if(locindexvalue!="" && locindexvalue!="null" && locindexvalue!=null )
+		{
+			sch.setLocationIndex(Integer.parseInt(locindexvalue));
+		}
+		}
+		catch(NumberFormatException e)
+		{
+			warningFlag = true;
+			warningMessage = warningMessage + "\nException in formatting the location index\n";
+		}
 		try{
 			GregorianCalendar cal = new GregorianCalendar();
 			Date date = null;
@@ -829,7 +873,11 @@ public class Save_XML extends ObjectFactory {
 					warningFlag = true;
 				}
 			
-			loc.getCircularSurface().getAntennaHeight().setHeight(Double.parseDouble(locData.HeightField.getText()));
+			if(locData.HeightField.getText()!=null && locData.HeightField.getText()!="")
+			{
+				loc.getCircularSurface().getAntennaHeight().setHeight(Double.parseDouble(locData.HeightField.getText()));
+
+			}
 			String val = "";
 			if(locData.AGL.isSelected())
 			{
@@ -842,7 +890,11 @@ public class Save_XML extends ObjectFactory {
 			
 			loc.getCircularSurface().getAntennaHeight().setReference(val);
 			
-			loc.getCircularSurface().setTransmitterDensity(Double.parseDouble(locData.transmitterField.getText().toString()));
+			if(locData.transmitterField.getText()!=null && locData.transmitterField.getText()!="")
+			{
+				loc.getCircularSurface().setTransmitterDensity(Double.parseDouble(locData.transmitterField.getText()));
+
+			}
 			
 		}	
 		else if(locData.LocCombo.getItemAt(locData.LocCombo.getSelectedIndex()).equals("Polygon Surface")) {
@@ -879,7 +931,11 @@ public class Save_XML extends ObjectFactory {
 					
 				}
 			}
-			loc.getPolygonSurface().getAntennaHeight().setHeight(Double.parseDouble(locData.HeightField.getText()));
+			if(locData.HeightField.getText()!=null && locData.HeightField.getText()!="")
+			{
+				loc.getPolygonSurface().getAntennaHeight().setHeight(Double.parseDouble(locData.HeightField.getText()));
+			}
+			
 			String val = "";
 			if(locData.AGL.isSelected())
 			{
@@ -891,7 +947,11 @@ public class Save_XML extends ObjectFactory {
 			}
 			
 			loc.getPolygonSurface().getAntennaHeight().setReference(val);
-			loc.getPolygonSurface().setTransmitterDensity(Double.parseDouble(locData.transmitterField.getText().toString()));
+			if(locData.transmitterField.getText()!=null && locData.transmitterField.getText()!="")
+			{
+				loc.getPolygonSurface().setTransmitterDensity(Double.parseDouble(locData.transmitterField.getText()));
+			}
+			
 
 		}
 		else if(locData.LocCombo.getItemAt(locData.LocCombo.getSelectedIndex()).equals("Cylinder")) {
@@ -927,8 +987,17 @@ public class Save_XML extends ObjectFactory {
 					warningFlag = true;
 					
 				}
-				loc.getCylinder().setTransmitterDensity(Double.parseDouble(locData.transmitterField.getText().toString()));
-				loc.getCylinder().setHeight(Double.parseDouble(locData.HeightField.getText().toString()));
+				String transText = locData.transmitterField.getText();
+				String heightText = locData.HeightField.getText();
+				if(transText!="")
+				{
+					loc.getCylinder().setTransmitterDensity(Double.parseDouble(transText));
+				}
+				if(heightText!="")
+				{
+					loc.getCylinder().setHeight(Double.parseDouble(heightText));
+				}
+				
 			}			
 		}
 		else if(locData.LocCombo.getItemAt(locData.LocCombo.getSelectedIndex()).equals("Polyhedron")) {
@@ -992,7 +1061,11 @@ public class Save_XML extends ObjectFactory {
 					warningFlag = true;
 				}
 			}	
-			loc.getPolyhedron().setTransmitterDensity(Double.parseDouble(locData.transmitterField.getText().toString()));
+			if(locData.transmitterField.getText()!="")
+			{
+				loc.getPolyhedron().setTransmitterDensity(Double.parseDouble(locData.transmitterField.getText()));
+
+			}
 
 		}
 		else if(locData.LocCombo.getItemAt(locData.LocCombo.getSelectedIndex()).equals("Path")) {
@@ -1033,7 +1106,29 @@ public class Save_XML extends ObjectFactory {
 			
 		}
 			
-		
+		//Save the location index
+				try
+				{
+					String locindex = locData.LocationField.getText();
+					int finallocindex;
+					if(locindex=="" || locindex == null)
+					{
+						finallocindex = 0;
+					}
+					else
+					{
+						finallocindex = Integer.parseInt(locindex);
+					}
+					
+				scmLoc.setLocationIndex(finallocindex);
+				}
+				catch(Exception e)
+				{
+					warningMessage = warningMessage + "\nThe entry in the Location Index of Location tab should be numeric";
+					warningFlag = true;
+					
+				}
+				
 		
 		
 		scmLoc.setLocation(loc);
@@ -1156,13 +1251,23 @@ public class Save_XML extends ObjectFactory {
 		try {
 			
 			JAXBContext context = JAXBContext.newInstance("org.ieee.dyspansc._1900._5.scm");
+			String filename = "";
+			if(saveName.endsWith(".xml"))
+			{
+				filename = saveName;
+			}
+			else
+			{
+				filename = saveName + ".xml";
+			}
+			
 			if(device.equals("Tx")){
 				JAXBElement<TxModelType> element = createTxModel(TxModel);
 				Marshaller marshaller = context.createMarshaller();
 		        marshaller.setProperty("jaxb.formatted.output",Boolean.TRUE);
 		        marshaller.marshal(element,System.out);
 		      
-		        OutputStream os = new FileOutputStream(saveName+".xml");
+		        OutputStream os = new FileOutputStream(filename);
 		        marshaller.marshal(element, os );
 		        os.close();
 			}else{
@@ -1171,7 +1276,7 @@ public class Save_XML extends ObjectFactory {
 		        marshaller.setProperty("jaxb.formatted.output",Boolean.TRUE);
 		        marshaller.marshal(element,System.out);
 		      
-		        OutputStream os = new FileOutputStream(saveName+".xml");
+		        OutputStream os = new FileOutputStream(filename);
 		        marshaller.marshal(element, os );
 		        os.close();
 			}

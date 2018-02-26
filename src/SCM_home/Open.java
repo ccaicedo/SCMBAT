@@ -41,6 +41,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.Unmarshaller;
@@ -102,7 +103,11 @@ public class Open {
         // Setting the add operation for SCM models.
         Add.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
-				fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+				//Allow the selection of only XML files
+				FileNameExtensionFilter xmlfilter = new FileNameExtensionFilter("xml files (*.xml)", "xml");
+				fc.setFileFilter(xmlfilter);
+				
 				int returnVal = fc.showOpenDialog(panel);
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 		            File file = fc.getSelectedFile();
@@ -150,7 +155,8 @@ public class Open {
 				
 				String device = "NULL";
 				
-				String filePath = model.ModelPath+"/"+model.ModelName+".xml";
+				//String filePath = model.ModelPath+"/"+model.ModelName+".xml";
+				String filePath = model.ModelPath;
 				File file = new File(filePath);
 				if(file.exists() && !file.isDirectory()){
 					System.out.println("File Exists");
