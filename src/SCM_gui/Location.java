@@ -48,7 +48,7 @@ import SCM_home.Home;
 
 public class Location {
 	
-JPanel panel = new JPanel();
+public JPanel panel = new JPanel();
 
 final Logger logger = Logger.getLogger(Location.class);
 public JButton NewMap = new JButton("Add new location");
@@ -241,6 +241,7 @@ public int index =0;
 	    panel.add(Previous);
 	    panel.add(Next);
 	    
+	   // Next.addActionListener(.new NextListener("location",tabbedPane));
 // Location Index
         
         JLabel LocationLabel = new JLabel("Location Index (Optional)");

@@ -27,8 +27,11 @@ along with program.  If not, see <http://www.gnu.org/licenses/>.
 package SCM_gui;
 
 import java.awt.Dimension;
+import java.util.Vector;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -39,7 +42,7 @@ import javax.swing.table.TableModel;
 
 public class Schedule {
 
-	JPanel panel = new JPanel();
+	public JPanel panel = new JPanel();
 	
 	public JButton NewSched = new JButton("Add new schedule");
 	public JButton Previous = new JButton("Previous");
@@ -111,6 +114,11 @@ public class Schedule {
 
 	public int index = 0;
 	
+	//Location index combo box
+		Vector<String> comboBoxItems = new Vector<String>();
+		DefaultComboBoxModel<String> combomodel = new DefaultComboBoxModel<String>(comboBoxItems);
+		public JComboBox<String> comboBox = new JComboBox<String>(combomodel);
+	
 	public JPanel getPanel(){
 		
 		panel.setLayout(null);
@@ -134,6 +142,8 @@ public class Schedule {
         
 	    Dimension NewSchedSize = NewSched.getPreferredSize();
 	    NewSched.setBounds(430 - 5, 70, NewSchedSize.width, NewSchedSize.height);
+	    //Set Enabled only when more than one location index is present. Hence, disabled by default
+	    NewSched.setEnabled(false);
 	    
 	    Dimension PreviousSize = Previous.getPreferredSize();
 	    Previous.setBounds(600 - 5, 70, PreviousSize.width, PreviousSize.height);
@@ -153,10 +163,12 @@ public class Schedule {
         Dimension LocationFieldSize = LocationField.getPreferredSize();
         
         LocationLabel.setBounds(25, 80, LocationLabelSize.width, LocationLabelSize.height);
-        LocationField.setBounds(225, 80, LocationFieldSize.width + 50, LocationFieldSize.height);
+       // LocationField.setBounds(225, 80, LocationFieldSize.width + 50, LocationFieldSize.height);
+        comboBox.setBounds(225, 80, LocationFieldSize.width + 50, LocationFieldSize.height);
         
-        panel.add(LocationField);
+       // panel.add(LocationField);
         panel.add(LocationLabel);
+        panel.add(comboBox);
 	    
         // Schedule Tables:
         

@@ -26,22 +26,24 @@ along with program.  If not, see <http://www.gnu.org/licenses/>.
 
 package SCM_gui;
 
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
-
-import java.awt.Font;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Vector;
 
+import javax.swing.ButtonGroup;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 public class PropMap {
 
@@ -60,11 +62,11 @@ public class PropMap {
 	public JLabel ReferenceLabel = new JLabel("Reference: ");
 	
 	
-	JButton b3 = new JButton("Save Values");    //Declaring Save Button
-    JButton b4 = new JButton("Save & Exit");	 //Declaring Exit Button
-	JButton NewMap = new JButton("Add new map");
-	JButton Previous = new JButton("Previous");
-	JButton Next = new JButton("Next");
+	public JButton b3 = new JButton("Save Values");    //Declaring Save Button
+    public JButton b4 = new JButton("Save & Exit");	 //Declaring Exit Button
+	public JButton NewMap = new JButton("Add new map");
+	public JButton Previous = new JButton("Previous");
+	public JButton Next = new JButton("Next");
     
 	Object rowData[][] = { { "1","","","","",""} };
     Object columnNames[] = {"#","Elevation Angle","Azimuth Angle", "n1", "BreakPoint (m)", "n2"};
@@ -95,6 +97,12 @@ public class PropMap {
         JTable table = new JTable(table_model);
         return table;
 	}
+	
+	//Location index combo box
+	Vector<String> comboBoxItems = new Vector<String>();
+	DefaultComboBoxModel<String> combomodel = new DefaultComboBoxModel<String>(comboBoxItems);
+	public JComboBox<String> comboBox = new JComboBox<String>(combomodel);
+	//public String currentSelectedItem;
     
 	public JPanel getPanel(){
 		
@@ -126,10 +134,25 @@ public class PropMap {
         Dimension LocationFieldSize = LocationField.getPreferredSize();
         
         LocationLabel.setBounds(25, 70, LocationLabelSize.width, LocationLabelSize.height);
-        LocationField.setBounds(225, 70, LocationFieldSize.width + 50, LocationFieldSize.height);
+       // LocationField.setBounds(225, 70, LocationFieldSize.width + 50, LocationFieldSize.height);
+        comboBox.setBounds(225, 70, LocationFieldSize.width + 50, LocationFieldSize.height);
         
-        PropPanel.add(LocationField);
+       // PropPanel.add(LocationField);
         PropPanel.add(LocationLabel);
+        PropPanel.add(comboBox);
+        
+        //Action listener for combobox
+       /* comboBox.addItemListener(new ItemListener() 
+        {
+        	@Override
+       	    public void itemStateChanged(ItemEvent event) {
+            if (event.getStateChange() == ItemEvent.SELECTED) {
+            	System.out.println(event.getItem().toString());
+            	currentSelectedItem = String.valueOf(comboBox.getSelectedItem());
+            }
+        	}
+        }	
+      );*/
         
         // Antenna Height Option
         
@@ -247,6 +270,8 @@ public class PropMap {
 	    
 	    Dimension NewMapSize = NewMap.getPreferredSize();
 	    NewMap.setBounds(450 + 10, 110 + 100, NewMapSize.width, NewMapSize.height);
+	    //By Default keep it disabled so that only when more than 1 location index is present, we allow the addition
+	    NewMap.setEnabled(false);
 	    
 	    Dimension PreviousSize = Previous.getPreferredSize();
 	    Previous.setBounds(600 + 10, 110 + 100, PreviousSize.width, PreviousSize.height);
