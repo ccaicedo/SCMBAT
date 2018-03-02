@@ -1,5 +1,5 @@
 # SCMBAT
-The **Spectrum Consumption Model Builder and Analysis Tool (SCMBAT) **facilitates the construction of Spectrum Consumption Models (SCMs) and the analysis of compatibility between transmitters and receivers for which an SCM describes their boundaries of spectrum use. 
+The **Spectrum Consumption Model Builder and Analysis Tool (SCMBAT) ** facilitates the construction of Spectrum Consumption Models (SCMs) and the analysis of compatibility between transmitters and receivers for which an SCM describes their boundaries of spectrum use. 
 
 The structure of SCMs and the mechanisms to determine non-interfering use of spectrum when devices express their spectrum use boundaries via SCMs is defined in the IEEE Standard 1900.5.2 being elaborated by the IEEE 1900.5 Working Group on Policy Language and Architectures for Managing Cognitive Radio for Dynamic Spectrum Access Applications. http://grouper.ieee.org/groups/dyspan/5/index.htm
 
@@ -30,7 +30,8 @@ javaoctave-0.6.4.jar  (https://kenai.com/projects/javaoctave/pages/Home)
 - The *Octave* folder contains scripts written in octave for SCMBAT operations
 - The *Models* folder contains an example of a SCM for a transmitter and a receiver which can be loaded and explored in SCMBAT.
 - The *libraries* folder contains jar libraries required by SCMBAT
-- The MaxPow.sh and TotPow.sh are required for adequate execution of compatibility computations in SCMBAT
+- The MaxPow.sh and TotPow.sh files are required for adequate execution of compatibility computations in SCMBAT
+- The HomeDirectoryPath.txt file. This file should be updated to contain the directory path of your installation of SCMBAT.
 
 ### Executing the code – environment setup
 If you have compiled the Java code and want to execute it (i.e. an executable JAR file), please note that the following elements should be present in the same directory where you have your executable
@@ -40,11 +41,14 @@ If you have compiled the Java code and want to execute it (i.e. an executable JA
 - (optional) a sub-directory containing the commons-logging and javaoctave jar libraries (depends on the options you used to compile the code)
 - (Recommended) A “Models” directory where the spectrum consumption model directories and files will be created by default.
 - A directory with the license files
+- **Note:** The *HomeDirectoryPath.txt* file must be edited to contain the directory path of your installation of SCMBAT.
+
+
 
 Also make sure your system meets the requirements mentioned previously
 
 ### Tool use – Notes/Observations
-- Spectrum Consumption Models are saved as xml files compatible with the IEEE 1900.5.2	XML Schema for SCM. The XML file with the SCM information will be stored inside a subdirectory with the same name of the model.
+- Spectrum Consumption Models are saved as xml files compatible with the IEEE 1900.5.2	XML Schema for SCM. The XML file with the SCM information will be stored inside the *Models* folder.
 
 - When doing compatibility calculations, a couple files are currently being generated inside the Octave directory: CompatAnalysis.png, SCM_receiver_java.txt and SCM_transmitter_java.txt. 
 In future versions of the tool these files will be placed in a separate directory.
