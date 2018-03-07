@@ -205,7 +205,7 @@ public class Home {
     private void initializeLogger()
     {
     	
-    	DateFormat dateFormat = new SimpleDateFormat("yyyy-dd-MM");
+    	DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     	Date date = new Date();
     	String curDate = dateFormat.format(date);
     	MethodAnalysis meth = new MethodAnalysis();
