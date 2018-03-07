@@ -161,7 +161,16 @@ public class SCM_MainWindow {
         else
         {
         	panel3 = control.powerArray.get(0).PowerPanel;
-        	panel4 = control.propArray.get(0).PropPanel;
+        	if(control.propArray.size()>0)
+        	{
+        		panel4 = control.propArray.get(0).PropPanel;
+        	}
+        	else
+        	{
+        		panel4 = prop.getPanel();
+        	}
+        	
+        	
         	panel8 = control.locationArray.get(0).panel;
         	panel9 = control.scheduleArray.get(0).panel;
         }
