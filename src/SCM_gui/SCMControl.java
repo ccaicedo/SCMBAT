@@ -200,6 +200,8 @@ public class SCMControl {
 			newIMC.NewMap.addActionListener(new createListener("imc",pane));
 			newIMC.Next.addActionListener(new NextListener("imc",pane));
 			newIMC.Previous.addActionListener(new PrevListener("imc",pane));
+			
+			
 			imcArray.add(newIMC);
 			int imcIndex = imcArray.size()-1;
 			imcArray.get(imcIndex).index = imcIndex;
@@ -319,11 +321,13 @@ public class SCMControl {
 			 int imIndex = pane.indexOfTab("Intermodulation Mask");
 			 pane.removeTabAt(imIndex);
 			 pane.insertTab("Intermodulation Mask",null,
-					 imcArray.get(imcIndex).panel,null,imIndex);
+					 imcArray.get(imcIndex).mainPanel,null,imIndex);
 			 pane.setSelectedIndex(imIndex);
 			 pane.repaint();
 			 pane.revalidate();
 			 tempIMC = imcArray.get(imcIndex);
+			 tempIMC.index = imcIndex;
+					 
 		 }
 		 
 			 break;
@@ -407,12 +411,13 @@ public class SCMControl {
 		 if(IMCindex<imcArray.size()){
 			 int imcIndex = pane.indexOfTab("Intermodulation Mask");
 			 pane.removeTabAt(imcIndex);
-			 pane.insertTab("IMC Mask",null, 
-					 imcArray.get(IMCindex).panel,null,imcIndex);
+			 pane.insertTab("Intermodulation Mask",null, 
+					 imcArray.get(IMCindex).mainPanel,null,imcIndex);
 			 pane.setSelectedIndex(imcIndex);
 			 pane.repaint();
 			 pane.revalidate();
 			 tempIMC = imcArray.get(IMCindex);
+			 tempIMC.index = IMCindex;
 			
 		 }
 		 break;

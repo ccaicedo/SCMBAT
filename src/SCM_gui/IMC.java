@@ -56,24 +56,26 @@ public class IMC {
 	
 	public JTextField IntFreqField;
 	public JTextField RelFreqField = new JTextField();
-	JLabel RelFreq = new JLabel("Center Frequency (MHz)");
-	JRadioButton relFreqBtn = new JRadioButton("Use relative frequency values");
+	public JLabel RelFreq = new JLabel("Center Frequency (MHz)");
+	public JRadioButton relFreqBtn = new JRadioButton("Use relative frequency values");
 	
-    JButton b3 = new JButton("Save Data");
+    public JButton b3 = new JButton("Save Data");
     JButton b4 = new JButton("Exit");
  
     JButton b1 = new JButton("Add Row");
     JButton b2 = new JButton("Delete Row");
 
-    JButton NewMap = new JButton("Add new mask");
-    JButton Previous = new JButton("Previous");
-    JButton Next = new JButton("Next");
+    public JButton NewMap = new JButton("Add new mask");
+    public JButton Previous = new JButton("Previous");
+    public JButton Next = new JButton("Next");
     
     Object rowData[][] = { { "1","",""} };
     Object columnNames[] = {"#","Frequency (MHz)","Relative Power (dB)"};
     
     //Adding the order field to save into the XML
     public JTextField imOrderField = new JTextField();
+    
+    public JPanel mainPanel = new JPanel();
     
     TableModel table_model = new DefaultTableModel(rowData, columnNames) {
     	
@@ -100,8 +102,8 @@ public class IMC {
 	 *Adding the IMA UI Controls
 	 */
 	public JTextField imaRelFreqField = new JTextField();
-	JLabel imaRelFreq = new JLabel("Center Frequency (MHz)");
-	JRadioButton imarelFreqBtn = new JRadioButton("Use relative frequency values");
+	public JLabel imaRelFreq = new JLabel("Center Frequency (MHz)");
+	public JRadioButton imarelFreqBtn = new JRadioButton("Use relative frequency values");
 
     JButton imab3 = new JButton("Save Data");
     JButton imab4 = new JButton("Exit");
@@ -110,8 +112,8 @@ public class IMC {
     JButton imab2 = new JButton("Delete Row");
 
     JButton imaNewMap = new JButton("Add new mask");
-    JButton imaPrevious = new JButton("Previous");
-    JButton imaNext = new JButton("Next");
+    public JButton imaPrevious = new JButton("Previous");
+    public JButton imaNext = new JButton("Next");
     
     Object imarowData[][] = { { "1","",""} };
     Object imacolumnNames[] = {"#","Frequency (MHz)","Relative Power (dB)"};
@@ -158,7 +160,7 @@ public class IMC {
     
     public JTextField IFField = new JTextField();
     
-	JPanel panel = new JPanel();
+	public JPanel panel = new JPanel();
 
 	//Adding the panel for defining the IMA
 	JPanel imapanel = new IMA().getPanel();
@@ -573,7 +575,7 @@ public class IMC {
 		scrollPane.revalidate();
 		
 		
-		JPanel mainPanel = new JPanel();
+		
 				
 		
 		mainPanel.add(scrollPane, BorderLayout.CENTER);
@@ -584,7 +586,7 @@ public class IMC {
 		return mainPanel;
 	}
 	
-	private void addIMAPanel()
+	public void addIMAPanel()
 	{
 		// Basic Font
         Font font = new Font("Arial", Font.PLAIN, 12);
@@ -650,9 +652,9 @@ public class IMC {
         // Placing buttons for the panel
         
         Dimension size2 = imab2.getPreferredSize();
-        imab1.setBounds(500 + 10, 160 + 720,
+        imab1.setBounds(500 + 10, 760,
 	                 size2.width, size2.height);
-        imab2.setBounds(500 + 10, 210 + 720,
+        imab2.setBounds(500 + 10, 50 + 760,
 	                 size2.width, size2.height);
         imab3.setBounds(630 + 10, 160 + 720,
 	                 size2.width, size2.height);
@@ -661,8 +663,8 @@ public class IMC {
         
         panel.add(imab1);
         panel.add(imab2);
-        panel.add(imab3);
-        panel.add(imab4);    
+       // panel.add(imab3);
+       // panel.add(imab4);    
         
         /*Considering that the relativeFrequency is inherited from the Intermodulation Mask tab removing it from this panel*/
         //panel.add(NewMap);

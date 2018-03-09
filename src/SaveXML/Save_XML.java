@@ -1142,33 +1142,32 @@ public class Save_XML extends ObjectFactory {
 	/*
 	 * Adding the IMA information to the XML document
 	 */
-	public void addIMA(IMC imc)
+	public void addIMA(IMC imc, IntermodulationMaskType imcMask)
 	{
-		int o = 0;
 		//First check if the IMA was set from Intermodulation Mask tab (Sometimes, both may not be enabled). Otherwise return
 		if(imc.IMANo.isSelected() ||( !imc.IMAYes.isSelected() && !imc.IMANo.isSelected()))
 		{
 			return;
 		}
 		SCMMaskType imaMask = new SCMMaskType();
-		TxModel.getIntermodulationMask().get(o).setImAmplificationMask(imaMask);
+		imcMask.setImAmplificationMask(imaMask);
 		
 		try{
-			TxModel.getIntermodulationMask().get(o).getImAmplificationMask().setRefFrequency(Double.parseDouble(imc.RelFreqField.getText()));
+			imcMask.getImAmplificationMask().setRefFrequency(Double.parseDouble(imc.RelFreqField.getText()));
 		}catch(Exception e){
-			TxModel.getIntermodulationMask().get(o).getImAmplificationMask().setRefFrequency(0.0);
+			imcMask.getImAmplificationMask().setRefFrequency(0.0);
 		}
 		
 		TableModel Sdata = imc.imatable.getModel();
 		for (int i = 0; i < Sdata.getRowCount(); i++) {
 			try{
 			InflectionPointType ifPoint = new InflectionPointType();
-			TxModel.getIntermodulationMask().get(o).getImAmplificationMask().getInflectionPoint().add(ifPoint);
+			imcMask.getImAmplificationMask().getInflectionPoint().add(ifPoint);
 			
 			Double data = Double.parseDouble(Sdata.getValueAt(i, 1).toString());
-			TxModel.getIntermodulationMask().get(o).getImAmplificationMask().getInflectionPoint().get(i).setFrequency(data);
+			imcMask.getImAmplificationMask().getInflectionPoint().get(i).setFrequency(data);
 			data = Double.parseDouble(Sdata.getValueAt(i, 2).toString());
-			TxModel.getIntermodulationMask().get(o).getImAmplificationMask().getInflectionPoint().get(i).setRelativePower(data);
+			imcMask.getImAmplificationMask().getInflectionPoint().get(i).setRelativePower(data);
 		
 			}catch(Exception e){
 				warningMessage = warningMessage + "\nThe entry at row: " +(i+1)+" in the IMA table should be numerical";
@@ -1183,32 +1182,30 @@ public class Save_XML extends ObjectFactory {
 	
 	public void addIMC(IMC imc){
 				
-		int o = 0;
-		
+			
 		IntermodulationMaskType imask = new IntermodulationMaskType();
-		TxModel.getIntermodulationMask().add(imask);
-		TxModel.getIntermodulationMask().get(o).setImCombiningMask(new SCMMaskType());
 		
+		imask.setImCombiningMask(new SCMMaskType());
 		//Set the Center frequency for the intermediate frequency
 		try {
-		TxModel.getIntermodulationMask().get(o).setIntermediateFrequency(Double.parseDouble(imc.IFField.getText()));
+			imask.setIntermediateFrequency(Double.parseDouble(imc.IFField.getText()));
 		}catch(Exception e)
 		{
-			TxModel.getIntermodulationMask().get(o).setIntermediateFrequency(0.0);
+			imask.setIntermediateFrequency(0.0);
 
 		}
 		
 		try{
-			TxModel.getIntermodulationMask().get(o).getImCombiningMask().setRefFrequency(Double.parseDouble(imc.RelFreqField.getText()));
+			imask.getImCombiningMask().setRefFrequency(Double.parseDouble(imc.RelFreqField.getText()));
 		}catch(Exception e){
-			TxModel.getIntermodulationMask().get(o).getImCombiningMask().setRefFrequency(0.0);
+			imask.getImCombiningMask().setRefFrequency(0.0);
 		}
 		
 		TableModel Sdata = imc.table.getModel();
 		for (int i = 0; i < Sdata.getRowCount(); i++) {
 			try{
 			InflectionPointType ifPoint = new InflectionPointType();
-			TxModel.getIntermodulationMask().get(o).getImCombiningMask().getInflectionPoint().add(ifPoint);
+			imask.getImCombiningMask().getInflectionPoint().add(ifPoint);
 			
 			if(Sdata.getValueAt(i, 1).toString().equals("")&& Sdata.getValueAt(i, 2).toString().equals(""))
 			{
@@ -1216,9 +1213,9 @@ public class Save_XML extends ObjectFactory {
 			}
 			
 			Double data = Double.parseDouble(Sdata.getValueAt(i, 1).toString());
-			TxModel.getIntermodulationMask().get(o).getImCombiningMask().getInflectionPoint().get(i).setFrequency(data);
+			imask.getImCombiningMask().getInflectionPoint().get(i).setFrequency(data);
 			data = Double.parseDouble(Sdata.getValueAt(i, 2).toString());
-			TxModel.getIntermodulationMask().get(o).getImCombiningMask().getInflectionPoint().get(i).setRelativePower(data);
+			imask.getImCombiningMask().getInflectionPoint().get(i).setRelativePower(data);
 		
 			}catch(Exception e){
 				warningMessage = warningMessage + "\nThe entry at row: " +(i+1)+" in the IM Combining Mask table should be numerical";
@@ -1226,7 +1223,7 @@ public class Save_XML extends ObjectFactory {
 			}
 		}    	
 		try{
-		TxModel.getIntermodulationMask().get(o).setOrder(imc.imOrderField.getText());
+			imask.setOrder(imc.imOrderField.getText());
 		}catch(Exception e){
 			warningMessage = warningMessage + "\nThe entry in IM Order field in the Intermodulation mask should be numeric";
 			warningFlag = true;
@@ -1235,7 +1232,7 @@ public class Save_XML extends ObjectFactory {
 		}
 		// If there is highSideInjection to be stored
 		try{
-			TxModel.getIntermodulationMask().get(o).setHighSideInjection(imc.IFYes.isSelected());
+			imask.setHighSideInjection(imc.IFYes.isSelected());
 			}catch(Exception e){
 				warningMessage = warningMessage + "\nThe entry for highSideInjection field in the Intermodulation mask must be set properly";
 				warningFlag = true;
@@ -1243,8 +1240,8 @@ public class Save_XML extends ObjectFactory {
 			//	new Warn().setWarn("Warning", "The entry in Resolution BW field should be numeric");
 			}
 		
-		
-	
+		addIMA(imc,imask);
+		TxModel.getIntermodulationMask().add(imask);
 		}
 		
 	public void concludeXML(String saveName, String device){

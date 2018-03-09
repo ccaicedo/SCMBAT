@@ -34,7 +34,6 @@ import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
-
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -61,8 +60,14 @@ public class ExecuteFrame {
 	}
 	
 	public JFrame getFrame(String CompatStat,String PowerMargin){
+		
+		
 		logger.addAppender(Home.appender);
+		
 		frame = new JFrame("Compatibility Analysis Report");
+		
+		
+		
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.setLayout(null);
@@ -98,6 +103,8 @@ public class ExecuteFrame {
         frame.add(picLabel);
         
         JLabel resultLabel = new JLabel("Graphical result");
+        
+        
         Dimension resultLabelSize = resultLabel.getPreferredSize();
         resultLabel.setBounds(25,30,resultLabelSize.width,resultLabelSize.height);
         frame.add(resultLabel);
@@ -107,11 +114,13 @@ public class ExecuteFrame {
         compatLabel.setBounds(700, 50, compatLabelSize.width, compatLabelSize.height);
         frame.add(compatLabel);
         
+       
         JLabel pMarginLabel = new JLabel("Power Margin: "+PowerMargin);
         Dimension pMarginSize = pMarginLabel.getPreferredSize();
         pMarginLabel.setBounds(700, 80, pMarginSize.width, pMarginSize.height);
         frame.add(pMarginLabel);
         
+              
         System.out.println(CompatStat);
         
         logger.debug(CompatStat);

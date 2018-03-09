@@ -34,6 +34,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -188,6 +189,8 @@ public class MethodAnalysis {
 		String CompatStat=null;
 		String PowerMargin=null;
 		String dirName = getFilePath();
+		PrintWriter printfile = null;
+		
 		if(dirName == "")
 		{
 			warningMessage = warningMessage + "\nError in getting directory path for Compatability Analysis";
@@ -200,6 +203,23 @@ public class MethodAnalysis {
 		
 		boolean created_success = new File(current_Dir).mkdirs();
 		
+		//Update the file that must the results of transmitter and receiver compatibility report details
+		//String printTFile = current_Dir + "/SCM_transmitter_java.txt";
+		//String printRFile = current_Dir + "/SCM_receiver_java.txt";
+		
+		String printTFile = dirName + "Octave/SCM_transmitter_java.txt";
+		String printRFile = dirName + "Octave/SCM_receiver_java.txt";
+		String resultFile = current_Dir + "/Results.txt";
+		
+		try
+		{
+			printfile = new PrintWriter(resultFile);
+		} 
+		catch (FileNotFoundException e1) {
+			
+			logger.error("File not found "+resultFile);
+		}
+		
 		if(!created_success)
 		{
 			warningMessage = warningMessage + "\nError in creating the directory for Compatability Analysis Test";
@@ -210,8 +230,8 @@ public class MethodAnalysis {
 		switch(method){
 		case "TotalPower": System.out.println("Total Power Method being executed");
 							logger.info("Total Power Method being executed");
-			warningMessage= warningMessage + printTx.printText(TxData.get(0),"SCM_transmitter_java.txt");
-			warningMessage = warningMessage + printRx.printText(RxData.get(0),"SCM_receiver_java.txt");
+			warningMessage= warningMessage + printTx.printText(TxData.get(0),printTFile);
+			warningMessage = warningMessage + printRx.printText(RxData.get(0),printRFile);
 			
 			int o = 0;
 			SCMScheduleType rxSched = RxData.get(0).getScmSchedule().get(o); 
@@ -262,6 +282,26 @@ public class MethodAnalysis {
 					e.printStackTrace();
 				}
 				
+				/*
+				 * Write the results into the Report file
+				 */
+				try
+				{
+					//Add in the results file
+					printfile.println("Compatibility Analysis Report Results");
+					printfile.println("");
+					printfile.println("Method: Total Power");
+					printfile.println("Compatibility Result: " + CompatStat);
+					printfile.println("");
+					printfile.println("Power Margin: "+PowerMargin);
+					
+				} 
+				catch(Exception e)
+				{
+					logger.error(e.toString());
+				}
+				
+				
 				execFrame = new ExecuteFrame();
 				execFrame.setPlotPath(compatTestDirectory);
 				execFrame.getFrame(CompatStat,PowerMargin);
@@ -270,8 +310,8 @@ public class MethodAnalysis {
 			break;
 		case "MaximumPowerDensity": System.out.println("Max Power Density Method being executed");
 				logger.info("Max Power Density Method being executed");
-		warningMessage= warningMessage+printTx.printText(TxData.get(0),"SCM_transmitter_java.txt");
-		warningMessage = warningMessage + printRx.printText(RxData.get(0),"SCM_receiver_java.txt");
+		warningMessage= warningMessage+printTx.printText(TxData.get(0),printTFile);
+		warningMessage = warningMessage + printRx.printText(RxData.get(0),printRFile);
 			
 			o = 0;
 			SCMScheduleType rxSched2 = RxData.get(0).getScmSchedule().get(o); 
@@ -317,6 +357,26 @@ public class MethodAnalysis {
 					e.printStackTrace();
 				}
 				
+				/*
+				 * Write the results into the Report file
+				 */
+				try
+				{
+					//Add in the results file
+					printfile.println("Compatibility Analysis Report Results");
+					printfile.println("");
+					printfile.println("Method: MaximumPowerDensity");
+					printfile.println("Compatibility Result: " + CompatStat);
+					printfile.println("");
+					printfile.println("Power Margin: "+PowerMargin);
+					printfile.println("");
+				} 
+				catch(Exception e)
+				{
+					logger.error(e.toString());
+				}
+				
+				
 				execFrame = new ExecuteFrame();
 				execFrame.getFrame(CompatStat,PowerMargin);
 
@@ -328,7 +388,7 @@ public class MethodAnalysis {
 		case "ratedBW":	System.out.println("Rated BW Analysis Running");
 						logger.info("Rated BW Analysis Running");
 		
-		warningMessage = warningMessage + printRx.printText(RxData.get(0),"SCM_receiver_java.txt");
+		warningMessage = warningMessage + printRx.printText(RxData.get(0),printRFile);
 		
 		o = 0;
 		SCMScheduleType rxSched_bw = RxData.get(0).getScmSchedule().get(o); 
@@ -367,7 +427,7 @@ public class MethodAnalysis {
 				
 				for(int i=0; i<TxData.size(); i++){
 					
-					warningMessage = warningMessage+printTx.printText(TxData.get(i),"SCM_transmitter_java.txt");	
+					warningMessage = warningMessage+printTx.printText(TxData.get(i),printTFile);	
 								
 					octave.eval("[SpecMask,PSD,BW,compatBWList] = TxMPSD();");
 					SpecMask.add(octave.get(OctaveDouble.class, "SpecMask"));
@@ -435,7 +495,7 @@ public class MethodAnalysis {
 		case "bwRatedList":System.out.println("BW Rated List ANalysis Running"); 
 		logger.info("BW Rated List ANalysis Running");
 			
-		warningMessage = warningMessage + printRx.printText(RxData.get(0),"SCM_receiver_java.txt");
+		warningMessage = warningMessage + printRx.printText(RxData.get(0),printRFile);
 				
 		o = 0;
 		SCMScheduleType rxSched3 = RxData.get(0).getScmSchedule().get(o); 
@@ -475,7 +535,7 @@ public class MethodAnalysis {
 				
 				for(int i=0; i<TxData.size(); i++){
 					
-					warningMessage= warningMessage+printTx.printText(TxData.get(i),"SCM_transmitter_java.txt");	
+					warningMessage= warningMessage+printTx.printText(TxData.get(i),printTFile);	
 					
 				//	p3 = Runtime.getRuntime().exec(Command0);
 				//	p3 = Runtime.getRuntime().exec(Command1);
@@ -543,7 +603,7 @@ public class MethodAnalysis {
 		case "ratedBTP": System.out.println("Rated BTP Analysis Running");
 		logger.info("Rated BTP Analysis Running");
 		
-		warningMessage = warningMessage + printRx.printText(RxData.get(0),"SCM_receiver_java.txt");
+		warningMessage = warningMessage + printRx.printText(RxData.get(0),printRFile);
 		
 		o = 0;
 		SCMScheduleType rxSched_btp = RxData.get(0).getScmSchedule().get(o); 
@@ -577,7 +637,7 @@ public class MethodAnalysis {
 					
 						if(TxData.get(i).getSpectrumMask().get(o).getHoppingData()!=null){
 							
-							warningMessage=warningMessage+printTx.printText(TxData.get(i),"SCM_transmitter_java.txt");
+							warningMessage=warningMessage+printTx.printText(TxData.get(i),printTFile);
 							
 							if(TxData.get(i).getSpectrumMask().get(o).getHoppingData().
 									getFrequencyList()!=null){
@@ -647,7 +707,7 @@ public class MethodAnalysis {
 // BTP Rated List Analysis		
 		case "btpRatedList": System.out.println("BTP Rated List Analysis Running");
 		logger.info("BTP Rated List Analysis Running");
-		warningMessage = warningMessage + printRx.printText(RxData.get(0),"SCM_receiver_java.txt");
+		warningMessage = warningMessage + printRx.printText(RxData.get(0),printRFile);
 		
 		o = 0;
 		SCMScheduleType rxSched4 = RxData.get(0).getScmSchedule().get(o); 
@@ -682,7 +742,7 @@ public class MethodAnalysis {
 					
 						if(TxData.get(i).getSpectrumMask().get(o).getHoppingData()!=null){
 							
-							warningMessage = warningMessage+printTx.printText(TxData.get(i),"SCM_transmitter_java.txt");
+							warningMessage = warningMessage+printTx.printText(TxData.get(i),printTFile);
 							
 							if(TxData.get(i).getSpectrumMask().get(o).getHoppingData().
 									getFrequencyList()!=null){
@@ -754,7 +814,7 @@ public class MethodAnalysis {
 		case "dcRatedList": System.out.println("DC Rated List Analysis Running");
 		logger.info("DC Rated List Analysis Running");
 		
-		warningMessage = warningMessage + printRx.printText(RxData.get(0),"SCM_receiver_java.txt");
+		warningMessage = warningMessage + printRx.printText(RxData.get(0),printRFile);
 		
 		o = 0;
 		SCMScheduleType rxSched_dc = RxData.get(0).getScmSchedule().get(o); 
@@ -788,7 +848,7 @@ public class MethodAnalysis {
 				
 				if(TxData.get(i).getSpectrumMask().get(o).getHoppingData()!=null){
 					
-					warningMessage= warningMessage+printTx.printText(TxData.get(i),"SCM_transmitter_java.txt");
+					warningMessage= warningMessage+printTx.printText(TxData.get(i),printTFile);
 					
 					if(TxData.get(i).getSpectrumMask().get(o).getHoppingData().getFrequencyList()!=null){
 						octaveDuty.eval("[Spec_mask_new,p_Tx_new,compatDutyList] = TxDuty_FreqList();");
@@ -846,5 +906,7 @@ public class MethodAnalysis {
 				
 		default:break;
 		}
+		
+	printfile.close();
 	}
 }

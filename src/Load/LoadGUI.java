@@ -46,6 +46,7 @@ import org.ieee.dyspansc._1900._5.scm.DCRatedListType;
 import org.ieee.dyspansc._1900._5.scm.DCRatingType;
 import org.ieee.dyspansc._1900._5.scm.GainMapValueType;
 import org.ieee.dyspansc._1900._5.scm.InflectionPointType;
+import org.ieee.dyspansc._1900._5.scm.IntermodulationMaskType;
 import org.ieee.dyspansc._1900._5.scm.PathPointType;
 import org.ieee.dyspansc._1900._5.scm.PointSurfaceType;
 import org.ieee.dyspansc._1900._5.scm.PropMapValueType;
@@ -53,6 +54,7 @@ import org.ieee.dyspansc._1900._5.scm.RatingType;
 import org.ieee.dyspansc._1900._5.scm.ReferencePowerType;
 import org.ieee.dyspansc._1900._5.scm.RxModelType;
 import org.ieee.dyspansc._1900._5.scm.SCMLocationType;
+import org.ieee.dyspansc._1900._5.scm.SCMMaskType;
 import org.ieee.dyspansc._1900._5.scm.SCMPowerMapType;
 import org.ieee.dyspansc._1900._5.scm.SCMPropagationMapType;
 import org.ieee.dyspansc._1900._5.scm.SCMScheduleType;
@@ -61,6 +63,7 @@ import org.ieee.dyspansc._1900._5.scm.TxModelType;
 import org.ieee.dyspansc._1900._5.scm.UnderlayMaskType;
 
 import Execute.MethodAnalysis;
+import SCM_gui.IMC;
 import SCM_gui.Location;
 import SCM_gui.PowerMap;
 import SCM_gui.PropMap;
@@ -645,6 +648,122 @@ public void setUnderlay(SCM_MainWindow scm, UnderlayMaskType underlay){
 			tzTableModel.addRow(row4);
 		}
 		scm.control.scheduleArray.add(currentSched);
+	}
+	
+	//The method to set the data of the inter-modulation mask into the UI
+	public void setIntermodulationMask(SCM_MainWindow scm, IntermodulationMaskType interMod)
+	{
+		IMC currentImc = new IMC();
+		currentImc.mainPanel = currentImc.getPanel();
+		
+		currentImc.Next.addActionListener(scm.control.new NextListener("imc",scm.tabbedPane));
+		currentImc.Previous.addActionListener(scm.control.new PrevListener("imc",scm.tabbedPane));
+		currentImc.b3.addActionListener(scm.control.saveAction);
+		currentImc.imaNext.addActionListener(scm.control.new NextListener("ima",scm.tabbedPane));
+		currentImc.imaPrevious.addActionListener(scm.control.new PrevListener("ima",scm.tabbedPane));
+	//	currentLoc.exit.addActionListener(scm.control.saveActionexitAction);
+		currentImc.NewMap.addActionListener(scm.control.new createListener("imc",scm.tabbedPane));
+
+		//Check with string null because the stored value shows null as string
+		if(String.valueOf(interMod.getOrder())!="null" && String.valueOf(interMod.getOrder())!="" )
+		{
+			String imIndex = String.valueOf(interMod.getOrder());
+			currentImc.imOrderField.setText(imIndex);
+		}
+		
+		try
+		{
+		if(String.valueOf(interMod.getIntermediateFrequency())!=null)
+		{
+			currentImc.IFField.setText(String.valueOf(interMod.getIntermediateFrequency()));
+			
+		}
+				
+		if(interMod.isHighSideInjection()!=null && interMod.isHighSideInjection())
+		{
+			currentImc.IFYes.setSelected(true);
+			currentImc.IFNo.setSelected(false);
+		}
+		else
+		{
+			currentImc.IFYes.setSelected(false);
+			currentImc.IFNo.setSelected(true);
+		}
+		
+		SCMMaskType scmmask = interMod.getImCombiningMask();
+		if(scmmask !=null && scmmask.getRefFrequency()!=null)
+		{
+			
+			currentImc.RelFreqField.setText(String.valueOf(scmmask.getRefFrequency()));
+			currentImc.relFreqBtn.setSelected(true);
+			currentImc.RelFreq.setEnabled(true);
+			currentImc.RelFreqField.setEnabled(true);
+			
+		
+		List<InflectionPointType> infP = interMod.getImCombiningMask().getInflectionPoint();
+		DefaultTableModel model = (DefaultTableModel) currentImc.table.getModel();
+	  	model.setRowCount(0);
+	  	
+	  	if(infP!=null)
+	  	{
+	  		for(int i=0; i<infP.size(); i++){
+				
+				String serial = Integer.toString(i+1);
+				String data1 = String.valueOf(infP.get(i).getFrequency());
+				String data2 = String.valueOf(infP.get(i).getRelativePower());
+		  		Object[] rowData = {serial,data1,data2};
+		  		model.addRow(rowData);
+		  	}
+		currentImc.table=new JTable(model);
+		
+	  	}
+		}
+	  	
+		
+		//Check if the IMA is set or not
+		if(scmmask!=null && scmmask.getRefFrequency()!=null)
+	  	{
+	  		currentImc.imaRelFreqField.setText(String.valueOf(interMod.getImCombiningMask().getRefFrequency()));
+	  	}
+		
+		
+		if(interMod.getImAmplificationMask()!=null)
+		{
+			List<InflectionPointType> imaInflP = interMod.getImAmplificationMask().getInflectionPoint();
+			if(imaInflP.size()>0)
+			{
+				currentImc.IMAYes.setSelected(true);
+				currentImc.addIMAPanel();
+				currentImc.imarelFreqBtn.setSelected(true);
+				currentImc.imaRelFreq.setEnabled(true);
+				currentImc.imaRelFreqField.setEnabled(true);
+				DefaultTableModel imamodel = (DefaultTableModel) currentImc.imatable.getModel();
+			  	imamodel.setRowCount(0);
+			  	
+				for(int i=0; i<imaInflP.size(); i++){
+						
+						String serial = Integer.toString(i+1);
+						String data1 = String.valueOf(imaInflP.get(i).getFrequency());
+						String data2 = String.valueOf(imaInflP.get(i).getRelativePower());
+				  		Object[] rowData = {serial,data1,data2};
+				  		imamodel.addRow(rowData);
+				  	}
+				currentImc.imatable=new JTable(imamodel);
+				
+			}
+			
+		}
+		
+		
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		scm.control.imcArray.add(currentImc);
+		
+		
 	}
 
 }

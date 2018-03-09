@@ -53,9 +53,10 @@ public class PrintRxText extends PrintText{
 		try{
 			System.out.println("Rx Printing");
 			logger.info("Rx Printing");
-			MethodAnalysis meth = new MethodAnalysis();
-			printfile = new PrintWriter (meth.getFilePath()+"Octave/" + SaveName);	
-		//	printfile = new PrintWriter ("Octave/" + SaveName);
+			
+			//MethodAnalysis meth = new MethodAnalysis();
+		//	printfile = new PrintWriter (meth.getFilePath()+"Octave/" + SaveName);	
+			printfile = new PrintWriter (SaveName);
 			
 			//Create the file name
 	//		String savefileName = SaveName_getCurrentDate;

@@ -161,6 +161,12 @@ public class LoadTxModel extends LoadGUI {
 				setSchedule(scm,txModel.getScmSchedule().get(i));
 			}
 			scm.schedule = scm.control.scheduleArray.get(0);
+			for(int i =0;i<txModel.getIntermodulationMask().size();i++)
+			{
+				setIntermodulationMask(scm,txModel.getIntermodulationMask().get(i));
+			}
+			scm.imc = scm.control.imcArray.get(0);
+			
 	}
 
 	
