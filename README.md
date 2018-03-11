@@ -1,5 +1,5 @@
 # SCMBAT
-The **Spectrum Consumption Model Builder and Analysis Tool (SCMBAT) ** facilitates the construction of Spectrum Consumption Models (SCMs) and the analysis of compatibility between transmitters and receivers for which an SCM describes their boundaries of spectrum use. 
+The ** Spectrum Consumption Model Builder and Analysis Tool (SCMBAT) ** facilitates the construction of Spectrum Consumption Models (SCMs) and the analysis of compatibility between transmitters and receivers for which an SCM describes their boundaries of spectrum use. 
 
 The structure of SCMs and the mechanisms to determine non-interfering use of spectrum when devices express their spectrum use boundaries via SCMs is defined in the IEEE Standard 1900.5.2 being elaborated by the IEEE 1900.5 Working Group on Policy Language and Architectures for Managing Cognitive Radio for Dynamic Spectrum Access Applications. http://grouper.ieee.org/groups/dyspan/5/index.htm
 
@@ -36,24 +36,24 @@ javaoctave-0.6.4.jar  (https://kenai.com/projects/javaoctave/pages/Home)
 ### Executing the code – environment setup
 If you have compiled the Java code and want to execute it (i.e. an executable JAR file), please note that the following elements should be present in the same directory where you have your executable
 
-- a sub-directory called “octave” with all the octave scripts for the tool in it.
+- a sub-directory called “Octave” with all the octave scripts for the tool in it.
 - The scripts MaxPow.sh and TotPow.sh
 - (optional) a sub-directory containing the commons-logging and javaoctave jar libraries (depends on the options you used to compile the code)
-- (Recommended) A “Models” directory where the spectrum consumption model directories and files will be created by default.
+- A “Models” directory where the spectrum consumption model directories and files will be created by default.
 - A directory with the license files
-- **Note:** The *HomeDirectoryPath.txt* file must be edited to contain the directory path of your installation of SCMBAT.
+- **IMPORTANT:** The *HomeDirectoryPath.txt* file must be edited to contain the directory path of your installation of SCMBAT.
 
-
+Please note that once SCMBAT is started, it will create a "logs" directory to store its execution log. A "Reports" directory will be created the first time you perfrom a comptability test. This directory will store the compatibility test result reports. 
 
 Also make sure your system meets the requirements mentioned previously
 
 ### Tool use – Notes/Observations
 - Spectrum Consumption Models are saved as xml files compatible with the IEEE 1900.5.2	XML Schema for SCM. The XML file with the SCM information will be stored inside the *Models* folder.
 
-- When doing compatibility calculations, a couple files are currently being generated inside the Octave directory: CompatAnalysis.png, SCM_receiver_java.txt and SCM_transmitter_java.txt. 
+- When performing compatibility calculations, a couple files are currently being generated inside the Octave directory:  SCM_receiver_java.txt and SCM_transmitter_java.txt. 
 In future versions of the tool these files will be placed in a separate directory.
 
-- When saving the data for a SCM, the application reconfirms that you are saving it into a Transmitter model (Tx) or a receive model file (Rx) depending on how you started building the model. Additionally, it provides several warning windows indicating data that is missing (which may be intentional from a modelers perspective) or data that should be numeric and isn't (potential data entry error).
+- When saving the data for a SCM, the application reconfirms that you are saving it into a Transmitter model (Tx) or a receive model file (Rx) depending on how you started building the model. Additionally, it provides a warning window indicating data that is missing (which may be intentional from a modelers perspective) or data that should be numeric and isn't (potential data entry error).
 
 ### Bug reports / Feature requests / Code contributions
 Please look at the guidelines mentioned in Contributing.md
