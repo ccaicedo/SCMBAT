@@ -149,6 +149,7 @@ public class SCM_MainWindow {
         //Create new panel only if it is in Create mode
         JPanel panel3;
         JPanel panel4;
+        JPanel panel5;
         JPanel panel8;
         JPanel panel9;
         if(Index==-1)
@@ -157,11 +158,22 @@ public class SCM_MainWindow {
         	panel4  = prop.getPanel();
         	panel8 = location.getPanel();        	
         	panel9 = schedule.getPanel();
+        	panel5  = imc.getPanel();
+             
         }
         else
         {
         	panel3 = control.powerArray.get(0).PowerPanel;
-        	panel4 = control.propArray.get(0).PropPanel;
+        	if(control.propArray.size()>0)
+        	{
+        		panel4 = control.propArray.get(0).PropPanel;
+        	}
+        	else
+        	{
+        		panel4 = prop.getPanel();
+        	}
+        	
+        	panel5 = control.imcArray.get(0).mainPanel;
         	panel8 = control.locationArray.get(0).panel;
         	panel9 = control.scheduleArray.get(0).panel;
         }
@@ -174,9 +186,9 @@ public class SCM_MainWindow {
         control.initializeCard("prop", panel4);
         
         //Changing the Panel title to Intermodulation  Mask from IMC
-        JPanel panel5 = imc.getPanel();
+       
         if(tabbedPane.indexOfTab("Intermodulation Mask")==-1)
-        tabbedPane.addTab("Intermodulation Mask",panel5);
+            tabbedPane.addTab("Intermodulation Mask",panel5);
        
         JPanel panel7 = platform.getPanel();
         if(tabbedPane.indexOfTab("Platform")==-1)
@@ -393,14 +405,15 @@ public class SCM_MainWindow {
         control.platformArray.add(platform);
         control.powerArray.add(power);
        
-        control.imcArray.add(imc);
-        control.imaArray.add(ima);
+       
         //If the mode is Open the model, then do avoid adding the location again
         if(Index==-1)
         {
         	control.locationArray.add(location);
         	control.propArray.add(prop);
         	control.scheduleArray.add(schedule);
+        	control.imcArray.add(imc);
+        	control.imaArray.add(ima);
         	
         }
         
@@ -438,7 +451,7 @@ public class SCM_MainWindow {
         //All create new mask Operations
         
         
-        imc.NewMap.addActionListener(control.new createListener("imc",tabbedPane));
+       
         //ima.NewMap.addActionListener(control.new createListener("ima",tabbedPane));
         
         if(Index==-1)
@@ -458,18 +471,25 @@ public class SCM_MainWindow {
         	 schedule.NewSched.addActionListener(control.new createListener("schedule",tabbedPane));
         	 schedule.Next.addActionListener(control.new NextListener("schedule",tabbedPane));
         	 schedule.Previous.addActionListener(control.new PrevListener("schedule",tabbedPane));
+        	 
+        	 //IMC Listeners
+        	 imc.Next.addActionListener(control.new NextListener("imc",tabbedPane));
+             imc.Previous.addActionListener(control.new PrevListener("imc",tabbedPane));
+             imc.NewMap.addActionListener(control.new createListener("imc",tabbedPane));
+
          }
+        
+        
         
        
         
-        imc.Next.addActionListener(control.new NextListener("imc",tabbedPane));
-        imc.imaNext.addActionListener(control.new NextListener("ima",tabbedPane));
+        
+     //   imc.imaNext.addActionListener(control.new NextListener("ima",tabbedPane));
       //  ima.Next.addActionListener(control.new NextListener("ima",tabbedPane));
         
       
         
-        imc.Previous.addActionListener(control.new PrevListener("imc",tabbedPane));
-        imc.imaPrevious.addActionListener(control.new PrevListener("ima",tabbedPane));
+     //   imc.imaPrevious.addActionListener(control.new PrevListener("ima",tabbedPane));
        // ima.Previous.addActionListener(control.new PrevListener("ima",tabbedPane));
        
         

@@ -64,7 +64,11 @@ public class LoadRxModel extends LoadGUI{
 			setSchedule(scm,rxModel.getScmSchedule().get(i));
 		}
 		scm.schedule = scm.control.scheduleArray.get(0);
-		
+		for(int i =0;i<rxModel.getIntermodulationMask().size();i++)
+		{
+			setIntermodulationMask(scm,rxModel.getIntermodulationMask().get(i));
+		}
+		scm.imc = scm.control.imcArray.get(0);
 		
 	}	
 }

@@ -114,8 +114,8 @@ public class Save extends Save_XML{
 		        }
 		        PropMap prop = propArray.get(0);
 		        */
-		        IMC imc = imcArray.get(0); /*IMC not implemented in the current version*/
-		        IMA ima = imaArray.get(0); /*IMA not implemented in the current version*/
+		      //  IMC imc = imcArray.get(0); /*IMC not implemented in the current version*/
+		        //IMA ima = imaArray.get(0); /*IMA not implemented in the current version*/
 		     //   Location location = locationArray.get(0);
 		        // Platform platform = platformArray.get(0); *platform not implemented in the current version
 		     //   Schedule schedule = scheduleArray.get(0);
@@ -138,8 +138,11 @@ public class Save extends Save_XML{
 		        	 PropMap prop = propArray.get(i);
 		        	 addPropMap(prop);
 		        }
-				addIMC(imc);
-				addIMA(imc);
+				for(int i=0;i<imcArray.size();i++)
+				{
+					addIMC(imcArray.get(i));	
+				}
+				
 				
 				}else{
 					if(device.equals("Rx")){

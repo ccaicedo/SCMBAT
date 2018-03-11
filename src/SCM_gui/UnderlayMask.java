@@ -139,7 +139,7 @@ public class UnderlayMask {
                 size3.width - 100, size3.height - 250);
           
 	}
-	public void addElements(SpecMask spec)
+	public void addElements(final SpecMask spec)
 	{
 		
 		 spec.SpecPanel.add(spec.ratedLabel);

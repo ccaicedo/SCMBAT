@@ -40,6 +40,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.TitledBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.Unmarshaller;
@@ -109,7 +110,9 @@ public class Exec {
         // Operation for adding more transmitter models        
         TxAdd.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
-				fcTx.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				fcTx.setFileSelectionMode(JFileChooser.FILES_ONLY);
+				FileNameExtensionFilter xmlfilter = new FileNameExtensionFilter("xml files (*.xml)", "xml");
+				fcTx.setFileFilter(xmlfilter);
 				int returnVal = fcTx.showOpenDialog(panel);
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 		            File file = fcTx.getSelectedFile();
@@ -147,7 +150,9 @@ public class Exec {
         // Setting operation for adding receiver models.
         RxAdd.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
-				fcRx.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				fcRx.setFileSelectionMode(JFileChooser.FILES_ONLY);
+				FileNameExtensionFilter xmlfilter = new FileNameExtensionFilter("xml files (*.xml)", "xml");
+				fcRx.setFileFilter(xmlfilter);
 				int returnVal = fcRx.showOpenDialog(panel);
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 		            File file = fcRx.getSelectedFile();
@@ -198,7 +203,7 @@ public class Exec {
 					int Index = indices[i];
 					Model model = TxArray.get(Index);					
 					
-					String filePath = model.ModelPath+"/"+model.ModelName+".xml";
+					String filePath = model.ModelPath;//+"/"+model.ModelName+".xml";
 					File file = new File(filePath);
 					if(file.exists() && !file.isDirectory()){
 						System.out.println("File Exists");
@@ -232,7 +237,7 @@ public class Exec {
 
 					Model model = RxArray.get(Index);					
 					
-					String filePath = model.ModelPath+"/"+model.ModelName+".xml";
+					String filePath = model.ModelPath;//+"/"+model.ModelName+".xml";
 					File file = new File(filePath);
 					if(file.exists() && !file.isDirectory()){
 						System.out.println("File Exists");

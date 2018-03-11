@@ -53,8 +53,12 @@ public class PrintTxText extends PrintText{
 				//printfile = new PrintWriter ("Octave/" + SaveName);
 				//Adding the Output folder for storing the output files
 				
-				MethodAnalysis meth = new MethodAnalysis();
-				printfile = new PrintWriter (meth.getFilePath()+"Octave/" + SaveName);	
+				//MethodAnalysis meth = new MethodAnalysis();
+				//printfile = new PrintWriter (meth.getFilePath()+"Reports/" + SaveName);	
+				
+				//Update the folder to be the Report folder containing all the Compatibility Steps Details 
+				printfile = new PrintWriter (SaveName);	
+				
 					int o = 0;
 					if(model.getSpectrumMask().get(o) != null){
 						System.out.println("Spec");
