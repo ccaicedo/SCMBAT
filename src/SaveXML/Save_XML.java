@@ -670,9 +670,11 @@ public class Save_XML extends ObjectFactory {
 				warningFlag = true;
 			//	new Warn().setWarn("Warning","The Start Time couldn't be parsed");
 			}
-			cal.setTime(date);
 			XMLGregorianCalendar start = DatatypeFactory.newInstance().
-			newXMLGregorianCalendar(cal);
+					newXMLGregorianCalendar(cal);
+			try{
+			cal.setTime(date);
+			
 			
 			start.setYear(cal.get(Calendar.YEAR));
 			start.setMonth(cal.get(Calendar.MONTH)+1);
@@ -680,7 +682,7 @@ public class Save_XML extends ObjectFactory {
 			start.setHour(startHour);
 			start.setMinute(date.getMinutes());
 			start.setSecond(date.getSeconds());
-			try{
+			
 				int hour = Integer.parseInt(timezoneModel.getValueAt(0, 1).toString());
 				int minute = Integer.parseInt(timezoneModel.getValueAt(0, 2).toString());
 				if(hour>0){
@@ -715,11 +717,12 @@ public class Save_XML extends ObjectFactory {
 				warningFlag = true;
 				//new Warn().setWarn("Warning","The End Time couldn't be parsed");
 			}
-			
+			XMLGregorianCalendar end = DatatypeFactory.newInstance().
+					newXMLGregorianCalendar(cal);
+			try{
 			cal.setTime(date);
 			//System.out.println(cal.getTimeZone().LONG);
-			XMLGregorianCalendar end = DatatypeFactory.newInstance().
-			newXMLGregorianCalendar(cal);
+			
 			end.setYear(cal.get(Calendar.YEAR));
 			end.setMonth(cal.get(Calendar.MONTH)+1);
 			end.setDay(cal.get(Calendar.DAY_OF_MONTH));
@@ -732,7 +735,7 @@ public class Save_XML extends ObjectFactory {
 							date.getSeconds(),DatatypeConstants.FIELD_UNDEFINED, cal.getTimeZone()
 			.LONG).normalize();*/
 			
-			try{
+			
 
 				int hour = Integer.parseInt(timezoneModel.getValueAt(1, 1).toString());
 				int minute = Integer.parseInt(timezoneModel.getValueAt(1, 2).toString());
@@ -796,10 +799,16 @@ public class Save_XML extends ObjectFactory {
 		
 			try{
 			TableModel pointModel = locData.pointTable.getModel();
-			loc.getPoint().setLongitude(Double.parseDouble(pointModel.getValueAt(0, 0).toString()));
-			loc.getPoint().setLatitude(Double.parseDouble(pointModel.getValueAt(0, 1).toString()));
-			loc.getPoint().setAltitude(Double.parseDouble(pointModel.getValueAt(0, 2).toString()));
-		
+			
+			if(pointModel.getValueAt(0, 0)!="" & pointModel.getValueAt(0, 1)!="" & pointModel.getValueAt(0, 2)!="")
+			{
+			Double longitude = Double.parseDouble(pointModel.getValueAt(0, 0).toString());
+			Double latitude = Double.parseDouble(pointModel.getValueAt(0, 1).toString());
+			Double altitude = Double.parseDouble(pointModel.getValueAt(0, 2).toString());
+			loc.getPointSurface().getPoint().setLongitude(longitude);
+			loc.getPointSurface().getPoint().setLatitude(latitude);
+			loc.getPointSurface().getPoint().setAltitude(altitude);
+			}
 			}catch(Exception e){
 				warningMessage = warningMessage + "\nThe entry in the Location Table should be Numerical";
 				warningFlag =  true;
@@ -1109,18 +1118,13 @@ public class Save_XML extends ObjectFactory {
 		//Save the location index
 				try
 				{
-					String locindex = locData.LocationField.getText();
-					int finallocindex;
-					if(locindex=="" || locindex == null)
+					if(!locData.LocationField.getText().equals(""))
 					{
-						finallocindex = 0;
+						scmLoc.setLocationIndex(Integer.parseInt(locData.LocationField.getText().toString()));
+
 					}
-					else
-					{
-						finallocindex = Integer.parseInt(locindex);
-					}
-					
-				scmLoc.setLocationIndex(finallocindex);
+									
+				
 				}
 				catch(Exception e)
 				{
@@ -1218,12 +1222,15 @@ public class Save_XML extends ObjectFactory {
 			imask.getImCombiningMask().getInflectionPoint().get(i).setRelativePower(data);
 		
 			}catch(Exception e){
-				warningMessage = warningMessage + "\nThe entry at row: " +(i+1)+" in the IM Combining Mask table should be numerical";
 				warningFlag = true;
 			}
 		}    	
 		try{
-			imask.setOrder(imc.imOrderField.getText());
+			if(!imc.imOrderField.getText().equals(""))
+			{
+				imask.setOrder(imc.imOrderField.getText());
+			}
+			
 		}catch(Exception e){
 			warningMessage = warningMessage + "\nThe entry in IM Order field in the Intermodulation mask should be numeric";
 			warningFlag = true;

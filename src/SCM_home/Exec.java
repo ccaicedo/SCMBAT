@@ -91,6 +91,7 @@ public class Exec {
 			logger.addAppender(Home.appender);
 		panel.setBorder(new TitledBorder(null, "Execute Compatibility Test", TitledBorder.LEADING, TitledBorder.TOP, null, null));
         panel.setLayout(null);
+        panel.setPreferredSize(new Dimension( 800, 750 ));
         
         // Positioning the Transmitter list and label        
         JLabel TxLabel = new JLabel("Transmitter Model");
@@ -169,24 +170,30 @@ public class Exec {
 			}
         });
         //Adding the help label to select more than one model
-        JLabel modelsLabel = new JLabel("Tip : Use Ctrl button to select more than one model if needed");
-        Dimension modelsLabelSize = modelsLabel.getPreferredSize();
-        modelsLabel.setBounds(25, 320, modelsLabelSize.width, modelsLabelSize.height);
-        panel.add(modelsLabel);
+        JLabel modelsLabel_1 = new JLabel("Please select at least one Transmitter and one Receiver model.");
+        JLabel modelsLabel_2 = new JLabel("Use the Ctrl button to select more than one model(transmitter/receiver).");
+              
+        Dimension modelsLabelSize_1 = modelsLabel_1.getPreferredSize();
+        modelsLabel_1.setBounds(25,320, modelsLabelSize_1.width, modelsLabelSize_1.height);
+        panel.add(modelsLabel_1);
+        
+        Dimension modelsLabelSize_2 = modelsLabel_2.getPreferredSize();
+        modelsLabel_2.setBounds(25,340, modelsLabelSize_2.width, modelsLabelSize_2.height);
+        panel.add(modelsLabel_2);
         
         
         // Placing Back, Execute and Exit operations
         
         Dimension BackSize = Back.getPreferredSize();
-        Back.setBounds(255, 350, BackSize.width, BackSize.height);
+        Back.setBounds(255, 380, BackSize.width, BackSize.height);
         panel.add(Back);
         
         Dimension ExecuteSize = Execute.getPreferredSize();
-        Execute.setBounds(343, 350, ExecuteSize.width, ExecuteSize.height);
+        Execute.setBounds(343, 380, ExecuteSize.width, ExecuteSize.height);
         panel.add(Execute);
         
         Dimension ExitSize = Exit.getPreferredSize();
-        Exit.setBounds(450, 350, ExitSize.width, ExitSize.height);
+        Exit.setBounds(450, 380, ExitSize.width, ExitSize.height);
         panel.add(Exit);
         
         // Setting operation for executing compatibility test.

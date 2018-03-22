@@ -29,6 +29,7 @@ package SCM_gui;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -69,7 +70,19 @@ public JLabel head = new JLabel();
 Object pointRow[][] = { { "","",""} };
 Object pointColumn[] = {"Longitude", "Latitude", "Altitude (m)"};
 TableModel pointModel = new DefaultTableModel(pointRow, pointColumn);    
-public JTable pointTable = new JTable(pointModel);
+public JTable pointTable = new JTable(pointModel) {
+	
+	private static final long serialVersionUID = -356523719488233990L;
+
+		//Add the cell tool tip text           
+    	public String getToolTipText(MouseEvent event)
+    	{
+    		return "Enter a decimal value";
+    	}
+	
+	
+};
+
 
 //Point Surface Data
 
@@ -84,7 +97,16 @@ Object circularRow[][] = { { "","","","",""} };
 Object circularColumn[] = {"Longitude", "Latitude", 
 		"Altitude (m)","Radius (m)", "Perimeter Attenuation (dB)"};
 TableModel circularModel = new DefaultTableModel(circularRow, circularColumn);    
-public JTable circularTable = new JTable(circularModel);
+public JTable circularTable = new JTable(circularModel) {
+	
+	private static final long serialVersionUID = 1L;
+	
+	//Add the cell tool tip text           
+	public String getToolTipText(MouseEvent event)
+	{
+		return "Enter a decimal value";
+	}
+};
 
 //Polygon Surface
 Object polygonRow[][] = { {"1","","","",""} };
@@ -109,7 +131,18 @@ TableModel polygonModel = new DefaultTableModel(polygonRow, polygonColumn)
 		}
     }
 };
-public JTable polygonTable = new JTable(polygonModel);
+public JTable polygonTable = new JTable(polygonModel) {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	//Add the cell tool tip text           
+	public String getToolTipText(MouseEvent event)
+	{
+		return "Enter a decimal value";
+	}
+};
 
 //Cylinder
 
@@ -117,7 +150,18 @@ Object cylinderRow[][] = { { "","","","","","",""} };
 Object cylinderColumn[] = {"Longitude", "Latitude", 
 		"Altitude (m)","Radius (m)", "<html> Perimeter <br> Attenuation (dB)", "Height (m)", "<html> Top Surface <br> Attenuation (dB)"};
 TableModel cylinderModel = new DefaultTableModel(cylinderRow, cylinderColumn);    
-public JTable cylinderTable = new JTable(cylinderModel);
+public JTable cylinderTable = new JTable(cylinderModel) {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	//Add the cell tool tip text           
+	public String getToolTipText(MouseEvent event)
+	{
+		return "Enter a decimal value";
+	}
+};
 
 //Polyhedron
 
@@ -145,13 +189,31 @@ TableModel polyhedronModel = new DefaultTableModel(polyhedronRow, polyhedronColu
 		}
     }
 };
-public JTable polyhedronTable = new JTable(polyhedronModel);
+public JTable polyhedronTable = new JTable(polyhedronModel) {
+	
+	private static final long serialVersionUID = 1L;
+
+	//Add the cell tool tip text           
+	public String getToolTipText(MouseEvent event)
+	{
+		return "Enter a decimal value";
+	}
+};
 
 Object heightRow[][] = { { "","",""} };
 Object heightColumn[] = {"Height (m)", 
 		"Bottom Surface attenuation (dB)", "Top Surface attenuation (dB)"};
 TableModel heightModel = new DefaultTableModel(heightRow, heightColumn);    
-public JTable heightTable = new JTable(heightModel);
+public JTable heightTable = new JTable(heightModel) {
+	
+	private static final long serialVersionUID = 1L;
+
+	//Add the cell tool tip text           
+	public String getToolTipText(MouseEvent event)
+	{
+		return "Enter a decimal value";
+	}
+};
 
 public JRadioButton AGL = new JRadioButton("AGL (Abouve Ground Level)");
 public JRadioButton HAAT = new JRadioButton("HAAT (Height Above Average Terrain)");
@@ -187,7 +249,16 @@ TableModel pathModel = new DefaultTableModel(pathRow, pathColumn)
 		}
     }
 };
-public JTable pathTable = new JTable(pathModel);
+public JTable pathTable = new JTable(pathModel) {
+	
+	private static final long serialVersionUID = 1L;
+
+	//Add the cell tool tip text           
+	public String getToolTipText(MouseEvent event)
+	{
+		return "Enter a decimal value";
+	}
+};
 
 public JTable table = new JTable();
 public JScrollPane tableContainer = new JScrollPane(pointTable);
@@ -412,7 +483,8 @@ public int index =0;
 		Dimension headSize = head.getPreferredSize();
 		head.setBounds(25, 200, headSize.width, headSize.height);
 		pointTable.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
-		pointTable.setCellSelectionEnabled(true);
+		pointTable.setCellSelectionEnabled(true);	
+
 		
 		table=pointTable;
 		tableContainer = new JScrollPane(table);
@@ -442,7 +514,7 @@ public int index =0;
 		head = new JLabel("Location - Point Surface");
 		Dimension headSize = head.getPreferredSize();
 		head.setBounds(25, 200, headSize.width, headSize.height);
-
+		
 		table=pointSurfaceTable;
 		table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
 		tableContainer = new JScrollPane(table);
@@ -497,7 +569,7 @@ public int index =0;
 		head = new JLabel("Location - Circular Surface");
 		Dimension headSize = head.getPreferredSize();
 		head.setBounds(25, 200, headSize.width, headSize.height);
-	
+		
 		table=circularTable;
 		table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
 		tableContainer = new JScrollPane(table);
@@ -566,7 +638,7 @@ public int index =0;
 		head = new JLabel("Location - Polygon Surface");
 		Dimension headSize = head.getPreferredSize();
 		head.setBounds(25, 200, headSize.width, headSize.height);
-	
+		
 		table=polygonTable;
 		table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
 		tableContainer = new JScrollPane(table);
@@ -637,7 +709,7 @@ public int index =0;
 		head = new JLabel("Location - Cylinder");
 		Dimension headSize = head.getPreferredSize();
 		head.setBounds(25, 200, headSize.width, headSize.height);
-	
+		
 		table=cylinderTable;
 		table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
 		tableContainer = new JScrollPane(table);
@@ -706,7 +778,7 @@ public int index =0;
 		head = new JLabel("Location - Polyhedron");
 		Dimension headSize = head.getPreferredSize();
 		head.setBounds(25, 200, headSize.width, headSize.height);
-
+		
 		table=polyhedronTable;
 		table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
 		heightTable.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
