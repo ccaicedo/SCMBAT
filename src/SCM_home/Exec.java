@@ -26,10 +26,12 @@ along with program.  If not, see <http://www.gnu.org/licenses/>.
 
 package SCM_home;
 
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.DefaultListModel;
@@ -60,6 +62,9 @@ public class Exec {
 	JButton Back = new JButton("Back");
 	JButton Execute = new JButton("Execute");
 	JButton Exit = new JButton("Exit");
+	
+	//To view the results in HTML page
+	JButton viewHTML = new JButton("View in HTML page");
 	
 	final Logger logger = Logger.getLogger(Exec.class);
 	String[] nullString = null;
@@ -196,6 +201,30 @@ public class Exec {
         Exit.setBounds(450, 380, ExitSize.width, ExitSize.height);
         panel.add(Exit);
         
+        //Placing the View button
+        Dimension viewSize = viewHTML.getPreferredSize();
+        viewHTML.setBounds(350, 210, viewSize.width, viewSize.height);
+     //   panel.add(viewHTML);
+        
+        
+        //Adding action listener for viewing HTML page
+        ActionListener viewOp = new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				
+				String fileUrl = methAn.compatTestDirectory+"/first_Trial.html";
+				File htmlURL = new File(fileUrl);
+				
+				try {
+					Desktop.getDesktop().open(htmlURL);
+				} catch (IOException e1) {
+					logger.error("Error in opening the web page"+ e1.getMessage() );
+				}
+			}
+		};
+        
+        viewHTML.addActionListener(viewOp);
+
         // Setting operation for executing compatibility test.
         ActionListener execOp = new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
