@@ -1,0 +1,48 @@
+.maintitle {
+    text-align: center;
+	font-family: verdana;
+}
+
+.subtitle_1{
+		
+	text-align: left;
+	font-family: verdana;
+}
+
+h3{
+		
+	text-align: left;
+	font-family: verdana;
+}
+
+#div01
+{
+	margin: auto;
+    width: 50%;
+    border: 3px solid black;
+    padding: 10px;
+	float: left;
+}
+
+.resultsdiv
+{
+	margin: auto;
+    width: 50%;
+    left: 750px;
+	position: fixed;
+	float: left;
+}
+subdiv
+{
+	border: 3px solid black;
+	width: 250px;
+	height: 250px;
+    left: 750px;
+	position: fixed;
+	float: left;
+}
+
+p {
+    font-family: verdana;
+    font-size: 20px;
+}
