@@ -718,7 +718,7 @@ public class MethodAnalysis {
 					ArrayList<String> compatList = new ArrayList<String>();
 					ArrayList<String> nonCompatList = new ArrayList<String>();
 					
-					ExecuteBTPRated execBTPRated = new ExecuteBTPRated();
+				///	ExecuteBTPRated execBTPRated = new ExecuteBTPRated();
 					
 					for(int i=0; i<Spec_BTP.size(); i++){
 						
@@ -732,10 +732,13 @@ public class MethodAnalysis {
 					
 					printRep.printBTPRated(printfile, compatList,nonCompatList,0);
 					
-					execBTPRated.setPlotPath(compatTestDirectory);
+					/*execBTPRated.setPlotPath(compatTestDirectory);
 					execBTPRated.buildCompatList(compatList);
 					execBTPRated.buildNonCompatList(nonCompatList);
-					execBTPRated.getFrame();
+					execBTPRated.getFrame();*/
+					loadCompRep.displayBTPRatedAnalysis( nonCompatList, compatList,compatTestDirectory);
+
+					
 
 		}
 
@@ -831,7 +834,7 @@ public class MethodAnalysis {
 					ArrayList<String> compatList = new ArrayList<String>();
 					ArrayList<String> nonCompatList = new ArrayList<String>();
 					
-					ExecuteBTPRated execBTPRated = new ExecuteBTPRated();
+				//	ExecuteBTPRated execBTPRated = new ExecuteBTPRated();
 					
 					for(int i=0; i<Spec_BTP.size(); i++){
 						
@@ -845,10 +848,12 @@ public class MethodAnalysis {
 					
 					printRep.printBTPRated(printfile, compatList,nonCompatList,1);
 					
-					execBTPRated.setPlotPath(compatTestDirectory);
+					/*execBTPRated.setPlotPath(compatTestDirectory);
 					execBTPRated.buildCompatList(compatList);
 					execBTPRated.buildNonCompatList(nonCompatList);
-					execBTPRated.getFrame();
+					execBTPRated.getFrame();*/
+					loadCompRep.displayBTPRatedAnalysis( nonCompatList, compatList,compatTestDirectory);
+
 
 		}
 		
@@ -925,7 +930,7 @@ public class MethodAnalysis {
 					ArrayList<String> dutyCompatList = new ArrayList<String>();
 					ArrayList<String> dutyNonCompatList = new ArrayList<String>();
 					
-					ExecuteDuty execDutyRated = new ExecuteDuty();
+					//ExecuteDuty execDutyRated = new ExecuteDuty();
 					
 					for(int i=0; i<compatDutyList.size(); i++){
 						
@@ -940,10 +945,11 @@ public class MethodAnalysis {
 					
 					printRep.printDuty(printfile, dutyCompatList, dutyNonCompatList);
 					
-					execDutyRated.setPlotPath(compatTestDirectory);
+					/*execDutyRated.setPlotPath(compatTestDirectory);
 					execDutyRated.buildCompatList(dutyCompatList);
 					execDutyRated.buildNonCompatList(dutyNonCompatList);
-					execDutyRated.getFrame();
+					execDutyRated.getFrame();*/
+					loadCompRep.displayDCRatedAnalysis(dutyNonCompatList, dutyCompatList, compatTestDirectory);
 
 		}
 				
