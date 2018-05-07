@@ -54,12 +54,16 @@ import dk.ange.octave.OctaveEngine;
 import dk.ange.octave.OctaveEngineFactory;
 import dk.ange.octave.type.OctaveDouble;
 import dk.ange.octave.type.OctaveString;
+import reportsGeneration.LoadCompatibilityReport;
 
 public class MethodAnalysis {
 	
 	PrintTxText printTx = new PrintTxText();
 	PrintRxText printRx = new PrintRxText();	
 	Warn warningDisplay = new Warn();
+	
+	//Create the print results object
+	PrintReportResults printRep = new PrintReportResults();
 	
 	final Logger logger = Logger.getLogger(MethodAnalysis.class);
 	
@@ -183,7 +187,7 @@ public class MethodAnalysis {
 			ArrayList<SCM_home.Model> txArray, int[] 
 					rxIndex, ArrayList<RxModelType> RxData, ArrayList<SCM_home.Model> rxArray){
 		
-		ExecuteFrame execFrame =null;
+		//ExecuteFrame execFrame =null;
 		String Command0=null;
 		String Command1=null;
 		String CompatStat=null;
@@ -214,6 +218,7 @@ public class MethodAnalysis {
 		try
 		{
 			printfile = new PrintWriter(resultFile);
+			printfile.println("Compatibility Analysis Report Results");
 		} 
 		catch (FileNotFoundException e1) {
 			
@@ -226,6 +231,9 @@ public class MethodAnalysis {
 			return;
 		}
 		this.setCompatTestDirectory(current_Dir);
+		
+		//Set the template File path
+		LoadCompatibilityReport loadCompRep = new LoadCompatibilityReport(dirName+"Reports/HTMLTemplates");
 			
 		switch(method){
 		case "TotalPower": System.out.println("Total Power Method being executed");
@@ -288,7 +296,7 @@ public class MethodAnalysis {
 				try
 				{
 					//Add in the results file
-					printfile.println("Compatibility Analysis Report Results");
+					
 					printfile.println("");
 					printfile.println("Method: Total Power");
 					printfile.println("Compatibility Result: " + CompatStat);
@@ -302,9 +310,13 @@ public class MethodAnalysis {
 				}
 				
 				
-				execFrame = new ExecuteFrame();
-				execFrame.setPlotPath(compatTestDirectory);
-				execFrame.getFrame(CompatStat,PowerMargin);
+				/*execFrame = new ExecuteFrame();
+				execFrame.setPlotPath(compatTestDirectory);					
+				execFrame.getFrame(CompatStat,PowerMargin);*/
+				
+				
+				//Call the load html page method
+				loadCompRep.displayCompatibilityReport(CompatStat, PowerMargin, compatTestDirectory);
 			}			
 			
 			break;
@@ -363,7 +375,7 @@ public class MethodAnalysis {
 				try
 				{
 					//Add in the results file
-					printfile.println("Compatibility Analysis Report Results");
+					
 					printfile.println("");
 					printfile.println("Method: MaximumPowerDensity");
 					printfile.println("Compatibility Result: " + CompatStat);
@@ -376,10 +388,12 @@ public class MethodAnalysis {
 					logger.error(e.toString());
 				}
 				
-				
+				/*
 				execFrame = new ExecuteFrame();
 				execFrame.getFrame(CompatStat,PowerMargin);
-
+				*/
+				//Call the load html page method
+				loadCompRep.displayCompatibilityReport(CompatStat, PowerMargin, compatTestDirectory);
 			}
 			
 			break;
@@ -421,6 +435,10 @@ public class MethodAnalysis {
 
 			octave.eval("fig1=figure");
 			octave.eval("retval = plotBWRated();");
+			
+			//Save the intermediate figures into the report folder
+			octave.eval("saveas(fig1, 'Analysis_Figure_1.png')");
+			octave.eval("movefile('Analysis_Figure_1.png','"+compatTestDirectory+"')");
 
 		//	Process p3;
 			try{
@@ -460,7 +478,7 @@ public class MethodAnalysis {
 			ArrayList<String> nonCompatModelList = new ArrayList<String>();
 			ArrayList<String> allCompatModelList = new ArrayList<String>();
 				
-			ExecuteBWRated execBWRated = new ExecuteBWRated();
+		//	ExecuteBWRated execBWRated = new ExecuteBWRated();
 			
 			final ArrayList<Integer> indexList = new ArrayList<Integer>();
 			for(int i=0; i<PSD.size(); i++){
@@ -480,11 +498,16 @@ public class MethodAnalysis {
 				
 			}
 			
-			execBWRated.setPlotPath(compatTestDirectory);
+			printRep.printBWRated(printfile, allCompatModelList, nonCompatModelList, compatModelList,0);
+		
+			/*execBWRated.setPlotPath(compatTestDirectory);
 			execBWRated.buildAllCompatList(allCompatModelList);
 			execBWRated.buildCompatList(compatModelList);
 			execBWRated.buildNonCompatList(nonCompatModelList);
-			execBWRated.getFrame(BW,PSD,indexList);
+			execBWRated.getFrame(BW,PSD,indexList);*/
+			
+			//Load the html page using the method
+			loadCompRep.displayBWRatedAnalysis(allCompatModelList, nonCompatModelList, compatModelList,compatTestDirectory);
 
 		}
 		
@@ -492,7 +515,7 @@ public class MethodAnalysis {
 		
 // bw Rated List
 		
-		case "bwRatedList":System.out.println("BW Rated List ANalysis Running"); 
+		case "bwRatedList":System.out.println("BW Rated List Analysis Running"); 
 		logger.info("BW Rated List ANalysis Running");
 			
 		warningMessage = warningMessage + printRx.printText(RxData.get(0),printRFile);
@@ -531,6 +554,11 @@ public class MethodAnalysis {
 			octave.eval("retval = plotBWRated();");
 
 		//	Process p3;
+			
+			octave.eval("saveas(fig1, 'Analysis_Figure_1.png')");
+			octave.eval("movefile('Analysis_Figure_1.png','"+compatTestDirectory+"')");
+
+		//	octave.eval("fig2=figure");
 			try{
 				
 				for(int i=0; i<TxData.size(); i++){
@@ -571,7 +599,7 @@ public class MethodAnalysis {
 			ArrayList<String> nonCompatModelList = new ArrayList<String>();
 			ArrayList<String> allCompatModelList = new ArrayList<String>();
 				
-			ExecuteBWRated execBWRated = new ExecuteBWRated();
+		//	ExecuteBWRated execBWRated = new ExecuteBWRated();
 			
 			final ArrayList<Integer> indexList = new ArrayList<Integer>();
 			for(int i=0; i<PSD.size(); i++){
@@ -590,11 +618,15 @@ public class MethodAnalysis {
 				}
 				
 			}
-			execBWRated.setPlotPath(compatTestDirectory);
+			printRep.printBWRated(printfile, allCompatModelList, nonCompatModelList, compatModelList,1);
+			
+			/*execBWRated.setPlotPath(compatTestDirectory);
 			execBWRated.buildAllCompatList(allCompatModelList);
 			execBWRated.buildCompatList(compatModelList);
 			execBWRated.buildNonCompatList(nonCompatModelList);
-			execBWRated.getFrame(BW,PSD,indexList);
+			execBWRated.getFrame(BW,PSD,indexList);*/
+			loadCompRep.displayBWRatedAnalysis(allCompatModelList, nonCompatModelList, compatModelList,compatTestDirectory);
+
 			
 		}
 		
@@ -632,6 +664,9 @@ public class MethodAnalysis {
 
 			octaveBTP.eval("fig2=figure");
 			octaveBTP.eval("retval = plotBTPRated();");
+			
+			octaveBTP.eval("saveas(fig2, 'Analysis_Figure_1.png')");
+			octaveBTP.eval("movefile('Analysis_Figure_1.png','"+compatTestDirectory+"')");
 			
 					for(int i=0; i<TxData.size(); i++){
 					
@@ -683,7 +718,7 @@ public class MethodAnalysis {
 					ArrayList<String> compatList = new ArrayList<String>();
 					ArrayList<String> nonCompatList = new ArrayList<String>();
 					
-					ExecuteBTPRated execBTPRated = new ExecuteBTPRated();
+				///	ExecuteBTPRated execBTPRated = new ExecuteBTPRated();
 					
 					for(int i=0; i<Spec_BTP.size(); i++){
 						
@@ -695,10 +730,15 @@ public class MethodAnalysis {
 							}
 					}
 					
-					execBTPRated.setPlotPath(compatTestDirectory);
+					printRep.printBTPRated(printfile, compatList,nonCompatList,0);
+					
+					/*execBTPRated.setPlotPath(compatTestDirectory);
 					execBTPRated.buildCompatList(compatList);
 					execBTPRated.buildNonCompatList(nonCompatList);
-					execBTPRated.getFrame();
+					execBTPRated.getFrame();*/
+					loadCompRep.displayBTPRatedAnalysis( nonCompatList, compatList,compatTestDirectory);
+
+					
 
 		}
 
@@ -737,6 +777,10 @@ public class MethodAnalysis {
 
 			octaveBTP.eval("fig2=figure");
 			octaveBTP.eval("retval = plotBTPRated();");
+			
+			
+			octaveBTP.eval("saveas(fig2, 'Analysis_Figure_1.png')");
+			octaveBTP.eval("movefile('Analysis_Figure_1.png','"+compatTestDirectory+"')");
 			
 					for(int i=0; i<TxData.size(); i++){
 					
@@ -790,7 +834,7 @@ public class MethodAnalysis {
 					ArrayList<String> compatList = new ArrayList<String>();
 					ArrayList<String> nonCompatList = new ArrayList<String>();
 					
-					ExecuteBTPRated execBTPRated = new ExecuteBTPRated();
+				//	ExecuteBTPRated execBTPRated = new ExecuteBTPRated();
 					
 					for(int i=0; i<Spec_BTP.size(); i++){
 						
@@ -802,10 +846,14 @@ public class MethodAnalysis {
 							}
 					}
 					
-					execBTPRated.setPlotPath(compatTestDirectory);
+					printRep.printBTPRated(printfile, compatList,nonCompatList,1);
+					
+					/*execBTPRated.setPlotPath(compatTestDirectory);
 					execBTPRated.buildCompatList(compatList);
 					execBTPRated.buildNonCompatList(nonCompatList);
-					execBTPRated.getFrame();
+					execBTPRated.getFrame();*/
+					loadCompRep.displayBTPRatedAnalysis( nonCompatList, compatList,compatTestDirectory);
+
 
 		}
 		
@@ -882,7 +930,7 @@ public class MethodAnalysis {
 					ArrayList<String> dutyCompatList = new ArrayList<String>();
 					ArrayList<String> dutyNonCompatList = new ArrayList<String>();
 					
-					ExecuteDuty execDutyRated = new ExecuteDuty();
+					//ExecuteDuty execDutyRated = new ExecuteDuty();
 					
 					for(int i=0; i<compatDutyList.size(); i++){
 						
@@ -895,10 +943,13 @@ public class MethodAnalysis {
 							}
 					}
 					
-					execDutyRated.setPlotPath(compatTestDirectory);
+					printRep.printDuty(printfile, dutyCompatList, dutyNonCompatList);
+					
+					/*execDutyRated.setPlotPath(compatTestDirectory);
 					execDutyRated.buildCompatList(dutyCompatList);
 					execDutyRated.buildNonCompatList(dutyNonCompatList);
-					execDutyRated.getFrame();
+					execDutyRated.getFrame();*/
+					loadCompRep.displayDCRatedAnalysis(dutyNonCompatList, dutyCompatList, compatTestDirectory);
 
 		}
 				

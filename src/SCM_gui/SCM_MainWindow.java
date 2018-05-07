@@ -318,7 +318,7 @@ public class SCM_MainWindow {
 		    /* Setting up Policy and Protocol 
 		     * buttons and fields.
 		     */
-			JLabel polLabel0 = new JLabel("Do you want to include 'Protocol or Policy': ");
+			JLabel polLabel0 = new JLabel("Do you want to associate a ‘Protocol or Policy’ to this model ? ");
 			final JLabel polLabel = new JLabel("Protocol or Policy name:");
 			final JLabel indLabel = new JLabel("Index value: ");
 			final JLabel paramLabel = new JLabel("Parameters: ");
@@ -343,11 +343,11 @@ public class SCM_MainWindow {
 			polLabel.setBounds(25, 350,polLabelSize. width, polLabelSize.height);
 			indLabel.setBounds(25, 380, indLabelSize.width, indLabelSize.height);
 			paramLabel.setBounds(25, 410, paramLabelSize.width, paramLabelSize.height);
-			polNameField.setBounds(225, 345, polFieldSize.width + 50, polFieldSize.height);
+			polNameField.setBounds(225, 345, polFieldSize.width + 100, polFieldSize.height);
 			indexField.setBounds(225, 375, indFieldSize.width + 50, indFieldSize.height);
 			paramField.setBounds(225, 405, paramFieldSize.width + 50, paramFieldSize.height);
-			polNo.setBounds(400, 295, polNoSize.width, polNoSize.height);
-			polYes.setBounds(350, 295, polYesSize.width, polYesSize.height);
+			polNo.setBounds(550, 295, polNoSize.width, polNoSize.height);
+			polYes.setBounds(500, 295, polYesSize.width, polYesSize.height);
 		
 			ButtonGroup polGroup = new ButtonGroup();
 			polGroup.add(polYes);

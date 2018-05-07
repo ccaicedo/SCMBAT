@@ -32,6 +32,8 @@ along with program.  If not, see <http://www.gnu.org/licenses/>.
 
 package SCM_gui;
 
+import static javax.swing.JOptionPane.showMessageDialog;
+
 import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -237,7 +239,17 @@ public class SCMControl {
 			
 			break;
 			
-    	case "location": 	Location newLoc = new Location();
+    	case "location": 
+    		/*
+    		 * First check if the current location has location index before allowing the addition of new location
+    		 */
+    			String curLocIndexVal = locationArray.get(locationArray.size()-1).LocationField.getText();
+    			if(curLocIndexVal.equals(""))
+    			{
+    				showMessageDialog(null, "Enter a value for location index");
+    				break;
+    			}
+    			Location newLoc = new Location();
 //    	newProp.b4.addActionListener(scm.exitAction);
     			newLoc.save.addActionListener(saveAction);
     			newLoc.NewMap.addActionListener(new createListener("location",pane));
