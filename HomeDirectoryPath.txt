@@ -1,1 +1,1 @@
-HOME_DIR=/home/username/SCMBAT
+HOME_DIR=/home/username/SCMBAT/
