@@ -28,12 +28,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for AntennaHeightType complex type.
+ * <p>Java class for AntennaHeight complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="AntennaHeightType">
+ * &lt;complexType name="AntennaHeight">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -55,11 +55,11 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "AntennaHeightType", propOrder = {
+@XmlType(name = "AntennaHeight", propOrder = {
     "height",
     "reference"
 })
-public class AntennaHeightType {
+public class AntennaHeight {
 
     protected double height;
     @XmlElement(required = true)

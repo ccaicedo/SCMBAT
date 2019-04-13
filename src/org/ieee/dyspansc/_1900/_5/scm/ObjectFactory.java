@@ -449,11 +449,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link AntennaHeightType }
+     * Create an instance of {@link AntennaHeight }
      * 
      */
-    public AntennaHeightType createAntennaHeightType() {
-        return new AntennaHeightType();
+    public AntennaHeight createAntennaHeight() {
+        return new AntennaHeight();
     }
 
     /**

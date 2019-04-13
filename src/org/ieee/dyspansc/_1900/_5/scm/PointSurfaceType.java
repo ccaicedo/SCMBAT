@@ -38,7 +38,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="point" type="{http://www.ieee.org/DyspanSC/1900/5/SCM}PointType"/>
- *         &lt;element name="antennaHeight" type="{http://www.ieee.org/DyspanSC/1900/5/SCM}AntennaHeightType"/>
+ *         &lt;element name="antennaHeight" type="{http://www.ieee.org/DyspanSC/1900/5/SCM}AntennaHeight"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -57,7 +57,7 @@ public class PointSurfaceType {
     @XmlElement(required = true)
     protected PointType point;
     @XmlElement(required = true)
-    protected AntennaHeightType antennaHeight;
+    protected AntennaHeight antennaHeight;
 
     /**
      * Gets the value of the point property.
@@ -88,10 +88,10 @@ public class PointSurfaceType {
      * 
      * @return
      *     possible object is
-     *     {@link AntennaHeightType }
+     *     {@link AntennaHeight }
      *     
      */
-    public AntennaHeightType getAntennaHeight() {
+    public AntennaHeight getAntennaHeight() {
         return antennaHeight;
     }
 
@@ -100,10 +100,10 @@ public class PointSurfaceType {
      * 
      * @param value
      *     allowed object is
-     *     {@link AntennaHeightType }
+     *     {@link AntennaHeight }
      *     
      */
-    public void setAntennaHeight(AntennaHeightType value) {
+    public void setAntennaHeight(AntennaHeight value) {
         this.antennaHeight = value;
     }
 

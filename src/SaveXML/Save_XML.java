@@ -47,7 +47,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.ieee.dyspansc._1900._5.scm.AntennaHeightType;
+import org.ieee.dyspansc._1900._5.scm.AntennaHeight;
 import org.ieee.dyspansc._1900._5.scm.BTPRatedListType;
 import org.ieee.dyspansc._1900._5.scm.BTPRatingType;
 import org.ieee.dyspansc._1900._5.scm.BWRatedListType;
@@ -821,7 +821,7 @@ public class Save_XML extends ObjectFactory {
 			TableModel pointSurfaceModel = locData.pointSurfaceTable.getModel();
 			loc.setPointSurface(new PointSurfaceType());
 			loc.getPointSurface().setPoint( new PointType());
-			loc.getPointSurface().setAntennaHeight(new AntennaHeightType());	
+			loc.getPointSurface().setAntennaHeight(new AntennaHeight());	
 			
 			for (int i=0; i<pointSurfaceModel.getRowCount(); i++){
 				
@@ -861,7 +861,7 @@ public class Save_XML extends ObjectFactory {
 			TableModel circularTable = locData.circularTable.getModel();
 			loc.setCircularSurface(new CircularSurfaceType());
 			loc.getCircularSurface().setPoint(new PointType());
-			loc.getCircularSurface().setAntennaHeight(new AntennaHeightType());	
+			loc.getCircularSurface().setAntennaHeight(new AntennaHeight());	
 			
 				try{
 				Double longitude = Double.parseDouble(circularTable.getValueAt(0, 0).toString());
@@ -912,7 +912,7 @@ public class Save_XML extends ObjectFactory {
 			loc.getPolygonSurface().setScmPolygon(new SCMPolygonType());
 			
 			
-			loc.getPolygonSurface().setAntennaHeight(new AntennaHeightType());	
+			loc.getPolygonSurface().setAntennaHeight(new AntennaHeight());	
 			
 			for (int i=0; i<polygonTable.getRowCount(); i++){
 				

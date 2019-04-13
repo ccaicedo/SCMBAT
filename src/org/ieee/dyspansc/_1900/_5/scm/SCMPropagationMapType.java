@@ -38,7 +38,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="propMap" type="{http://www.ieee.org/DyspanSC/1900/5/SCM}PropMapType"/>
- *         &lt;element name="antennaHeight" type="{http://www.ieee.org/DyspanSC/1900/5/SCM}AntennaHeightType" minOccurs="0"/>
+ *         &lt;element name="antennaHeight" type="{http://www.ieee.org/DyspanSC/1900/5/SCM}AntennaHeight" minOccurs="0"/>
  *         &lt;element name="locationIndex" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *         &lt;element name="confidence" type="{http://www.ieee.org/DyspanSC/1900/5/SCM}ConfidenceType" minOccurs="0"/>
  *       &lt;/sequence>
@@ -60,7 +60,7 @@ public class SCMPropagationMapType {
 
     @XmlElement(required = true)
     protected PropMapType propMap;
-    protected AntennaHeightType antennaHeight;
+    protected AntennaHeight antennaHeight;
     protected Integer locationIndex;
     protected ConfidenceType confidence;
 
@@ -93,10 +93,10 @@ public class SCMPropagationMapType {
      * 
      * @return
      *     possible object is
-     *     {@link AntennaHeightType }
+     *     {@link AntennaHeight }
      *     
      */
-    public AntennaHeightType getAntennaHeight() {
+    public AntennaHeight getAntennaHeight() {
         return antennaHeight;
     }
 
@@ -105,10 +105,10 @@ public class SCMPropagationMapType {
      * 
      * @param value
      *     allowed object is
-     *     {@link AntennaHeightType }
+     *     {@link AntennaHeight }
      *     
      */
-    public void setAntennaHeight(AntennaHeightType value) {
+    public void setAntennaHeight(AntennaHeight value) {
         this.antennaHeight = value;
     }
 

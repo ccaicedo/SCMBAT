@@ -38,7 +38,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="scmPolygon" type="{http://www.ieee.org/DyspanSC/1900/5/SCM}SCMPolygonType"/>
- *         &lt;element name="antennaHeight" type="{http://www.ieee.org/DyspanSC/1900/5/SCM}AntennaHeightType"/>
+ *         &lt;element name="antennaHeight" type="{http://www.ieee.org/DyspanSC/1900/5/SCM}AntennaHeight"/>
  *         &lt;element name="transmitterDensity" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
@@ -59,7 +59,7 @@ public class PolygonSurfaceType {
     @XmlElement(required = true)
     protected SCMPolygonType scmPolygon;
     @XmlElement(required = true)
-    protected AntennaHeightType antennaHeight;
+    protected AntennaHeight antennaHeight;
     protected Double transmitterDensity;
 
     /**
@@ -91,10 +91,10 @@ public class PolygonSurfaceType {
      * 
      * @return
      *     possible object is
-     *     {@link AntennaHeightType }
+     *     {@link AntennaHeight }
      *     
      */
-    public AntennaHeightType getAntennaHeight() {
+    public AntennaHeight getAntennaHeight() {
         return antennaHeight;
     }
 
@@ -103,10 +103,10 @@ public class PolygonSurfaceType {
      * 
      * @param value
      *     allowed object is
-     *     {@link AntennaHeightType }
+     *     {@link AntennaHeight }
      *     
      */
-    public void setAntennaHeight(AntennaHeightType value) {
+    public void setAntennaHeight(AntennaHeight value) {
         this.antennaHeight = value;
     }
 

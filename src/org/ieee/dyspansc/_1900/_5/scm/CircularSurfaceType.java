@@ -40,7 +40,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="point" type="{http://www.ieee.org/DyspanSC/1900/5/SCM}PointType"/>
  *         &lt;element name="radius" type="{http://www.w3.org/2001/XMLSchema}double"/>
  *         &lt;element name="perimeterAttenuation" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
- *         &lt;element name="antennaHeight" type="{http://www.ieee.org/DyspanSC/1900/5/SCM}AntennaHeightType"/>
+ *         &lt;element name="antennaHeight" type="{http://www.ieee.org/DyspanSC/1900/5/SCM}AntennaHeight"/>
  *         &lt;element name="transmitterDensity" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
@@ -66,7 +66,7 @@ public class CircularSurfaceType {
     @XmlElement(defaultValue = "0")
     protected Double perimeterAttenuation;
     @XmlElement(required = true)
-    protected AntennaHeightType antennaHeight;
+    protected AntennaHeight antennaHeight;
     protected Double transmitterDensity;
 
     /**
@@ -138,10 +138,10 @@ public class CircularSurfaceType {
      * 
      * @return
      *     possible object is
-     *     {@link AntennaHeightType }
+     *     {@link AntennaHeight }
      *     
      */
-    public AntennaHeightType getAntennaHeight() {
+    public AntennaHeight getAntennaHeight() {
         return antennaHeight;
     }
 
@@ -150,10 +150,10 @@ public class CircularSurfaceType {
      * 
      * @param value
      *     allowed object is
-     *     {@link AntennaHeightType }
+     *     {@link AntennaHeight }
      *     
      */
-    public void setAntennaHeight(AntennaHeightType value) {
+    public void setAntennaHeight(AntennaHeight value) {
         this.antennaHeight = value;
     }
 
