@@ -26,8 +26,8 @@ along with program.  If not, see <http://www.gnu.org/licenses/>.
 
 package Load;
 
-import org.ieee.dyspansc._1900._5.scm.RxModelType;
-import org.ieee.dyspansc._1900._5.scm.TxModelType;
+import org.ieee.dyspansc._1900._5.scm.RxModel;
+import org.ieee.dyspansc._1900._5.scm.TxModel;
 
 import SCM_gui.SCM_MainWindow;
 
@@ -35,12 +35,12 @@ public class LoadRxModel extends LoadGUI{
 	
 	//final Logger logger = Logger.getLogger(LoadRxModel.class);
 	@Override
-	public void setData(SCM_MainWindow scm, TxModelType txModel) {
+	public void setData(SCM_MainWindow scm, TxModel txModel) {
 		
 	}
 
 	@Override
-	public void setData(SCM_MainWindow scm, RxModelType rxModel) {
+	public void setData(SCM_MainWindow scm, RxModel rxModel) {
 	//	logger.info("This is a Receiver");
 		System.out.println("This is a Receiver");
 		

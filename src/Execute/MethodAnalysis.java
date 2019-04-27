@@ -44,10 +44,10 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
-import org.ieee.dyspansc._1900._5.scm.RatingType;
-import org.ieee.dyspansc._1900._5.scm.RxModelType;
-import org.ieee.dyspansc._1900._5.scm.SCMScheduleType;
-import org.ieee.dyspansc._1900._5.scm.TxModelType;
+import org.ieee.dyspansc._1900._5.scm.Rating;
+import org.ieee.dyspansc._1900._5.scm.RxModel;
+import org.ieee.dyspansc._1900._5.scm.SCMSchedule;
+import org.ieee.dyspansc._1900._5.scm.TxModel;
 
 import SCM_home.Home;
 import dk.ange.octave.OctaveEngine;
@@ -139,16 +139,16 @@ public class MethodAnalysis {
 		logger.addAppender(Home.appender);
 	}
 	// Analysing which compatibility method to use based on Model types.
-	public String analyseRatedMethod(ArrayList<TxModelType> TxData,ArrayList<RxModelType> RxData){
+	public String analyseRatedMethod(ArrayList<TxModel> TxData,ArrayList<RxModel> RxData){
 		
 		String ratedMethod = "null";
 
 		if(RxData.size()==1){
 			
-			RxModelType Rx=RxData.get(0);
+			RxModel Rx=RxData.get(0);
 			
 			if(Rx.getUnderlayMask().get(0).getRating()!=null){
-				RatingType ratedMask = Rx.getUnderlayMask().get(0).getRating();
+				Rating ratedMask = Rx.getUnderlayMask().get(0).getRating();
 				if(ratedMask.getRatedBW()!=0.0){
 					ratedMethod = "ratedBW";
 				}
@@ -164,7 +164,7 @@ public class MethodAnalysis {
 				if(ratedMask.getDcRatedList()!=null){
 					ratedMethod = "dcRatedList";
 				}
-				if(ratedMask.getPorpIndex()!=0){
+				if(ratedMask.getPorPIndex()!=0){
 					ratedMethod = "pOrPIndex";
 				}
 			}else{
@@ -183,9 +183,9 @@ public class MethodAnalysis {
 	}
 // Executing compatibility based on method specified. 	
 	public void execCompat(String method, 
-			int[] txIndex, ArrayList<TxModelType> TxData, 
+			int[] txIndex, ArrayList<TxModel> TxData, 
 			ArrayList<SCM_home.Model> txArray, int[] 
-					rxIndex, ArrayList<RxModelType> RxData, ArrayList<SCM_home.Model> rxArray){
+					rxIndex, ArrayList<RxModel> RxData, ArrayList<SCM_home.Model> rxArray){
 		
 		//ExecuteFrame execFrame =null;
 		String Command0=null;
@@ -242,8 +242,8 @@ public class MethodAnalysis {
 			warningMessage = warningMessage + printRx.printText(RxData.get(0),printRFile);
 			
 			int o = 0;
-			SCMScheduleType rxSched = RxData.get(0).getScmSchedule().get(o); 
-			SCMScheduleType txSched = TxData.get(0).getScmSchedule().get(o);
+			SCMSchedule rxSched = RxData.get(0).getScmSchedule().get(o); 
+			SCMSchedule txSched = TxData.get(0).getScmSchedule().get(o);
 			GregorianCalendar Tx_Start_time = txSched.getStartTime().toGregorianCalendar();
 			GregorianCalendar Tx_End_time = txSched.getEndTime().toGregorianCalendar();
 			GregorianCalendar Rx_Start_time = rxSched.getStartTime().toGregorianCalendar();
@@ -326,8 +326,8 @@ public class MethodAnalysis {
 		warningMessage = warningMessage + printRx.printText(RxData.get(0),printRFile);
 			
 			o = 0;
-			SCMScheduleType rxSched2 = RxData.get(0).getScmSchedule().get(o); 
-			SCMScheduleType txSched2 = TxData.get(0).getScmSchedule().get(o);
+			SCMSchedule rxSched2 = RxData.get(0).getScmSchedule().get(o); 
+			SCMSchedule txSched2 = TxData.get(0).getScmSchedule().get(o);
 			GregorianCalendar Tx_Start_time2 = txSched2.getStartTime().toGregorianCalendar();
 			GregorianCalendar Tx_End_time2 = txSched2.getEndTime().toGregorianCalendar();
 			GregorianCalendar Rx_Start_time2 = rxSched2.getStartTime().toGregorianCalendar();
@@ -405,8 +405,8 @@ public class MethodAnalysis {
 		warningMessage = warningMessage + printRx.printText(RxData.get(0),printRFile);
 		
 		o = 0;
-		SCMScheduleType rxSched_bw = RxData.get(0).getScmSchedule().get(o); 
-		SCMScheduleType txSched_bw = TxData.get(0).getScmSchedule().get(o);
+		SCMSchedule rxSched_bw = RxData.get(0).getScmSchedule().get(o); 
+		SCMSchedule txSched_bw = TxData.get(0).getScmSchedule().get(o);
 		GregorianCalendar Tx_Start_time_bw = txSched_bw.getStartTime().toGregorianCalendar();
 		GregorianCalendar Tx_End_time_bw = txSched_bw.getEndTime().toGregorianCalendar();
 		GregorianCalendar Rx_Start_time_bw = rxSched_bw.getStartTime().toGregorianCalendar();
@@ -521,8 +521,8 @@ public class MethodAnalysis {
 		warningMessage = warningMessage + printRx.printText(RxData.get(0),printRFile);
 				
 		o = 0;
-		SCMScheduleType rxSched3 = RxData.get(0).getScmSchedule().get(o); 
-		SCMScheduleType txSched3 = TxData.get(0).getScmSchedule().get(o);
+		SCMSchedule rxSched3 = RxData.get(0).getScmSchedule().get(o); 
+		SCMSchedule txSched3 = TxData.get(0).getScmSchedule().get(o);
 		GregorianCalendar Tx_Start_time3 = txSched3.getStartTime().toGregorianCalendar();
 		GregorianCalendar Tx_End_time3 = txSched3.getEndTime().toGregorianCalendar();
 		GregorianCalendar Rx_Start_time3 = rxSched3.getStartTime().toGregorianCalendar();
@@ -638,8 +638,8 @@ public class MethodAnalysis {
 		warningMessage = warningMessage + printRx.printText(RxData.get(0),printRFile);
 		
 		o = 0;
-		SCMScheduleType rxSched_btp = RxData.get(0).getScmSchedule().get(o); 
-		SCMScheduleType txSched_btp = TxData.get(0).getScmSchedule().get(o);
+		SCMSchedule rxSched_btp = RxData.get(0).getScmSchedule().get(o); 
+		SCMSchedule txSched_btp = TxData.get(0).getScmSchedule().get(o);
 		GregorianCalendar Tx_Start_time_btp = txSched_btp.getStartTime().toGregorianCalendar();
 		GregorianCalendar Tx_End_time_btp = txSched_btp.getEndTime().toGregorianCalendar();
 		GregorianCalendar Rx_Start_time_btp = rxSched_btp.getStartTime().toGregorianCalendar();
@@ -750,8 +750,8 @@ public class MethodAnalysis {
 		warningMessage = warningMessage + printRx.printText(RxData.get(0),printRFile);
 		
 		o = 0;
-		SCMScheduleType rxSched4 = RxData.get(0).getScmSchedule().get(o); 
-		SCMScheduleType txSched4 = TxData.get(0).getScmSchedule().get(o);
+		SCMSchedule rxSched4 = RxData.get(0).getScmSchedule().get(o); 
+		SCMSchedule txSched4 = TxData.get(0).getScmSchedule().get(o);
 		GregorianCalendar Tx_Start_time4 = txSched4.getStartTime().toGregorianCalendar();
 		GregorianCalendar Tx_End_time4 = txSched4.getEndTime().toGregorianCalendar();
 		GregorianCalendar Rx_Start_time4 = rxSched4.getStartTime().toGregorianCalendar();
@@ -865,8 +865,8 @@ public class MethodAnalysis {
 		warningMessage = warningMessage + printRx.printText(RxData.get(0),printRFile);
 		
 		o = 0;
-		SCMScheduleType rxSched_dc = RxData.get(0).getScmSchedule().get(o); 
-		SCMScheduleType txSched_dc = TxData.get(0).getScmSchedule().get(o);
+		SCMSchedule rxSched_dc = RxData.get(0).getScmSchedule().get(o); 
+		SCMSchedule txSched_dc = TxData.get(0).getScmSchedule().get(o);
 		GregorianCalendar Tx_Start_time_dc = txSched_dc.getStartTime().toGregorianCalendar();
 		GregorianCalendar Tx_End_time_dc = txSched_dc.getEndTime().toGregorianCalendar();
 		GregorianCalendar Rx_Start_time_dc = rxSched_dc.getStartTime().toGregorianCalendar();

@@ -49,8 +49,8 @@ import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.log4j.Logger;
-import org.ieee.dyspansc._1900._5.scm.RxModelType;
-import org.ieee.dyspansc._1900._5.scm.TxModelType;
+import org.ieee.dyspansc._1900._5.scm.RxModel;
+import org.ieee.dyspansc._1900._5.scm.TxModel;
 
 import Execute.MethodAnalysis;
 import Execute.Warn;
@@ -230,7 +230,7 @@ public class Exec {
 			public void actionPerformed(ActionEvent e) {
 				
 				int[] indices = TxBox.getSelectedIndices();
-				ArrayList<TxModelType> TxData = new ArrayList<TxModelType>();
+				ArrayList<TxModel> TxData = new ArrayList<TxModel>();
 				System.out.println(indices.length);
 				logger.debug(indices.length);
 				
@@ -246,10 +246,10 @@ public class Exec {
 						logger.info("File Exists");
 					}
 					try{
-					JAXBContext TxContext = JAXBContext.newInstance(TxModelType.class);
+					JAXBContext TxContext = JAXBContext.newInstance(TxModel.class);
 					Unmarshaller TxUnmarshaller = TxContext.createUnmarshaller();
-					JAXBElement<TxModelType> TxElement = TxUnmarshaller.unmarshal(new StreamSource(filePath),
-							TxModelType.class);
+					JAXBElement<TxModel> TxElement = TxUnmarshaller.unmarshal(new StreamSource(filePath),
+							TxModel.class);
 					
 					TxData.add(TxElement.getValue());
 					System.out.println(TxData.get(i).toString());
@@ -265,7 +265,7 @@ public class Exec {
 				int[] txBoxIndices = indices;
 				indices = RxBox.getSelectedIndices();
 				int[] rxBoxIndices = indices;
-				ArrayList<RxModelType> RxData = new ArrayList<RxModelType>();
+				ArrayList<RxModel> RxData = new ArrayList<RxModel>();
 				
 				for(int i=0;i<indices.length;i++){
 					
@@ -281,10 +281,10 @@ public class Exec {
 						
 					}
 					try{
-					JAXBContext RxContext = JAXBContext.newInstance(RxModelType.class);
+					JAXBContext RxContext = JAXBContext.newInstance(RxModel.class);
 					Unmarshaller RxUnmarshaller = RxContext.createUnmarshaller();
-					JAXBElement<RxModelType> RxElement = RxUnmarshaller.unmarshal(new StreamSource(filePath),
-							RxModelType.class);
+					JAXBElement<RxModel> RxElement = RxUnmarshaller.unmarshal(new StreamSource(filePath),
+							RxModel.class);
 					
 					RxData.add(RxElement.getValue());
 					System.out.println(RxData.get(i).toString());
