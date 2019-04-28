@@ -1223,24 +1223,20 @@ public class Save_XML extends ObjectFactory {
 				warningFlag = true;
 			}
 		}    	
-		try{
-			if(!imc.imOrderField.getText().equals(""))
-			{	int order = 0;
-				try {
-					order = Integer.parseInt(imc.imOrderField.getText());
-				}
-				catch(NumberFormatException exception) {
-					//ABhatt eat the exception for now
-				}				
-				imask.setOrder(order);
+
+		if (!imc.imOrderField.getText().equals("")) {
+			int order = 0;
+			try {
+				order = Integer.parseInt(imc.imOrderField.getText());
+			} catch (NumberFormatException exception) {
+				// ABhatt eating this exception for now
+				warningFlag = true;
+				warningMessage = warningMessage
+						+ "\nThe entry in IM Order field in the Intermodulation mask should be numeric";
 			}
-			
-		}catch(Exception e){
-			warningMessage = warningMessage + "\nThe entry in IM Order field in the Intermodulation mask should be numeric";
-			warningFlag = true;
-			
-		//	new Warn().setWarn("Warning", "The entry in Resolution BW field should be numeric");
+			imask.setOrder(order);
 		}
+		
 		// If there is highSideInjection to be stored
 		try{
 			imask.setHighSideInjection(imc.IFYes.isSelected());
