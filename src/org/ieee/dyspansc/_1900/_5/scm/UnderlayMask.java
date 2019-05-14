@@ -29,36 +29,6 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 
-/**
- * <p>Java class for UnderlayMask complex type.
- * 
- * <p>The following schema fragment specifies the expected content contained within this class.
- * 
- * <pre>
- * &lt;complexType name="UnderlayMask">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="rating" type="{http://www.ieee.org/DyspanSC/1900/5/SCM}Rating" minOccurs="0"/>
- *         &lt;element name="resolutionBW" type="{http://www.w3.org/2001/XMLSchema}double"/>
- *         &lt;element name="scmMask" type="{http://www.ieee.org/DyspanSC/1900/5/SCM}SCMMask"/>
- *         &lt;element name="confidence" type="{http://www.ieee.org/DyspanSC/1900/5/SCM}Confidence" minOccurs="0"/>
- *       &lt;/sequence>
- *       &lt;attribute name="maskPowerMarginMethod" use="required">
- *         &lt;simpleType>
- *           &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
- *             &lt;enumeration value="TotalPower"/>
- *             &lt;enumeration value="MaximumPowerDensity"/>
- *           &lt;/restriction>
- *         &lt;/simpleType>
- *       &lt;/attribute>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
- * 
- * 
- */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "UnderlayMask", propOrder = {
     "rating",
