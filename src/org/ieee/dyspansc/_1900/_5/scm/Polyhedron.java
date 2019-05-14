@@ -28,41 +28,6 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 
-/**
- * <p>Java class for Polyhedron complex type.
- * 
- * <p>The following schema fragment specifies the expected content contained within this class.
- * 
- * <pre>
- * &lt;complexType name="Polyhedron">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="scmPolygon" type="{http://www.ieee.org/DyspanSC/1900/5/SCM}SCMPolygon"/>
- *         &lt;element name="height">
- *           &lt;simpleType>
- *             &lt;restriction base="{http://www.w3.org/2001/XMLSchema}double">
- *               &lt;minExclusive value="0"/>
- *             &lt;/restriction>
- *           &lt;/simpleType>
- *         &lt;/element>
- *         &lt;element name="transmitterDensity" minOccurs="0">
- *           &lt;simpleType>
- *             &lt;restriction base="{http://www.w3.org/2001/XMLSchema}double">
- *               &lt;minInclusive value="0"/>
- *             &lt;/restriction>
- *           &lt;/simpleType>
- *         &lt;/element>
- *         &lt;element name="topAttenuation" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
- *         &lt;element name="bottomAttenuation" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
- *       &lt;/sequence>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
- * 
- * 
- */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Polyhedron", propOrder = {
     "scmPolygon",
