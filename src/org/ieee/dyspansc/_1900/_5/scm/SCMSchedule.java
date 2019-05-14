@@ -29,29 +29,6 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 
-/**
- * <p>Java class for SCMSchedule complex type.
- * 
- * <p>The following schema fragment specifies the expected content contained within this class.
- * 
- * <pre>
- * &lt;complexType name="SCMSchedule">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="startTime" type="{http://www.w3.org/2001/XMLSchema}dateTime"/>
- *         &lt;element name="endTime" type="{http://www.w3.org/2001/XMLSchema}dateTime"/>
- *         &lt;element name="cycle" type="{http://www.ieee.org/DyspanSC/1900/5/SCM}Cycle" minOccurs="0"/>
- *         &lt;element name="locationIndex" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
- *         &lt;element name="confidence" type="{http://www.ieee.org/DyspanSC/1900/5/SCM}Confidence" minOccurs="0"/>
- *       &lt;/sequence>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
- * 
- * 
- */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "SCMSchedule", propOrder = {
     "startTime",
