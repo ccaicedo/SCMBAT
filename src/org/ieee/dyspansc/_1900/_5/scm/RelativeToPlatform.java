@@ -27,48 +27,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 
 
-/**
- * <p>Java class for RelativeToPlatform complex type.
- * 
- * <p>The following schema fragment specifies the expected content contained within this class.
- * 
- * <pre>
- * &lt;complexType name="RelativeToPlatform">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="zRotation">
- *           &lt;simpleType>
- *             &lt;restriction base="{http://www.w3.org/2001/XMLSchema}double">
- *               &lt;minInclusive value="-360"/>
- *               &lt;maxInclusive value="360"/>
- *             &lt;/restriction>
- *           &lt;/simpleType>
- *         &lt;/element>
- *         &lt;element name="yRotation">
- *           &lt;simpleType>
- *             &lt;restriction base="{http://www.w3.org/2001/XMLSchema}double">
- *               &lt;minInclusive value="-360"/>
- *               &lt;maxInclusive value="360"/>
- *             &lt;/restriction>
- *           &lt;/simpleType>
- *         &lt;/element>
- *         &lt;element name="xRotation">
- *           &lt;simpleType>
- *             &lt;restriction base="{http://www.w3.org/2001/XMLSchema}double">
- *               &lt;minInclusive value="-360"/>
- *               &lt;maxInclusive value="360"/>
- *             &lt;/restriction>
- *           &lt;/simpleType>
- *         &lt;/element>
- *       &lt;/sequence>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
- * 
- * 
- */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "RelativeToPlatform", propOrder = {
     "zRotation",
