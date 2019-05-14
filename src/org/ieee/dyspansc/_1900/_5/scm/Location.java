@@ -27,31 +27,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 
 
-/**
- * <p>Java class for Location complex type.
- * 
- * <p>The following schema fragment specifies the expected content contained within this class.
- * 
- * <pre>
- * &lt;complexType name="Location">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;choice>
- *         &lt;element name="point" type="{http://www.ieee.org/DyspanSC/1900/5/SCM}Point"/>
- *         &lt;element name="pointSurface" type="{http://www.ieee.org/DyspanSC/1900/5/SCM}PointSurface"/>
- *         &lt;element name="circularSurface" type="{http://www.ieee.org/DyspanSC/1900/5/SCM}CircularSurface"/>
- *         &lt;element name="polygonSurface" type="{http://www.ieee.org/DyspanSC/1900/5/SCM}PolygonSurface"/>
- *         &lt;element name="cylinder" type="{http://www.ieee.org/DyspanSC/1900/5/SCM}Cylinder"/>
- *         &lt;element name="polyhedron" type="{http://www.ieee.org/DyspanSC/1900/5/SCM}Polyhedron"/>
- *         &lt;element name="path" type="{http://www.ieee.org/DyspanSC/1900/5/SCM}Path"/>
- *       &lt;/choice>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
- * 
- * 
- */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Location", propOrder = {
     "point",
