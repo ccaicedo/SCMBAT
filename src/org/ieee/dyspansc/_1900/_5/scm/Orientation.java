@@ -27,27 +27,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 
 
-/**
- * <p>Java class for Orientation complex type.
- * 
- * <p>The following schema fragment specifies the expected content contained within this class.
- * 
- * <pre>
- * &lt;complexType name="Orientation">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;choice>
- *         &lt;element name="surface" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
- *         &lt;element name="relativeToPlatform" type="{http://www.ieee.org/DyspanSC/1900/5/SCM}RelativeToPlatform"/>
- *         &lt;element name="towardReferencePoint" type="{http://www.ieee.org/DyspanSC/1900/5/SCM}TowardReferencePoint"/>
- *       &lt;/choice>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
- * 
- * 
- */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Orientation", propOrder = {
     "surface",
