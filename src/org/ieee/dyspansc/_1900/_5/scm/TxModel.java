@@ -29,46 +29,6 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 
-/**
- * <p>Java class for TxModel complex type.
- * 
- * <p>The following schema fragment specifies the expected content contained within this class.
- * 
- * <pre>
- * &lt;complexType name="TxModel">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="systemID" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="purpose">
- *           &lt;simpleType>
- *             &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
- *               &lt;enumeration value="AUTHORIZATION"/>
- *               &lt;enumeration value="CONSTRAINT"/>
- *               &lt;enumeration value="CONSUMPTION"/>
- *             &lt;/restriction>
- *           &lt;/simpleType>
- *         &lt;/element>
- *         &lt;element name="confidence" type="{http://www.ieee.org/DyspanSC/1900/5/SCM}Confidence" minOccurs="0"/>
- *         &lt;element name="referencePower" type="{http://www.ieee.org/DyspanSC/1900/5/SCM}ReferencePower" maxOccurs="unbounded"/>
- *         &lt;element name="spectrumMask" type="{http://www.ieee.org/DyspanSC/1900/5/SCM}SpectrumMask" maxOccurs="unbounded"/>
- *         &lt;element name="underlayMask" type="{http://www.ieee.org/DyspanSC/1900/5/SCM}UnderlayMask" minOccurs="0"/>
- *         &lt;element name="scmPowerMap" type="{http://www.ieee.org/DyspanSC/1900/5/SCM}SCMPowerMap" maxOccurs="unbounded"/>
- *         &lt;element name="scmPropagationMap" type="{http://www.ieee.org/DyspanSC/1900/5/SCM}SCMPropagationMap" maxOccurs="unbounded"/>
- *         &lt;element name="intermodulationMask" type="{http://www.ieee.org/DyspanSC/1900/5/SCM}IntermodulationMask" maxOccurs="unbounded" minOccurs="0"/>
- *         &lt;element name="scmPlatform" type="{http://www.ieee.org/DyspanSC/1900/5/SCM}SCMPlatform" maxOccurs="unbounded" minOccurs="0"/>
- *         &lt;element name="scmLocation" type="{http://www.ieee.org/DyspanSC/1900/5/SCM}SCMLocation" maxOccurs="unbounded"/>
- *         &lt;element name="scmSchedule" type="{http://www.ieee.org/DyspanSC/1900/5/SCM}SCMSchedule" maxOccurs="unbounded"/>
- *         &lt;element name="minimumPowerSpectralFluxDensity" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
- *         &lt;element name="scmPolicyOrProtocol" type="{http://www.ieee.org/DyspanSC/1900/5/SCM}SCMPolicyOrProtocol" minOccurs="0"/>
- *       &lt;/sequence>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
- * 
- * 
- */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "TxModel", propOrder = {
     "systemID",
