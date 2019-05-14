@@ -29,27 +29,6 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.Duration;
 
 
-/**
- * <p>Java class for Cycle complex type.
- * 
- * <p>The following schema fragment specifies the expected content contained within this class.
- * 
- * <pre>
- * &lt;complexType name="Cycle">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="waitUntilOn" type="{http://www.w3.org/2001/XMLSchema}duration"/>
- *         &lt;element name="durationOn" type="{http://www.w3.org/2001/XMLSchema}duration"/>
- *         &lt;element name="durationOff" type="{http://www.w3.org/2001/XMLSchema}duration"/>
- *       &lt;/sequence>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
- * 
- * 
- */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Cycle", propOrder = {
     "waitUntilOn",
