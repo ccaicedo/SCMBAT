@@ -27,27 +27,6 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 
-/**
- * <p>Java class for SCMPolicyOrProtocol complex type.
- * 
- * <p>The following schema fragment specifies the expected content contained within this class.
- * 
- * <pre>
- * &lt;complexType name="SCMPolicyOrProtocol">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="porPName" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="porPParameters" type="{http://www.ieee.org/DyspanSC/1900/5/SCM}PorPParameters" minOccurs="0"/>
- *         &lt;element name="porPIndex" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
- *       &lt;/sequence>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
- * 
- * 
- */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "SCMPolicyOrProtocol", propOrder = {
     "porPName",
