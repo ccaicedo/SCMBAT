@@ -30,40 +30,6 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 
-/**
- * <p>Java class for SCMSet complex type.
- * 
- * <p>The following schema fragment specifies the expected content contained within this class.
- * 
- * <pre>
- * &lt;complexType name="SCMSet">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="scmSetID" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="boundary" type="{http://www.ieee.org/DyspanSC/1900/5/SCM}Boundary" minOccurs="0"/>
- *         &lt;element name="uberModel" type="{http://www.ieee.org/DyspanSC/1900/5/SCM}UberModel" minOccurs="0"/>
- *         &lt;element name="systemModel" type="{http://www.ieee.org/DyspanSC/1900/5/SCM}SystemModel" maxOccurs="unbounded" minOccurs="0"/>
- *         &lt;element name="txModel" type="{http://www.ieee.org/DyspanSC/1900/5/SCM}TxModel" maxOccurs="unbounded" minOccurs="0"/>
- *         &lt;element name="rxModel" type="{http://www.ieee.org/DyspanSC/1900/5/SCM}RxModel" maxOccurs="unbounded" minOccurs="0"/>
- *       &lt;/sequence>
- *       &lt;attribute name="purpose" use="required">
- *         &lt;simpleType>
- *           &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
- *             &lt;enumeration value="AUTHORIZATION"/>
- *             &lt;enumeration value="CONSTRAINT"/>
- *             &lt;enumeration value="CONSUMPTION"/>
- *           &lt;/restriction>
- *         &lt;/simpleType>
- *       &lt;/attribute>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
- * 
- * 
- */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "SCMSet", propOrder = {
     "scmSetID",
