@@ -31,26 +31,6 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.Duration;
 
 
-/**
- * <p>Java class for Path complex type.
- * 
- * <p>The following schema fragment specifies the expected content contained within this class.
- * 
- * <pre>
- * &lt;complexType name="Path">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="pathPoint" type="{http://www.ieee.org/DyspanSC/1900/5/SCM}PathPoint" maxOccurs="unbounded" minOccurs="2"/>
- *         &lt;element name="period" type="{http://www.w3.org/2001/XMLSchema}duration" minOccurs="0"/>
- *       &lt;/sequence>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
- * 
- * 
- */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Path", propOrder = {
     "pathPoint",
