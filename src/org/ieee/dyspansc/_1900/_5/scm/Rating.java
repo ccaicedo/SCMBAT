@@ -27,43 +27,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 
 
-/**
- * <p>Java class for Rating complex type.
- * 
- * <p>The following schema fragment specifies the expected content contained within this class.
- * 
- * <pre>
- * &lt;complexType name="Rating">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;choice>
- *         &lt;element name="ratedBW">
- *           &lt;simpleType>
- *             &lt;restriction base="{http://www.w3.org/2001/XMLSchema}double">
- *               &lt;minExclusive value="0"/>
- *             &lt;/restriction>
- *           &lt;/simpleType>
- *         &lt;/element>
- *         &lt;element name="bwRatedList" type="{http://www.ieee.org/DyspanSC/1900/5/SCM}BWRatedList"/>
- *         &lt;element name="ratedBTP">
- *           &lt;simpleType>
- *             &lt;restriction base="{http://www.w3.org/2001/XMLSchema}double">
- *               &lt;minExclusive value="0"/>
- *             &lt;/restriction>
- *           &lt;/simpleType>
- *         &lt;/element>
- *         &lt;element name="btpRatedList" type="{http://www.ieee.org/DyspanSC/1900/5/SCM}BTPRatedList"/>
- *         &lt;element name="dcRatedList" type="{http://www.ieee.org/DyspanSC/1900/5/SCM}DCRatedList"/>
- *         &lt;element name="hopRated" type="{http://www.ieee.org/DyspanSC/1900/5/SCM}HopRated"/>
- *         &lt;element name="porPIndex" type="{http://www.w3.org/2001/XMLSchema}int"/>
- *       &lt;/choice>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
- * 
- * 
- */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Rating", propOrder = {
     "ratedBW",
