@@ -30,27 +30,6 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 
-/**
- * <p>Java class for Boundary complex type.
- * 
- * <p>The following schema fragment specifies the expected content contained within this class.
- * 
- * <pre>
- * &lt;complexType name="Boundary">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="bandList" type="{http://www.ieee.org/DyspanSC/1900/5/SCM}BandList" minOccurs="0"/>
- *         &lt;element name="schedule" type="{http://www.ieee.org/DyspanSC/1900/5/SCM}SCMSchedule" maxOccurs="unbounded" minOccurs="0"/>
- *         &lt;element name="location" type="{http://www.ieee.org/DyspanSC/1900/5/SCM}SCMLocation" maxOccurs="unbounded" minOccurs="0"/>
- *       &lt;/sequence>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
- * 
- * 
- */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Boundary", propOrder = {
     "bandList",
