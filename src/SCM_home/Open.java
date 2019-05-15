@@ -50,8 +50,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.log4j.Logger;
-import org.ieee.dyspansc._1900._5.scm.RxModelType;
-import org.ieee.dyspansc._1900._5.scm.TxModelType;
+import org.ieee.dyspansc._1900._5.scm.RxModel;
+import org.ieee.dyspansc._1900._5.scm.TxModel;
 import org.w3c.dom.Document;
 
 import Load.LoadGUI;
@@ -69,8 +69,8 @@ public class Open {
 	JButton Back = new JButton("Back");
 	JButton Exit = new JButton("Exit");
 	JFileChooser fc = new JFileChooser();
-	protected TxModelType TxModel;
-	protected RxModelType RxModel;
+	protected TxModel TxModel;
+	protected RxModel RxModel;
 	
 	//Maintaining the HashMap for the already opened Models
 	HashMap<String,Boolean> openedModels = new HashMap<String, Boolean>();
@@ -175,20 +175,20 @@ public class Open {
 					String type = doc.getDocumentElement().getNodeName();
 					
 					switch(type){
-					case "txModel": JAXBContext TxContext = JAXBContext.newInstance(TxModelType.class);
+					case "txModel": JAXBContext TxContext = JAXBContext.newInstance(TxModel.class);
 						Unmarshaller TxUnmarshaller = TxContext.createUnmarshaller();
 
-						JAXBElement<TxModelType> TxElement = TxUnmarshaller.unmarshal(new StreamSource(filePath),
-								TxModelType.class);
+						JAXBElement<TxModel> TxElement = TxUnmarshaller.unmarshal(new StreamSource(filePath),
+								TxModel.class);
 						device = "Tx";
 						TxModel = TxElement.getValue();
 						break;
 						
-					case "rxModel": JAXBContext RxContext = JAXBContext.newInstance(RxModelType.class);
+					case "rxModel": JAXBContext RxContext = JAXBContext.newInstance(RxModel.class);
 				    	Unmarshaller RxUnmarshaller = RxContext.createUnmarshaller();
 				    	
-				    	JAXBElement<RxModelType> RxElement = RxUnmarshaller.unmarshal(new StreamSource(filePath),
-				        RxModelType.class);
+				    	JAXBElement<RxModel> RxElement = RxUnmarshaller.unmarshal(new StreamSource(filePath),
+				        RxModel.class);
 				    	device = "Rx";
 				    	RxModel = RxElement.getValue();
 				    	

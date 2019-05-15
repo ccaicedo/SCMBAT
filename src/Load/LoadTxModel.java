@@ -33,9 +33,9 @@ import java.util.List;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-import org.ieee.dyspansc._1900._5.scm.BandType;
-import org.ieee.dyspansc._1900._5.scm.InflectionPointType;
-import org.ieee.dyspansc._1900._5.scm.TxModelType;
+import org.ieee.dyspansc._1900._5.scm.Band;
+import org.ieee.dyspansc._1900._5.scm.InflectionPnt;
+import org.ieee.dyspansc._1900._5.scm.TxModel;
 
 import SCM_gui.SCM_MainWindow;
 
@@ -44,7 +44,7 @@ public class LoadTxModel extends LoadGUI {
 	//final Logger logger = Logger.getLogger(LoadTxModel.class);
 	
 	@Override
-	public void setData(SCM_MainWindow scm, TxModelType txModel) {		
+	public void setData(SCM_MainWindow scm, TxModel txModel) {		
 	//	logger.info("This is Transmitter");
 		System.out.println("This is Transmitter");
 		
@@ -53,7 +53,7 @@ public class LoadTxModel extends LoadGUI {
 		scm.spec.ResTextField.setText(String.valueOf(
 				txModel.getSpectrumMask().get(o).getResolutionBW()));
 		
-		List<InflectionPointType> infP = txModel.getSpectrumMask().get(o).getScmMask().getInflectionPoint();
+		List<InflectionPnt> infP = txModel.getSpectrumMask().get(o).getScmMask().getInflectionPnt();
 		int inflectionLength = infP.size();
 		DefaultTableModel model = (DefaultTableModel) scm.spec.table.getModel();
 	  	model.setRowCount(0);
@@ -94,7 +94,7 @@ public class LoadTxModel extends LoadGUI {
 				
 				if(txModel.getSpectrumMask().get(o).getHoppingData().getBandList()!=null){
 					
-					List<BandType> bandList = txModel.getSpectrumMask().get(o).
+					List<Band> bandList = txModel.getSpectrumMask().get(o).
 							getHoppingData().getBandList().getBand();
 					model = (DefaultTableModel) scm.spec.SpecHop.table3.getModel();
 				  	model.setRowCount(0);

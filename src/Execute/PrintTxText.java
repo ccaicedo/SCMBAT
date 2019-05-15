@@ -31,10 +31,10 @@ import java.io.PrintWriter;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.ieee.dyspansc._1900._5.scm.BandType;
-import org.ieee.dyspansc._1900._5.scm.HoppingDataType;
-import org.ieee.dyspansc._1900._5.scm.InflectionPointType;
-import org.ieee.dyspansc._1900._5.scm.TxModelType;
+import org.ieee.dyspansc._1900._5.scm.Band;
+import org.ieee.dyspansc._1900._5.scm.HoppingData;
+import org.ieee.dyspansc._1900._5.scm.InflectionPnt;
+import org.ieee.dyspansc._1900._5.scm.TxModel;
 
 import SCM_home.Home;
 
@@ -42,7 +42,7 @@ import SCM_home.Home;
 public class PrintTxText extends PrintText{
 	
 	final Logger logger = Logger.getLogger(MethodAnalysis.class);
-	public String printText(TxModelType model, String SaveName){
+	public String printText(TxModel model, String SaveName){
 		
 		logger.addAppender(Home.appender);
 		String warningMessage= "\n";
@@ -66,7 +66,7 @@ public class PrintTxText extends PrintText{
 						printfile.println("# name: "+"Tx_SpecMask");
 						printfile.println("# type: matrix");
 						printfile.println("# rows: 1");
-						List<InflectionPointType> infPoint = model.getSpectrumMask().get(o).getScmMask().getInflectionPoint();
+						List<InflectionPnt> infPoint = model.getSpectrumMask().get(o).getScmMask().getInflectionPnt();
 						String data = "";
 						for(int i=0; i<infPoint.size(); i++){
 							data = data + infPoint.get(i).getFrequency() + " ";
@@ -97,10 +97,10 @@ public class PrintTxText extends PrintText{
 						
 						if(model.getSpectrumMask().get(o).getHoppingData()!=null){
 							
-							HoppingDataType hopData  = model.getSpectrumMask().get(o).getHoppingData();
+							HoppingData hopData  = model.getSpectrumMask().get(o).getHoppingData();
 							
 							if(hopData.getBandList()!=null){
-								List<BandType> bandList = hopData.getBandList().getBand();
+								List<Band> bandList = hopData.getBandList().getBand();
 								printfile.println("# name: Tx_BandList");
 								printfile.println("# type: matrix");
 								printfile.println("# rows: 1");				

@@ -47,57 +47,55 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.ieee.dyspansc._1900._5.scm.AntennaHeightType;
-import org.ieee.dyspansc._1900._5.scm.BTPRatedListType;
-import org.ieee.dyspansc._1900._5.scm.BTPRatingType;
-import org.ieee.dyspansc._1900._5.scm.BWRatedListType;
-import org.ieee.dyspansc._1900._5.scm.BWRatingType;
-import org.ieee.dyspansc._1900._5.scm.BandListType;
-import org.ieee.dyspansc._1900._5.scm.BandType;
-import org.ieee.dyspansc._1900._5.scm.CircularSurfaceType;
-import org.ieee.dyspansc._1900._5.scm.CylinderType;
-import org.ieee.dyspansc._1900._5.scm.DCRatedListType;
-import org.ieee.dyspansc._1900._5.scm.DCRatingType;
-import org.ieee.dyspansc._1900._5.scm.FrequencyListType;
-import org.ieee.dyspansc._1900._5.scm.GainMapType;
-import org.ieee.dyspansc._1900._5.scm.GainMapValueType;
-import org.ieee.dyspansc._1900._5.scm.HoppingDataType;
-import org.ieee.dyspansc._1900._5.scm.InflectionPointType;
-import org.ieee.dyspansc._1900._5.scm.IntermodulationMaskType;
-import org.ieee.dyspansc._1900._5.scm.LocationType;
+import org.ieee.dyspansc._1900._5.scm.AntennaHeight;
+import org.ieee.dyspansc._1900._5.scm.BTPRatedList;
+import org.ieee.dyspansc._1900._5.scm.BTPRating;
+import org.ieee.dyspansc._1900._5.scm.BWRatedList;
+import org.ieee.dyspansc._1900._5.scm.BWRating;
+import org.ieee.dyspansc._1900._5.scm.Band;
+import org.ieee.dyspansc._1900._5.scm.BandList;
+import org.ieee.dyspansc._1900._5.scm.CircularSurface;
+import org.ieee.dyspansc._1900._5.scm.Cylinder;
+import org.ieee.dyspansc._1900._5.scm.DCRatedList;
+import org.ieee.dyspansc._1900._5.scm.DCRating;
+import org.ieee.dyspansc._1900._5.scm.FrequencyList;
+import org.ieee.dyspansc._1900._5.scm.GainMap;
+import org.ieee.dyspansc._1900._5.scm.GainMapValue;
+import org.ieee.dyspansc._1900._5.scm.HoppingData;
+import org.ieee.dyspansc._1900._5.scm.InflectionPnt;
+import org.ieee.dyspansc._1900._5.scm.IntermodulationMask;
+import org.ieee.dyspansc._1900._5.scm.Location;
 import org.ieee.dyspansc._1900._5.scm.ObjectFactory;
-import org.ieee.dyspansc._1900._5.scm.OrientationType;
-import org.ieee.dyspansc._1900._5.scm.PathPointType;
-import org.ieee.dyspansc._1900._5.scm.PathType;
-import org.ieee.dyspansc._1900._5.scm.PiecewiseLinearType;
-import org.ieee.dyspansc._1900._5.scm.PointSurfaceType;
-import org.ieee.dyspansc._1900._5.scm.PointType;
-import org.ieee.dyspansc._1900._5.scm.PolygonSurfaceType;
-import org.ieee.dyspansc._1900._5.scm.PolyhedronType;
-import org.ieee.dyspansc._1900._5.scm.PropMapType;
-import org.ieee.dyspansc._1900._5.scm.PropMapValueType;
-import org.ieee.dyspansc._1900._5.scm.PropagationModelType;
-import org.ieee.dyspansc._1900._5.scm.RatingType;
-import org.ieee.dyspansc._1900._5.scm.ReferencePowerType;
-import org.ieee.dyspansc._1900._5.scm.RelativeToPlatformType;
-import org.ieee.dyspansc._1900._5.scm.RxModelType;
-import org.ieee.dyspansc._1900._5.scm.SCMLocationType;
-import org.ieee.dyspansc._1900._5.scm.SCMMaskType;
-import org.ieee.dyspansc._1900._5.scm.SCMPolygonType;
-import org.ieee.dyspansc._1900._5.scm.SCMPowerMapType;
-import org.ieee.dyspansc._1900._5.scm.SCMPropagationMapType;
-import org.ieee.dyspansc._1900._5.scm.SCMScheduleType;
-import org.ieee.dyspansc._1900._5.scm.SideType;
-import org.ieee.dyspansc._1900._5.scm.SpectrumMaskType;
-import org.ieee.dyspansc._1900._5.scm.TowardReferencePointType;
-import org.ieee.dyspansc._1900._5.scm.TxModelType;
-import org.ieee.dyspansc._1900._5.scm.UnderlayMaskType;
+import org.ieee.dyspansc._1900._5.scm.Orientation;
+import org.ieee.dyspansc._1900._5.scm.PathPoint;
+import org.ieee.dyspansc._1900._5.scm.Path;
+import org.ieee.dyspansc._1900._5.scm.PiecewiseLinear;
+import org.ieee.dyspansc._1900._5.scm.PointSurface;
+import org.ieee.dyspansc._1900._5.scm.Point;
+import org.ieee.dyspansc._1900._5.scm.PolygonSurface;
+import org.ieee.dyspansc._1900._5.scm.Polyhedron;
+import org.ieee.dyspansc._1900._5.scm.PropMap;
+import org.ieee.dyspansc._1900._5.scm.PropMapValue;
+import org.ieee.dyspansc._1900._5.scm.PropagationModel;
+import org.ieee.dyspansc._1900._5.scm.Rating;
+import org.ieee.dyspansc._1900._5.scm.ReferencePower;
+import org.ieee.dyspansc._1900._5.scm.RelativeToPlatform;
+import org.ieee.dyspansc._1900._5.scm.RxModel;
+import org.ieee.dyspansc._1900._5.scm.SCMLocation;
+import org.ieee.dyspansc._1900._5.scm.SCMMask;
+import org.ieee.dyspansc._1900._5.scm.SCMPolygon;
+import org.ieee.dyspansc._1900._5.scm.SCMPowerMap;
+import org.ieee.dyspansc._1900._5.scm.SCMPropagationMap;
+import org.ieee.dyspansc._1900._5.scm.SCMSchedule;
+import org.ieee.dyspansc._1900._5.scm.Side;
+import org.ieee.dyspansc._1900._5.scm.SpectrumMask;
+import org.ieee.dyspansc._1900._5.scm.TowardReferencePoint;
+import org.ieee.dyspansc._1900._5.scm.TxModel; 
+import org.ieee.dyspansc._1900._5.scm.UnderlayMask;
 import org.w3c.dom.Document;
 
 import SCM_gui.IMC;
-import SCM_gui.Location;
 import SCM_gui.PowerMap;
-import SCM_gui.PropMap;
 import SCM_gui.Schedule;
 import SCM_gui.SpecMask;
 
@@ -108,8 +106,8 @@ public class Save_XML extends ObjectFactory {
 	DocumentBuilder docBuilder;
 	Document doc;
 		
-	TxModelType TxModel;
-	RxModelType RxModel;
+	TxModel TxModel;
+	RxModel RxModel;
 	Object Model;
 	
 	/*
@@ -127,11 +125,11 @@ public class Save_XML extends ObjectFactory {
 			doc=docBuilder.newDocument();
 			
 			if(device.equals("Tx")){
-				TxModel = createTxModelType();
+				TxModel = createTxModel();
 				TxModel.setSystemID(SystemID);
 				Model = (Object) TxModel;
 			}else{
-				RxModel = createRxModelType();
+				RxModel = createRxModel();
 				RxModel.setSystemID(SystemID);
 				Model = (Object) RxModel;
 			}
@@ -149,9 +147,9 @@ public class Save_XML extends ObjectFactory {
 		
 		int o = 0;
 		
-		SpectrumMaskType spec = new SpectrumMaskType();
+		SpectrumMask spec = new SpectrumMask();
 		TxModel.getSpectrumMask().add(spec);
-		TxModel.getSpectrumMask().get(o).setScmMask(new SCMMaskType());
+		TxModel.getSpectrumMask().get(o).setScmMask(new SCMMask());
 		
 		try{
 			TxModel.getSpectrumMask().get(o).getScmMask().setRefFrequency(Double.parseDouble(specMask.TextField.getText()));
@@ -162,13 +160,13 @@ public class Save_XML extends ObjectFactory {
 		TableModel Sdata = specMask.table.getModel();
 		for (int i = 0; i < Sdata.getRowCount(); i++) {
 			try{
-			InflectionPointType ifPoint = new InflectionPointType();
-			TxModel.getSpectrumMask().get(o).getScmMask().getInflectionPoint().add(ifPoint);
+			InflectionPnt ifPoint = new InflectionPnt();
+			TxModel.getSpectrumMask().get(o).getScmMask().getInflectionPnt().add(ifPoint);
 			
 			Double data = Double.parseDouble(Sdata.getValueAt(i, 1).toString());
-			TxModel.getSpectrumMask().get(o).getScmMask().getInflectionPoint().get(i).setFrequency(data);
+			TxModel.getSpectrumMask().get(o).getScmMask().getInflectionPnt().get(i).setFrequency(data);
 			data = Double.parseDouble(Sdata.getValueAt(i, 2).toString());
-			TxModel.getSpectrumMask().get(o).getScmMask().getInflectionPoint().get(i).setRelativePower(data);
+			TxModel.getSpectrumMask().get(o).getScmMask().getInflectionPnt().get(i).setRelativePower(data);
 		
 			}catch(Exception e){
 				warningMessage = warningMessage + "\nThe entry at row: " +(i+1)+" in the Spectrum Mask table should be numerical";
@@ -187,7 +185,7 @@ public class Save_XML extends ObjectFactory {
 		
 		if(specMask.yes.isSelected()==true){
 			
-			TxModel.getSpectrumMask().get(o).setHoppingData(new HoppingDataType());
+			TxModel.getSpectrumMask().get(o).setHoppingData(new HoppingData());
 			
 			TxModel.getSpectrumMask().get(o).getHoppingData().setDwellTime(
 					Double.parseDouble(specMask.SpecHop.DwellField.getText()));
@@ -195,7 +193,7 @@ public class Save_XML extends ObjectFactory {
 					Double.parseDouble(specMask.SpecHop.RevisitField.getText()));
 			
 			if(specMask.FreqListBtn.isSelected()==true && specMask.SpecHop.freqListBtn1.isSelected()==true){
-				TxModel.getSpectrumMask().get(o).getHoppingData().setFrequencyList(new FrequencyListType());
+				TxModel.getSpectrumMask().get(o).getHoppingData().setFrequencyList(new FrequencyList());
 				
 				TableModel freqTable = specMask.SpecHop.table2.getModel();
 				
@@ -214,13 +212,13 @@ public class Save_XML extends ObjectFactory {
 			}
 			
 			if(specMask.BandListBtn.isSelected()==true){
-				TxModel.getSpectrumMask().get(o).getHoppingData().setBandList(new BandListType());
+				TxModel.getSpectrumMask().get(o).getHoppingData().setBandList(new BandList());
 				
 				TableModel bandTable = specMask.SpecHop.table3.getModel();
 				
 				for (int i = 0; i < bandTable.getRowCount(); i++) {
 					try{
-					TxModel.getSpectrumMask().get(o).getHoppingData().getBandList().getBand().add(new BandType());
+					TxModel.getSpectrumMask().get(o).getHoppingData().getBandList().getBand().add(new Band());
 					TxModel.getSpectrumMask().get(o).getHoppingData().getBandList().getBand().get(i)
 					.setStartFrequency(Double.parseDouble(bandTable.getValueAt(i, 1).toString()));
 					TxModel.getSpectrumMask().get(o).getHoppingData().getBandList().getBand().get(i)
@@ -242,7 +240,7 @@ public class Save_XML extends ObjectFactory {
 	 */
 	public void addUnderlay(SpecMask spec, String device) {
 		
-		UnderlayMaskType under = new UnderlayMaskType();
+		UnderlayMask under = new UnderlayMask();
 		//First check if the Underlay Mask was set from Spec Mask tab (Sometimes, both may not be enabled). Otherwise return
 		if(spec.underlayNoButton.isSelected() ||( !spec.underlayYesButton.isSelected() && !spec.underlayNoButton.isSelected()))
 		{
@@ -254,12 +252,12 @@ public class Save_XML extends ObjectFactory {
 			warningMessage= warningMessage + "\nThe entry in the Resolution BW field should be numeric";
 			warningFlag = true;
 		}
-		under.setScmMask(new SCMMaskType());
+		under.setScmMask(new SCMMask());
 		
 		Double data = 0.0;
 		TableModel Sdata = spec.underlayTable.getModel();
 		for (int i=0; i<Sdata.getRowCount(); i++){
-			InflectionPointType ifPoint = new InflectionPointType();
+			InflectionPnt ifPoint = new InflectionPnt();
 			try{
 			if(Sdata.getValueAt(i, 1).toString().equals("")&& Sdata.getValueAt(i, 2).toString().equals(""))
 			{
@@ -269,7 +267,7 @@ public class Save_XML extends ObjectFactory {
 			ifPoint.setFrequency(data);
 			data = Double.parseDouble(Sdata.getValueAt(i, 2).toString());
 			ifPoint.setRelativePower(data);
-			under.getScmMask().getInflectionPoint().add(ifPoint);
+			under.getScmMask().getInflectionPnt().add(ifPoint);
 			}catch(Exception e){
 				
 				warningMessage = warningMessage + "\nThe entry at row: "+(i+1)+ "in the Underlay Mask table should be numeric";
@@ -290,7 +288,7 @@ public class Save_XML extends ObjectFactory {
 		// If Underlay Mask is rated		
 		if(spec.underlayyes.isSelected()==true){
 			   
-			   under.setRating(new RatingType());
+			   under.setRating(new Rating());
 		       int index = spec.box.getSelectedIndex();
 		       
 		       switch(index){
@@ -305,13 +303,13 @@ public class Save_XML extends ObjectFactory {
 		       }
 		       break;
 		       
-		       case 1: BWRatedListType bwRatedList = new BWRatedListType(); 
+		       case 1: BWRatedList bwRatedList = new BWRatedList(); 
 		    	data = 0.0;		       
 				Sdata = spec.underlayRated.table2.getModel();
 
 				for (int i=0; i<Sdata.getRowCount(); i++){
 					
-					BWRatingType bwRating = new BWRatingType();
+					BWRating bwRating = new BWRating();
 					try{
 					data = Double.parseDouble(Sdata.getValueAt(i, 1).toString());
 					bwRating.setRatedBW(data);
@@ -339,13 +337,13 @@ public class Save_XML extends ObjectFactory {
 		       }
 		       break;
 		       
-		       case 3: BTPRatedListType btpRatedList = new BTPRatedListType();
+		       case 3: BTPRatedList btpRatedList = new BTPRatedList();
 		       data = 0.0;
 		       Sdata = spec.underlayRated.table3.getModel();
 		       
 		       for (int i=0; i<Sdata.getRowCount(); i++){
 		    	   
-		    	   BTPRatingType btpRating = new BTPRatingType();
+		    	   BTPRating btpRating = new BTPRating();
 		    	   try{
 		    	   data = Double.parseDouble(Sdata.getValueAt(i, 1).toString());
 		    	   btpRating.setBtp(data);
@@ -363,13 +361,13 @@ public class Save_XML extends ObjectFactory {
 		       under.getRating().setBtpRatedList(btpRatedList);
 		       break;
 		       
-		       case 4: DCRatedListType dcRatedList = new DCRatedListType();
+		       case 4: DCRatedList dcRatedList = new DCRatedList();
 		       data = 0.0;
 		       Sdata = spec.underlayRated.table4.getModel();
 		       
 		       for(int i=0; i<Sdata.getRowCount(); i++){
 		    	   
-		    	   DCRatingType dcRating = new DCRatingType();
+		    	   DCRating dcRating = new DCRating();
 		    	   try{
 		    	   data = Double.parseDouble(Sdata.getValueAt(i, 1).toString());
 		    	   dcRating.setDc(data);
@@ -391,7 +389,7 @@ public class Save_XML extends ObjectFactory {
 		       break;
 		       		   
 		       case 5: try{under.getRating().
-		        setPorpIndex(Integer.parseInt(spec.underlayRated.PolicyField.getText().toString()));
+		        setPorPIndex(Integer.parseInt(spec.underlayRated.PolicyField.getText().toString()));
 		       }catch(Exception e){
 		    	   warningMessage = warningMessage + "\nThe entry for PorP Index should be numerical";
 	    		   warningFlag = true;
@@ -416,9 +414,9 @@ public class Save_XML extends ObjectFactory {
 	 */		
 	public void addPowerMap(PowerMap powerMap, String device){
 				
-		SCMPowerMapType power = new SCMPowerMapType();
-		power.setOrientation(new OrientationType());
-		power.setGainMap(new GainMapType());
+		SCMPowerMap power = new SCMPowerMap();
+		power.setOrientation(new Orientation());
+		power.setGainMap(new GainMap());
 		String locindexvalue = String.valueOf(powerMap.comboBox.getSelectedItem());
 		
 		//Save the location index only if it is not empty
@@ -447,7 +445,7 @@ public class Save_XML extends ObjectFactory {
 			for (int i = 0; i < tableData.getRowCount(); i++) {
 			try{	
 				
-				power.getGainMap().getGainMapValue().add(new GainMapValueType());
+				power.getGainMap().getGainMapValue().add(new GainMapValue());
 				
 				strData = tableData.getValueAt(i, 1).toString().replaceAll(" ", "");
 				if(strData.equals(null)  || strData.equals("") || strData.equals(" ")){
@@ -491,20 +489,20 @@ public class Save_XML extends ObjectFactory {
 		}
 			
 		if(powerMap.reference.isSelected()==true){
-			power.setOrientation(new OrientationType());
-			power.getOrientation().setTowardReferencePoint(new TowardReferencePointType());
+			power.setOrientation(new Orientation());
+			power.getOrientation().setTowardReferencePoint(new TowardReferencePoint());
 		}
 		
 		if(powerMap.relative.isSelected()==true){
-			power.setOrientation(new OrientationType());
-			power.getOrientation().setRelativeToPlatform(new RelativeToPlatformType());
+			power.setOrientation(new Orientation());
+			power.getOrientation().setRelativeToPlatform(new RelativeToPlatform());
 		}
 	}
 
 	/* Adding Reference Power information to the XML document
 	 */
 	public void addReferencePower(JTextField powerField, String device){
-		ReferencePowerType pow = new ReferencePowerType();
+		ReferencePower pow = new ReferencePower();
 		try{
 		pow.setValue(Double.parseDouble(powerField.getText()));
 		}catch(Exception e){
@@ -523,10 +521,10 @@ public class Save_XML extends ObjectFactory {
 	/* Adding Propagation Map information to the XML document
 	 * (Considering that we are adding a single Propagation Map)
 	 */
-	public void addPropMap(PropMap propMap){
+	public void addPropMap(SCM_gui.PropMap propMap){
 		
-		SCMPropagationMapType prop = new SCMPropagationMapType();
-		prop.setPropMap(new PropMapType());
+		SCMPropagationMap prop = new SCMPropagationMap();
+		prop.setPropMap(new PropMap());
 		
 		String strData = "";
 		Double elevationData = 0.0;
@@ -552,7 +550,7 @@ public class Save_XML extends ObjectFactory {
 		TableModel tableData = propMap.table.getModel();
 		for (int i = 0; i < tableData.getRowCount(); i++) {
 			try{
-			prop.getPropMap().getPropMapValue().add(new PropMapValueType());
+			prop.getPropMap().getPropMapValue().add(new PropMapValue());
 			
 			strData = tableData.getValueAt(i, 1).toString().replaceAll(" ", "");
 			if(strData.equals(null)  || strData.equals("") || strData.equals(" ")){
@@ -570,7 +568,7 @@ public class Save_XML extends ObjectFactory {
 				prop.getPropMap().getPropMapValue().get(i).setAzimuth(azimuthData);
 			}
 			
-			prop.getPropMap().getPropMapValue().get(i).setPropagationModel(new PropagationModelType());
+			prop.getPropMap().getPropMapValue().get(i).setPropagationModel(new PropagationModel());
 			
 			
 			strData = tableData.getValueAt(i, 4).toString().replaceAll(" ", "");
@@ -587,12 +585,12 @@ public class Save_XML extends ObjectFactory {
 			}else{
 				
 				prop.getPropMap().getPropMapValue().get(i).getPropagationModel().
-				setPiecewiseLinear(new PiecewiseLinearType());
+				setPiecewiseLinear(new PiecewiseLinear());
 				breakData = Double.parseDouble(strData);
 				prop.getPropMap().getPropMapValue().get(i).getPropagationModel()
 				.getPiecewiseLinear().setBreakpoint(breakData);
 				
-				//Set the linear value to default value if the piecewiselineartype is set
+				//Set the linear value to default value if the piecewiselinear is set
 				prop.getPropMap().getPropMapValue().get(i).getPropagationModel().setLinear(0.0);
 				
 				strData = tableData.getValueAt(i, 3).toString().replaceAll(" ", "");
@@ -634,7 +632,7 @@ public class Save_XML extends ObjectFactory {
 		
 		DefaultTableModel timeModel = (DefaultTableModel) sched.table1.getModel();		
 		DefaultTableModel timezoneModel = (DefaultTableModel) sched.table2.getModel();
-		SCMScheduleType sch = new SCMScheduleType();
+		SCMSchedule sch = new SCMSchedule();
 
 		String locindexvalue = String.valueOf(sched.comboBox.getSelectedItem());
 		
@@ -789,13 +787,13 @@ public class Save_XML extends ObjectFactory {
 	/* Adding Location information to the XML document
 	 * (Considering that we are adding a single Location Construct)
 	 */
-	public void addLocation(Location locData, String device){
+	public void addLocation(SCM_gui.Location locData, String device){
 	
-		SCMLocationType scmLoc = new SCMLocationType();
-		LocationType loc = new LocationType();
+		SCMLocation scmLoc = new SCMLocation();
+		Location loc = new Location();
 				
-		if(locData.LocCombo.getItemAt(locData.LocCombo.getSelectedIndex()).equals("Point")){
-			loc.setPoint(new PointType());
+		if (locData.LocCombo.getItemAt(locData.LocCombo.getSelectedIndex()).equals("Point")){
+			loc.setPoint(new Point());
 		
 			try{
 			TableModel pointModel = locData.pointTable.getModel();
@@ -819,9 +817,9 @@ public class Save_XML extends ObjectFactory {
 		else if(locData.LocCombo.getItemAt(locData.LocCombo.getSelectedIndex()).equals("Point Surface")) {
 			
 			TableModel pointSurfaceModel = locData.pointSurfaceTable.getModel();
-			loc.setPointSurface(new PointSurfaceType());
-			loc.getPointSurface().setPoint( new PointType());
-			loc.getPointSurface().setAntennaHeight(new AntennaHeightType());	
+			loc.setPointSurface(new PointSurface());
+			loc.getPointSurface().setPoint( new Point());
+			loc.getPointSurface().setAntennaHeight(new AntennaHeight());	
 			
 			for (int i=0; i<pointSurfaceModel.getRowCount(); i++){
 				
@@ -859,9 +857,9 @@ public class Save_XML extends ObjectFactory {
 		else if(locData.LocCombo.getItemAt(locData.LocCombo.getSelectedIndex()).equals("Circular Surface")) {
 			
 			TableModel circularTable = locData.circularTable.getModel();
-			loc.setCircularSurface(new CircularSurfaceType());
-			loc.getCircularSurface().setPoint(new PointType());
-			loc.getCircularSurface().setAntennaHeight(new AntennaHeightType());	
+			loc.setCircularSurface(new CircularSurface());
+			loc.getCircularSurface().setPoint(new Point());
+			loc.getCircularSurface().setAntennaHeight(new AntennaHeight());	
 			
 				try{
 				Double longitude = Double.parseDouble(circularTable.getValueAt(0, 0).toString());
@@ -908,11 +906,11 @@ public class Save_XML extends ObjectFactory {
 		}	
 		else if(locData.LocCombo.getItemAt(locData.LocCombo.getSelectedIndex()).equals("Polygon Surface")) {
 			TableModel polygonTable = locData.polygonTable.getModel();
-			loc.setPolygonSurface(new PolygonSurfaceType());
-			loc.getPolygonSurface().setScmPolygon(new SCMPolygonType());
+			loc.setPolygonSurface(new PolygonSurface());
+			loc.getPolygonSurface().setScmPolygon(new SCMPolygon());
 			
 			
-			loc.getPolygonSurface().setAntennaHeight(new AntennaHeightType());	
+			loc.getPolygonSurface().setAntennaHeight(new AntennaHeight());	
 			
 			for (int i=0; i<polygonTable.getRowCount(); i++){
 				
@@ -922,8 +920,8 @@ public class Save_XML extends ObjectFactory {
 				Double altitude = Double.parseDouble(polygonTable.getValueAt(i, 3).toString());
 				Double sideatten = Double.parseDouble(polygonTable.getValueAt(i, 4).toString());
 				
-				SideType sideType = new SideType();
-				sideType.setPoint(new PointType());
+				Side sideType = new Side();
+				sideType.setPoint(new Point());
 				loc.getPolygonSurface().getScmPolygon().getSide().add(sideType);
 				
 				sideType.getPoint().setLongitude(longitude);
@@ -965,8 +963,8 @@ public class Save_XML extends ObjectFactory {
 		}
 		else if(locData.LocCombo.getItemAt(locData.LocCombo.getSelectedIndex()).equals("Cylinder")) {
 			TableModel cylinderTable = locData.cylinderTable.getModel();
-			loc.setCylinder(new CylinderType());
-			loc.getCylinder().setPoint(new PointType());
+			loc.setCylinder(new Cylinder());
+			loc.getCylinder().setPoint(new Point());
 				
 			
 			for (int i=0; i<cylinderTable.getRowCount(); i++){
@@ -1013,8 +1011,8 @@ public class Save_XML extends ObjectFactory {
 			TableModel polyhedronTable = locData.polyhedronTable.getModel();
 			TableModel heightTable = locData.heightTable.getModel();
 			
-			loc.setPolyhedron(new PolyhedronType());
-			loc.getPolyhedron().setScmPolygon(new SCMPolygonType());
+			loc.setPolyhedron(new Polyhedron());
+			loc.getPolyhedron().setScmPolygon(new SCMPolygon());
 			
 				
 			
@@ -1022,8 +1020,8 @@ public class Save_XML extends ObjectFactory {
 				
 				try{
 					
-				SideType sideType = new SideType();
-				PointType pointType = new PointType();
+				Side sideType = new Side();
+				Point pointType = new Point();
 				
 					
 				Double longitude = Double.parseDouble(polyhedronTable.getValueAt(i, 1).toString());
@@ -1080,11 +1078,11 @@ public class Save_XML extends ObjectFactory {
 		else if(locData.LocCombo.getItemAt(locData.LocCombo.getSelectedIndex()).equals("Path")) {
 			
 			TableModel pathTable = locData.pathTable.getModel();
-			loc.setPath(new PathType());
+			loc.setPath(new Path());
 			
 			
-			PathPointType pathPointType = new PathPointType();
-			pathPointType.setPoint(new PointType());
+			PathPoint pathPointType = new PathPoint();
+			pathPointType.setPoint(new Point());
 			loc.getPath().getPathPoint().add(pathPointType);
 			
 				
@@ -1146,14 +1144,14 @@ public class Save_XML extends ObjectFactory {
 	/*
 	 * Adding the IMA information to the XML document
 	 */
-	public void addIMA(IMC imc, IntermodulationMaskType imcMask)
+	public void addIMA(IMC imc, IntermodulationMask imcMask)
 	{
 		//First check if the IMA was set from Intermodulation Mask tab (Sometimes, both may not be enabled). Otherwise return
 		if(imc.IMANo.isSelected() ||( !imc.IMAYes.isSelected() && !imc.IMANo.isSelected()))
 		{
 			return;
 		}
-		SCMMaskType imaMask = new SCMMaskType();
+		SCMMask imaMask = new SCMMask();
 		imcMask.setImAmplificationMask(imaMask);
 		
 		try{
@@ -1165,13 +1163,13 @@ public class Save_XML extends ObjectFactory {
 		TableModel Sdata = imc.imatable.getModel();
 		for (int i = 0; i < Sdata.getRowCount(); i++) {
 			try{
-			InflectionPointType ifPoint = new InflectionPointType();
-			imcMask.getImAmplificationMask().getInflectionPoint().add(ifPoint);
+			InflectionPnt ifPoint = new InflectionPnt();
+			imcMask.getImAmplificationMask().getInflectionPnt().add(ifPoint);
 			
 			Double data = Double.parseDouble(Sdata.getValueAt(i, 1).toString());
-			imcMask.getImAmplificationMask().getInflectionPoint().get(i).setFrequency(data);
+			imcMask.getImAmplificationMask().getInflectionPnt().get(i).setFrequency(data);
 			data = Double.parseDouble(Sdata.getValueAt(i, 2).toString());
-			imcMask.getImAmplificationMask().getInflectionPoint().get(i).setRelativePower(data);
+			imcMask.getImAmplificationMask().getInflectionPnt().get(i).setRelativePower(data);
 		
 			}catch(Exception e){
 				warningMessage = warningMessage + "\nThe entry at row: " +(i+1)+" in the IMA table should be numerical";
@@ -1187,9 +1185,9 @@ public class Save_XML extends ObjectFactory {
 	public void addIMC(IMC imc){
 				
 			
-		IntermodulationMaskType imask = new IntermodulationMaskType();
+		IntermodulationMask imask = new IntermodulationMask();
 		
-		imask.setImCombiningMask(new SCMMaskType());
+		imask.setImCombiningMask(new SCMMask());
 		//Set the Center frequency for the intermediate frequency
 		try {
 			imask.setIntermediateFrequency(Double.parseDouble(imc.IFField.getText()));
@@ -1208,8 +1206,8 @@ public class Save_XML extends ObjectFactory {
 		TableModel Sdata = imc.table.getModel();
 		for (int i = 0; i < Sdata.getRowCount(); i++) {
 			try{
-			InflectionPointType ifPoint = new InflectionPointType();
-			imask.getImCombiningMask().getInflectionPoint().add(ifPoint);
+			InflectionPnt ifPoint = new InflectionPnt();
+			imask.getImCombiningMask().getInflectionPnt().add(ifPoint);
 			
 			if(Sdata.getValueAt(i, 1).toString().equals("")&& Sdata.getValueAt(i, 2).toString().equals(""))
 			{
@@ -1217,26 +1215,28 @@ public class Save_XML extends ObjectFactory {
 			}
 			
 			Double data = Double.parseDouble(Sdata.getValueAt(i, 1).toString());
-			imask.getImCombiningMask().getInflectionPoint().get(i).setFrequency(data);
+			imask.getImCombiningMask().getInflectionPnt().get(i).setFrequency(data);
 			data = Double.parseDouble(Sdata.getValueAt(i, 2).toString());
-			imask.getImCombiningMask().getInflectionPoint().get(i).setRelativePower(data);
+			imask.getImCombiningMask().getInflectionPnt().get(i).setRelativePower(data);
 		
 			}catch(Exception e){
 				warningFlag = true;
 			}
 		}    	
-		try{
-			if(!imc.imOrderField.getText().equals(""))
-			{
-				imask.setOrder(imc.imOrderField.getText());
+
+		if (!imc.imOrderField.getText().equals("")) {
+			int order = 0;
+			try {
+				order = Integer.parseInt(imc.imOrderField.getText());
+			} catch (NumberFormatException exception) {
+				// ABhatt eating this exception for now
+				warningFlag = true;
+				warningMessage = warningMessage
+						+ "\nThe entry in IM Order field in the Intermodulation mask should be numeric";
 			}
-			
-		}catch(Exception e){
-			warningMessage = warningMessage + "\nThe entry in IM Order field in the Intermodulation mask should be numeric";
-			warningFlag = true;
-			
-		//	new Warn().setWarn("Warning", "The entry in Resolution BW field should be numeric");
+			imask.setOrder(order);
 		}
+		
 		// If there is highSideInjection to be stored
 		try{
 			imask.setHighSideInjection(imc.IFYes.isSelected());
@@ -1266,7 +1266,7 @@ public class Save_XML extends ObjectFactory {
 			}
 			
 			if(device.equals("Tx")){
-				JAXBElement<TxModelType> element = createTxModel(TxModel);
+				JAXBElement<TxModel> element = createTxModel(TxModel);
 				Marshaller marshaller = context.createMarshaller();
 		        marshaller.setProperty("jaxb.formatted.output",Boolean.TRUE);
 		        marshaller.marshal(element,System.out);
@@ -1275,7 +1275,7 @@ public class Save_XML extends ObjectFactory {
 		        marshaller.marshal(element, os );
 		        os.close();
 			}else{
-				JAXBElement<RxModelType> element = createRxModel(RxModel);
+				JAXBElement<RxModel> element = createRxModel(RxModel);
 				Marshaller marshaller = context.createMarshaller();
 		        marshaller.setProperty("jaxb.formatted.output",Boolean.TRUE);
 		        marshaller.marshal(element,System.out);

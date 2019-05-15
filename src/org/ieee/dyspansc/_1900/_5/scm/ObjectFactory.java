@@ -44,9 +44,9 @@ import javax.xml.namespace.QName;
 @XmlRegistry
 public class ObjectFactory {
 
-    private final static QName _TxModel_QNAME = new QName("http://www.ieee.org/DyspanSC/1900/5/SCM", "txModel");
     private final static QName _RxModel_QNAME = new QName("http://www.ieee.org/DyspanSC/1900/5/SCM", "rxModel");
     private final static QName _SystemModel_QNAME = new QName("http://www.ieee.org/DyspanSC/1900/5/SCM", "systemModel");
+    private final static QName _TxModel_QNAME = new QName("http://www.ieee.org/DyspanSC/1900/5/SCM", "txModel");
     private final static QName _ScmSet_QNAME = new QName("http://www.ieee.org/DyspanSC/1900/5/SCM", "scmSet");
 
     /**
@@ -57,495 +57,487 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link SystemModelType }
+     * Create an instance of {@link RxModel }
      * 
      */
-    public SystemModelType createSystemModelType() {
-        return new SystemModelType();
+    public RxModel createRxModel() {
+        return new RxModel();
     }
 
     /**
-     * Create an instance of {@link SCMSetType }
+     * Create an instance of {@link SCMSet }
      * 
      */
-    public SCMSetType createSCMSetType() {
-        return new SCMSetType();
+    public SCMSet createSCMSet() {
+        return new SCMSet();
     }
 
     /**
-     * Create an instance of {@link TxModelType }
+     * Create an instance of {@link SystemModel }
      * 
      */
-    public TxModelType createTxModelType() {
-        return new TxModelType();
+    public SystemModel createSystemModel() {
+        return new SystemModel();
     }
 
     /**
-     * Create an instance of {@link RxModelType }
+     * Create an instance of {@link TxModel }
      * 
      */
-    public RxModelType createRxModelType() {
-        return new RxModelType();
+    public TxModel createTxModel() {
+        return new TxModel();
     }
 
     /**
-     * Create an instance of {@link UberModelType }
+     * Create an instance of {@link Confidence }
      * 
      */
-    public UberModelType createUberModelType() {
-        return new UberModelType();
+    public Confidence createConfidence() {
+        return new Confidence();
     }
 
     /**
-     * Create an instance of {@link ReferencePowerType }
+     * Create an instance of {@link SpectrumMask }
      * 
      */
-    public ReferencePowerType createReferencePowerType() {
-        return new ReferencePowerType();
+    public SpectrumMask createSpectrumMask() {
+        return new SpectrumMask();
     }
 
     /**
-     * Create an instance of {@link BandType }
+     * Create an instance of {@link HopRated }
      * 
      */
-    public BandType createBandType() {
-        return new BandType();
+    public HopRated createHopRated() {
+        return new HopRated();
     }
 
     /**
-     * Create an instance of {@link ConfidenceType }
+     * Create an instance of {@link SCMLocation }
      * 
      */
-    public ConfidenceType createConfidenceType() {
-        return new ConfidenceType();
+    public SCMLocation createSCMLocation() {
+        return new SCMLocation();
     }
 
     /**
-     * Create an instance of {@link SpectrumMaskType }
+     * Create an instance of {@link SCMPolicyOrProtocol }
      * 
      */
-    public SpectrumMaskType createSpectrumMaskType() {
-        return new SpectrumMaskType();
+    public SCMPolicyOrProtocol createSCMPolicyOrProtocol() {
+        return new SCMPolicyOrProtocol();
     }
 
     /**
-     * Create an instance of {@link SideType }
+     * Create an instance of {@link Path }
      * 
      */
-    public SideType createSideType() {
-        return new SideType();
+    public Path createPath() {
+        return new Path();
     }
 
     /**
-     * Create an instance of {@link ScanValueType }
+     * Create an instance of {@link FrequencyList }
      * 
      */
-    public ScanValueType createScanValueType() {
-        return new ScanValueType();
+    public FrequencyList createFrequencyList() {
+        return new FrequencyList();
     }
 
     /**
-     * Create an instance of {@link PropagationModelType }
+     * Create an instance of {@link PolygonSurface }
      * 
      */
-    public PropagationModelType createPropagationModelType() {
-        return new PropagationModelType();
+    public PolygonSurface createPolygonSurface() {
+        return new PolygonSurface();
     }
 
     /**
-     * Create an instance of {@link BandListType }
+     * Create an instance of {@link Side }
      * 
      */
-    public BandListType createBandListType() {
-        return new BandListType();
+    public Side createSide() {
+        return new Side();
     }
 
     /**
-     * Create an instance of {@link PolygonSurfaceType }
+     * Create an instance of {@link Point }
      * 
      */
-    public PolygonSurfaceType createPolygonSurfaceType() {
-        return new PolygonSurfaceType();
+    public Point createPoint() {
+        return new Point();
     }
 
     /**
-     * Create an instance of {@link SCMPropagationMapType }
+     * Create an instance of {@link HoppingData }
      * 
      */
-    public SCMPropagationMapType createSCMPropagationMapType() {
-        return new SCMPropagationMapType();
+    public HoppingData createHoppingData() {
+        return new HoppingData();
     }
 
     /**
-     * Create an instance of {@link SCMScheduleType }
+     * Create an instance of {@link DCRating }
      * 
      */
-    public SCMScheduleType createSCMScheduleType() {
-        return new SCMScheduleType();
+    public DCRating createDCRating() {
+        return new DCRating();
     }
 
     /**
-     * Create an instance of {@link DCRatingType }
+     * Create an instance of {@link IntermodulationMask }
      * 
      */
-    public DCRatingType createDCRatingType() {
-        return new DCRatingType();
+    public IntermodulationMask createIntermodulationMask() {
+        return new IntermodulationMask();
     }
 
     /**
-     * Create an instance of {@link BTPRatingType }
+     * Create an instance of {@link PropagationModel }
      * 
      */
-    public BTPRatingType createBTPRatingType() {
-        return new BTPRatingType();
+    public PropagationModel createPropagationModel() {
+        return new PropagationModel();
     }
 
     /**
-     * Create an instance of {@link CircularSurfaceType }
+     * Create an instance of {@link UnderlayMask }
      * 
      */
-    public CircularSurfaceType createCircularSurfaceType() {
-        return new CircularSurfaceType();
+    public UnderlayMask createUnderlayMask() {
+        return new UnderlayMask();
     }
 
     /**
-     * Create an instance of {@link PolyhedronType }
+     * Create an instance of {@link PiecewiseLinear }
      * 
      */
-    public PolyhedronType createPolyhedronType() {
-        return new PolyhedronType();
+    public PiecewiseLinear createPiecewiseLinear() {
+        return new PiecewiseLinear();
     }
 
     /**
-     * Create an instance of {@link PointSurfaceType }
+     * Create an instance of {@link UberModel }
      * 
      */
-    public PointSurfaceType createPointSurfaceType() {
-        return new PointSurfaceType();
+    public UberModel createUberModel() {
+        return new UberModel();
     }
 
     /**
-     * Create an instance of {@link IntermodulationMaskType }
+     * Create an instance of {@link SCMMask }
      * 
      */
-    public IntermodulationMaskType createIntermodulationMaskType() {
-        return new IntermodulationMaskType();
+    public SCMMask createSCMMask() {
+        return new SCMMask();
     }
 
     /**
-     * Create an instance of {@link GainMapType }
+     * Create an instance of {@link CircularSurface }
      * 
      */
-    public GainMapType createGainMapType() {
-        return new GainMapType();
+    public CircularSurface createCircularSurface() {
+        return new CircularSurface();
     }
 
     /**
-     * Create an instance of {@link PropMapValueType }
+     * Create an instance of {@link Rating }
      * 
      */
-    public PropMapValueType createPropMapValueType() {
-        return new PropMapValueType();
+    public Rating createRating() {
+        return new Rating();
     }
 
     /**
-     * Create an instance of {@link FrequencyListType }
+     * Create an instance of {@link Cycle }
      * 
      */
-    public FrequencyListType createFrequencyListType() {
-        return new FrequencyListType();
+    public Cycle createCycle() {
+        return new Cycle();
     }
 
     /**
-     * Create an instance of {@link CycleType }
+     * Create an instance of {@link BandList }
      * 
      */
-    public CycleType createCycleType() {
-        return new CycleType();
+    public BandList createBandList() {
+        return new BandList();
     }
 
     /**
-     * Create an instance of {@link POrPParametersType }
+     * Create an instance of {@link ReferencePower }
      * 
      */
-    public POrPParametersType createPOrPParametersType() {
-        return new POrPParametersType();
+    public ReferencePower createReferencePower() {
+        return new ReferencePower();
     }
 
     /**
-     * Create an instance of {@link SCMPlatformType }
+     * Create an instance of {@link GainMapValue }
      * 
      */
-    public SCMPlatformType createSCMPlatformType() {
-        return new SCMPlatformType();
+    public GainMapValue createGainMapValue() {
+        return new GainMapValue();
     }
 
     /**
-     * Create an instance of {@link SCMLocationType }
+     * Create an instance of {@link Polyhedron }
      * 
      */
-    public SCMLocationType createSCMLocationType() {
-        return new SCMLocationType();
+    public Polyhedron createPolyhedron() {
+        return new Polyhedron();
     }
 
     /**
-     * Create an instance of {@link PropMapType }
+     * Create an instance of {@link RelativeToPlatform }
      * 
      */
-    public PropMapType createPropMapType() {
-        return new PropMapType();
+    public RelativeToPlatform createRelativeToPlatform() {
+        return new RelativeToPlatform();
     }
 
     /**
-     * Create an instance of {@link SCMPowerMapType }
+     * Create an instance of {@link SCMSchedule }
      * 
      */
-    public SCMPowerMapType createSCMPowerMapType() {
-        return new SCMPowerMapType();
+    public SCMSchedule createSCMSchedule() {
+        return new SCMSchedule();
     }
 
     /**
-     * Create an instance of {@link PiecewiseLinearType }
+     * Create an instance of {@link PropMap }
      * 
      */
-    public PiecewiseLinearType createPiecewiseLinearType() {
-        return new PiecewiseLinearType();
+    public PropMap createPropMap() {
+        return new PropMap();
     }
 
     /**
-     * Create an instance of {@link RelativeToPlatformType }
+     * Create an instance of {@link PorPParameters }
      * 
      */
-    public RelativeToPlatformType createRelativeToPlatformType() {
-        return new RelativeToPlatformType();
+    public PorPParameters createPorPParameters() {
+        return new PorPParameters();
     }
 
     /**
-     * Create an instance of {@link CylinderType }
+     * Create an instance of {@link InflectionPnt }
      * 
      */
-    public CylinderType createCylinderType() {
-        return new CylinderType();
+    public InflectionPnt createInflectionPnt() {
+        return new InflectionPnt();
     }
 
     /**
-     * Create an instance of {@link PathPointType }
+     * Create an instance of {@link SCMPlatform }
      * 
      */
-    public PathPointType createPathPointType() {
-        return new PathPointType();
+    public SCMPlatform createSCMPlatform() {
+        return new SCMPlatform();
     }
 
     /**
-     * Create an instance of {@link TowardReferencePointType }
+     * Create an instance of {@link Cylinder }
      * 
      */
-    public TowardReferencePointType createTowardReferencePointType() {
-        return new TowardReferencePointType();
+    public Cylinder createCylinder() {
+        return new Cylinder();
     }
 
     /**
-     * Create an instance of {@link BWRatingType }
+     * Create an instance of {@link AntennaHeight }
      * 
      */
-    public BWRatingType createBWRatingType() {
-        return new BWRatingType();
+    public AntennaHeight createAntennaHeight() {
+        return new AntennaHeight();
     }
 
     /**
-     * Create an instance of {@link OrientationType }
+     * Create an instance of {@link SCMPolygon }
      * 
      */
-    public OrientationType createOrientationType() {
-        return new OrientationType();
+    public SCMPolygon createSCMPolygon() {
+        return new SCMPolygon();
     }
 
     /**
-     * Create an instance of {@link SCMMaskType }
+     * Create an instance of {@link ScanValue }
      * 
      */
-    public SCMMaskType createSCMMaskType() {
-        return new SCMMaskType();
+    public ScanValue createScanValue() {
+        return new ScanValue();
     }
 
     /**
-     * Create an instance of {@link InflectionPointType }
+     * Create an instance of {@link SCMPropagationMap }
      * 
      */
-    public InflectionPointType createInflectionPointType() {
-        return new InflectionPointType();
+    public SCMPropagationMap createSCMPropagationMap() {
+        return new SCMPropagationMap();
     }
 
     /**
-     * Create an instance of {@link SCMPolygonType }
+     * Create an instance of {@link BTPRating }
      * 
      */
-    public SCMPolygonType createSCMPolygonType() {
-        return new SCMPolygonType();
+    public BTPRating createBTPRating() {
+        return new BTPRating();
     }
 
     /**
-     * Create an instance of {@link BWRatedListType }
+     * Create an instance of {@link BTPRatedList }
      * 
      */
-    public BWRatedListType createBWRatedListType() {
-        return new BWRatedListType();
+    public BTPRatedList createBTPRatedList() {
+        return new BTPRatedList();
     }
 
     /**
-     * Create an instance of {@link UnderlayMaskType }
+     * Create an instance of {@link BWRatedList }
      * 
      */
-    public UnderlayMaskType createUnderlayMaskType() {
-        return new UnderlayMaskType();
+    public BWRatedList createBWRatedList() {
+        return new BWRatedList();
     }
 
     /**
-     * Create an instance of {@link DCRatedListType }
+     * Create an instance of {@link SCMPowerMap }
      * 
      */
-    public DCRatedListType createDCRatedListType() {
-        return new DCRatedListType();
+    public SCMPowerMap createSCMPowerMap() {
+        return new SCMPowerMap();
     }
 
     /**
-     * Create an instance of {@link BoundaryType }
+     * Create an instance of {@link Orientation }
      * 
      */
-    public BoundaryType createBoundaryType() {
-        return new BoundaryType();
+    public Orientation createOrientation() {
+        return new Orientation();
     }
 
     /**
-     * Create an instance of {@link HopRatingType }
+     * Create an instance of {@link Location }
      * 
      */
-    public HopRatingType createHopRatingType() {
-        return new HopRatingType();
+    public Location createLocation() {
+        return new Location();
     }
 
     /**
-     * Create an instance of {@link RatingType }
+     * Create an instance of {@link GainMap }
      * 
      */
-    public RatingType createRatingType() {
-        return new RatingType();
+    public GainMap createGainMap() {
+        return new GainMap();
     }
 
     /**
-     * Create an instance of {@link ScanningRegionType }
+     * Create an instance of {@link PointSurface }
      * 
      */
-    public ScanningRegionType createScanningRegionType() {
-        return new ScanningRegionType();
+    public PointSurface createPointSurface() {
+        return new PointSurface();
     }
 
     /**
-     * Create an instance of {@link BTPRatedListType }
+     * Create an instance of {@link BWRating }
      * 
      */
-    public BTPRatedListType createBTPRatedListType() {
-        return new BTPRatedListType();
+    public BWRating createBWRating() {
+        return new BWRating();
     }
 
     /**
-     * Create an instance of {@link AntennaHeightType }
+     * Create an instance of {@link Band }
      * 
      */
-    public AntennaHeightType createAntennaHeightType() {
-        return new AntennaHeightType();
+    public Band createBand() {
+        return new Band();
     }
 
     /**
-     * Create an instance of {@link SCMPolicyOrProtocolType }
+     * Create an instance of {@link DCRatedList }
      * 
      */
-    public SCMPolicyOrProtocolType createSCMPolicyOrProtocolType() {
-        return new SCMPolicyOrProtocolType();
+    public DCRatedList createDCRatedList() {
+        return new DCRatedList();
     }
 
     /**
-     * Create an instance of {@link GainMapValueType }
+     * Create an instance of {@link PathPoint }
      * 
      */
-    public GainMapValueType createGainMapValueType() {
-        return new GainMapValueType();
+    public PathPoint createPathPoint() {
+        return new PathPoint();
     }
 
     /**
-     * Create an instance of {@link PathType }
+     * Create an instance of {@link TowardReferencePoint }
      * 
      */
-    public PathType createPathType() {
-        return new PathType();
+    public TowardReferencePoint createTowardReferencePoint() {
+        return new TowardReferencePoint();
     }
 
     /**
-     * Create an instance of {@link SCMMapType }
+     * Create an instance of {@link Boundary }
      * 
      */
-    public SCMMapType createSCMMapType() {
-        return new SCMMapType();
+    public Boundary createBoundary() {
+        return new Boundary();
     }
 
     /**
-     * Create an instance of {@link HoppingDataType }
+     * Create an instance of {@link ScanningRegion }
      * 
      */
-    public HoppingDataType createHoppingDataType() {
-        return new HoppingDataType();
+    public ScanningRegion createScanningRegion() {
+        return new ScanningRegion();
     }
 
     /**
-     * Create an instance of {@link PointType }
+     * Create an instance of {@link PropMapValue }
      * 
      */
-    public PointType createPointType() {
-        return new PointType();
+    public PropMapValue createPropMapValue() {
+        return new PropMapValue();
     }
 
     /**
-     * Create an instance of {@link LocationType }
-     * 
-     */
-    public LocationType createLocationType() {
-        return new LocationType();
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link TxModelType }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://www.ieee.org/DyspanSC/1900/5/SCM", name = "txModel")
-    public JAXBElement<TxModelType> createTxModel(TxModelType value) {
-        return new JAXBElement<TxModelType>(_TxModel_QNAME, TxModelType.class, null, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link RxModelType }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link RxModel }{@code >}}
      * 
      */
     @XmlElementDecl(namespace = "http://www.ieee.org/DyspanSC/1900/5/SCM", name = "rxModel")
-    public JAXBElement<RxModelType> createRxModel(RxModelType value) {
-        return new JAXBElement<RxModelType>(_RxModel_QNAME, RxModelType.class, null, value);
+    public JAXBElement<RxModel> createRxModel(RxModel value) {
+        return new JAXBElement<RxModel>(_RxModel_QNAME, RxModel.class, null, value);
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link SystemModelType }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link SystemModel }{@code >}}
      * 
      */
     @XmlElementDecl(namespace = "http://www.ieee.org/DyspanSC/1900/5/SCM", name = "systemModel")
-    public JAXBElement<SystemModelType> createSystemModel(SystemModelType value) {
-        return new JAXBElement<SystemModelType>(_SystemModel_QNAME, SystemModelType.class, null, value);
+    public JAXBElement<SystemModel> createSystemModel(SystemModel value) {
+        return new JAXBElement<SystemModel>(_SystemModel_QNAME, SystemModel.class, null, value);
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link SCMSetType }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link TxModel }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://www.ieee.org/DyspanSC/1900/5/SCM", name = "txModel")
+    public JAXBElement<TxModel> createTxModel(TxModel value) {
+        return new JAXBElement<TxModel>(_TxModel_QNAME, TxModel.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link SCMSet }{@code >}}
      * 
      */
     @XmlElementDecl(namespace = "http://www.ieee.org/DyspanSC/1900/5/SCM", name = "scmSet")
-    public JAXBElement<SCMSetType> createScmSet(SCMSetType value) {
-        return new JAXBElement<SCMSetType>(_ScmSet_QNAME, SCMSetType.class, null, value);
+    public JAXBElement<SCMSet> createScmSet(SCMSet value) {
+        return new JAXBElement<SCMSet>(_ScmSet_QNAME, SCMSet.class, null, value);
     }
 
 }

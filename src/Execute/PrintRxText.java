@@ -30,22 +30,22 @@ import java.io.PrintWriter;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.ieee.dyspansc._1900._5.scm.BTPRatedListType;
-import org.ieee.dyspansc._1900._5.scm.BTPRatingType;
-import org.ieee.dyspansc._1900._5.scm.BWRatedListType;
-import org.ieee.dyspansc._1900._5.scm.BWRatingType;
-import org.ieee.dyspansc._1900._5.scm.DCRatedListType;
-import org.ieee.dyspansc._1900._5.scm.DCRatingType;
-import org.ieee.dyspansc._1900._5.scm.InflectionPointType;
-import org.ieee.dyspansc._1900._5.scm.RatingType;
-import org.ieee.dyspansc._1900._5.scm.RxModelType;
+import org.ieee.dyspansc._1900._5.scm.BTPRatedList;
+import org.ieee.dyspansc._1900._5.scm.BTPRating;
+import org.ieee.dyspansc._1900._5.scm.BWRatedList;
+import org.ieee.dyspansc._1900._5.scm.BWRating;
+import org.ieee.dyspansc._1900._5.scm.DCRatedList;
+import org.ieee.dyspansc._1900._5.scm.DCRating;
+import org.ieee.dyspansc._1900._5.scm.InflectionPnt;
+import org.ieee.dyspansc._1900._5.scm.Rating;
+import org.ieee.dyspansc._1900._5.scm.RxModel;
 
 import SCM_home.Home;
 
 public class PrintRxText extends PrintText{
 	
 	final Logger logger = Logger.getLogger(PrintRxText.class);
-	public String printText(RxModelType model, String SaveName){
+	public String printText(RxModel model, String SaveName){
 		
 		logger.addAppender(Home.appender);
 		String warningMessage = "\n";
@@ -71,8 +71,8 @@ public class PrintRxText extends PrintText{
 				printfile.println("# name: Rx_UnderlayMask");
 				printfile.println("# type: matrix");
 				printfile.println("# rows: 1");
-				List<InflectionPointType> infPoint = model.getUnderlayMask()
-						.get(o).getScmMask().getInflectionPoint();
+				List<InflectionPnt> infPoint = model.getUnderlayMask()
+						.get(o).getScmMask().getInflectionPnt();
 				String data = "";
 				for(int i=0; i<infPoint.size(); i++){
 					data = data + infPoint.get(i).getFrequency() + " ";
@@ -93,7 +93,7 @@ public class PrintRxText extends PrintText{
 				
 				if(model.getUnderlayMask().get(o).getRating()!=null){
 				
-					RatingType ratedMask = model.getUnderlayMask().get(o).getRating();
+					Rating ratedMask = model.getUnderlayMask().get(o).getRating();
 					
 					if(ratedMask.getRatedBW()!=0.0){
 						
@@ -107,8 +107,8 @@ public class PrintRxText extends PrintText{
 					}
 					
 					if(ratedMask.getBwRatedList()!=null){
-						BWRatedListType bwRatedList = ratedMask.getBwRatedList();
-						List<BWRatingType> bwRating = bwRatedList.getBwRating();
+						BWRatedList bwRatedList = ratedMask.getBwRatedList();
+						List<BWRating> bwRating = bwRatedList.getBwRating();
 						String bwData = "";
 						
 						for(int i=0; i<bwRating.size(); i++){
@@ -138,8 +138,8 @@ public class PrintRxText extends PrintText{
 					}
 					
 					if(ratedMask.getBtpRatedList()!=null){
-						BTPRatedListType btpRatedList = ratedMask.getBtpRatedList();
-						List<BTPRatingType> btpRating = btpRatedList.getBtpRating();
+						BTPRatedList btpRatedList = ratedMask.getBtpRatedList();
+						List<BTPRating> btpRating = btpRatedList.getBtpRating();
 						String btpData = "";
 												
 						for(int i=0; i<btpRating.size(); i++){
@@ -159,8 +159,8 @@ public class PrintRxText extends PrintText{
 					
 					if(ratedMask.getDcRatedList()!=null){
 						
-						DCRatedListType dcRatedList = ratedMask.getDcRatedList();
-						List<DCRatingType> dcRating = dcRatedList.getDcRating();
+						DCRatedList dcRatedList = ratedMask.getDcRatedList();
+						List<DCRating> dcRating = dcRatedList.getDcRating();
 						String dcData = "";
 						
 						for(int i=0; i<dcRating.size(); i++){
@@ -180,10 +180,10 @@ public class PrintRxText extends PrintText{
 						
 					}
 					
-					if(ratedMask.getPorpIndex()!=0){
+					if(ratedMask.getPorPIndex()!=0){
 						printfile.println("# name: Rx_Policy");
 						printfile.println("# type: scalar");
-					    printfile.println (ratedMask.getPorpIndex());
+					    printfile.println (ratedMask.getPorPIndex());
 					    printfile.println("");
 						printfile.println("");
 					}

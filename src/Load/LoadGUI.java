@@ -37,30 +37,30 @@ import javax.swing.table.DefaultTableModel;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.apache.log4j.Logger;
-import org.ieee.dyspansc._1900._5.scm.BTPRatedListType;
-import org.ieee.dyspansc._1900._5.scm.BTPRatingType;
-import org.ieee.dyspansc._1900._5.scm.BWRatedListType;
-import org.ieee.dyspansc._1900._5.scm.BWRatingType;
-import org.ieee.dyspansc._1900._5.scm.CircularSurfaceType;
-import org.ieee.dyspansc._1900._5.scm.DCRatedListType;
-import org.ieee.dyspansc._1900._5.scm.DCRatingType;
-import org.ieee.dyspansc._1900._5.scm.GainMapValueType;
-import org.ieee.dyspansc._1900._5.scm.InflectionPointType;
-import org.ieee.dyspansc._1900._5.scm.IntermodulationMaskType;
-import org.ieee.dyspansc._1900._5.scm.PathPointType;
-import org.ieee.dyspansc._1900._5.scm.PointSurfaceType;
-import org.ieee.dyspansc._1900._5.scm.PropMapValueType;
-import org.ieee.dyspansc._1900._5.scm.RatingType;
-import org.ieee.dyspansc._1900._5.scm.ReferencePowerType;
-import org.ieee.dyspansc._1900._5.scm.RxModelType;
-import org.ieee.dyspansc._1900._5.scm.SCMLocationType;
-import org.ieee.dyspansc._1900._5.scm.SCMMaskType;
-import org.ieee.dyspansc._1900._5.scm.SCMPowerMapType;
-import org.ieee.dyspansc._1900._5.scm.SCMPropagationMapType;
-import org.ieee.dyspansc._1900._5.scm.SCMScheduleType;
-import org.ieee.dyspansc._1900._5.scm.SideType;
-import org.ieee.dyspansc._1900._5.scm.TxModelType;
-import org.ieee.dyspansc._1900._5.scm.UnderlayMaskType;
+import org.ieee.dyspansc._1900._5.scm.BTPRatedList;
+import org.ieee.dyspansc._1900._5.scm.BTPRating;
+import org.ieee.dyspansc._1900._5.scm.BWRatedList;
+import org.ieee.dyspansc._1900._5.scm.BWRating;
+import org.ieee.dyspansc._1900._5.scm.CircularSurface;
+import org.ieee.dyspansc._1900._5.scm.DCRatedList;
+import org.ieee.dyspansc._1900._5.scm.DCRating;
+import org.ieee.dyspansc._1900._5.scm.GainMapValue;
+import org.ieee.dyspansc._1900._5.scm.InflectionPnt;
+import org.ieee.dyspansc._1900._5.scm.IntermodulationMask;
+import org.ieee.dyspansc._1900._5.scm.PathPoint;
+import org.ieee.dyspansc._1900._5.scm.PointSurface;
+import org.ieee.dyspansc._1900._5.scm.PropMapValue;
+import org.ieee.dyspansc._1900._5.scm.Rating;
+import org.ieee.dyspansc._1900._5.scm.ReferencePower;
+import org.ieee.dyspansc._1900._5.scm.RxModel;
+import org.ieee.dyspansc._1900._5.scm.SCMLocation;
+import org.ieee.dyspansc._1900._5.scm.SCMMask;
+import org.ieee.dyspansc._1900._5.scm.SCMPowerMap;
+import org.ieee.dyspansc._1900._5.scm.SCMPropagationMap;
+import org.ieee.dyspansc._1900._5.scm.SCMSchedule;
+import org.ieee.dyspansc._1900._5.scm.Side;
+import org.ieee.dyspansc._1900._5.scm.TxModel;
+import org.ieee.dyspansc._1900._5.scm.UnderlayMask;
 
 import Execute.MethodAnalysis;
 import SCM_gui.IMC;
@@ -74,16 +74,16 @@ import SCM_home.Home;
 public abstract class LoadGUI {
 	
 	final Logger logger = Logger.getLogger(MethodAnalysis.class);
-	public abstract void setData(SCM_MainWindow scm, TxModelType txModel);
-	public void setData(SCM_MainWindow scm, RxModelType rxModel){};
+	public abstract void setData(SCM_MainWindow scm, TxModel txModel);
+	public void setData(SCM_MainWindow scm, RxModel rxModel){};
 	public Vector<String> locationIndices = new Vector<String>();
 	
-	public void setReferencePower(SCM_MainWindow scm, ReferencePowerType refPow){
+	public void setReferencePower(SCM_MainWindow scm, ReferencePower refPow){
 		scm.RefPowerField.setText(String.valueOf(refPow.getValue()));
 	}
 
 // Loading Underlay mask construct	
-public void setUnderlay(SCM_MainWindow scm, UnderlayMaskType underlay){
+public void setUnderlay(SCM_MainWindow scm, UnderlayMask underlay){
 		
 		
 		
@@ -92,7 +92,7 @@ public void setUnderlay(SCM_MainWindow scm, UnderlayMaskType underlay){
 		if(underlay!=null){
 			scm.spec.underlayResTextField.setText(String.valueOf(underlay.getResolutionBW()));
 			
-			List<InflectionPointType> infP = underlay.getScmMask().getInflectionPoint();
+			List<InflectionPnt> infP = underlay.getScmMask().getInflectionPnt();
 			DefaultTableModel model = (DefaultTableModel) scm.spec.underlayTable.getModel();
 		  	model.setRowCount(0);
 		  	
@@ -123,7 +123,7 @@ public void setUnderlay(SCM_MainWindow scm, UnderlayMaskType underlay){
 				scm.spec.underlayyes.setSelected(true);
 				scm.spec.underlayno.setSelected(false);
 				
-				RatingType ratedMask = underlay.getRating();
+				Rating ratedMask = underlay.getRating();
 				if(ratedMask.getRatedBW()!=0.0){
 					scm.spec.box.setSelectedIndex(0);
 					scm.spec.underlayRated.BandRatField.setText(String.valueOf(
@@ -131,8 +131,8 @@ public void setUnderlay(SCM_MainWindow scm, UnderlayMaskType underlay){
 				}
 				if(ratedMask.getBwRatedList()!=null){
 					scm.spec.box.setSelectedIndex(1);
-					BWRatedListType bwRatedList = ratedMask.getBwRatedList();
-					List<BWRatingType> bwRating = bwRatedList.getBwRating();
+					BWRatedList bwRatedList = ratedMask.getBwRatedList();
+					List<BWRating> bwRating = bwRatedList.getBwRating();
 					DefaultTableModel ratedModel = (DefaultTableModel) scm.spec.underlayRated.table2.getModel();
 					ratedModel.setRowCount(0);
 					
@@ -151,8 +151,8 @@ public void setUnderlay(SCM_MainWindow scm, UnderlayMaskType underlay){
 				}
 				if(ratedMask.getBtpRatedList()!=null){
 					scm.spec.box.setSelectedIndex(3);
-					BTPRatedListType btpRatedList = ratedMask.getBtpRatedList();
-					List<BTPRatingType> btpRating = btpRatedList.getBtpRating();
+					BTPRatedList btpRatedList = ratedMask.getBtpRatedList();
+					List<BTPRating> btpRating = btpRatedList.getBtpRating();
 					DefaultTableModel ratedModel = (DefaultTableModel) scm.spec.underlayRated.table3.getModel();
 					ratedModel.setRowCount(0);
 					
@@ -165,8 +165,8 @@ public void setUnderlay(SCM_MainWindow scm, UnderlayMaskType underlay){
 				}
 				if(ratedMask.getDcRatedList()!=null){
 					scm.spec.box.setSelectedIndex(4);
-					DCRatedListType dcRatedList = ratedMask.getDcRatedList();
-					List<DCRatingType> dcRating = dcRatedList.getDcRating();
+					DCRatedList dcRatedList = ratedMask.getDcRatedList();
+					List<DCRating> dcRating = dcRatedList.getDcRating();
 					DefaultTableModel ratedModel = (DefaultTableModel) scm.spec.underlayRated.table4.getModel();
 					ratedModel.setRowCount(0);
 					
@@ -178,10 +178,10 @@ public void setUnderlay(SCM_MainWindow scm, UnderlayMaskType underlay){
 						ratedModel.addRow(rowData);
 					}
 				}
-				if(ratedMask.getPorpIndex()!=0){
+				if(ratedMask.getPorPIndex()!=0){
 					scm.spec.box.setSelectedIndex(5);
 					scm.spec.underlayRated.PolicyField.setText(String.valueOf(
-							ratedMask.getPorpIndex()));
+							ratedMask.getPorPIndex()));
 				}
 			
 			}
@@ -190,7 +190,7 @@ public void setUnderlay(SCM_MainWindow scm, UnderlayMaskType underlay){
 	}
 	
 // Loading Power Map construct
-	public void setPowerMap(SCM_MainWindow scm, SCMPowerMapType powerMap){
+	public void setPowerMap(SCM_MainWindow scm, SCMPowerMap powerMap){
 	
 		PowerMap currentPow = new PowerMap();
 		
@@ -223,7 +223,7 @@ public void setUnderlay(SCM_MainWindow scm, UnderlayMaskType underlay){
 				powerMap.getGainMap()!=null){
 				
 			currentPow.surface.setSelected(true);
-			List<GainMapValueType> gainMapValue = powerMap.getGainMap().getGainMapValue();
+			List<GainMapValue> gainMapValue = powerMap.getGainMap().getGainMapValue();
 			
 			DefaultTableModel model = (DefaultTableModel) currentPow.table1.getModel();
 		  	model.setRowCount(0);
@@ -260,7 +260,7 @@ public void setUnderlay(SCM_MainWindow scm, UnderlayMaskType underlay){
 	}
 	
 // Loading Propagation Map construct.
-	public void setPropMap(SCM_MainWindow scm, SCMPropagationMapType propMap){
+	public void setPropMap(SCM_MainWindow scm, SCMPropagationMap propMap){
 		
 		PropMap currentProp = new PropMap();
 		
@@ -290,7 +290,7 @@ public void setUnderlay(SCM_MainWindow scm, UnderlayMaskType underlay){
 		
 		if(propMap.getPropMap().getPropMapValue()!=null){
 			
-			List<PropMapValueType> propMapValue = propMap.getPropMap().getPropMapValue();
+			List<PropMapValue> propMapValue = propMap.getPropMap().getPropMapValue();
 			
 			DefaultTableModel model = (DefaultTableModel) currentProp.table.getModel();
 			model.setRowCount(0);
@@ -335,7 +335,7 @@ public void setUnderlay(SCM_MainWindow scm, UnderlayMaskType underlay){
 	}
 
 // Loading Location construct
-	public void setLocation(SCM_MainWindow scm, SCMLocationType loc, int index){
+	public void setLocation(SCM_MainWindow scm, SCMLocation loc, int index){
 		
 		Location currentLoc = new Location();
 		currentLoc.panel = currentLoc.getPanel();
@@ -397,7 +397,7 @@ public void setUnderlay(SCM_MainWindow scm, UnderlayMaskType underlay){
 			currentLoc.LocCombo.setSelectedItem(loc.getLocationIndex().toString());
 			
 			
-			CircularSurfaceType circ = loc.getLocation().getCircularSurface();
+			CircularSurface circ = loc.getLocation().getCircularSurface();
 			String longitude = String.valueOf(circ.getPoint().getLongitude());
 			String latitude = String.valueOf(circ.getPoint().getLatitude());
 			String Altitude = String.valueOf(circ.getPoint().getAltitude());
@@ -429,7 +429,7 @@ public void setUnderlay(SCM_MainWindow scm, UnderlayMaskType underlay){
 			currentLoc.LocCombo.setSelectedItem("Path");
 			currentLoc.LocCombo.setSelectedItem(loc.getLocationIndex().toString());
 			
-			List<PathPointType> pathPoint = loc.getLocation().getPath().getPathPoint();
+			List<PathPoint> pathPoint = loc.getLocation().getPath().getPathPoint();
 			currentLoc.periodField.setText(loc.getLocation().getPath().getPeriod().toString());
 			
 			DefaultTableModel model = (DefaultTableModel) currentLoc.pathTable.getModel();
@@ -458,7 +458,7 @@ public void setUnderlay(SCM_MainWindow scm, UnderlayMaskType underlay){
 			currentLoc.LocationField.setText(String.valueOf(loc.getLocationIndex()));
 			
 			
-			PointSurfaceType pointSurf = loc.getLocation().getPointSurface();
+			PointSurface pointSurf = loc.getLocation().getPointSurface();
 			
 			String longitude = String.valueOf(pointSurf.getPoint().getLongitude());
 			String latitude = String.valueOf(pointSurf.getPoint().getLatitude());
@@ -493,7 +493,7 @@ public void setUnderlay(SCM_MainWindow scm, UnderlayMaskType underlay){
 			String height = String.valueOf(loc.getLocation().getPolygonSurface().getAntennaHeight().getHeight());
 			String heightVal = String.valueOf(loc.getLocation().getPolygonSurface().getAntennaHeight().getReference());
 			
-			List<SideType> polySide = loc.getLocation().getPolygonSurface().getScmPolygon().getSide();
+			List<Side> polySide = loc.getLocation().getPolygonSurface().getScmPolygon().getSide();
 			
 			DefaultTableModel model = (DefaultTableModel) currentLoc.polygonTable.getModel();
 			model.setRowCount(0);
@@ -531,7 +531,7 @@ public void setUnderlay(SCM_MainWindow scm, UnderlayMaskType underlay){
 			currentLoc.LocCombo.setSelectedItem(loc.getLocationIndex().toString());
 					
 			
-			List<SideType> polySide = loc.getLocation().getPolyhedron().getScmPolygon().getSide();
+			List<Side> polySide = loc.getLocation().getPolyhedron().getScmPolygon().getSide();
 			
 			DefaultTableModel model = (DefaultTableModel) currentLoc.polyhedronTable.getModel();
 			model.setRowCount(0);
@@ -572,7 +572,7 @@ public void setUnderlay(SCM_MainWindow scm, UnderlayMaskType underlay){
 	}
 
 // Loading Schedule construct.
-	public void setSchedule(SCM_MainWindow scm, SCMScheduleType sched){
+	public void setSchedule(SCM_MainWindow scm, SCMSchedule sched){
 		logger.addAppender(Home.appender);
 		Schedule currentSched = new Schedule();
 		
@@ -651,7 +651,7 @@ public void setUnderlay(SCM_MainWindow scm, UnderlayMaskType underlay){
 	}
 	
 	//The method to set the data of the inter-modulation mask into the UI
-	public void setIntermodulationMask(SCM_MainWindow scm, IntermodulationMaskType interMod)
+	public void setIntermodulationMask(SCM_MainWindow scm, IntermodulationMask interMod)
 	{
 		IMC currentImc = new IMC();
 		currentImc.mainPanel = currentImc.getPanel();
@@ -690,7 +690,7 @@ public void setUnderlay(SCM_MainWindow scm, UnderlayMaskType underlay){
 			currentImc.IFNo.setSelected(true);
 		}
 		
-		SCMMaskType scmmask = interMod.getImCombiningMask();
+		SCMMask scmmask = interMod.getImCombiningMask();
 		if(scmmask !=null && scmmask.getRefFrequency()!=null)
 		{
 			
@@ -700,7 +700,7 @@ public void setUnderlay(SCM_MainWindow scm, UnderlayMaskType underlay){
 			currentImc.RelFreqField.setEnabled(true);
 			
 		
-		List<InflectionPointType> infP = interMod.getImCombiningMask().getInflectionPoint();
+		List<InflectionPnt> infP = interMod.getImCombiningMask().getInflectionPnt();
 		DefaultTableModel model = (DefaultTableModel) currentImc.table.getModel();
 	  	model.setRowCount(0);
 	  	
@@ -729,7 +729,7 @@ public void setUnderlay(SCM_MainWindow scm, UnderlayMaskType underlay){
 		
 		if(interMod.getImAmplificationMask()!=null)
 		{
-			List<InflectionPointType> imaInflP = interMod.getImAmplificationMask().getInflectionPoint();
+			List<InflectionPnt> imaInflP = interMod.getImAmplificationMask().getInflectionPnt();
 			if(imaInflP.size()>0)
 			{
 				currentImc.IMAYes.setSelected(true);

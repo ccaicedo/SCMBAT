@@ -30,17 +30,17 @@ package Execute;
 import java.io.PrintWriter;
 import java.util.List;
 
-import org.ieee.dyspansc._1900._5.scm.GainMapValueType;
-import org.ieee.dyspansc._1900._5.scm.PropMapValueType;
-import org.ieee.dyspansc._1900._5.scm.ReferencePowerType;
-import org.ieee.dyspansc._1900._5.scm.SCMLocationType;
-import org.ieee.dyspansc._1900._5.scm.SCMPowerMapType;
-import org.ieee.dyspansc._1900._5.scm.SCMPropagationMapType;
-import org.ieee.dyspansc._1900._5.scm.SCMScheduleType;
+import org.ieee.dyspansc._1900._5.scm.GainMapValue;
+import org.ieee.dyspansc._1900._5.scm.PropMapValue;
+import org.ieee.dyspansc._1900._5.scm.ReferencePower;
+import org.ieee.dyspansc._1900._5.scm.SCMLocation;
+import org.ieee.dyspansc._1900._5.scm.SCMPowerMap;
+import org.ieee.dyspansc._1900._5.scm.SCMPropagationMap;
+import org.ieee.dyspansc._1900._5.scm.SCMSchedule;
 
 public class PrintText {
 	
-	public String printReferencePower(ReferencePowerType refPower, 
+	public String printReferencePower(ReferencePower refPower, 
 			PrintWriter printfile, 
 			String device){
 		 String warningMessage="\n";
@@ -60,14 +60,14 @@ public class PrintText {
 		return warningMessage;
 	}
 	
-	public String printPowerMap(SCMPowerMapType powMap,
+	public String printPowerMap(SCMPowerMap powMap,
 			PrintWriter printfile,
 			String device){
 		 String warningMessage= "\n";
 		if(powMap.getGainMap()!=null){
 			String PowerPrintData;
 			try{
-				List<GainMapValueType> gainMapValue = powMap.getGainMap().getGainMapValue();
+				List<GainMapValue> gainMapValue = powMap.getGainMap().getGainMapValue();
 				
 				StringBuilder PowerStringBuilder = new StringBuilder();				
 				PowerStringBuilder.setLength(0);
@@ -122,7 +122,7 @@ public class PrintText {
 		return warningMessage;
 	}
 			
-	public String printPropagationMap(SCMPropagationMapType propMap,
+	public String printPropagationMap(SCMPropagationMap propMap,
 			PrintWriter printfile,
 			String device){
 		
@@ -130,7 +130,7 @@ public class PrintText {
 		if(propMap.getPropMap()!=null){
 			String propPrintData;
 			try{
-				List<PropMapValueType> propMapValue = propMap.getPropMap().getPropMapValue();
+				List<PropMapValue> propMapValue = propMap.getPropMap().getPropMapValue();
 				
 				StringBuilder propStringBuilder = new StringBuilder();				
 				propStringBuilder.setLength(0);
@@ -200,7 +200,7 @@ public class PrintText {
 		return warningMessage;
 	}
 	
-	public void printLocation(SCMLocationType loc,
+	public void printLocation(SCMLocation loc,
 			PrintWriter printfile,
 			String device){
 		
@@ -227,7 +227,7 @@ public class PrintText {
 
 	}
 	
-	public void printTime(SCMScheduleType sched,
+	public void printTime(SCMSchedule sched,
 			PrintWriter printfile,
 			String device){
 		
