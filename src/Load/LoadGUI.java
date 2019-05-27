@@ -232,7 +232,7 @@ public void setUnderlay(SCM_MainWindow scm, UnderlayMask underlay){
 			String azi = "";
 			String gain = "";
 			
-			for(int i=0; i<gainMapValue.size(); i++){
+			for(int i=0; i<gainMapValue.size(); i=i+3){
 				
 				if(gainMapValue.get(i).getElevation()!=prevElevation){
 					ele = String.valueOf(gainMapValue.get(i).getElevation());
@@ -240,8 +240,8 @@ public void setUnderlay(SCM_MainWindow scm, UnderlayMask underlay){
 					ele = "";
 				}
 				
-				azi = String.valueOf(gainMapValue.get(i).getAzimuth());
-				gain = String.valueOf(gainMapValue.get(i).getGain());
+				azi = String.valueOf(gainMapValue.get(i+1).getAzimuth());
+				gain = String.valueOf(gainMapValue.get(i+2).getGain());
 				Object[] rowData = {currentPow.table1.getRowCount()+1,ele,azi,gain};
 				model.addRow(rowData);
 				
