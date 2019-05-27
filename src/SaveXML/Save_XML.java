@@ -117,7 +117,7 @@ public class Save_XML extends ObjectFactory {
 	public boolean warningFlag = false;
 	
 	//Creating a XML document.
-	public void createXML(String SystemID, String device){
+	public void createXML(String SystemID, String device, String purpose){
 		
 		try {
 			
@@ -127,10 +127,12 @@ public class Save_XML extends ObjectFactory {
 			if(device.equals("Tx")){
 				TxModel = createTxModel();
 				TxModel.setSystemID(SystemID);
+				TxModel.setPurpose(purpose);
 				Model = (Object) TxModel;
 			}else{
 				RxModel = createRxModel();
 				RxModel.setSystemID(SystemID);
+				RxModel.setPurpose(purpose);
 				Model = (Object) RxModel;
 			}
 			
@@ -401,10 +403,15 @@ public class Save_XML extends ObjectFactory {
 		       }
 		       
 		}
-		
-		if(device.equals("Tx")){
-			TxModel.setUnderlayMask(under);
-		}else{
+
+		if (device.equals("Tx")) {
+			if (!(under.getConfidence() == null && under.getRating() == null
+					&& (under.getScmMask().getInflectionPnt() == null
+							|| under.getScmMask().getInflectionPnt().size() == 0)
+					&& under.getScmMask().getRefFrequency() == null
+					&& Double.compare(under.getResolutionBW(), new Double(0.0)) == 0))
+				TxModel.setUnderlayMask(under);
+		} else {
 			RxModel.getUnderlayMask().add(under);
 		}
 	}
@@ -436,39 +443,45 @@ public class Save_XML extends ObjectFactory {
 		if(powerMap.surface.isSelected()==true){
 			power.getOrientation().setSurface(true);
 			
-			Double elevationData = 0.0;
-			Double azimuthData = 0.0;
-			Double gainData = 0.0;
-			String strData = "";
+			
 			
 			TableModel tableData = powerMap.table.getModel();
 			for (int i = 0; i < tableData.getRowCount(); i++) {
 			try{	
+				Double elevationData = 0.0;
+				Double azimuthData = 0.0;
+				Double gainData = 0.0;
+				String strData = "";
 				
-				power.getGainMap().getGainMapValue().add(new GainMapValue());
 				
 				strData = tableData.getValueAt(i, 1).toString().replaceAll(" ", "");
 				if(strData.equals(null)  || strData.equals("") || strData.equals(" ")){
-					power.getGainMap().getGainMapValue().get(i).setElevation(elevationData);
+					power.getGainMap().getGainMapValue().add(new GainMapValue());
+					power.getGainMap().getGainMapValue().get((i*3)+0).setElevation(elevationData);
 				}else{
 					elevationData = Double.parseDouble(strData);
-					power.getGainMap().getGainMapValue().get(i).setElevation(elevationData);
+					power.getGainMap().getGainMapValue().add(new GainMapValue());
+					power.getGainMap().getGainMapValue().get((i*3)+0).setElevation(elevationData);
 				}
 				
 				strData = tableData.getValueAt(i, 2).toString().replaceAll(" ", "");				
 				if(strData.equals(null)  || strData.equals("") || strData.equals(" ")){
-					power.getGainMap().getGainMapValue().get(i).setAzimuth(azimuthData);
+					power.getGainMap().getGainMapValue().add(new GainMapValue());
+					power.getGainMap().getGainMapValue().get((i*3)+1).setAzimuth(azimuthData);
 				}else{
 					azimuthData = Double.parseDouble(strData);
-					power.getGainMap().getGainMapValue().get(i).setAzimuth(azimuthData);
+					power.getGainMap().getGainMapValue().add(new GainMapValue());
+					power.getGainMap().getGainMapValue().get((i*3)+1).setAzimuth(azimuthData);
 				}
 				
 				strData = tableData.getValueAt(i, 3).toString().replaceAll(" ", "");
 				if(strData.equals(null)  || strData.equals("") || strData.equals(" ")){
-					power.getGainMap().getGainMapValue().get(i).setGain(gainData);
+					power.getGainMap().getGainMapValue().add(new GainMapValue());
+					power.getGainMap().getGainMapValue().get((i*3)+2).setGain(gainData);
 				}else{
 					gainData = Double.parseDouble(strData);
-					power.getGainMap().getGainMapValue().get(i).setGain(gainData);
+					power.getGainMap().getGainMapValue().add(new GainMapValue());
+					power.getGainMap().getGainMapValue().get((i*3)+2).setGain(gainData);
 				}		
 				
 			}catch(Exception e){
@@ -1144,18 +1157,20 @@ public class Save_XML extends ObjectFactory {
 	/*
 	 * Adding the IMA information to the XML document
 	 */
-	public void addIMA(IMC imc, IntermodulationMask imcMask)
+	public boolean addIMA(IMC imc, IntermodulationMask imcMask)
 	{
+		boolean isIMAProvided = false;
 		//First check if the IMA was set from Intermodulation Mask tab (Sometimes, both may not be enabled). Otherwise return
 		if(imc.IMANo.isSelected() ||( !imc.IMAYes.isSelected() && !imc.IMANo.isSelected()))
 		{
-			return;
+			return isIMAProvided;
 		}
 		SCMMask imaMask = new SCMMask();
 		imcMask.setImAmplificationMask(imaMask);
 		
 		try{
 			imcMask.getImAmplificationMask().setRefFrequency(Double.parseDouble(imc.RelFreqField.getText()));
+			isIMAProvided = true;
 		}catch(Exception e){
 			imcMask.getImAmplificationMask().setRefFrequency(0.0);
 		}
@@ -1170,12 +1185,13 @@ public class Save_XML extends ObjectFactory {
 			imcMask.getImAmplificationMask().getInflectionPnt().get(i).setFrequency(data);
 			data = Double.parseDouble(Sdata.getValueAt(i, 2).toString());
 			imcMask.getImAmplificationMask().getInflectionPnt().get(i).setRelativePower(data);
-		
+			isIMAProvided = true;
 			}catch(Exception e){
 				warningMessage = warningMessage + "\nThe entry at row: " +(i+1)+" in the IMA table should be numerical";
 				warningFlag = true;
 			}
-		}	
+		}
+		return isIMAProvided;
 		
 	}
 	
@@ -1186,11 +1202,13 @@ public class Save_XML extends ObjectFactory {
 				
 			
 		IntermodulationMask imask = new IntermodulationMask();
+		boolean isIntermodulationMaskProvided = false;
 		
 		imask.setImCombiningMask(new SCMMask());
 		//Set the Center frequency for the intermediate frequency
 		try {
 			imask.setIntermediateFrequency(Double.parseDouble(imc.IFField.getText()));
+			isIntermodulationMaskProvided = true;
 		}catch(Exception e)
 		{
 			imask.setIntermediateFrequency(0.0);
@@ -1199,6 +1217,7 @@ public class Save_XML extends ObjectFactory {
 		
 		try{
 			imask.getImCombiningMask().setRefFrequency(Double.parseDouble(imc.RelFreqField.getText()));
+			isIntermodulationMaskProvided = true;
 		}catch(Exception e){
 			imask.getImCombiningMask().setRefFrequency(0.0);
 		}
@@ -1218,7 +1237,7 @@ public class Save_XML extends ObjectFactory {
 			imask.getImCombiningMask().getInflectionPnt().get(i).setFrequency(data);
 			data = Double.parseDouble(Sdata.getValueAt(i, 2).toString());
 			imask.getImCombiningMask().getInflectionPnt().get(i).setRelativePower(data);
-		
+			isIntermodulationMaskProvided = true;
 			}catch(Exception e){
 				warningFlag = true;
 			}
@@ -1228,6 +1247,7 @@ public class Save_XML extends ObjectFactory {
 			int order = 0;
 			try {
 				order = Integer.parseInt(imc.imOrderField.getText());
+				isIntermodulationMaskProvided = true;
 			} catch (NumberFormatException exception) {
 				// ABhatt eating this exception for now
 				warningFlag = true;
@@ -1239,6 +1259,7 @@ public class Save_XML extends ObjectFactory {
 		
 		// If there is highSideInjection to be stored
 		try{
+			//TODO ABhatt can't see  HighSideInjection in GUI
 			imask.setHighSideInjection(imc.IFYes.isSelected());
 			}catch(Exception e){
 				warningMessage = warningMessage + "\nThe entry for highSideInjection field in the Intermodulation mask must be set properly";
@@ -1247,9 +1268,12 @@ public class Save_XML extends ObjectFactory {
 			//	new Warn().setWarn("Warning", "The entry in Resolution BW field should be numeric");
 			}
 		
-		addIMA(imc,imask);
-		TxModel.getIntermodulationMask().add(imask);
+		isIntermodulationMaskProvided = isIntermodulationMaskProvided || addIMA(imc, imask);
+		if (isIntermodulationMaskProvided) {
+			TxModel.getIntermodulationMask().add(imask);
 		}
+
+	}
 		
 	public void concludeXML(String saveName, String device){
 		try {

@@ -45,6 +45,7 @@ public class Save extends Save_XML{
 	
 	
 	public String device = "Default";
+	public String purpose = "CONSUMPTION";
 	public String SaveName = "NewFile";
 	private JFrame Newframe;	
 	public JTextField SField;
@@ -121,7 +122,7 @@ public class Save extends Save_XML{
 		     //   Schedule schedule = scheduleArray.get(0);
 				
 		        // Saving data to XML file based on the XML Schema 
-				createXML(SaveName, device);
+				createXML(SaveName, device, purpose);
 				// Saving Transmitter data and Receiver data based on the device type
 				if(device.equals("Tx")){
 				
