@@ -816,9 +816,9 @@ public class Save_XML extends ObjectFactory {
 			Double longitude = Double.parseDouble(pointModel.getValueAt(0, 0).toString());
 			Double latitude = Double.parseDouble(pointModel.getValueAt(0, 1).toString());
 			Double altitude = Double.parseDouble(pointModel.getValueAt(0, 2).toString());
-			loc.getPointSurface().getPoint().setLongitude(longitude);
-			loc.getPointSurface().getPoint().setLatitude(latitude);
-			loc.getPointSurface().getPoint().setAltitude(altitude);
+			loc.getPoint().setLongitude(longitude);
+			loc.getPoint().setLatitude(latitude);
+			loc.getPoint().setAltitude(altitude);
 			}
 			}catch(Exception e){
 				warningMessage = warningMessage + "\nThe entry in the Location Table should be Numerical";
