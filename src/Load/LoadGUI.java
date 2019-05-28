@@ -301,7 +301,7 @@ public void setUnderlay(SCM_MainWindow scm, UnderlayMask underlay){
 			String dist = "";
 			String n2 = "";
 			
-			for(int i=0; i<propMapValue.size(); i++){
+			for(int i=0; i<propMapValue.size(); i=i+3){
 								
 				if(propMapValue.get(i).getElevation()!=prevElevation){
 					ele = String.valueOf(propMapValue.get(i).getElevation());
@@ -309,20 +309,20 @@ public void setUnderlay(SCM_MainWindow scm, UnderlayMask underlay){
 					ele = "";
 				}
 				
-				azi = String.valueOf(propMapValue.get(i).getAzimuth());
+				azi = String.valueOf(propMapValue.get(i+1).getAzimuth());
 				
-				if(propMapValue.get(i).getPropagationModel().getPiecewiseLinear()==null ||
-						propMapValue.get(i).getPropagationModel().getLinear()!=0.0){
-					n1 = String.valueOf(propMapValue.get(i).getPropagationModel().getLinear());
+				if(propMapValue.get(i+2).getPropagationModel().getPiecewiseLinear()==null ||
+						propMapValue.get(i+2).getPropagationModel().getLinear()!=0.0){
+					n1 = String.valueOf(propMapValue.get(i+2).getPropagationModel().getLinear());
 					Object[] rowData = {currentProp.table.getRowCount()+1,ele,azi,n1,"",""};
 					model.addRow(rowData);
 				}else{
 					
-					n1 = String.valueOf(propMapValue.get(i).getPropagationModel().
+					n1 = String.valueOf(propMapValue.get(i+2).getPropagationModel().
 							getPiecewiseLinear().getFirstExponent());					
-					dist = String.valueOf(propMapValue.get(i).getPropagationModel().
+					dist = String.valueOf(propMapValue.get(i+2).getPropagationModel().
 							getPiecewiseLinear().getBreakpoint());
-					n2 = String.valueOf(propMapValue.get(i).getPropagationModel().
+					n2 = String.valueOf(propMapValue.get(i+2).getPropagationModel().
 							getPiecewiseLinear().getSecondExponent());
 					Object[] rowData = {currentProp.table.getRowCount()+1,ele,azi,n1,dist,n2};
 					model.addRow(rowData);
