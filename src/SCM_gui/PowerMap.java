@@ -28,10 +28,13 @@ along with program.  If not, see <http://www.gnu.org/licenses/>.
 package SCM_gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.ButtonGroup;
@@ -58,7 +61,7 @@ public class PowerMap {
     
     int count1 = 2;
 	//Object rowData1[][] = { { "1","","",""} };
-	Object rowData1[][] = { { "", "Elevation Angle","-90"},  { "", "Azimuth Angle","-90"}, { "", "Azimuth Angle","-90"}, { "", "Azimuth Angle","-90"} };
+	Object rowData1[][] = { { "", "Elevation Angle","-90"},  { "", "Azimuth Angle","0"}, { "1","",""}, { "", "Azimuth Angle","360"}, { "", "Elevation Angle","90"} };
 //    Object columnNames1[] = {"#","Elevation Angle","Azimuth Angle", "Gain (dB)"};
     Object columnNames1[] = {"#","Value Type","Value"};
     
@@ -80,12 +83,13 @@ public class PowerMap {
 //					}
     	        }
     };
+    
     public JTable table1 = new JTable(table_model1);
     
     JLabel relativeText = new JLabel("orientation relative to Platform");
 	Object rowData2[][] = { {"","","",""} };
     Object columnNames2[] = {"\u03b1","\u03b2","\u03b3"};
-    TableModel table_model2 = new DefaultTableModel(rowData2, columnNames2);    
+    TableModel table_model2 = new DefaultTableModel(rowData2, columnNames2);
     public JTable relativeTable = new JTable(table_model2);
     JScrollPane relativeContainer = new JScrollPane(relativeTable);
 
@@ -114,7 +118,6 @@ public class PowerMap {
     
     JLabel ScanningLabel = new JLabel("Scanning Region");
     JLabel AntennaBeamLabel = new JLabel("Antenna beam width");
-    JLabel ValueTypeLabel = new JLabel("Value type to enter");
     JTextField AntennaBeamField = new JTextField();
     JTextField ValueTypeValue = new JTextField();
     Object ScanRowData[][] = {{"Azimuth limits","",""},{"Elevation limits","",""}};
@@ -128,10 +131,23 @@ public class PowerMap {
   	Vector<String> comboBoxItems = new Vector<String>();
   	DefaultComboBoxModel<String> combomodel = new DefaultComboBoxModel<String>(comboBoxItems);
   	public JComboBox<String> comboBox = new JComboBox<String>(combomodel);
-  	
+
+    JLabel ValueTypeLabel = new JLabel("Value type to enter:");
+    JLabel ValueTypeValueLabel = new JLabel("Enter Value:");
     String DropDownOptions[] = { "Elevation Angle", "Azimuth Angle", "Gain (dB)" };
   	public JComboBox<String> ValueTypeComboBox = new JComboBox<String>(DropDownOptions);
-  	public JTextField gainMapRowItemValue = new JTextField();
+  	public JTextField ValueTypeRowItemValue = new JTextField();
+  	
+  	public static Boolean firstRowInsertion = true;
+  	
+  	public static boolean isNumeric(String strNum) {
+  	    try {
+  	        double d = Double.parseDouble(strNum);
+  	    } catch (NumberFormatException | NullPointerException nfe) {
+  	        return false;
+  	    }
+  	    return true;
+  	}
   	
 	public JPanel getPanel(){
 		
@@ -261,16 +277,11 @@ public class PowerMap {
         group2.add(scanYes);
         group2.add(scanNo);
         
-        scanNo.setSelected(true);
-        
-        //Value Type fields
-        ValueTypeComboBox.setFont(font);
-        
-        
+        scanNo.setSelected(true);        
         
         //placing buttons for the panel
 	    
-	    JButton b1 = new JButton("Add Row");
+	    JButton b1 = new JButton("Add new entry");
 	    JButton b2 = new JButton("Remove Last Row");
 	    
         Dimension size2 = b2.getPreferredSize();
@@ -287,17 +298,23 @@ public class PowerMap {
 	    PowerPanel.add(b2);
 	    PowerPanel.add(b3);
 	    PowerPanel.add(b4);
-
-	    // Creating table
 	    
-	    JLabel gainMap = new JLabel("Gain Map");
-	    Dimension gainMapSize = gainMap.getPreferredSize();
-	    gainMap.setBounds(25, 40 + 200, gainMapSize.width, gainMapSize.height);
+
+        //Value Type fields
+	    Dimension ValueTypeLabelSize = ValueTypeLabel.getPreferredSize();
+	    ValueTypeLabel.setBounds(25, 40 + 204, ValueTypeLabelSize.width, ValueTypeLabelSize.height);
 	    
 	    ValueTypeComboBox.setFont(font);
-	    ValueTypeComboBox.setBounds(100, 40+200, ValueTypeComboBox.getPreferredSize().width, ValueTypeComboBox.getPreferredSize().height);
+	    Dimension ValueTypeComboBoxSize = ValueTypeComboBox.getPreferredSize();
+	    ValueTypeComboBox.setBounds(25 + ValueTypeLabelSize.width + 5, 40+200, ValueTypeComboBoxSize.width, ValueTypeComboBoxSize.height);
 	    
-	    gainMapRowItemValue.setBounds(300, 40+200 , 100, gainMapRowItemValue.getPreferredSize().height);
+	    Dimension ValueTypeValueLabelSize = ValueTypeValueLabel.getPreferredSize();
+	    ValueTypeValueLabel.setBounds(25 + ValueTypeLabelSize.width + ValueTypeComboBoxSize.width + 25, 40+204, ValueTypeValueLabelSize.width, ValueTypeValueLabelSize.height);
+	    
+	    ValueTypeRowItemValue.setBounds(25 + ValueTypeLabelSize.width + ValueTypeComboBoxSize.width + ValueTypeValueLabelSize.width + 25, 40+200 , 100, ValueTypeRowItemValue.getPreferredSize().height);
+        
+
+	    // Creating table
 	    
 	    table1.getColumnModel().getColumn(0).setPreferredWidth(10);
 	    table1.getColumnModel().getColumn(2).setPreferredWidth(30);
@@ -315,8 +332,9 @@ public class PowerMap {
 	    
 	    PowerPanel.add(tableContainer1, BorderLayout.CENTER);
 	    PowerPanel.add(ValueTypeComboBox);
-	    PowerPanel.add(gainMapRowItemValue);
-	    PowerPanel.add(gainMap);
+	    PowerPanel.add(ValueTypeValueLabel);
+	    PowerPanel.add(ValueTypeRowItemValue);
+	    PowerPanel.add(ValueTypeLabel);
 	    
 	    // Table options. 
 	    
@@ -401,11 +419,18 @@ public class PowerMap {
 	    
 		b1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-			
-				count = table.getRowCount();
-				DefaultTableModel model = (DefaultTableModel) table.getModel();
+
+				if(isNumeric(ValueTypeRowItemValue.getText())) {
+					DefaultTableModel model = (DefaultTableModel) table.getModel();
+					if(firstRowInsertion) {
+						model.removeRow(2);
+					}
+					firstRowInsertion = false;
 				
-				model.insertRow(model.getRowCount()-2, new Object[]{count-3,ValueTypeComboBox.getSelectedItem().toString() , gainMapRowItemValue.getText()});
+					count = table.getRowCount();
+				
+					model.insertRow(model.getRowCount()-2, new Object[]{count-3,ValueTypeComboBox.getSelectedItem().toString() , ValueTypeRowItemValue.getText()});
+				}
 			}
 		});
 		
@@ -413,6 +438,7 @@ public class PowerMap {
 		b2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 			
+				firstRowInsertion = false;
 				DefaultTableModel model = (DefaultTableModel) table.getModel();
 				/*
 				 * Allowing the deletion of selected rows
@@ -439,11 +465,17 @@ public class PowerMap {
 				if(selectedRowIndex != 0 && selectedRowIndex != 1) {
 					model.removeRow(selectedRowIndex);
 				}
+
+				if(table.getRowCount() == 4) {
+					model.insertRow( model.getRowCount()-2, new Object[]{"1","",""});
+				}
+				
 				int numberOfRow = 1;
 				
 				   count = count - numberOfRow;
 				   for(int i=count;i>=0;i--)
 				   {
+//					   int curVal = (table.getModel().getValueAt(i, 0).toString()!="")? Integer.parseInt(table.getModel().getValueAt(i, 0).toString()) : 1;
 					   int curVal = Integer.parseInt(table.getModel().getValueAt(i, 0).toString());
 					   if(curVal!= i+1)
 					   {

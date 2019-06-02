@@ -30,6 +30,8 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.Vector;
 
 import javax.swing.ButtonGroup;
@@ -62,14 +64,18 @@ public class PropMap {
 	public JLabel ReferenceLabel = new JLabel("Reference: ");
 	
 	
-	public JButton b3 = new JButton("Save Values");    //Declaring Save Button
-    public JButton b4 = new JButton("Save & Exit");	 //Declaring Exit Button
+	public JButton b3 = new JButton("Save");    //Declaring Save Button
+    public JButton b4 = new JButton("Exit");	 //Declaring Exit Button
 	public JButton NewMap = new JButton("Add new map");
 	public JButton Previous = new JButton("Previous");
 	public JButton Next = new JButton("Next");
     
-	Object rowData[][] = { { "1","","","","",""} };
-    Object columnNames[] = {"#","Elevation Angle","Azimuth Angle", "n1", "BreakPoint (m)", "n2"};
+//	Object rowData[][] = { { "1","","","","",""} };
+//    Object columnNames[] = {"#","Elevation Angle","Azimuth Angle", "n1", "BreakPoint (m)", "n2"};
+
+	Object rowData[][] = { { "", "Elevation Angle","-90"},  { "", "Azimuth Angle","0"}, { "1","",""}, { "", "Azimuth Angle","360"}, { "", "Elevation Angle","90"} };
+	Object columnNames[] = {"#","Value Type","Value"};
+  
     TableModel table_model = new DefaultTableModel(rowData, columnNames) {
     	
 		private static final long serialVersionUID = 4471013790258970066L;
@@ -77,18 +83,35 @@ public class PropMap {
 		@Override
         public boolean isCellEditable(int row, int column)
         {
-            // make read only column
-			if(column ==0 )
-			{
-				return false;
-			}
-			else
-			{
-				return true;
-			}
+			return false;
+//            // make read only column
+//			if(column ==0 )
+//			{
+//				return false;
+//			}
+//			else
+//			{
+//				return true;
+//			}
         }
     	
     };
+    
+	Object rowData_piecewise[][] = { { "", "","" }};
+	Object columnData_piecewise[] = {"First Exponent","Breakpoint(meters)","Second Exponent"};
+    
+	//table for piecewise linear model
+    TableModel piecewise_table_model = new DefaultTableModel(rowData_piecewise, columnData_piecewise) {
+    	private static final long serialVersionUID = 2580276847572016977L; 
+    	
+    	@Override
+        public boolean isCellEditable(int row, int column)
+        {
+			return true;
+        }
+    	
+    };
+    
     public JTable table = new JTable(table_model);
 	JScrollPane tableContainer = new JScrollPane(table);
     
@@ -102,7 +125,39 @@ public class PropMap {
 	Vector<String> comboBoxItems = new Vector<String>();
 	DefaultComboBoxModel<String> combomodel = new DefaultComboBoxModel<String>(comboBoxItems);
 	public JComboBox<String> comboBox = new JComboBox<String>(combomodel);
-	//public String currentSelectedItem;
+	
+	//value type items
+    JLabel ValueTypeLabel = new JLabel("Value type to enter:");
+    String DropDownOptions[] = { "Elevation Angle", "Azimuth Angle", "Propagation Model" };
+  	public JComboBox<String> ValueTypeComboBox = new JComboBox<String>(DropDownOptions);
+    JLabel ValueTypeValueLabel = new JLabel("Enter Value:");
+  	public JTextField ValueTypeRowItemValue = new JTextField();
+  	
+  	//for propagation model
+  	JLabel PropModelValueTypeLabel = new JLabel("Type:");
+  	String PropTypeDropDownOptions[] = { "Piecewise Linear", "Linear" };
+  	public JComboBox<String> PropTypeComboBox = new JComboBox<String>(PropTypeDropDownOptions);
+  	
+  	//for linear - propagation model
+    JLabel PropExpTypeValueLabel = new JLabel("Prop. exponent:");
+  	public JTextField PropExpTypeRowItemValue = new JTextField();
+  	
+  	//for piecewise linear - propagation model
+  	JLabel PiecewiseTypeValueLabel = new JLabel("Values:");
+  	public JTable piecewiseTable = new JTable(piecewise_table_model);
+	JScrollPane piecewiseTableContainer = new JScrollPane(piecewiseTable);
+  	
+  	public static Boolean firstRowInsertion = true;
+  	
+  	public static boolean isNumeric(String strNum) {
+  	    try {
+  	        double d = Double.parseDouble(strNum);
+  	    } catch (NumberFormatException | NullPointerException nfe) {
+  	        return false;
+  	    }
+  	    return true;
+  	}
+  	
     
 	public JPanel getPanel(){
 		
@@ -236,36 +291,56 @@ public class PropMap {
         
         // Table Content
         
-        table.getColumnModel().getColumn(0).setWidth(5);
-        table.getColumnModel().getColumn(1).setWidth(20);
+        table.getColumnModel().getColumn(0).setWidth(1);
+        table.getColumnModel().getColumn(1).setWidth(15);
         table.getColumnModel().getColumn(2).setWidth(20);
-        table.getColumnModel().getColumn(3).setWidth(5);
-        table.getColumnModel().getColumn(4).setWidth(20);
-        table.getColumnModel().getColumn(5).setWidth(5);
+//        table.getColumnModel().getColumn(3).setWidth(5);
+//        table.getColumnModel().getColumn(4).setWidth(20);
+//        table.getColumnModel().getColumn(5).setWidth(5);
         
         JLabel TableLabel = new JLabel("Propagation Map");
         Dimension TableLabelSize = TableLabel.getPreferredSize();
         TableLabel.setBounds(25, 120 + 100, TableLabelSize.width, TableLabelSize.height);    
         
         Dimension tableSize = tableContainer.getPreferredSize();
-        tableContainer.setBounds(25, 160 + 100, tableSize.width + 160, tableSize.height - 200);
+        tableContainer.setBounds(25, 160 + 100, 380, tableSize.height-200);
 		
         PropPanel.add(tableContainer);
         PropPanel.add(TableLabel);
         
+        
+        //Value Type fields
+	    Dimension ValueTypeLabelSize = ValueTypeLabel.getPreferredSize();
+	    ValueTypeLabel.setBounds(400 + 25, 160+80 - 50 + 4, ValueTypeLabelSize.width, ValueTypeLabelSize.height);
+	    
+	    ValueTypeComboBox.setFont(font);
+	    Dimension ValueTypeComboBoxSize = ValueTypeComboBox.getPreferredSize();
+	    ValueTypeComboBox.setBounds(400 + ValueTypeLabelSize.width + 25, 160+80 - 50, ValueTypeComboBoxSize.width, ValueTypeComboBoxSize.height);
+	    
+	    Dimension ValueTypeValueLabelSize = ValueTypeValueLabel.getPreferredSize();
+	    ValueTypeValueLabel.setBounds(400 + 25, 160+80 - 50+ValueTypeComboBoxSize.height + 10 + 4, ValueTypeValueLabelSize.width, ValueTypeValueLabelSize.height);
+	    
+	    ValueTypeRowItemValue.setBounds(400 + ValueTypeValueLabelSize.width + 50, 160+80 - 50 +ValueTypeComboBoxSize.height+10 , 100, ValueTypeRowItemValue.getPreferredSize().height);
+        
+	    //prop model fields
+	    PropModelValueTypeLabel.setBounds(400+25, 160 + 80 - 50 + 50 + 10, PropModelValueTypeLabel.getPreferredSize().width, PropModelValueTypeLabel.getPreferredSize().height);
+	    
+	    Dimension PropTypeComboBoxSize = PropTypeComboBox.getPreferredSize();
+	    PropTypeComboBox.setBounds(400 + 25 + PropModelValueTypeLabel.getPreferredSize().width + 25, 160 + 80 - 50 + 50 + 10, PropTypeComboBoxSize.width, PropTypeComboBoxSize.height);
+	    
         // Creating and placing buttons for the panel.
         
-		JButton b1 = new JButton("Add Row");
-        JButton b2 = new JButton("Delete Row");
+		JButton b1 = new JButton("Add new entry");
+        JButton b2 = new JButton("Delete Last Row");
         
-        Dimension size2 = b3.getPreferredSize();
-	    b1.setBounds(650 + 10, 160 + 100,
+        Dimension size2 = b2.getPreferredSize();
+	    b1.setBounds(400 + 30, 280 + 100,
 	                 size2.width, size2.height);
-	    b2.setBounds(650 + 10, 210 + 100,
+	    b2.setBounds(400 + 30, 330 + 100,
 	                 size2.width, size2.height);
-	    b3.setBounds(650 + 10, 260 + 100,
+	    b3.setBounds(400 + size2.width + 30, 280 + 100,
 	                 size2.width, size2.height);
-	    b4.setBounds(650 + 10, 310 + 100,
+	    b4.setBounds(400 + size2.width + 30, 330 + 100,
 	                 size2.width, size2.height);
 	    
 	    Dimension NewMapSize = NewMap.getPreferredSize();
@@ -279,22 +354,102 @@ public class PropMap {
 	    Dimension NextSize = Next.getPreferredSize();
 	    Next.setBounds(705 + 10, 110 + 100, NextSize.width, NextSize.height);
 	    
+	    
+
+        // Create an ActionListener for the JComboBox component.
+	    ValueTypeComboBox.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent event) {
+            	
+                Object selected = ValueTypeComboBox.getSelectedItem();
+                if(selected == "Elevation Angle" || selected == "Azimuth Angle") {
+            		PropPanel.remove(PropTypeComboBox);
+            		PropPanel.remove(PropModelValueTypeLabel);            		
+            	}
+            	else {
+            		PropPanel.remove(ValueTypeValueLabel);
+            		PropPanel.remove(ValueTypeRowItemValue);
+            		PropPanel.add(PropTypeComboBox);
+            		PropPanel.add(PropModelValueTypeLabel);
+            	}
+                
+            }
+        });
+	   
+        
+	    PropPanel.add(ValueTypeComboBox);
+	    
+	    PropPanel.add(ValueTypeValueLabel);
+	    PropPanel.add(ValueTypeRowItemValue);
+	    PropPanel.add(ValueTypeLabel);
         PropPanel.add(b1);
         PropPanel.add(b2);
         PropPanel.add(b3);
         PropPanel.add(b4);
-        PropPanel.add(NewMap);
-        PropPanel.add(Previous);
-        PropPanel.add(Next);
+//        PropPanel.add(NewMap);
+//        PropPanel.add(Previous);
+//        PropPanel.add(Next);
+        
+        
+        //selection action listener for combo box
+//        ValueTypeComboBox.addItemListener(new ItemListener() 
+//        {
+//        	@Override
+//       	    public void itemStateChanged(ItemEvent event) {
+//            if (event.getStateChange() == ItemEvent.SELECTED) {
+//            	System.out.println(event.getItem().toString());
+//            	String currentSelectedItem = String.valueOf(comboBox.getSelectedItem());
+//            	if(currentSelectedItem == "Elevation Angle" || currentSelectedItem == "Azimuth Angle") {
+//            		PropPanel.remove(PropTypeComboBox);
+//            		PropPanel.remove(PropModelValueTypeLabel);            		
+//            	}
+//            	else {
+//            		PropPanel.remove(ValueTypeValueLabel);
+//            		PropPanel.remove(ValueTypeRowItemValue);
+//            		PropPanel.add(PropTypeComboBox);
+//            		PropPanel.add(PropModelValueTypeLabel);
+//            	}
+//            }
+//        	}
+//        }	
+//      );        
+        
+        
+        PropTypeComboBox.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent event) {
+            	
+                Object selected = ValueTypeComboBox.getSelectedItem();
+                if(selected == "Linear") {
+            		PropPanel.add(PropExpTypeValueLabel);
+            		PropPanel.add(PropExpTypeRowItemValue);
+            	}
+            	else {
+            		PropPanel.remove(PropExpTypeValueLabel);
+            		PropPanel.remove(PropExpTypeRowItemValue);
+            	}
+                
+            }
+        });
         
         // Button Actions       		
         
         b1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-			
-				DefaultTableModel model = (DefaultTableModel) table.getModel();
-				int count = model.getRowCount() +1;
-				model.addRow(new Object[]{count, "", ""});	
+				if(isNumeric(PropExpTypeRowItemValue.getText())) {
+					
+				}
+				//else if(check if all the three values in the piecewise linear are filled up)
+
+				else if(isNumeric(ValueTypeRowItemValue.getText())) {
+					DefaultTableModel model = (DefaultTableModel) table.getModel();
+					if(firstRowInsertion) {
+						model.removeRow(2);
+					}
+					firstRowInsertion = false;
+				
+					int count = table.getRowCount();
+				
+					model.insertRow(model.getRowCount()-2, new Object[]{count-3,ValueTypeComboBox.getSelectedItem().toString() , ValueTypeRowItemValue.getText()});
+				}
 			}
 		});
 		
@@ -307,19 +462,29 @@ public class PropMap {
 				/*
 				 * Allowing the deletion of selected rows
 				 */
-				int[] selectedRows = table.getSelectedRows();
-				   for(int row=selectedRows.length-1;row>=0;row--){
-					int rowNum = selectedRows[row];
-				     model.removeRow(rowNum);
-				     //Updating the index column - count variable appropriately
-				     if(rowNum!=table.getRowCount())
-				     {
-				    	 table.getModel().setValueAt(rowNum+1,rowNum ,0 );
-				     }
-				     
-				   }
+//				int[] selectedRows = table.getSelectedRows();
+//				   for(int row=selectedRows.length-1;row>=0;row--){
+//					int rowNum = selectedRows[row];
+//				     model.removeRow(rowNum);
+//				     //Updating the index column - count variable appropriately
+//				     if(rowNum!=table.getRowCount())
+//				     {
+//				    	 table.getModel().setValueAt(rowNum+1,rowNum ,0 );
+//				     }
+//				     
+//				   }
 			//	model.removeRow(model.getRowCount() - 1);
-				   
+				   if (table.getRowCount() == 4) {
+						return;
+					}
+					int selectedRowIndex = table.getRowCount()-3;
+					if(selectedRowIndex != 0 && selectedRowIndex != 1) {
+						model.removeRow(selectedRowIndex);
+					}
+
+					if(table.getRowCount() == 4) {
+						model.insertRow( model.getRowCount()-2, new Object[]{"1","",""});
+					}
 				  
 				   for(int i=table.getRowCount()-1;i>=0;i--)
 				   {
