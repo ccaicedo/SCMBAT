@@ -51,29 +51,33 @@ public class PowerMap {
 
 	public JPanel PowerPanel = new JPanel();
 	
-	public JButton b3 = new JButton("Save Data");
+	public JButton b3 = new JButton("Save");
     JButton b4 = new JButton("Exit");
 
     int count;
     
     int count1 = 2;
-	Object rowData1[][] = { { "1","","",""} };
-    Object columnNames1[] = {"#","Elevation Angle","Azimuth Angle", "Gain (dB)"};
+	//Object rowData1[][] = { { "1","","",""} };
+	Object rowData1[][] = { { "", "Elevation Angle","-90"},  { "", "Azimuth Angle","-90"}, { "", "Azimuth Angle","-90"}, { "", "Azimuth Angle","-90"} };
+//    Object columnNames1[] = {"#","Elevation Angle","Azimuth Angle", "Gain (dB)"};
+    Object columnNames1[] = {"#","Value Type","Value"};
+    
     TableModel table_model1 = new DefaultTableModel(rowData1, columnNames1) {
 		private static final long serialVersionUID = 2580299347572016977L;  //Adding a serial version ID
 
 			@Override
     	        public boolean isCellEditable(int row, int column)
     	        {
+					return false;
     	            // make read only column
-					if(column ==0 )
-					{
-						return false;
-					}
-					else
-					{
-						return true;
-					}
+//					if(column ==0 )
+//					{
+//						return false;
+//					}
+//					else
+//					{
+//						return true;
+//					}
     	        }
     };
     public JTable table1 = new JTable(table_model1);
@@ -97,6 +101,8 @@ public class PowerMap {
     JButton Remove = new JButton("Remove Row");
 	public JTable table;
     
+	
+	//radio buttons
     public JRadioButton surface = new JRadioButton("Surface");
     public JRadioButton relative = new JRadioButton("Relative to platform");
     public JRadioButton reference = new JRadioButton("Towards reference point");
@@ -108,9 +114,12 @@ public class PowerMap {
     
     JLabel ScanningLabel = new JLabel("Scanning Region");
     JLabel AntennaBeamLabel = new JLabel("Antenna beam width");
+    JLabel ValueTypeLabel = new JLabel("Value type to enter");
     JTextField AntennaBeamField = new JTextField();
+    JTextField ValueTypeValue = new JTextField();
     Object ScanRowData[][] = {{"Azimuth limits","",""},{"Elevation limits","",""}};
     Object ScanColumnName[] = {"","Start","End"};
+
     TableModel ScanTableModel = new DefaultTableModel(ScanRowData,ScanColumnName);
     public JTable ScanTable = new JTable(ScanTableModel);
     JScrollPane ScanTableContainer = new JScrollPane(ScanTable);
@@ -119,7 +128,11 @@ public class PowerMap {
   	Vector<String> comboBoxItems = new Vector<String>();
   	DefaultComboBoxModel<String> combomodel = new DefaultComboBoxModel<String>(comboBoxItems);
   	public JComboBox<String> comboBox = new JComboBox<String>(combomodel);
-    
+  	
+    String DropDownOptions[] = { "Elevation Angle", "Azimuth Angle", "Gain (dB)" };
+  	public JComboBox<String> ValueTypeComboBox = new JComboBox<String>(DropDownOptions);
+  	public JTextField gainMapRowItemValue = new JTextField();
+  	
 	public JPanel getPanel(){
 		
 	    PowerPanel.setLayout(null);
@@ -250,19 +263,24 @@ public class PowerMap {
         
         scanNo.setSelected(true);
         
+        //Value Type fields
+        ValueTypeComboBox.setFont(font);
+        
+        
+        
         //placing buttons for the panel
 	    
 	    JButton b1 = new JButton("Add Row");
-	    JButton b2 = new JButton("Remove Row");
+	    JButton b2 = new JButton("Remove Last Row");
 	    
-        Dimension size2 = b3.getPreferredSize();
-        b1.setBounds(400 + 0, 130 + 30 + 100,
+        Dimension size2 = b2.getPreferredSize();
+        b1.setBounds(400 + 0, 30 + 130 + 30 + 100,
                 size2.width + 30, size2.height);        
-        b2.setBounds(400 + 0, 180 + 30 + 100,
+        b2.setBounds(400 + 0, 30+ 180 + 30 + 100,
                 size2.width + 30, size2.height);
-        b3.setBounds(550, 130 + 30 + 100,
+        b3.setBounds(430 + size2.width, 30 + 130 + 30 + 100,
                 size2.width + 30, size2.height);
-        b4.setBounds(550, 180 + 30 + 100, 
+        b4.setBounds(430 + size2.width, 30 + 180 + 30 + 100, 
         		size2.width + 30, size2.height);
                 
 	    PowerPanel.add(b1);
@@ -276,8 +294,13 @@ public class PowerMap {
 	    Dimension gainMapSize = gainMap.getPreferredSize();
 	    gainMap.setBounds(25, 40 + 200, gainMapSize.width, gainMapSize.height);
 	    
+	    ValueTypeComboBox.setFont(font);
+	    ValueTypeComboBox.setBounds(100, 40+200, ValueTypeComboBox.getPreferredSize().width, ValueTypeComboBox.getPreferredSize().height);
+	    
+	    gainMapRowItemValue.setBounds(300, 40+200 , 100, gainMapRowItemValue.getPreferredSize().height);
+	    
 	    table1.getColumnModel().getColumn(0).setPreferredWidth(10);
-	    table1.getColumnModel().getColumn(3).setPreferredWidth(30);
+	    table1.getColumnModel().getColumn(2).setPreferredWidth(30);
 	    
 	    table = table1;
 	  //To allow the element on the last edit to be saved
@@ -286,11 +309,13 @@ public class PowerMap {
 	    count = count1;
 	    tableContainer1 = new JScrollPane(table1);
 	    Dimension sizeContainer1 = tableContainer1.getPreferredSize();
-	    tableContainer1.setBounds(25 + 0, 60 + 200,
+	    tableContainer1.setBounds(25 + 0, 70 + 200,
 	            sizeContainer1.width - 100, sizeContainer1.height - 300);
 	    
 	    
 	    PowerPanel.add(tableContainer1, BorderLayout.CENTER);
+	    PowerPanel.add(ValueTypeComboBox);
+	    PowerPanel.add(gainMapRowItemValue);
 	    PowerPanel.add(gainMap);
 	    
 	    // Table options. 
@@ -379,7 +404,8 @@ public class PowerMap {
 			
 				count = table.getRowCount();
 				DefaultTableModel model = (DefaultTableModel) table.getModel();
-				model.addRow(new Object[]{count+1, "", "",""});
+				
+				model.insertRow(model.getRowCount()-2, new Object[]{count-3,ValueTypeComboBox.getSelectedItem().toString() , gainMapRowItemValue.getText()});
 			}
 		});
 		
@@ -391,20 +417,31 @@ public class PowerMap {
 				/*
 				 * Allowing the deletion of selected rows
 				 */
-				int[] selectedRows = table.getSelectedRows();
-				int numberOfRows = selectedRows.length;
-				   for(int row=selectedRows.length-1;row>=0;row--){
-					int rowNum = selectedRows[row];
-				     model.removeRow(rowNum);
-				     //Updating the index column - count variable appropriately
-				     if(rowNum!=table.getRowCount())
-				     {
-				    	 table.getModel().setValueAt(rowNum+1,rowNum ,0 );
-				     }
-				     
-				   }
-			//	model.removeRow(model.getRowCount() - 1);		 
-				   count = count - numberOfRows;
+//				int[] selectedRows = table.getSelectedRows();
+//				int numberOfRows = selectedRows.length;
+//				   for(int row=selectedRows.length-1;row>=0;row--){
+//					int rowNum = selectedRows[row];
+//				     model.removeRow(rowNum);
+//				     //Updating the index column - count variable appropriately
+//				     if(rowNum!=table.getRowCount())
+//				     {
+//				    	 table.getModel().setValueAt(rowNum+1,rowNum ,0 );
+//				     }
+//				     
+//				   }
+			//	model.removeRow(model.getRowCount() - 1);
+				
+				//deleting only the last row
+				if (table.getRowCount() == 4) {
+					return;
+				}
+				int selectedRowIndex = table.getRowCount()-3;
+				if(selectedRowIndex != 0 && selectedRowIndex != 1) {
+					model.removeRow(selectedRowIndex);
+				}
+				int numberOfRow = 1;
+				
+				   count = count - numberOfRow;
 				   for(int i=count;i>=0;i--)
 				   {
 					   int curVal = Integer.parseInt(table.getModel().getValueAt(i, 0).toString());

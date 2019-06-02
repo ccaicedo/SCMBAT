@@ -448,41 +448,30 @@ public class Save_XML extends ObjectFactory {
 			TableModel tableData = powerMap.table.getModel();
 			for (int i = 0; i < tableData.getRowCount(); i++) {
 			try{	
-				Double elevationData = 0.0;
-				Double azimuthData = 0.0;
-				Double gainData = 0.0;
+
+				String dataValue = "";
 				String strData = "";
 				
 				
 				strData = tableData.getValueAt(i, 1).toString().replaceAll(" ", "");
-				if(strData.equals(null)  || strData.equals("") || strData.equals(" ")){
+				dataValue = tableData.getValueAt(i, 2).toString().replaceAll(" ", "");
+				//Elevation Angle","Azimuth Angle", "Gain (dB)
+				if (strData.equals("ElevationAngle")) {
 					power.getGainMap().getGainMapValue().add(new GainMapValue());
-					power.getGainMap().getGainMapValue().get((i*3)+0).setElevation(elevationData);
-				}else{
-					elevationData = Double.parseDouble(strData);
+					power.getGainMap().getGainMapValue().get((i)).setElevation(Double.parseDouble(dataValue));
+					
+				}
+				if (strData.equals("AzimuthAngle")) {
 					power.getGainMap().getGainMapValue().add(new GainMapValue());
-					power.getGainMap().getGainMapValue().get((i*3)+0).setElevation(elevationData);
+					power.getGainMap().getGainMapValue().get((i)).setAzimuth(Double.parseDouble(dataValue));
+					
+				}
+				if (strData.equals("Gain(dB)")) {
+					power.getGainMap().getGainMapValue().add(new GainMapValue());
+					power.getGainMap().getGainMapValue().get((i)).setGain(Double.parseDouble(dataValue));
+					
 				}
 				
-				strData = tableData.getValueAt(i, 2).toString().replaceAll(" ", "");				
-				if(strData.equals(null)  || strData.equals("") || strData.equals(" ")){
-					power.getGainMap().getGainMapValue().add(new GainMapValue());
-					power.getGainMap().getGainMapValue().get((i*3)+1).setAzimuth(azimuthData);
-				}else{
-					azimuthData = Double.parseDouble(strData);
-					power.getGainMap().getGainMapValue().add(new GainMapValue());
-					power.getGainMap().getGainMapValue().get((i*3)+1).setAzimuth(azimuthData);
-				}
-				
-				strData = tableData.getValueAt(i, 3).toString().replaceAll(" ", "");
-				if(strData.equals(null)  || strData.equals("") || strData.equals(" ")){
-					power.getGainMap().getGainMapValue().add(new GainMapValue());
-					power.getGainMap().getGainMapValue().get((i*3)+2).setGain(gainData);
-				}else{
-					gainData = Double.parseDouble(strData);
-					power.getGainMap().getGainMapValue().add(new GainMapValue());
-					power.getGainMap().getGainMapValue().get((i*3)+2).setGain(gainData);
-				}		
 				
 			}catch(Exception e){
 				warningMessage = warningMessage + "\nThe entry in row: "+ (i+1) +" in the Power Map table should be numeric";
