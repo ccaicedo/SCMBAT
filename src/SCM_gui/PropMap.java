@@ -357,23 +357,24 @@ public class PropMap {
 	    
 
         // Create an ActionListener for the JComboBox component.
-	    ValueTypeComboBox.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent event) {
-            	
-                Object selected = ValueTypeComboBox.getSelectedItem();
-                if(selected == "Elevation Angle" || selected == "Azimuth Angle") {
-            		PropPanel.remove(PropTypeComboBox);
-            		PropPanel.remove(PropModelValueTypeLabel);            		
-            	}
-            	else {
-            		PropPanel.remove(ValueTypeValueLabel);
-            		PropPanel.remove(ValueTypeRowItemValue);
-            		PropPanel.add(PropTypeComboBox);
-            		PropPanel.add(PropModelValueTypeLabel);
-            	}
-                
-            }
-        });
+//	    ValueTypeComboBox.change
+//	    ValueTypeComboBox.addActionListener(new ActionListener() {
+//            public void actionPerformed(ActionEvent event) {
+//            	
+//                Object selected = ValueTypeComboBox.getSelectedItem();
+//                if(selected == "Elevation Angle" || selected == "Azimuth Angle") {
+//            		PropPanel.remove(PropTypeComboBox);
+//            		PropPanel.remove(PropModelValueTypeLabel);            		
+//            	}
+//            	else {
+//            		PropPanel.remove(ValueTypeValueLabel);
+//            		PropPanel.remove(ValueTypeRowItemValue);
+//            		PropPanel.add(PropTypeComboBox);
+//            		PropPanel.add(PropModelValueTypeLabel);
+//            	}
+//                
+//            }
+//        });
 	   
         
 	    PropPanel.add(ValueTypeComboBox);
@@ -391,27 +392,34 @@ public class PropMap {
         
         
         //selection action listener for combo box
-//        ValueTypeComboBox.addItemListener(new ItemListener() 
-//        {
-//        	@Override
-//       	    public void itemStateChanged(ItemEvent event) {
-//            if (event.getStateChange() == ItemEvent.SELECTED) {
-//            	System.out.println(event.getItem().toString());
-//            	String currentSelectedItem = String.valueOf(comboBox.getSelectedItem());
-//            	if(currentSelectedItem == "Elevation Angle" || currentSelectedItem == "Azimuth Angle") {
-//            		PropPanel.remove(PropTypeComboBox);
-//            		PropPanel.remove(PropModelValueTypeLabel);            		
-//            	}
-//            	else {
-//            		PropPanel.remove(ValueTypeValueLabel);
-//            		PropPanel.remove(ValueTypeRowItemValue);
-//            		PropPanel.add(PropTypeComboBox);
-//            		PropPanel.add(PropModelValueTypeLabel);
-//            	}
-//            }
-//        	}
-//        }	
-//      );        
+        ValueTypeComboBox.addItemListener(new ItemListener() 
+        {
+        	@Override
+       	    public void itemStateChanged(ItemEvent event) {
+            if (event.getStateChange() == ItemEvent.SELECTED) {
+            	System.out.println(event.getItem().toString());
+            	System.out.println(ValueTypeComboBox.getSelectedItem().toString());
+            	String currentSelectedItem = event.getItem().toString();
+            	if(currentSelectedItem == "Elevation Angle" || currentSelectedItem == "Azimuth Angle") {
+            		PropPanel.remove(PropTypeComboBox);
+            		PropPanel.remove(PropModelValueTypeLabel);    
+            		PropPanel.add(ValueTypeRowItemValue);
+            	    PropPanel.add(ValueTypeLabel);
+            	    PropPanel.repaint(2000);
+            		PropPanel.repaint();
+            	}
+            	else {
+            		PropPanel.remove(ValueTypeValueLabel);
+            		PropPanel.remove(ValueTypeRowItemValue);
+            		PropPanel.add(PropTypeComboBox);
+            		PropPanel.add(PropModelValueTypeLabel);
+            		PropPanel.repaint(2000);
+            		PropPanel.repaint();
+            	}
+            }
+        	}
+        }	
+      );        
         
         
         PropTypeComboBox.addActionListener(new ActionListener() {
@@ -434,13 +442,18 @@ public class PropMap {
         
         b1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				DefaultTableModel model = (DefaultTableModel) table.getModel();
 				if(isNumeric(PropExpTypeRowItemValue.getText())) {
+					if(firstRowInsertion) {
+						model.removeRow(2);
+					}
+					firstRowInsertion = false;
 					
 				}
-				//else if(check if all the three values in the piecewise linear are filled up)
+				//todo: see line below
+				//else if(check if all or one of the three values in the piecewise linear are filled up)
 
 				else if(isNumeric(ValueTypeRowItemValue.getText())) {
-					DefaultTableModel model = (DefaultTableModel) table.getModel();
 					if(firstRowInsertion) {
 						model.removeRow(2);
 					}
