@@ -475,12 +475,15 @@ public class PowerMap {
 				   count = count - numberOfRow;
 				   for(int i=count;i>=0;i--)
 				   {
-//					   int curVal = (table.getModel().getValueAt(i, 0).toString()!="")? Integer.parseInt(table.getModel().getValueAt(i, 0).toString()) : 1;
-					   int curVal = Integer.parseInt(table.getModel().getValueAt(i, 0).toString());
-					   if(curVal!= i+1)
-					   {
-						   table.getModel().setValueAt(i+1, i, 0);
-					   }
+					   try {
+						   int curVal = Integer.parseInt(table.getModel().getValueAt(i, 0).toString());
+							   
+							   if(curVal!= i+1)
+							   {
+								   table.getModel().setValueAt(i+1, i, 0);
+							   }
+						   }
+						   catch(Exception e) {}
 				   }
 				
 			}

@@ -44,8 +44,11 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+
+import org.ieee.dyspansc._1900._5.scm.PiecewiseLinear;
 
 public class PropMap {
 
@@ -135,7 +138,7 @@ public class PropMap {
   	
   	//for propagation model
   	JLabel PropModelValueTypeLabel = new JLabel("Type:");
-  	String PropTypeDropDownOptions[] = { "Piecewise Linear", "Linear" };
+  	String PropTypeDropDownOptions[] = { "Linear", "Piecewise Linear" };
   	public JComboBox<String> PropTypeComboBox = new JComboBox<String>(PropTypeDropDownOptions);
   	
   	//for linear - propagation model
@@ -146,8 +149,19 @@ public class PropMap {
   	JLabel PiecewiseTypeValueLabel = new JLabel("Values:");
   	public JTable piecewiseTable = new JTable(piecewise_table_model);
 	JScrollPane piecewiseTableContainer = new JScrollPane(piecewiseTable);
+	
+//	public JTable createProp(String column_names[]){
+//		DefaultTableModel table_model = new DefaultTableModel(column_names, 0);
+//        JTable table = new JTable(table_model);
+//        return table;
+//	}
   	
   	public static Boolean firstRowInsertion = true;
+  	public Boolean elevationSelected = true;
+  	public Boolean azimuthSelected = true;
+  	public Boolean propagationModelSelected= false;
+  	public Boolean linearSelected = true;
+  	public Boolean piecewiseLinearSelected = false;
   	
   	public static boolean isNumeric(String strNum) {
   	    try {
@@ -322,11 +336,24 @@ public class PropMap {
 	    
 	    ValueTypeRowItemValue.setBounds(400 + ValueTypeValueLabelSize.width + 50, 160+80 - 50 +ValueTypeComboBoxSize.height+10 , 100, ValueTypeRowItemValue.getPreferredSize().height);
         
-	    //prop model fields
+	    //prop model fields - drop down selection
 	    PropModelValueTypeLabel.setBounds(400+25, 160 + 80 - 50 + 50 + 10, PropModelValueTypeLabel.getPreferredSize().width, PropModelValueTypeLabel.getPreferredSize().height);
 	    
+	    PropTypeComboBox.setFont(font);
 	    Dimension PropTypeComboBoxSize = PropTypeComboBox.getPreferredSize();
 	    PropTypeComboBox.setBounds(400 + 25 + PropModelValueTypeLabel.getPreferredSize().width + 25, 160 + 80 - 50 + 50 + 10, PropTypeComboBoxSize.width, PropTypeComboBoxSize.height);
+	    
+	    //Linear
+	    Dimension PropExpTypeValueLabelSize = PropExpTypeValueLabel.getPreferredSize();
+	    PropExpTypeValueLabel.setBounds(400+25, 160 + 80 - 50 + 50 + 10 + 50, PropExpTypeValueLabelSize.width, PropExpTypeValueLabelSize.height);
+	    Dimension PropExpTypeRowItemValueSize = PropExpTypeRowItemValue.getPreferredSize();
+	    PropExpTypeRowItemValue.setBounds(400+25+PropExpTypeValueLabelSize.width, 160 + 80 - 50 + 50 + 10 + 50, 100, PropExpTypeRowItemValueSize.height);
+	    
+	    //piecewise linear
+	    Dimension PiecewiseTypeValueLabelSize = PiecewiseTypeValueLabel.getPreferredSize();
+	    PiecewiseTypeValueLabel.setBounds(400+25, 160 + 80 - 50 + 50 + 10 + 50, PiecewiseTypeValueLabelSize.width, PiecewiseTypeValueLabelSize.height);
+	    Dimension piecewiseTableContainerSize = piecewiseTableContainer.getPreferredSize();
+	    piecewiseTableContainer.setBounds(400+25+PiecewiseTypeValueLabelSize.width, 160 + 80 - 50 + 50 + 10 + 50, 350, 40);
 	    
         // Creating and placing buttons for the panel.
         
@@ -397,23 +424,47 @@ public class PropMap {
         	@Override
        	    public void itemStateChanged(ItemEvent event) {
             if (event.getStateChange() == ItemEvent.SELECTED) {
-            	System.out.println(event.getItem().toString());
-            	System.out.println(ValueTypeComboBox.getSelectedItem().toString());
+            	//System.out.println(event.getItem().toString());
+            	//System.out.println(ValueTypeComboBox.getSelectedItem().toString());
             	String currentSelectedItem = event.getItem().toString();
             	if(currentSelectedItem == "Elevation Angle" || currentSelectedItem == "Azimuth Angle") {
+            		elevationSelected = true;
+            		azimuthSelected = true;
+            		propagationModelSelected = false;
+            		linearSelected = false;
+    				piecewiseLinearSelected = false;
             		PropPanel.remove(PropTypeComboBox);
             		PropPanel.remove(PropModelValueTypeLabel);    
             		PropPanel.add(ValueTypeRowItemValue);
-            	    PropPanel.add(ValueTypeLabel);
-            	    PropPanel.repaint(2000);
+            	    PropPanel.add(ValueTypeValueLabel);
+    				PropPanel.remove(PropExpTypeValueLabel);
+            		PropPanel.remove(PropExpTypeRowItemValue);
+            		PropPanel.remove(PiecewiseTypeValueLabel);
+            		PropPanel.remove(piecewiseTableContainer);
+    				PropPanel.remove(PropExpTypeValueLabel);
+            		PropPanel.remove(PropExpTypeRowItemValue);
+            	    
+            	    SwingUtilities.updateComponentTreeUI(PropPanel);
+            	    PropPanel.invalidate();
+            	    PropPanel.validate();
             		PropPanel.repaint();
             	}
             	else {
+            		elevationSelected = false;
+            		azimuthSelected = false;
+            		propagationModelSelected = true;
+            		linearSelected = false;
+    				piecewiseLinearSelected = false;
             		PropPanel.remove(ValueTypeValueLabel);
             		PropPanel.remove(ValueTypeRowItemValue);
             		PropPanel.add(PropTypeComboBox);
             		PropPanel.add(PropModelValueTypeLabel);
-            		PropPanel.repaint(2000);
+    				PropPanel.add(PropExpTypeValueLabel);
+            		PropPanel.add(PropExpTypeRowItemValue);
+            		
+            		SwingUtilities.updateComponentTreeUI(PropPanel);
+            	    PropPanel.invalidate();
+            	    PropPanel.validate();
             		PropPanel.repaint();
             	}
             }
@@ -422,47 +473,79 @@ public class PropMap {
       );        
         
         
-        PropTypeComboBox.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent event) {
-            	
-                Object selected = ValueTypeComboBox.getSelectedItem();
-                if(selected == "Linear") {
-            		PropPanel.add(PropExpTypeValueLabel);
-            		PropPanel.add(PropExpTypeRowItemValue);
-            	}
-            	else {
-            		PropPanel.remove(PropExpTypeValueLabel);
-            		PropPanel.remove(PropExpTypeRowItemValue);
-            	}
-                
-            }
-        });
+        PropTypeComboBox.addItemListener(new ItemListener() 
+        {
+        	@Override
+        	public void itemStateChanged(ItemEvent event) {
+        		if (event.getStateChange() == ItemEvent.SELECTED) {
+        			//System.out.println(event.getItem().toString());
+        			//System.out.println(PropTypeComboBox.getSelectedItem().toString());
+        			String currentSelectedItem = event.getItem().toString();
+        			if(currentSelectedItem == "Linear") {
+        				linearSelected = true;
+        				piecewiseLinearSelected = false;
+        				PropPanel.add(PropExpTypeValueLabel);
+                		PropPanel.add(PropExpTypeRowItemValue);
+                		PropPanel.remove(PiecewiseTypeValueLabel);
+                		PropPanel.remove(piecewiseTableContainer);
+                		
+                		SwingUtilities.updateComponentTreeUI(PropPanel);
+                	    PropPanel.invalidate();
+                	    PropPanel.validate();
+                		PropPanel.repaint();
+        			}
+        			else {
+        				linearSelected = false;
+        				piecewiseLinearSelected = true;
+        				PropPanel.remove(PropExpTypeValueLabel);
+                		PropPanel.remove(PropExpTypeRowItemValue);
+                		PropPanel.add(PiecewiseTypeValueLabel);
+                		PropPanel.add(piecewiseTableContainer);
+                		
+                		SwingUtilities.updateComponentTreeUI(PropPanel);
+                	    PropPanel.invalidate();
+                	    PropPanel.validate();
+                		PropPanel.repaint();
+        			}
+        		}
+        	}
+        }	
+      );        
+        
+
         
         // Button Actions       		
         
         b1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				DefaultTableModel model = (DefaultTableModel) table.getModel();
-				if(isNumeric(PropExpTypeRowItemValue.getText())) {
-					if(firstRowInsertion) {
-						model.removeRow(2);
-					}
-					firstRowInsertion = false;
-					
-				}
-				//todo: see line below
-				//else if(check if all or one of the three values in the piecewise linear are filled up)
-
-				else if(isNumeric(ValueTypeRowItemValue.getText())) {
-					if(firstRowInsertion) {
-						model.removeRow(2);
-					}
-					firstRowInsertion = false;
+				int count = table.getRowCount();
 				
-					int count = table.getRowCount();
+				if(propagationModelSelected && linearSelected && isNumeric(PropExpTypeRowItemValue.getText())) {
+					if(firstRowInsertion) {
+						model.removeRow(2);
+					}
+					model.insertRow(model.getRowCount()-2, new Object[]{count-3, "Prop Exponent" , PropExpTypeRowItemValue.getText()});
+				}
+				
+				else if(propagationModelSelected && piecewiseLinearSelected && (piecewiseTable.getModel().getValueAt(0,0) !="" && piecewiseTable.getModel().getValueAt(0,1) !="" && piecewiseTable.getModel().getValueAt(0,2) !="")) {
+					if(firstRowInsertion) {
+						model.removeRow(2);
+					}
+					model.insertRow(model.getRowCount()-2, new Object[]{count-3, "First Exponent" , piecewiseTable.getModel().getValueAt(0,0)});
+					model.insertRow(model.getRowCount()-2, new Object[]{count-3, "Breakpoint(meters)" , piecewiseTable.getModel().getValueAt(0,1)});
+					model.insertRow(model.getRowCount()-2, new Object[]{count-3, "Second Exponent" , piecewiseTable.getModel().getValueAt(0,2)});
+				}
+				
+				else if(!propagationModelSelected && isNumeric(ValueTypeRowItemValue.getText())) {
+					if(firstRowInsertion) {
+						model.removeRow(2);
+					}
 				
 					model.insertRow(model.getRowCount()-2, new Object[]{count-3,ValueTypeComboBox.getSelectedItem().toString() , ValueTypeRowItemValue.getText()});
 				}
+
+				firstRowInsertion = false;
 			}
 		});
 		
@@ -499,14 +582,21 @@ public class PropMap {
 						model.insertRow( model.getRowCount()-2, new Object[]{"1","",""});
 					}
 				  
-				   for(int i=table.getRowCount()-1;i>=0;i--)
-				   {
-					   int curVal = Integer.parseInt(table.getModel().getValueAt(i, 0).toString());
-					   if(curVal!= i+1)
+					int numberOfRow = 1;
+						int count = table.getRowCount();
+					   count = count - numberOfRow;
+					   for(int i=count;i>=0;i--)
 					   {
-						   table.getModel().setValueAt(i+1, i, 0);
+						   try {
+							   int curVal = Integer.parseInt(table.getModel().getValueAt(i, 0).toString());
+								   
+								   if(curVal!= i+1)
+								   {
+									   table.getModel().setValueAt(i+1, i, 0);
+								   }
+							   }
+							   catch(Exception e) {}
 					   }
-				   }
 				}
 		});
         
