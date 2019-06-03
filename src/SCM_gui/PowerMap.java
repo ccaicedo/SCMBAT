@@ -426,9 +426,7 @@ public class PowerMap {
 						model.removeRow(2);
 					}
 					firstRowInsertion = false;
-				
-					count = table.getRowCount();
-				
+					count = table.getRowCount();				
 					model.insertRow(model.getRowCount()-2, new Object[]{count-3,ValueTypeComboBox.getSelectedItem().toString() , ValueTypeRowItemValue.getText()});
 				}
 			}
@@ -459,6 +457,7 @@ public class PowerMap {
 				
 				//deleting only the last row
 				if (table.getRowCount() == 4) {
+					firstRowInsertion = true;
 					return;
 				}
 				int selectedRowIndex = table.getRowCount()-3;
@@ -468,23 +467,24 @@ public class PowerMap {
 
 				if(table.getRowCount() == 4) {
 					model.insertRow( model.getRowCount()-2, new Object[]{"1","",""});
+					firstRowInsertion = true;
 				}
 				
-				int numberOfRow = 1;
-				
-				   count = count - numberOfRow;
-				   for(int i=count;i>=0;i--)
-				   {
-					   try {
-						   int curVal = Integer.parseInt(table.getModel().getValueAt(i, 0).toString());
-							   
-							   if(curVal!= i+1)
-							   {
-								   table.getModel().setValueAt(i+1, i, 0);
-							   }
-						   }
-						   catch(Exception e) {}
-				   }
+//				int numberOfRow = 1;
+//
+//				   count = count - numberOfRow;
+//				   for(int i=count;i>=0;i--)
+//				   {
+//					   try {
+//						   int curVal = Integer.parseInt(table.getModel().getValueAt(i, 0).toString());
+//							   
+//							   if(curVal!= i+1)
+//							   {
+//								   table.getModel().setValueAt(i+1, i, 0);
+//							   }
+//						   }
+//						   catch(Exception e) {}
+//				   }
 				
 			}
 		});

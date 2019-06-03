@@ -100,12 +100,12 @@ public class PropMap {
     	
     };
     
-	Object rowData_piecewise[][] = { { "", "","" }};
+	Object rowData_piecewise[][] = { { "", "", "" } };
 	Object columnData_piecewise[] = {"First Exponent","Breakpoint(meters)","Second Exponent"};
     
 	//table for piecewise linear model
     TableModel piecewise_table_model = new DefaultTableModel(rowData_piecewise, columnData_piecewise) {
-    	private static final long serialVersionUID = 2580276847572016977L; 
+    	private static final long serialVersionUID = 2580276847892016977L; 
     	
     	@Override
         public boolean isCellEditable(int row, int column)
@@ -157,11 +157,11 @@ public class PropMap {
 //	}
   	
   	public static Boolean firstRowInsertion = true;
-  	public Boolean elevationSelected = true;
-  	public Boolean azimuthSelected = true;
-  	public Boolean propagationModelSelected= false;
-  	public Boolean linearSelected = true;
-  	public Boolean piecewiseLinearSelected = false;
+  	public static Boolean elevationSelected = true;
+  	public static Boolean azimuthSelected = true;
+  	public static Boolean propagationModelSelected= false;
+  	public static Boolean linearSelected = true;
+  	public static Boolean piecewiseLinearSelected = false;
   	
   	public static boolean isNumeric(String strNum) {
   	    try {
@@ -424,8 +424,8 @@ public class PropMap {
         	@Override
        	    public void itemStateChanged(ItemEvent event) {
             if (event.getStateChange() == ItemEvent.SELECTED) {
-            	//System.out.println(event.getItem().toString());
-            	//System.out.println(ValueTypeComboBox.getSelectedItem().toString());
+            	System.out.println(event.getItem().toString());
+            	System.out.println(ValueTypeComboBox.getSelectedItem().toString());
             	String currentSelectedItem = event.getItem().toString();
             	if(currentSelectedItem == "Elevation Angle" || currentSelectedItem == "Azimuth Angle") {
             		elevationSelected = true;
@@ -441,10 +441,7 @@ public class PropMap {
             		PropPanel.remove(PropExpTypeRowItemValue);
             		PropPanel.remove(PiecewiseTypeValueLabel);
             		PropPanel.remove(piecewiseTableContainer);
-    				PropPanel.remove(PropExpTypeValueLabel);
-            		PropPanel.remove(PropExpTypeRowItemValue);
             	    
-            	    SwingUtilities.updateComponentTreeUI(PropPanel);
             	    PropPanel.invalidate();
             	    PropPanel.validate();
             		PropPanel.repaint();
@@ -453,7 +450,7 @@ public class PropMap {
             		elevationSelected = false;
             		azimuthSelected = false;
             		propagationModelSelected = true;
-            		linearSelected = false;
+            		linearSelected = true;
     				piecewiseLinearSelected = false;
             		PropPanel.remove(ValueTypeValueLabel);
             		PropPanel.remove(ValueTypeRowItemValue);
@@ -462,7 +459,6 @@ public class PropMap {
     				PropPanel.add(PropExpTypeValueLabel);
             		PropPanel.add(PropExpTypeRowItemValue);
             		
-            		SwingUtilities.updateComponentTreeUI(PropPanel);
             	    PropPanel.invalidate();
             	    PropPanel.validate();
             		PropPanel.repaint();
@@ -478,8 +474,8 @@ public class PropMap {
         	@Override
         	public void itemStateChanged(ItemEvent event) {
         		if (event.getStateChange() == ItemEvent.SELECTED) {
-        			//System.out.println(event.getItem().toString());
-        			//System.out.println(PropTypeComboBox.getSelectedItem().toString());
+        			System.out.println(event.getItem().toString());
+        			System.out.println(PropTypeComboBox.getSelectedItem().toString());
         			String currentSelectedItem = event.getItem().toString();
         			if(currentSelectedItem == "Linear") {
         				linearSelected = true;
@@ -489,7 +485,6 @@ public class PropMap {
                 		PropPanel.remove(PiecewiseTypeValueLabel);
                 		PropPanel.remove(piecewiseTableContainer);
                 		
-                		SwingUtilities.updateComponentTreeUI(PropPanel);
                 	    PropPanel.invalidate();
                 	    PropPanel.validate();
                 		PropPanel.repaint();
@@ -502,7 +497,6 @@ public class PropMap {
                 		PropPanel.add(PiecewiseTypeValueLabel);
                 		PropPanel.add(piecewiseTableContainer);
                 		
-                		SwingUtilities.updateComponentTreeUI(PropPanel);
                 	    PropPanel.invalidate();
                 	    PropPanel.validate();
                 		PropPanel.repaint();
@@ -519,29 +513,32 @@ public class PropMap {
         b1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				DefaultTableModel model = (DefaultTableModel) table.getModel();
-				int count = table.getRowCount();
+				int count;
+				
+				//Boolean test = isNumeric(piecewiseTable.getModel().getValueAt(0,2).toString());
 				
 				if(propagationModelSelected && linearSelected && isNumeric(PropExpTypeRowItemValue.getText())) {
 					if(firstRowInsertion) {
 						model.removeRow(2);
 					}
+					count = table.getRowCount();
 					model.insertRow(model.getRowCount()-2, new Object[]{count-3, "Prop Exponent" , PropExpTypeRowItemValue.getText()});
 				}
-				
-				else if(propagationModelSelected && piecewiseLinearSelected && (piecewiseTable.getModel().getValueAt(0,0) !="" && piecewiseTable.getModel().getValueAt(0,1) !="" && piecewiseTable.getModel().getValueAt(0,2) !="")) {
+				else if(propagationModelSelected && piecewiseLinearSelected && isNumeric(piecewiseTable.getModel().getValueAt(0,0).toString()) && isNumeric(piecewiseTable.getModel().getValueAt(0,1).toString()) && isNumeric(piecewiseTable.getModel().getValueAt(0,2).toString())) {
 					if(firstRowInsertion) {
 						model.removeRow(2);
 					}
-					model.insertRow(model.getRowCount()-2, new Object[]{count-3, "First Exponent" , piecewiseTable.getModel().getValueAt(0,0)});
-					model.insertRow(model.getRowCount()-2, new Object[]{count-3, "Breakpoint(meters)" , piecewiseTable.getModel().getValueAt(0,1)});
-					model.insertRow(model.getRowCount()-2, new Object[]{count-3, "Second Exponent" , piecewiseTable.getModel().getValueAt(0,2)});
+					count = table.getRowCount();
+					model.insertRow(model.getRowCount()-2, new Object[]{count-3, "First Exponent" , piecewiseTable.getModel().getValueAt(0,0).toString()});
+					model.insertRow(model.getRowCount()-2, new Object[]{count-3, "Breakpoint(meters)" , piecewiseTable.getModel().getValueAt(0,1).toString()});
+					model.insertRow(model.getRowCount()-2, new Object[]{count-3, "Second Exponent" , piecewiseTable.getModel().getValueAt(0,2).toString()});
 				}
 				
 				else if(!propagationModelSelected && isNumeric(ValueTypeRowItemValue.getText())) {
 					if(firstRowInsertion) {
 						model.removeRow(2);
 					}
-				
+					count = table.getRowCount();
 					model.insertRow(model.getRowCount()-2, new Object[]{count-3,ValueTypeComboBox.getSelectedItem().toString() , ValueTypeRowItemValue.getText()});
 				}
 
@@ -571,7 +568,8 @@ public class PropMap {
 //				   }
 			//	model.removeRow(model.getRowCount() - 1);
 				   if (table.getRowCount() == 4) {
-						return;
+					   firstRowInsertion = true;
+					   return;
 					}
 					int selectedRowIndex = table.getRowCount()-3;
 					if(selectedRowIndex != 0 && selectedRowIndex != 1) {
@@ -580,23 +578,24 @@ public class PropMap {
 
 					if(table.getRowCount() == 4) {
 						model.insertRow( model.getRowCount()-2, new Object[]{"1","",""});
+						firstRowInsertion = true;
 					}
 				  
-					int numberOfRow = 1;
-						int count = table.getRowCount();
-					   count = count - numberOfRow;
-					   for(int i=count;i>=0;i--)
-					   {
-						   try {
-							   int curVal = Integer.parseInt(table.getModel().getValueAt(i, 0).toString());
-								   
-								   if(curVal!= i+1)
-								   {
-									   table.getModel().setValueAt(i+1, i, 0);
-								   }
-							   }
-							   catch(Exception e) {}
-					   }
+//					int numberOfRow = 1;
+//						int count = table.getRowCount();
+//					   count = count - numberOfRow;
+//					   for(int i=count;i>=0;i--)
+//					   {
+//						   try {
+//							   int curVal = Integer.parseInt(table.getModel().getValueAt(i, 0).toString());
+//								   
+//								   if(curVal!= i+1)
+//								   {
+//									   table.getModel().setValueAt(i+1, i, 0);
+//								   }
+//							   }
+//							   catch(Exception e) {}
+//					   }
 				}
 		});
         
