@@ -455,6 +455,10 @@ public class Save_XML extends ObjectFactory {
 				
 				strData = tableData.getValueAt(i, 1).toString().replaceAll(" ", "");
 				dataValue = tableData.getValueAt(i, 2).toString().replaceAll(" ", "");
+				
+				if(strData == "")
+					continue;
+				
 				//Elevation Angle","Azimuth Angle", "Gain (dB)
 				if (strData.equals("ElevationAngle")) {
 					power.getGainMap().getGainMapValue().add(new GainMapValue());
@@ -529,11 +533,12 @@ public class Save_XML extends ObjectFactory {
 		prop.setPropMap(new PropMap());
 		
 		String strData = "";
-		Double elevationData = 0.0;
-		Double azimuthData = 0.0;
-		Double n1 = 0.0;
-		Double breakData = 0.0;
-		Double n2 = 0.0;
+		String dataValue = "";
+//		Double elevationData = 0.0;
+//		Double azimuthData = 0.0;
+//		Double n1 = 0.0;
+//		Double breakData = 0.0;
+//		Double n2 = 0.0;
 		String locindexvalue = String.valueOf(propMap.comboBox.getSelectedItem());
 		
 		//Save the location index only if it is not empty
@@ -549,76 +554,108 @@ public class Save_XML extends ObjectFactory {
 			warningFlag = true;
 			warningMessage = warningMessage + "\nException in formatting the location index\n";
 		}
+		
 		TableModel tableData = propMap.table.getModel();
 		for (int i = 0; i < tableData.getRowCount(); i++) {
 			try{
 			
 			
 			strData = tableData.getValueAt(i, 1).toString().replaceAll(" ", "");
-			if(strData.equals(null)  || strData.equals("") || strData.equals(" ")){
+			dataValue = tableData.getValueAt(i, 2).toString().replaceAll(" ", "");
+			if(strData == "")
+				continue;
+			//
+			if (strData.equals("ElevationAngle")) {
 				prop.getPropMap().getPropMapValue().add(new PropMapValue());
-				prop.getPropMap().getPropMapValue().get(i*3+0).setElevation(elevationData);
-			}else{
-				elevationData = Double.parseDouble(strData);
-				prop.getPropMap().getPropMapValue().add(new PropMapValue());
-				prop.getPropMap().getPropMapValue().get(i*3+0).setElevation(elevationData);
+				prop.getPropMap().getPropMapValue().get((i)).setElevation(Double.parseDouble(dataValue));
 			}
 			
-			strData = tableData.getValueAt(i, 2).toString().replaceAll(" ", "");				
-			if(strData.equals(null)  || strData.equals("") || strData.equals(" ")){
+			if (strData.equals("AzimuthAngle")) {
 				prop.getPropMap().getPropMapValue().add(new PropMapValue());
-				prop.getPropMap().getPropMapValue().get(i*3+1).setAzimuth(azimuthData);
-			}else{
-				azimuthData = Double.parseDouble(strData);
-				prop.getPropMap().getPropMapValue().add(new PropMapValue());
-				prop.getPropMap().getPropMapValue().get(i*3+1).setAzimuth(azimuthData);
+				prop.getPropMap().getPropMapValue().get((i)).setAzimuth(Double.parseDouble(dataValue));
 			}
-			prop.getPropMap().getPropMapValue().add(new PropMapValue());
-			prop.getPropMap().getPropMapValue().get(i*3+2).setPropagationModel(new PropagationModel());
+			
+			if (strData.equals("PropExponent")) {
+				prop.getPropMap().getPropMapValue().add(new PropMapValue());
+				PropagationModel propModel = new PropagationModel();
+				propModel.setLinear(Double.parseDouble(dataValue));
+				prop.getPropMap().getPropMapValue().get((i)).setPropagationModel(propModel);
+			}
+			
+			if (strData.equals("FirstExponent")) {
+				prop.getPropMap().getPropMapValue().add(new PropMapValue());
+				PropagationModel propModel = new PropagationModel();
+				PiecewiseLinear plinear = new PiecewiseLinear();
+				plinear.setFirstExponent(Double.parseDouble(dataValue));
+				propModel.setPiecewiseLinear(plinear);
+				prop.getPropMap().getPropMapValue().get((i)).setPropagationModel(propModel);
+			}
+			
+			if (strData.equals("Breakpoint(meters)")) {
+				prop.getPropMap().getPropMapValue().add(new PropMapValue());
+				PropagationModel propModel = new PropagationModel();
+				PiecewiseLinear plinear = new PiecewiseLinear();
+				plinear.setBreakpoint(Double.parseDouble(dataValue));
+				propModel.setPiecewiseLinear(plinear);
+				propModel.setLinear(Double.parseDouble(dataValue));
+				prop.getPropMap().getPropMapValue().get((i)).setElevation(Double.parseDouble(dataValue));
+			}
+			
+			if (strData.equals("SecondExponent")) {
+				prop.getPropMap().getPropMapValue().add(new PropMapValue());
+				PropagationModel propModel = new PropagationModel();
+				PiecewiseLinear plinear = new PiecewiseLinear();
+				plinear.setSecondExponent(Double.parseDouble(dataValue));
+				propModel.setPiecewiseLinear(plinear);
+				propModel.setLinear(Double.parseDouble(dataValue));
+				prop.getPropMap().getPropMapValue().get((i)).setElevation(Double.parseDouble(dataValue));
+			}
+//			prop.getPropMap().getPropMapValue().add(new PropMapValue());
+//			prop.getPropMap().getPropMapValue().get(i*3+2).setPropagationModel(new PropagationModel());
 			
 			
-			strData = tableData.getValueAt(i, 4).toString().replaceAll(" ", "");
-			if(strData.equals(null)  || strData.equals("") || strData.equals(" ")){
-				
-				strData = tableData.getValueAt(i, 3).toString().replaceAll(" ", "");
-				if(strData.equals(null)  || strData.equals("") || strData.equals(" ")){
-					prop.getPropMap().getPropMapValue().get(i*3+2).getPropagationModel().setLinear(n1);
-				}else{
-					n1 = Double.parseDouble(strData);
-					prop.getPropMap().getPropMapValue().get(i*3+2).getPropagationModel().setLinear(n1);
-				}
-				
-			}else{
-				
-				prop.getPropMap().getPropMapValue().get(i*3+2).getPropagationModel().
-				setPiecewiseLinear(new PiecewiseLinear());
-				breakData = Double.parseDouble(strData);
-				prop.getPropMap().getPropMapValue().get(i*3+2).getPropagationModel()
-				.getPiecewiseLinear().setBreakpoint(breakData);
-				
-				//Set the linear value to default value if the piecewiselinear is set
-				prop.getPropMap().getPropMapValue().get(i*3+2).getPropagationModel().setLinear(0.0);
-				
-				strData = tableData.getValueAt(i, 3).toString().replaceAll(" ", "");
-				if(strData.equals(null)  || strData.equals("") || strData.equals(" ")){
-					prop.getPropMap().getPropMapValue().get(i*3+2).getPropagationModel()
-					.getPiecewiseLinear().setFirstExponent(0.0);
-				}else{
-					n1 = Double.parseDouble(strData);
-					prop.getPropMap().getPropMapValue().get(i*3+2).getPropagationModel()
-					.getPiecewiseLinear().setFirstExponent(n1);
-				}
-				
-				strData = tableData.getValueAt(i, 5).toString().replaceAll(" ", "");
-				if(strData.equals(null)  || strData.equals("") || strData.equals(" ")){
-					prop.getPropMap().getPropMapValue().get(i*3+2).getPropagationModel()
-					.getPiecewiseLinear().setSecondExponent(0.0);
-				}else{
-					n2 = Double.parseDouble(strData);
-					prop.getPropMap().getPropMapValue().get(i*3+2).getPropagationModel()
-					.getPiecewiseLinear().setSecondExponent(n2);
-				}				
-			}		
+//			strData = tableData.getValueAt(i, 4).toString().replaceAll(" ", "");
+//			if(strData.equals(null)  || strData.equals("") || strData.equals(" ")){
+//				
+//				strData = tableData.getValueAt(i, 3).toString().replaceAll(" ", "");
+//				if(strData.equals(null)  || strData.equals("") || strData.equals(" ")){
+//					prop.getPropMap().getPropMapValue().get(i*3+2).getPropagationModel().setLinear(n1);
+//				}else{
+//					n1 = Double.parseDouble(strData);
+//					prop.getPropMap().getPropMapValue().get(i*3+2).getPropagationModel().setLinear(n1);
+//				}
+//				
+//			}else{
+//				
+//				prop.getPropMap().getPropMapValue().get(i*3+2).getPropagationModel().
+//				setPiecewiseLinear(new PiecewiseLinear());
+//				breakData = Double.parseDouble(strData);
+//				prop.getPropMap().getPropMapValue().get(i*3+2).getPropagationModel()
+//				.getPiecewiseLinear().setBreakpoint(breakData);
+//				
+//				//Set the linear value to default value if the piecewiselinear is set
+//				prop.getPropMap().getPropMapValue().get(i*3+2).getPropagationModel().setLinear(0.0);
+//				
+//				strData = tableData.getValueAt(i, 3).toString().replaceAll(" ", "");
+//				if(strData.equals(null)  || strData.equals("") || strData.equals(" ")){
+//					prop.getPropMap().getPropMapValue().get(i*3+2).getPropagationModel()
+//					.getPiecewiseLinear().setFirstExponent(0.0);
+//				}else{
+//					n1 = Double.parseDouble(strData);
+//					prop.getPropMap().getPropMapValue().get(i*3+2).getPropagationModel()
+//					.getPiecewiseLinear().setFirstExponent(n1);
+//				}
+//				
+//				strData = tableData.getValueAt(i, 5).toString().replaceAll(" ", "");
+//				if(strData.equals(null)  || strData.equals("") || strData.equals(" ")){
+//					prop.getPropMap().getPropMapValue().get(i*3+2).getPropagationModel()
+//					.getPiecewiseLinear().setSecondExponent(0.0);
+//				}else{
+//					n2 = Double.parseDouble(strData);
+//					prop.getPropMap().getPropMapValue().get(i*3+2).getPropagationModel()
+//					.getPiecewiseLinear().setSecondExponent(n2);
+//				}				
+//			}		
 			
 			}catch(Exception e){
 				warningMessage = warningMessage + "\nThe entry at row: " + (i+1) + " in the propagation map table should be numeric";

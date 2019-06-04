@@ -27,8 +27,11 @@ along with program.  If not, see <http://www.gnu.org/licenses/>.
 
 package SCM_gui;
 
+import SCM_gui.TableCellRender;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -47,7 +50,9 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 
 public class PowerMap {
@@ -82,9 +87,38 @@ public class PowerMap {
 //						return true;
 //					}
     	        }
+			
     };
     
-    public JTable table1 = new JTable(table_model1);
+    public JTable table1 = new JTable(table_model1) {
+    	/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		@Override
+        public Component prepareRenderer(TableCellRenderer renderer, int row, int col) {
+            Component comp = super.prepareRenderer(renderer, row, col);
+            //comp.co
+            
+//            Object value = getModel().getValueAt(row, col);
+//            if (getSelectedRow() == row) {
+//                if (value.equals(false)) {
+//                    comp.setBackground(Color.red);
+//                } else if (value.equals(true)) {
+//                    comp.setBackground(Color.green);
+//                } else {
+//                    comp.setBackground(Color.white);
+//                }
+//            } else {
+//                comp.setBackground(Color.white);
+//            }
+            return comp;
+        }
+    	
+    };
+    
+    
     
     JLabel relativeText = new JLabel("orientation relative to Platform");
 	Object rowData2[][] = { {"","","",""} };
@@ -319,6 +353,51 @@ public class PowerMap {
 	    table1.getColumnModel().getColumn(0).setPreferredWidth(10);
 	    table1.getColumnModel().getColumn(2).setPreferredWidth(30);
 	    
+	    table1.setShowGrid(true);
+	    table1.setGridColor(Color.BLACK);
+	    
+	    DefaultTableCellRenderer headerRenderer = new DefaultTableCellRenderer();
+	    headerRenderer.setBackground(Color.lightGray);
+	    
+//	    count = table.getRowCount();
+//	    for(int i = 0; i<count; i++) {
+//	    	table1.getColumnModel().getColumn(0).
+//	    }
+	    
+	    table1.getColumnModel().getColumn(0).setCellRenderer(headerRenderer);
+//	    table1.setDefaultRenderer(Object.class, new TableCellRender());
+	    
+//	    table1.getColumnModel().getColumn(1).setCellRenderer(
+//	    		new DefaultTableCellRenderer() {
+//	    			  /**
+//					 * 
+//					 */
+//					private static final long serialVersionUID = 1L;
+//
+//					{
+//	    				    // you need to set it to opaque
+////	    				    setOpaque(true);
+//	    				  }
+//
+//					public Component getTableCellRendererComponent(JTable table, 
+//                            Object value, 
+//                            boolean isSelected, 
+//                            boolean hasFocus, 
+//                            int row, 
+//                            int column) {
+//	    				if(row == 1 ) {
+//	    				setBackground(Color.LIGHT_GRAY);
+//	    				setForeground(Color.BLACK);
+//	    				}
+//	    				return this;
+//	    			}
+//	    		}
+//	    		
+//	    );
+	    	
+	    table1.getTableHeader().setOpaque(false);
+	    table1.getTableHeader().setBackground(Color.lightGray);
+	    
 	    table = table1;
 	  //To allow the element on the last edit to be saved
 	    table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
@@ -423,11 +502,12 @@ public class PowerMap {
 				if(isNumeric(ValueTypeRowItemValue.getText())) {
 					DefaultTableModel model = (DefaultTableModel) table.getModel();
 					if(firstRowInsertion) {
-						model.removeRow(2);
+						model.removeRow(model.getRowCount()-3);
 					}
-					firstRowInsertion = false;
+					//firstRowInsertion = false;
 					count = table.getRowCount();				
 					model.insertRow(model.getRowCount()-2, new Object[]{count-3,ValueTypeComboBox.getSelectedItem().toString() , ValueTypeRowItemValue.getText()});
+					model.insertRow(model.getRowCount()-2, new Object[]{table.getRowCount()-3,"" ,""});
 				}
 			}
 		});
@@ -436,7 +516,7 @@ public class PowerMap {
 		b2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 			
-				firstRowInsertion = false;
+				//firstRowInsertion = false;
 				DefaultTableModel model = (DefaultTableModel) table.getModel();
 				/*
 				 * Allowing the deletion of selected rows
@@ -460,9 +540,13 @@ public class PowerMap {
 					firstRowInsertion = true;
 					return;
 				}
-				int selectedRowIndex = table.getRowCount()-3;
+				//if(table.getRowCount())
+				int selectedRowIndex = table.getRowCount()-4;
 				if(selectedRowIndex != 0 && selectedRowIndex != 1) {
 					model.removeRow(selectedRowIndex);
+					//update index of the last empty row
+					model.removeRow(model.getRowCount()-3);
+					model.insertRow(model.getRowCount()-2, new Object[]{table.getRowCount()-3,"" ,""});
 				}
 
 				if(table.getRowCount() == 4) {
