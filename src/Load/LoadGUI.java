@@ -228,24 +228,30 @@ public void setUnderlay(SCM_MainWindow scm, UnderlayMask underlay){
 			DefaultTableModel model = (DefaultTableModel) currentPow.table1.getModel();
 		  	model.setRowCount(0);
 			double prevElevation=361.0;						
-			String ele = "";
-			String azi = "";
-			String gain = "";
+			String valueType = "";
+			String value = "";
 			
-			for(int i=0; i<gainMapValue.size(); i=i+3){
-				
-				if(gainMapValue.get(i).getElevation()!=prevElevation){
-					ele = String.valueOf(gainMapValue.get(i).getElevation());
-				}else{
-					ele = "";
+			for(int i=0; i<gainMapValue.size(); i++){
+				//Elevation Angle","Azimuth Angle", "Gain (dB)
+				if (gainMapValue.get(i).getElevation() != null) {
+					valueType = "Elevation Angle";
+					value = gainMapValue.get(i).getElevation().toString();
+				}
+				else if (gainMapValue.get(i).getAzimuth() != null) {
+					valueType = "Azimuth Angle";
+					value = gainMapValue.get(i).getAzimuth().toString();
+				}
+				else if (gainMapValue.get(i).getGain() != null) {
+					valueType = "Gain (dB)";
+					value = gainMapValue.get(i).getGain().toString();
+				}
+				else {
+					continue;
 				}
 				
-				azi = String.valueOf(gainMapValue.get(i+1).getAzimuth());
-				gain = String.valueOf(gainMapValue.get(i+2).getGain());
-				Object[] rowData = {currentPow.table1.getRowCount()+1,ele,azi,gain};
+				Object[] rowData = {currentPow.table1.getRowCount()+1, valueType, value};
 				model.addRow(rowData);
 				
-				prevElevation = gainMapValue.get(i).getElevation();
 			}
 			
 			
