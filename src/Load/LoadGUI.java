@@ -228,24 +228,30 @@ public void setUnderlay(SCM_MainWindow scm, UnderlayMask underlay){
 			DefaultTableModel model = (DefaultTableModel) currentPow.table1.getModel();
 		  	model.setRowCount(0);
 			double prevElevation=361.0;						
-			String ele = "";
-			String azi = "";
-			String gain = "";
+			String valueType = "";
+			String value = "";
 			
 			for(int i=0; i<gainMapValue.size(); i++){
-				
-				if(gainMapValue.get(i).getElevation()!=prevElevation){
-					ele = String.valueOf(gainMapValue.get(i).getElevation());
-				}else{
-					ele = "";
+				//Elevation Angle","Azimuth Angle", "Gain (dB)
+				if (gainMapValue.get(i).getElevation() != null) {
+					valueType = "Elevation Angle";
+					value = gainMapValue.get(i).getElevation().toString();
+				}
+				else if (gainMapValue.get(i).getAzimuth() != null) {
+					valueType = "Azimuth Angle";
+					value = gainMapValue.get(i).getAzimuth().toString();
+				}
+				else if (gainMapValue.get(i).getGain() != null) {
+					valueType = "Gain (dB)";
+					value = gainMapValue.get(i).getGain().toString();
+				}
+				else {
+					continue;
 				}
 				
-				azi = String.valueOf(gainMapValue.get(i).getAzimuth());
-				gain = String.valueOf(gainMapValue.get(i).getGain());
-				Object[] rowData = {currentPow.table1.getRowCount()+1,ele,azi,gain};
+				Object[] rowData = {currentPow.table1.getRowCount()+1, valueType, value};
 				model.addRow(rowData);
 				
-				prevElevation = gainMapValue.get(i).getElevation();
 			}
 			
 			
@@ -301,7 +307,7 @@ public void setUnderlay(SCM_MainWindow scm, UnderlayMask underlay){
 			String dist = "";
 			String n2 = "";
 			
-			for(int i=0; i<propMapValue.size(); i++){
+			for(int i=0; i<propMapValue.size(); i=i+3){
 								
 				if(propMapValue.get(i).getElevation()!=prevElevation){
 					ele = String.valueOf(propMapValue.get(i).getElevation());
@@ -309,20 +315,20 @@ public void setUnderlay(SCM_MainWindow scm, UnderlayMask underlay){
 					ele = "";
 				}
 				
-				azi = String.valueOf(propMapValue.get(i).getAzimuth());
+				azi = String.valueOf(propMapValue.get(i+1).getAzimuth());
 				
-				if(propMapValue.get(i).getPropagationModel().getPiecewiseLinear()==null ||
-						propMapValue.get(i).getPropagationModel().getLinear()!=0.0){
-					n1 = String.valueOf(propMapValue.get(i).getPropagationModel().getLinear());
+				if(propMapValue.get(i+2).getPropagationModel().getPiecewiseLinear()==null ||
+						propMapValue.get(i+2).getPropagationModel().getLinear()!=0.0){
+					n1 = String.valueOf(propMapValue.get(i+2).getPropagationModel().getLinear());
 					Object[] rowData = {currentProp.table.getRowCount()+1,ele,azi,n1,"",""};
 					model.addRow(rowData);
 				}else{
 					
-					n1 = String.valueOf(propMapValue.get(i).getPropagationModel().
+					n1 = String.valueOf(propMapValue.get(i+2).getPropagationModel().
 							getPiecewiseLinear().getFirstExponent());					
-					dist = String.valueOf(propMapValue.get(i).getPropagationModel().
+					dist = String.valueOf(propMapValue.get(i+2).getPropagationModel().
 							getPiecewiseLinear().getBreakpoint());
-					n2 = String.valueOf(propMapValue.get(i).getPropagationModel().
+					n2 = String.valueOf(propMapValue.get(i+2).getPropagationModel().
 							getPiecewiseLinear().getSecondExponent());
 					Object[] rowData = {currentProp.table.getRowCount()+1,ele,azi,n1,dist,n2};
 					model.addRow(rowData);
