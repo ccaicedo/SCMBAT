@@ -446,6 +446,7 @@ public class Save_XML extends ObjectFactory {
 			
 			
 			TableModel tableData = powerMap.table.getModel();
+			int gainMapValueIndex = -1;
 			for (int i = 0; i < tableData.getRowCount(); i++) {
 			try{	
 
@@ -456,24 +457,26 @@ public class Save_XML extends ObjectFactory {
 				strData = tableData.getValueAt(i, 1).toString().replaceAll(" ", "");
 				dataValue = tableData.getValueAt(i, 2).toString().replaceAll(" ", "");
 				
-				if(strData == "")
-					continue;
 				
+				++gainMapValueIndex;
 				//Elevation Angle","Azimuth Angle", "Gain (dB)
 				if (strData.equals("ElevationAngle")) {
 					power.getGainMap().getGainMapValue().add(new GainMapValue());
-					power.getGainMap().getGainMapValue().get((i)).setElevation(Double.parseDouble(dataValue));
+					power.getGainMap().getGainMapValue().get((gainMapValueIndex)).setElevation(Double.parseDouble(dataValue));
 					
 				}
-				if (strData.equals("AzimuthAngle")) {
+				else if (strData.equals("AzimuthAngle")) {
 					power.getGainMap().getGainMapValue().add(new GainMapValue());
-					power.getGainMap().getGainMapValue().get((i)).setAzimuth(Double.parseDouble(dataValue));
+					power.getGainMap().getGainMapValue().get((gainMapValueIndex)).setAzimuth(Double.parseDouble(dataValue));
 					
 				}
-				if (strData.equals("Gain(dB)")) {
+				else if (strData.equals("Gain(dB)")) {
 					power.getGainMap().getGainMapValue().add(new GainMapValue());
-					power.getGainMap().getGainMapValue().get((i)).setGain(Double.parseDouble(dataValue));
+					power.getGainMap().getGainMapValue().get((gainMapValueIndex)).setGain(Double.parseDouble(dataValue));
 					
+				}
+				else {					
+					--gainMapValueIndex;
 				}
 				
 				
