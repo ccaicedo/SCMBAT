@@ -27,7 +27,6 @@ along with program.  If not, see <http://www.gnu.org/licenses/>.
 
 package SCM_gui;
 
-import SCM_gui.TableCellRender;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -65,9 +64,8 @@ public class PowerMap {
     int count;
     
     int count1 = 2;
-	//Object rowData1[][] = { { "1","","",""} };
+
 	Object rowData1[][] = { { "", "Elevation Angle","-90"},  { "", "Azimuth Angle","0"}, { "1","",""}, { "", "Azimuth Angle","360"}, { "", "Elevation Angle","90"} };
-//    Object columnNames1[] = {"#","Elevation Angle","Azimuth Angle", "Gain (dB)"};
     Object columnNames1[] = {"#","Value Type","Value"};
     
     TableModel table_model1 = new DefaultTableModel(rowData1, columnNames1) {
@@ -77,15 +75,6 @@ public class PowerMap {
     	        public boolean isCellEditable(int row, int column)
     	        {
 					return false;
-    	            // make read only column
-//					if(column ==0 )
-//					{
-//						return false;
-//					}
-//					else
-//					{
-//						return true;
-//					}
     	        }
 			
     };
@@ -99,20 +88,6 @@ public class PowerMap {
 		@Override
         public Component prepareRenderer(TableCellRenderer renderer, int row, int col) {
             Component comp = super.prepareRenderer(renderer, row, col);
-            //comp.co
-            
-//            Object value = getModel().getValueAt(row, col);
-//            if (getSelectedRow() == row) {
-//                if (value.equals(false)) {
-//                    comp.setBackground(Color.red);
-//                } else if (value.equals(true)) {
-//                    comp.setBackground(Color.green);
-//                } else {
-//                    comp.setBackground(Color.white);
-//                }
-//            } else {
-//                comp.setBackground(Color.white);
-//            }
             return comp;
         }
     	
@@ -136,7 +111,7 @@ public class PowerMap {
     
     JScrollPane tableContainer1 = new JScrollPane(table1);
     JButton Add = new JButton("Add Row");
-    JButton Remove = new JButton("Remove Row");
+    JButton Remove = new JButton("Remove last entry");
 	public JTable table;
     
 	
@@ -316,7 +291,7 @@ public class PowerMap {
         //placing buttons for the panel
 	    
 	    JButton b1 = new JButton("Add new entry");
-	    JButton b2 = new JButton("Remove Last Row");
+	    JButton b2 = new JButton("Remove last entry");
 	    
         Dimension size2 = b2.getPreferredSize();
         b1.setBounds(400 + 0, 30 + 130 + 30 + 100,
@@ -359,41 +334,8 @@ public class PowerMap {
 	    DefaultTableCellRenderer headerRenderer = new DefaultTableCellRenderer();
 	    headerRenderer.setBackground(Color.lightGray);
 	    
-//	    count = table.getRowCount();
-//	    for(int i = 0; i<count; i++) {
-//	    	table1.getColumnModel().getColumn(0).
-//	    }
 	    
 	    table1.getColumnModel().getColumn(0).setCellRenderer(headerRenderer);
-//	    table1.setDefaultRenderer(Object.class, new TableCellRender());
-	    
-//	    table1.getColumnModel().getColumn(1).setCellRenderer(
-//	    		new DefaultTableCellRenderer() {
-//	    			  /**
-//					 * 
-//					 */
-//					private static final long serialVersionUID = 1L;
-//
-//					{
-//	    				    // you need to set it to opaque
-////	    				    setOpaque(true);
-//	    				  }
-//
-//					public Component getTableCellRendererComponent(JTable table, 
-//                            Object value, 
-//                            boolean isSelected, 
-//                            boolean hasFocus, 
-//                            int row, 
-//                            int column) {
-//	    				if(row == 1 ) {
-//	    				setBackground(Color.LIGHT_GRAY);
-//	    				setForeground(Color.BLACK);
-//	    				}
-//	    				return this;
-//	    			}
-//	    		}
-//	    		
-//	    );
 	    	
 	    table1.getTableHeader().setOpaque(false);
 	    table1.getTableHeader().setBackground(Color.lightGray);
@@ -406,7 +348,7 @@ public class PowerMap {
 	    tableContainer1 = new JScrollPane(table1);
 	    Dimension sizeContainer1 = tableContainer1.getPreferredSize();
 	    tableContainer1.setBounds(25 + 0, 70 + 200,
-	            sizeContainer1.width - 100, sizeContainer1.height - 300);
+	            sizeContainer1.width - 100, sizeContainer1.height - 200);
 	    
 	    
 	    PowerPanel.add(tableContainer1, BorderLayout.CENTER);
@@ -504,7 +446,6 @@ public class PowerMap {
 					if(firstRowInsertion) {
 						model.removeRow(model.getRowCount()-3);
 					}
-					//firstRowInsertion = false;
 					count = table.getRowCount();				
 					model.insertRow(model.getRowCount()-2, new Object[]{count-3,ValueTypeComboBox.getSelectedItem().toString() , ValueTypeRowItemValue.getText()});
 					model.insertRow(model.getRowCount()-2, new Object[]{table.getRowCount()-3,"" ,""});
@@ -516,31 +457,13 @@ public class PowerMap {
 		b2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 			
-				//firstRowInsertion = false;
 				DefaultTableModel model = (DefaultTableModel) table.getModel();
-				/*
-				 * Allowing the deletion of selected rows
-				 */
-//				int[] selectedRows = table.getSelectedRows();
-//				int numberOfRows = selectedRows.length;
-//				   for(int row=selectedRows.length-1;row>=0;row--){
-//					int rowNum = selectedRows[row];
-//				     model.removeRow(rowNum);
-//				     //Updating the index column - count variable appropriately
-//				     if(rowNum!=table.getRowCount())
-//				     {
-//				    	 table.getModel().setValueAt(rowNum+1,rowNum ,0 );
-//				     }
-//				     
-//				   }
-			//	model.removeRow(model.getRowCount() - 1);
 				
 				//deleting only the last row
 				if (table.getRowCount() == 4) {
 					firstRowInsertion = true;
 					return;
 				}
-				//if(table.getRowCount())
 				int selectedRowIndex = table.getRowCount()-4;
 				if(selectedRowIndex != 0 && selectedRowIndex != 1) {
 					model.removeRow(selectedRowIndex);
@@ -554,20 +477,6 @@ public class PowerMap {
 					firstRowInsertion = true;
 				}
 				
-//				int numberOfRow = 1;
-//
-//				   count = count - numberOfRow;
-//				   for(int i=count;i>=0;i--)
-//				   {
-//					   try {
-//						   int curVal = Integer.parseInt(table.getModel().getValueAt(i, 0).toString());
-//							   
-//							   if(curVal!= i+1)
-//							   {
-//								   table.getModel().setValueAt(i+1, i, 0);
-//							   }
-//						   }
-//						   catch(Exception e) {}
 //				   }
 				
 			}
