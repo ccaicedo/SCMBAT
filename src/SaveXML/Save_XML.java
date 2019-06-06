@@ -117,7 +117,7 @@ public class Save_XML extends ObjectFactory {
 	public boolean warningFlag = false;
 	
 	//Creating a XML document.
-	public void createXML(String SystemID, String device){
+	public void createXML(String SystemID, String device, String purpose){
 		
 		try {
 			
@@ -127,10 +127,12 @@ public class Save_XML extends ObjectFactory {
 			if(device.equals("Tx")){
 				TxModel = createTxModel();
 				TxModel.setSystemID(SystemID);
+				TxModel.setPurpose(purpose);
 				Model = (Object) TxModel;
 			}else{
 				RxModel = createRxModel();
 				RxModel.setSystemID(SystemID);
+				RxModel.setPurpose(purpose);
 				Model = (Object) RxModel;
 			}
 			
@@ -401,10 +403,15 @@ public class Save_XML extends ObjectFactory {
 		       }
 		       
 		}
-		
-		if(device.equals("Tx")){
-			TxModel.setUnderlayMask(under);
-		}else{
+
+		if (device.equals("Tx")) {
+			if (!(under.getConfidence() == null && under.getRating() == null
+					&& (under.getScmMask().getInflectionPnt() == null
+							|| under.getScmMask().getInflectionPnt().size() == 0)
+					&& under.getScmMask().getRefFrequency() == null
+					&& Double.compare(under.getResolutionBW(), new Double(0.0)) == 0))
+				TxModel.setUnderlayMask(under);
+		} else {
 			RxModel.getUnderlayMask().add(under);
 		}
 	}
@@ -436,40 +443,43 @@ public class Save_XML extends ObjectFactory {
 		if(powerMap.surface.isSelected()==true){
 			power.getOrientation().setSurface(true);
 			
-			Double elevationData = 0.0;
-			Double azimuthData = 0.0;
-			Double gainData = 0.0;
-			String strData = "";
+			
 			
 			TableModel tableData = powerMap.table.getModel();
+			int gainMapValueIndex = -1;
 			for (int i = 0; i < tableData.getRowCount(); i++) {
 			try{	
+
+				String dataValue = "";
+				String strData = "";
 				
-				power.getGainMap().getGainMapValue().add(new GainMapValue());
 				
 				strData = tableData.getValueAt(i, 1).toString().replaceAll(" ", "");
-				if(strData.equals(null)  || strData.equals("") || strData.equals(" ")){
-					power.getGainMap().getGainMapValue().get(i).setElevation(elevationData);
-				}else{
-					elevationData = Double.parseDouble(strData);
-					power.getGainMap().getGainMapValue().get(i).setElevation(elevationData);
+				dataValue = tableData.getValueAt(i, 2).toString().replaceAll(" ", "");
+				
+				if(dataValue == "")
+					continue;
+				++gainMapValueIndex;
+				//Elevation Angle","Azimuth Angle", "Gain (dB)
+				if (strData.equals("ElevationAngle")) {
+					power.getGainMap().getGainMapValue().add(new GainMapValue());
+					power.getGainMap().getGainMapValue().get((gainMapValueIndex)).setElevation(Double.parseDouble(dataValue));
+					
+				}
+				else if (strData.equals("AzimuthAngle")) {
+					power.getGainMap().getGainMapValue().add(new GainMapValue());
+					power.getGainMap().getGainMapValue().get((gainMapValueIndex)).setAzimuth(Double.parseDouble(dataValue));
+					
+				}
+				else if (strData.equals("Gain(dB)")) {
+					power.getGainMap().getGainMapValue().add(new GainMapValue());
+					power.getGainMap().getGainMapValue().get((gainMapValueIndex)).setGain(Double.parseDouble(dataValue));
+					
+				}
+				else {					
+					--gainMapValueIndex;
 				}
 				
-				strData = tableData.getValueAt(i, 2).toString().replaceAll(" ", "");				
-				if(strData.equals(null)  || strData.equals("") || strData.equals(" ")){
-					power.getGainMap().getGainMapValue().get(i).setAzimuth(azimuthData);
-				}else{
-					azimuthData = Double.parseDouble(strData);
-					power.getGainMap().getGainMapValue().get(i).setAzimuth(azimuthData);
-				}
-				
-				strData = tableData.getValueAt(i, 3).toString().replaceAll(" ", "");
-				if(strData.equals(null)  || strData.equals("") || strData.equals(" ")){
-					power.getGainMap().getGainMapValue().get(i).setGain(gainData);
-				}else{
-					gainData = Double.parseDouble(strData);
-					power.getGainMap().getGainMapValue().get(i).setGain(gainData);
-				}		
 				
 			}catch(Exception e){
 				warningMessage = warningMessage + "\nThe entry in row: "+ (i+1) +" in the Power Map table should be numeric";
@@ -527,11 +537,12 @@ public class Save_XML extends ObjectFactory {
 		prop.setPropMap(new PropMap());
 		
 		String strData = "";
-		Double elevationData = 0.0;
-		Double azimuthData = 0.0;
-		Double n1 = 0.0;
-		Double breakData = 0.0;
-		Double n2 = 0.0;
+		String dataValue = "";
+//		Double elevationData = 0.0;
+//		Double azimuthData = 0.0;
+//		Double n1 = 0.0;
+//		Double breakData = 0.0;
+//		Double n2 = 0.0;
 		String locindexvalue = String.valueOf(propMap.comboBox.getSelectedItem());
 		
 		//Save the location index only if it is not empty
@@ -547,72 +558,112 @@ public class Save_XML extends ObjectFactory {
 			warningFlag = true;
 			warningMessage = warningMessage + "\nException in formatting the location index\n";
 		}
+		
 		TableModel tableData = propMap.table.getModel();
+		int propMapIndex = -1;
 		for (int i = 0; i < tableData.getRowCount(); i++) {
 			try{
-			prop.getPropMap().getPropMapValue().add(new PropMapValue());
 			
+				
 			strData = tableData.getValueAt(i, 1).toString().replaceAll(" ", "");
-			if(strData.equals(null)  || strData.equals("") || strData.equals(" ")){
-				prop.getPropMap().getPropMapValue().get(i).setElevation(elevationData);
-			}else{
-				elevationData = Double.parseDouble(strData);
-				prop.getPropMap().getPropMapValue().get(i).setElevation(elevationData);
+			dataValue = tableData.getValueAt(i, 2).toString().replaceAll(" ", "");
+			if(dataValue == "")
+				continue;
+			++propMapIndex;
+			if (strData.equals("ElevationAngle")) {
+				prop.getPropMap().getPropMapValue().add(new PropMapValue());
+				prop.getPropMap().getPropMapValue().get((propMapIndex)).setElevation(Double.parseDouble(dataValue));
 			}
 			
-			strData = tableData.getValueAt(i, 2).toString().replaceAll(" ", "");				
-			if(strData.equals(null)  || strData.equals("") || strData.equals(" ")){
-				prop.getPropMap().getPropMapValue().get(i).setAzimuth(azimuthData);
-			}else{
-				azimuthData = Double.parseDouble(strData);
-				prop.getPropMap().getPropMapValue().get(i).setAzimuth(azimuthData);
+			else if (strData.equals("AzimuthAngle")) {
+				prop.getPropMap().getPropMapValue().add(new PropMapValue());
+				prop.getPropMap().getPropMapValue().get((propMapIndex)).setAzimuth(Double.parseDouble(dataValue));
 			}
 			
-			prop.getPropMap().getPropMapValue().get(i).setPropagationModel(new PropagationModel());
+			else if (strData.equals("PropExponent")) {
+				prop.getPropMap().getPropMapValue().add(new PropMapValue());
+				PropagationModel propModel = new PropagationModel();
+				propModel.setLinear(Double.parseDouble(dataValue));
+				prop.getPropMap().getPropMapValue().get((propMapIndex)).setPropagationModel(propModel);
+			}
+			
+			else if (strData.equals("FirstExponent")) {
+				prop.getPropMap().getPropMapValue().add(new PropMapValue());
+				PropagationModel propModel = new PropagationModel();
+				PiecewiseLinear plinear = new PiecewiseLinear();
+				plinear.setFirstExponent(Double.parseDouble(dataValue));
+				propModel.setPiecewiseLinear(plinear);
+				prop.getPropMap().getPropMapValue().get((propMapIndex)).setPropagationModel(propModel);
+			}
+			
+			else if (strData.equals("Breakpoint(meters)")) {
+				prop.getPropMap().getPropMapValue().add(new PropMapValue());
+				PropagationModel propModel = new PropagationModel();
+				PiecewiseLinear plinear = new PiecewiseLinear();
+				plinear.setBreakpoint(Double.parseDouble(dataValue));
+				propModel.setPiecewiseLinear(plinear);
+				propModel.setLinear(Double.parseDouble(dataValue));
+				prop.getPropMap().getPropMapValue().get((propMapIndex)).setElevation(Double.parseDouble(dataValue));
+			}
+			
+			else if (strData.equals("SecondExponent")) {
+				prop.getPropMap().getPropMapValue().add(new PropMapValue());
+				PropagationModel propModel = new PropagationModel();
+				PiecewiseLinear plinear = new PiecewiseLinear();
+				plinear.setSecondExponent(Double.parseDouble(dataValue));
+				propModel.setPiecewiseLinear(plinear);
+				propModel.setLinear(Double.parseDouble(dataValue));
+				prop.getPropMap().getPropMapValue().get((propMapIndex)).setElevation(Double.parseDouble(dataValue));
+			}
+			else {
+				--propMapIndex;
+			}
+//			prop.getPropMap().getPropMapValue().add(new PropMapValue());
+//			prop.getPropMap().getPropMapValue().get(i*3+2).setPropagationModel(new PropagationModel());
 			
 			
-			strData = tableData.getValueAt(i, 4).toString().replaceAll(" ", "");
-			if(strData.equals(null)  || strData.equals("") || strData.equals(" ")){
-				
-				strData = tableData.getValueAt(i, 3).toString().replaceAll(" ", "");
-				if(strData.equals(null)  || strData.equals("") || strData.equals(" ")){
-					prop.getPropMap().getPropMapValue().get(i).getPropagationModel().setLinear(n1);
-				}else{
-					n1 = Double.parseDouble(strData);
-					prop.getPropMap().getPropMapValue().get(i).getPropagationModel().setLinear(n1);
-				}
-				
-			}else{
-				
-				prop.getPropMap().getPropMapValue().get(i).getPropagationModel().
-				setPiecewiseLinear(new PiecewiseLinear());
-				breakData = Double.parseDouble(strData);
-				prop.getPropMap().getPropMapValue().get(i).getPropagationModel()
-				.getPiecewiseLinear().setBreakpoint(breakData);
-				
-				//Set the linear value to default value if the piecewiselinear is set
-				prop.getPropMap().getPropMapValue().get(i).getPropagationModel().setLinear(0.0);
-				
-				strData = tableData.getValueAt(i, 3).toString().replaceAll(" ", "");
-				if(strData.equals(null)  || strData.equals("") || strData.equals(" ")){
-					prop.getPropMap().getPropMapValue().get(i).getPropagationModel()
-					.getPiecewiseLinear().setFirstExponent(0.0);
-				}else{
-					n1 = Double.parseDouble(strData);
-					prop.getPropMap().getPropMapValue().get(i).getPropagationModel()
-					.getPiecewiseLinear().setFirstExponent(n1);
-				}
-				
-				strData = tableData.getValueAt(i, 5).toString().replaceAll(" ", "");
-				if(strData.equals(null)  || strData.equals("") || strData.equals(" ")){
-					prop.getPropMap().getPropMapValue().get(i).getPropagationModel()
-					.getPiecewiseLinear().setSecondExponent(0.0);
-				}else{
-					n2 = Double.parseDouble(strData);
-					prop.getPropMap().getPropMapValue().get(i).getPropagationModel()
-					.getPiecewiseLinear().setSecondExponent(n2);
-				}				
-			}		
+//			strData = tableData.getValueAt(i, 4).toString().replaceAll(" ", "");
+//			if(strData.equals(null)  || strData.equals("") || strData.equals(" ")){
+//				
+//				strData = tableData.getValueAt(i, 3).toString().replaceAll(" ", "");
+//				if(strData.equals(null)  || strData.equals("") || strData.equals(" ")){
+//					prop.getPropMap().getPropMapValue().get(i*3+2).getPropagationModel().setLinear(n1);
+//				}else{
+//					n1 = Double.parseDouble(strData);
+//					prop.getPropMap().getPropMapValue().get(i*3+2).getPropagationModel().setLinear(n1);
+//				}
+//				
+//			}else{
+//				
+//				prop.getPropMap().getPropMapValue().get(i*3+2).getPropagationModel().
+//				setPiecewiseLinear(new PiecewiseLinear());
+//				breakData = Double.parseDouble(strData);
+//				prop.getPropMap().getPropMapValue().get(i*3+2).getPropagationModel()
+//				.getPiecewiseLinear().setBreakpoint(breakData);
+//				
+//				//Set the linear value to default value if the piecewiselinear is set
+//				prop.getPropMap().getPropMapValue().get(i*3+2).getPropagationModel().setLinear(0.0);
+//				
+//				strData = tableData.getValueAt(i, 3).toString().replaceAll(" ", "");
+//				if(strData.equals(null)  || strData.equals("") || strData.equals(" ")){
+//					prop.getPropMap().getPropMapValue().get(i*3+2).getPropagationModel()
+//					.getPiecewiseLinear().setFirstExponent(0.0);
+//				}else{
+//					n1 = Double.parseDouble(strData);
+//					prop.getPropMap().getPropMapValue().get(i*3+2).getPropagationModel()
+//					.getPiecewiseLinear().setFirstExponent(n1);
+//				}
+//				
+//				strData = tableData.getValueAt(i, 5).toString().replaceAll(" ", "");
+//				if(strData.equals(null)  || strData.equals("") || strData.equals(" ")){
+//					prop.getPropMap().getPropMapValue().get(i*3+2).getPropagationModel()
+//					.getPiecewiseLinear().setSecondExponent(0.0);
+//				}else{
+//					n2 = Double.parseDouble(strData);
+//					prop.getPropMap().getPropMapValue().get(i*3+2).getPropagationModel()
+//					.getPiecewiseLinear().setSecondExponent(n2);
+//				}				
+//			}		
 			
 			}catch(Exception e){
 				warningMessage = warningMessage + "\nThe entry at row: " + (i+1) + " in the propagation map table should be numeric";
@@ -803,9 +854,9 @@ public class Save_XML extends ObjectFactory {
 			Double longitude = Double.parseDouble(pointModel.getValueAt(0, 0).toString());
 			Double latitude = Double.parseDouble(pointModel.getValueAt(0, 1).toString());
 			Double altitude = Double.parseDouble(pointModel.getValueAt(0, 2).toString());
-			loc.getPointSurface().getPoint().setLongitude(longitude);
-			loc.getPointSurface().getPoint().setLatitude(latitude);
-			loc.getPointSurface().getPoint().setAltitude(altitude);
+			loc.getPoint().setLongitude(longitude);
+			loc.getPoint().setLatitude(latitude);
+			loc.getPoint().setAltitude(altitude);
 			}
 			}catch(Exception e){
 				warningMessage = warningMessage + "\nThe entry in the Location Table should be Numerical";
@@ -1144,18 +1195,20 @@ public class Save_XML extends ObjectFactory {
 	/*
 	 * Adding the IMA information to the XML document
 	 */
-	public void addIMA(IMC imc, IntermodulationMask imcMask)
+	public boolean addIMA(IMC imc, IntermodulationMask imcMask)
 	{
+		boolean isIMAProvided = false;
 		//First check if the IMA was set from Intermodulation Mask tab (Sometimes, both may not be enabled). Otherwise return
 		if(imc.IMANo.isSelected() ||( !imc.IMAYes.isSelected() && !imc.IMANo.isSelected()))
 		{
-			return;
+			return isIMAProvided;
 		}
 		SCMMask imaMask = new SCMMask();
 		imcMask.setImAmplificationMask(imaMask);
 		
 		try{
 			imcMask.getImAmplificationMask().setRefFrequency(Double.parseDouble(imc.RelFreqField.getText()));
+			isIMAProvided = true;
 		}catch(Exception e){
 			imcMask.getImAmplificationMask().setRefFrequency(0.0);
 		}
@@ -1170,12 +1223,13 @@ public class Save_XML extends ObjectFactory {
 			imcMask.getImAmplificationMask().getInflectionPnt().get(i).setFrequency(data);
 			data = Double.parseDouble(Sdata.getValueAt(i, 2).toString());
 			imcMask.getImAmplificationMask().getInflectionPnt().get(i).setRelativePower(data);
-		
+			isIMAProvided = true;
 			}catch(Exception e){
 				warningMessage = warningMessage + "\nThe entry at row: " +(i+1)+" in the IMA table should be numerical";
 				warningFlag = true;
 			}
-		}	
+		}
+		return isIMAProvided;
 		
 	}
 	
@@ -1186,11 +1240,13 @@ public class Save_XML extends ObjectFactory {
 				
 			
 		IntermodulationMask imask = new IntermodulationMask();
+		boolean isIntermodulationMaskProvided = false;
 		
 		imask.setImCombiningMask(new SCMMask());
 		//Set the Center frequency for the intermediate frequency
 		try {
 			imask.setIntermediateFrequency(Double.parseDouble(imc.IFField.getText()));
+			isIntermodulationMaskProvided = true;
 		}catch(Exception e)
 		{
 			imask.setIntermediateFrequency(0.0);
@@ -1199,6 +1255,7 @@ public class Save_XML extends ObjectFactory {
 		
 		try{
 			imask.getImCombiningMask().setRefFrequency(Double.parseDouble(imc.RelFreqField.getText()));
+			isIntermodulationMaskProvided = true;
 		}catch(Exception e){
 			imask.getImCombiningMask().setRefFrequency(0.0);
 		}
@@ -1218,7 +1275,7 @@ public class Save_XML extends ObjectFactory {
 			imask.getImCombiningMask().getInflectionPnt().get(i).setFrequency(data);
 			data = Double.parseDouble(Sdata.getValueAt(i, 2).toString());
 			imask.getImCombiningMask().getInflectionPnt().get(i).setRelativePower(data);
-		
+			isIntermodulationMaskProvided = true;
 			}catch(Exception e){
 				warningFlag = true;
 			}
@@ -1228,6 +1285,7 @@ public class Save_XML extends ObjectFactory {
 			int order = 0;
 			try {
 				order = Integer.parseInt(imc.imOrderField.getText());
+				isIntermodulationMaskProvided = true;
 			} catch (NumberFormatException exception) {
 				// ABhatt eating this exception for now
 				warningFlag = true;
@@ -1239,6 +1297,7 @@ public class Save_XML extends ObjectFactory {
 		
 		// If there is highSideInjection to be stored
 		try{
+			//TODO ABhatt can't see  HighSideInjection in GUI
 			imask.setHighSideInjection(imc.IFYes.isSelected());
 			}catch(Exception e){
 				warningMessage = warningMessage + "\nThe entry for highSideInjection field in the Intermodulation mask must be set properly";
@@ -1247,9 +1306,12 @@ public class Save_XML extends ObjectFactory {
 			//	new Warn().setWarn("Warning", "The entry in Resolution BW field should be numeric");
 			}
 		
-		addIMA(imc,imask);
-		TxModel.getIntermodulationMask().add(imask);
+		isIntermodulationMaskProvided = isIntermodulationMaskProvided || addIMA(imc, imask);
+		if (isIntermodulationMaskProvided) {
+			TxModel.getIntermodulationMask().add(imask);
 		}
+
+	}
 		
 	public void concludeXML(String saveName, String device){
 		try {
