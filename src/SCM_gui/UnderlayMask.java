@@ -33,13 +33,21 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
  
 public class UnderlayMask {
 		
-	/*public JTextField ResTextField = new JTextField();
+	public JTextField ResTextField = new JTextField();
 	
 	//Global Buttons
 	JButton b3 = new JButton("Save Data");
@@ -89,341 +97,341 @@ public class UnderlayMask {
     public JRadioButton MaxPowBtn= new JRadioButton("Max. Power Density");
     
     public boolean noInitialState=true;
-    public boolean TotPowerInitialState=true;*/
+    public boolean TotPowerInitialState=true;
     
-	public void defineElements(SpecMask spec)
-	{
-		// Rated Underlay Mask Option
-        
-        
-        
-        Dimension maskTypeSize = spec.maskType.getPreferredSize();
-        spec.maskType.setBounds(490, 540, maskTypeSize.width, maskTypeSize.height);
-        
-        Dimension boxSize = spec.box.getPreferredSize();
-        spec.box.setBounds(620, 538, boxSize.width + 50, boxSize.height);
-        
-        Dimension ratedLabelSize = spec.ratedLabel.getPreferredSize();
-        spec.ratedLabel.setBounds(25, 540, ratedLabelSize.width, ratedLabelSize.height);
-        
-        Dimension noSize = spec.underlayno.getPreferredSize();
-        Dimension yesSize = spec.underlayyes.getPreferredSize();
-        
-        spec.underlayno.setBounds(380, 536, noSize.width, noSize.height);
-        spec.underlayyes.setBounds(430, 536, yesSize.width, yesSize.height);
-        
-        // Calculation Method
-        
-               
-        Dimension PowerSize = spec.PowerMarginLabel.getPreferredSize();
-        spec.PowerMarginLabel.setBounds(25, 770, PowerSize.width, PowerSize.height);
-        
-        Dimension TotPowSize = spec.TotPowerBtn.getPreferredSize();
-        Dimension MaxPowSize = spec.MaxPowBtn.getPreferredSize();
-        
-        spec.TotPowerBtn.setBounds(250, 770, TotPowSize.width, TotPowSize.height);
-        spec.MaxPowBtn.setBounds(250, 790, MaxPowSize.width, MaxPowSize.height);
-        
-        // Positioning Underlay Table
-        
-        Dimension size3 = spec.underlaytableContainer.getPreferredSize();
-        
-      //To allow the element on the last edit to be saved
-        spec.underlayTable.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
-  
-        
-        spec.underlayTable.getTableHeader().setReorderingAllowed(true);
-        spec.underlayTable.getColumnModel().getColumn(0).setPreferredWidth(15);
-        spec.underlayTable.getColumnModel().getColumn(0);
-        spec.underlaytableContainer.setBounds(25, 860,
-                size3.width - 100, size3.height - 250);
-          
-	}
-	public void addElements(final SpecMask spec)
-	{
-		
-		 spec.SpecPanel.add(spec.ratedLabel);
-		 spec.SpecPanel.add(spec.underlayno);
-		 spec.SpecPanel.add(spec.underlayyes);
-	        
-	        ButtonGroup group1 = new ButtonGroup();
-	        group1.add(spec.underlayno);
-	        group1.add(spec.underlayyes);
-		 
-	        ButtonGroup group2 = new ButtonGroup();
-	        group2.add(spec.TotPowerBtn);
-	        group2.add(spec.MaxPowBtn);
-	        
-	        spec.SpecPanel.add(spec.PowerMarginLabel);
-	        spec.SpecPanel.add(spec.TotPowerBtn);
-	        spec.SpecPanel.add(spec.MaxPowBtn);
-		 // Combo Box Actions for rated Underlay Masks
-
-        final ActionListener boxAction = new ActionListener(){
-
-			public void actionPerformed(ActionEvent arg0) {
-				
-				int index = spec.box.getSelectedIndex();
-				
-				switch(index){
-				
-				case 0: spec.underlayRated.getBR(spec.SpecPanel);
-				spec.underlayRated.removeBRList(spec.SpecPanel);
-				spec.underlayRated.removeBTPRating(spec.SpecPanel);
-				spec.underlayRated.removeBTPList(spec.SpecPanel);
-				spec.underlayRated.removeDutyCycle(spec.SpecPanel);
-				spec.underlayRated.removePolicy(spec.SpecPanel);
-				spec.MaxPowBtn.setSelected(true);
-				spec.TotPowerBtn.setSelected(false);
-				spec.TotPowerBtn.setEnabled(false);
-				spec.MaxPowBtn.setEnabled(false);	
-
-				spec.SpecPanel.revalidate();
-				spec.SpecPanel.repaint();
-						
-						break;
-						
-				case 1: spec.underlayRated.getBRList(spec.SpecPanel);
-				spec.underlayRated.removeBR(spec.SpecPanel);
-				spec.underlayRated.removeBTPRating(spec.SpecPanel);
-				spec.underlayRated.removeBTPList(spec.SpecPanel);
-				spec.underlayRated.removeDutyCycle(spec.SpecPanel);
-				spec.underlayRated.removePolicy(spec.SpecPanel);
-				spec.MaxPowBtn.setSelected(true);
-				spec.TotPowerBtn.setSelected(false);
-				spec.TotPowerBtn.setEnabled(false);
-				spec.MaxPowBtn.setEnabled(false);	
-
-				spec.SpecPanel.revalidate();
-				spec.SpecPanel.repaint();
-						
-						break;
-						
-				case 2: spec.underlayRated.getBTPRating(spec.SpecPanel);
-				spec.underlayRated.removeBR(spec.SpecPanel);
-				spec.underlayRated.removeBRList(spec.SpecPanel);
-				spec.underlayRated.removeBTPList(spec.SpecPanel);
-				spec.underlayRated.removeDutyCycle(spec.SpecPanel);
-				spec.underlayRated.removePolicy(spec.SpecPanel);
-				spec.MaxPowBtn.setSelected(true);
-				spec.TotPowerBtn.setSelected(false);
-				spec.TotPowerBtn.setEnabled(false);
-				spec.MaxPowBtn.setEnabled(false);	
-
-				spec.SpecPanel.revalidate();
-				spec.SpecPanel.repaint();
-						
-						break;
-						
-				case 3: spec.underlayRated.removeBTPRating(spec.SpecPanel);
-				spec.underlayRated.removeBR(spec.SpecPanel);
-				spec.underlayRated.removeBRList(spec.SpecPanel);
-				spec.underlayRated.getBTPList(spec.SpecPanel);
-				spec.underlayRated.removeDutyCycle(spec.SpecPanel);
-				spec.underlayRated.removePolicy(spec.SpecPanel);
-				spec.MaxPowBtn.setSelected(true);
-				spec.TotPowerBtn.setSelected(false);
-				spec.TotPowerBtn.setEnabled(false);
-				spec.MaxPowBtn.setEnabled(false);	
-
-				spec.SpecPanel.revalidate();
-				spec.SpecPanel.repaint();
-						
-						break;
-				
-				case 4: spec.underlayRated.removeBTPRating(spec.SpecPanel);
-				spec.underlayRated.removeBR(spec.SpecPanel);
-				spec.underlayRated.removeBRList(spec.SpecPanel);
-				spec.underlayRated.removeBTPList(spec.SpecPanel);
-				spec.underlayRated.getDutyCycle(spec.SpecPanel);
-				spec.underlayRated.removePolicy(spec.SpecPanel);
-				spec.MaxPowBtn.setEnabled(true);
-				spec.TotPowerBtn.setEnabled(true);
-						
-				spec.SpecPanel.revalidate();
-				spec.SpecPanel.repaint();
-						
-						break;
-						
-				case 5: spec.underlayRated.removeBTPRating(spec.SpecPanel);
-				spec.underlayRated.removeBR(spec.SpecPanel);
-				spec.underlayRated.removeBRList(spec.SpecPanel);
-				spec.underlayRated.removeBTPList(spec.SpecPanel);
-				spec.underlayRated.removeDutyCycle(spec.SpecPanel);
-				spec.underlayRated.getPolicy(spec.SpecPanel);
-				spec.MaxPowBtn.setEnabled(true);
-				spec.TotPowerBtn.setEnabled(true);
-				spec.SpecPanel.revalidate();
-				spec.SpecPanel.repaint();
-						
-						break;
-						
-						
-				default:spec.SpecPanel.revalidate();
-				spec.SpecPanel.repaint();
-						
-						break;
-				}
-				
-			}
-        	
-        };
-        
-        /* Setting initial states for Total Power Method vs 
-         * Maximum Power Density Method radio buttons
-         */
-        
-        spec.underlayno.setSelected(spec.noInitialState);
-        spec.underlayno.setEnabled(true);
-        
-        spec.TotPowerBtn.setSelected(spec.TotPowerInitialState);
-        spec.TotPowerBtn.setEnabled(true);
-        
-        // Radio Button Operations for Rated Underlay (Yes/No) 
-        
-        spec.underlayno.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e) {
-					if(spec.underlayno.isSelected()==true){
-						spec.TotPowerBtn.setEnabled(true);
-				        
-						spec.MaxPowBtn.setEnabled(true);
-				        
-						spec.SpecPanel.remove(spec.maskType);
-						spec.SpecPanel.remove(spec.box);
-				        
-						spec.underlayRated.removeBTPRating(spec.SpecPanel);
-						spec.underlayRated.removeBR(spec.SpecPanel);
-						spec.underlayRated.removeBRList(spec.SpecPanel);
-						spec.underlayRated.removeBTPList(spec.SpecPanel);
-						spec.underlayRated.removeDutyCycle(spec.SpecPanel);
-						spec.underlayRated.removePolicy(spec.SpecPanel);
-						
-						spec.SpecPanel.revalidate();
-						spec.SpecPanel.repaint();
-					}
-			}
-        	
-        });
-        
-        spec.underlayyes.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e) {
-					if(spec.underlayyes.isSelected()==true){
-						
-						
-						spec.SpecPanel.add(spec.maskType);
-						spec.SpecPanel.add(spec.box);
-						
-						boxAction.actionPerformed(e);
-						
-						spec.SpecPanel.revalidate();
-						spec.SpecPanel.repaint();
-					
-						if(spec.box.getSelectedIndex()==4 || spec.box.getSelectedIndex()==5){
-							spec.TotPowerBtn.setEnabled(true);
-							spec.MaxPowBtn.setEnabled(true);
-						}else{
-							spec.TotPowerBtn.setEnabled(false);
-							spec.MaxPowBtn.setEnabled(false);	
-						}						
-					}
-			}
-        	
-        });
-        
-        ActionEvent e = null;
-        
-        if(spec.underlayyes.isSelected()==true){
-			
-			
-        	spec.SpecPanel.add(spec.maskType);
-        	spec.SpecPanel.add(spec.box);
-			
-			boxAction.actionPerformed(e);
-			
-			spec.SpecPanel.revalidate();
-			spec.SpecPanel.repaint();
-		
-			spec.TotPowerBtn.setEnabled(false);
-			spec.MaxPowBtn.setEnabled(false);
-		}
-                
-        spec.box.addActionListener(boxAction);
-        
-        // Creating Resolution Bandwidth Label and Text Field
-
-        Dimension sizeBW = spec.underlayResBW.getPreferredSize();
-        spec.underlayResBW.setBounds(25, 820, sizeBW.width, sizeBW.height);
-        spec.SpecPanel.add(spec.underlayResBW);
-     
-        spec.underlayResTextField.setColumns(1);
-        spec.underlayResTextField.setBounds(235, 820, sizeBW.width - 150, 5 + sizeBW.height);
-        spec.SpecPanel.add(spec.underlayResTextField);
-
-        spec.SpecPanel.add(spec.underlaytableContainer, BorderLayout.CENTER);
-        
-
-        // Underlay Buttons
-             
-        
-        Dimension size2 = spec.underlayb3.getPreferredSize();
-        spec.underlayb1.setBounds(400 + 0, 900,
-                     size2.width + 30, size2.height);        
-        spec.underlayb2.setBounds(400 + 0, 950,
-                size2.width + 30, size2.height);
-        spec.underlayb3.setBounds(550, 950,
-                size2.width + 30, size2.height);
-        spec.underlayb4.setBounds(550, 900, 
-        		size2.width + 30, size2.height);
-               
-        spec.underlayb1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-			
-				DefaultTableModel model = (DefaultTableModel) spec.underlayTable.getModel();
-				model.addRow(new Object[]{spec.underlayTable.getRowCount()+1, "", ""});	
-			}
-		});
-		
-		
-		
-		spec.underlayb2.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-			
-				DefaultTableModel model = (DefaultTableModel) spec.underlayTable.getModel();
-				//model.removeRow(model.getRowCount() - 1);
-				/*
-				 * Allowing the deletion of selected rows
-				 */
-				int[] selectedRows = spec.underlayTable.getSelectedRows();
-				   for(int row=selectedRows.length-1;row>=0;row--){
-					int rowNum = selectedRows[row];
-				     model.removeRow(rowNum);
-				     //Updating the index column - count variable appropriately
-				     if(rowNum!=spec.underlayTable.getRowCount())
-				     {
-				    	 spec.underlayTable.getModel().setValueAt(rowNum+1,rowNum ,0 );
-				     }
-				     
-				   }
-			//	model.removeRow(model.getRowCount() - 1);		 
-				   for(int i=spec.underlayTable.getRowCount()-1;i>=0;i--)
-				   {
-					   int curVal = Integer.parseInt(spec.underlayTable.getModel().getValueAt(i, 0).toString());
-					   if(curVal!= i+1)
-					   {
-						   spec.underlayTable.getModel().setValueAt(i+1, i, 0);
-					   }
-				   }
-			}
-		});
-
-		spec.SpecPanel.add(spec.underlayb1);
-		spec.SpecPanel.add(spec.underlayb2);
-		spec.SpecPanel.add(spec.underlayb3);
-		spec.SpecPanel.add(spec.underlayb4); 
-        
-	}
+//	public void defineElements(SpecMask spec)
+//	{
+//		// Rated Underlay Mask Option
+//        
+//        
+//        
+//        Dimension maskTypeSize = spec.maskType.getPreferredSize();
+//        spec.maskType.setBounds(490, 540, maskTypeSize.width, maskTypeSize.height);
+//        
+//        Dimension boxSize = spec.box.getPreferredSize();
+//        spec.box.setBounds(620, 538, boxSize.width + 50, boxSize.height);
+//        
+//        Dimension ratedLabelSize = spec.ratedLabel.getPreferredSize();
+//        spec.ratedLabel.setBounds(25, 540, ratedLabelSize.width, ratedLabelSize.height);
+//        
+//        Dimension noSize = spec.underlayno.getPreferredSize();
+//        Dimension yesSize = spec.underlayyes.getPreferredSize();
+//        
+//        spec.underlayno.setBounds(380, 536, noSize.width, noSize.height);
+//        spec.underlayyes.setBounds(430, 536, yesSize.width, yesSize.height);
+//        
+//        // Calculation Method
+//        
+//               
+//        Dimension PowerSize = spec.PowerMarginLabel.getPreferredSize();
+//        spec.PowerMarginLabel.setBounds(25, 770, PowerSize.width, PowerSize.height);
+//        
+//        Dimension TotPowSize = spec.TotPowerBtn.getPreferredSize();
+//        Dimension MaxPowSize = spec.MaxPowBtn.getPreferredSize();
+//        
+//        spec.TotPowerBtn.setBounds(250, 770, TotPowSize.width, TotPowSize.height);
+//        spec.MaxPowBtn.setBounds(250, 790, MaxPowSize.width, MaxPowSize.height);
+//        
+//        // Positioning Underlay Table
+//        
+//        Dimension size3 = spec.underlaytableContainer.getPreferredSize();
+//        
+//      //To allow the element on the last edit to be saved
+//        spec.underlayTable.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
+//  
+//        
+//        spec.underlayTable.getTableHeader().setReorderingAllowed(true);
+//        spec.underlayTable.getColumnModel().getColumn(0).setPreferredWidth(15);
+//        spec.underlayTable.getColumnModel().getColumn(0);
+//        spec.underlaytableContainer.setBounds(25, 860,
+//                size3.width - 100, size3.height - 250);
+//          
+//	}
+//	public void addElements(final SpecMask spec)
+//	{
+//		
+//		 spec.SpecPanel.add(spec.ratedLabel);
+//		 spec.SpecPanel.add(spec.underlayno);
+//		 spec.SpecPanel.add(spec.underlayyes);
+//	        
+//	        ButtonGroup group1 = new ButtonGroup();
+//	        group1.add(spec.underlayno);
+//	        group1.add(spec.underlayyes);
+//		 
+//	        ButtonGroup group2 = new ButtonGroup();
+//	        group2.add(spec.TotPowerBtn);
+//	        group2.add(spec.MaxPowBtn);
+//	        
+//	        spec.SpecPanel.add(spec.PowerMarginLabel);
+//	        spec.SpecPanel.add(spec.TotPowerBtn);
+//	        spec.SpecPanel.add(spec.MaxPowBtn);
+//		 // Combo Box Actions for rated Underlay Masks
+//
+//        final ActionListener boxAction = new ActionListener(){
+//
+//			public void actionPerformed(ActionEvent arg0) {
+//				
+//				int index = spec.box.getSelectedIndex();
+//				
+//				switch(index){
+//				
+//				case 0: spec.underlayRated.getBR(spec.SpecPanel);
+//				spec.underlayRated.removeBRList(spec.SpecPanel);
+//				spec.underlayRated.removeBTPRating(spec.SpecPanel);
+//				spec.underlayRated.removeBTPList(spec.SpecPanel);
+//				spec.underlayRated.removeDutyCycle(spec.SpecPanel);
+//				spec.underlayRated.removePolicy(spec.SpecPanel);
+//				spec.MaxPowBtn.setSelected(true);
+//				spec.TotPowerBtn.setSelected(false);
+//				spec.TotPowerBtn.setEnabled(false);
+//				spec.MaxPowBtn.setEnabled(false);	
+//
+//				spec.SpecPanel.revalidate();
+//				spec.SpecPanel.repaint();
+//						
+//						break;
+//						
+//				case 1: spec.underlayRated.getBRList(spec.SpecPanel);
+//				spec.underlayRated.removeBR(spec.SpecPanel);
+//				spec.underlayRated.removeBTPRating(spec.SpecPanel);
+//				spec.underlayRated.removeBTPList(spec.SpecPanel);
+//				spec.underlayRated.removeDutyCycle(spec.SpecPanel);
+//				spec.underlayRated.removePolicy(spec.SpecPanel);
+//				spec.MaxPowBtn.setSelected(true);
+//				spec.TotPowerBtn.setSelected(false);
+//				spec.TotPowerBtn.setEnabled(false);
+//				spec.MaxPowBtn.setEnabled(false);	
+//
+//				spec.SpecPanel.revalidate();
+//				spec.SpecPanel.repaint();
+//						
+//						break;
+//						
+//				case 2: spec.underlayRated.getBTPRating(spec.SpecPanel);
+//				spec.underlayRated.removeBR(spec.SpecPanel);
+//				spec.underlayRated.removeBRList(spec.SpecPanel);
+//				spec.underlayRated.removeBTPList(spec.SpecPanel);
+//				spec.underlayRated.removeDutyCycle(spec.SpecPanel);
+//				spec.underlayRated.removePolicy(spec.SpecPanel);
+//				spec.MaxPowBtn.setSelected(true);
+//				spec.TotPowerBtn.setSelected(false);
+//				spec.TotPowerBtn.setEnabled(false);
+//				spec.MaxPowBtn.setEnabled(false);	
+//
+//				spec.SpecPanel.revalidate();
+//				spec.SpecPanel.repaint();
+//						
+//						break;
+//						
+//				case 3: spec.underlayRated.removeBTPRating(spec.SpecPanel);
+//				spec.underlayRated.removeBR(spec.SpecPanel);
+//				spec.underlayRated.removeBRList(spec.SpecPanel);
+//				spec.underlayRated.getBTPList(spec.SpecPanel);
+//				spec.underlayRated.removeDutyCycle(spec.SpecPanel);
+//				spec.underlayRated.removePolicy(spec.SpecPanel);
+//				spec.MaxPowBtn.setSelected(true);
+//				spec.TotPowerBtn.setSelected(false);
+//				spec.TotPowerBtn.setEnabled(false);
+//				spec.MaxPowBtn.setEnabled(false);	
+//
+//				spec.SpecPanel.revalidate();
+//				spec.SpecPanel.repaint();
+//						
+//						break;
+//				
+//				case 4: spec.underlayRated.removeBTPRating(spec.SpecPanel);
+//				spec.underlayRated.removeBR(spec.SpecPanel);
+//				spec.underlayRated.removeBRList(spec.SpecPanel);
+//				spec.underlayRated.removeBTPList(spec.SpecPanel);
+//				spec.underlayRated.getDutyCycle(spec.SpecPanel);
+//				spec.underlayRated.removePolicy(spec.SpecPanel);
+//				spec.MaxPowBtn.setEnabled(true);
+//				spec.TotPowerBtn.setEnabled(true);
+//						
+//				spec.SpecPanel.revalidate();
+//				spec.SpecPanel.repaint();
+//						
+//						break;
+//						
+//				case 5: spec.underlayRated.removeBTPRating(spec.SpecPanel);
+//				spec.underlayRated.removeBR(spec.SpecPanel);
+//				spec.underlayRated.removeBRList(spec.SpecPanel);
+//				spec.underlayRated.removeBTPList(spec.SpecPanel);
+//				spec.underlayRated.removeDutyCycle(spec.SpecPanel);
+//				spec.underlayRated.getPolicy(spec.SpecPanel);
+//				spec.MaxPowBtn.setEnabled(true);
+//				spec.TotPowerBtn.setEnabled(true);
+//				spec.SpecPanel.revalidate();
+//				spec.SpecPanel.repaint();
+//						
+//						break;
+//						
+//						
+//				default:spec.SpecPanel.revalidate();
+//				spec.SpecPanel.repaint();
+//						
+//						break;
+//				}
+//				
+//			}
+//        	
+//        };
+//        
+//        /* Setting initial states for Total Power Method vs 
+//         * Maximum Power Density Method radio buttons
+//         */
+//        
+//        spec.underlayno.setSelected(spec.noInitialState);
+//        spec.underlayno.setEnabled(true);
+//        
+//        spec.TotPowerBtn.setSelected(spec.TotPowerInitialState);
+//        spec.TotPowerBtn.setEnabled(true);
+//        
+//        // Radio Button Operations for Rated Underlay (Yes/No) 
+//        
+//        spec.underlayno.addActionListener(new ActionListener(){
+//			public void actionPerformed(ActionEvent e) {
+//					if(spec.underlayno.isSelected()==true){
+//						spec.TotPowerBtn.setEnabled(true);
+//				        
+//						spec.MaxPowBtn.setEnabled(true);
+//				        
+//						spec.SpecPanel.remove(spec.maskType);
+//						spec.SpecPanel.remove(spec.box);
+//				        
+//						spec.underlayRated.removeBTPRating(spec.SpecPanel);
+//						spec.underlayRated.removeBR(spec.SpecPanel);
+//						spec.underlayRated.removeBRList(spec.SpecPanel);
+//						spec.underlayRated.removeBTPList(spec.SpecPanel);
+//						spec.underlayRated.removeDutyCycle(spec.SpecPanel);
+//						spec.underlayRated.removePolicy(spec.SpecPanel);
+//						
+//						spec.SpecPanel.revalidate();
+//						spec.SpecPanel.repaint();
+//					}
+//			}
+//        	
+//        });
+//        
+//        spec.underlayyes.addActionListener(new ActionListener(){
+//			public void actionPerformed(ActionEvent e) {
+//					if(spec.underlayyes.isSelected()==true){
+//						
+//						
+//						spec.SpecPanel.add(spec.maskType);
+//						spec.SpecPanel.add(spec.box);
+//						
+//						boxAction.actionPerformed(e);
+//						
+//						spec.SpecPanel.revalidate();
+//						spec.SpecPanel.repaint();
+//					
+//						if(spec.box.getSelectedIndex()==4 || spec.box.getSelectedIndex()==5){
+//							spec.TotPowerBtn.setEnabled(true);
+//							spec.MaxPowBtn.setEnabled(true);
+//						}else{
+//							spec.TotPowerBtn.setEnabled(false);
+//							spec.MaxPowBtn.setEnabled(false);	
+//						}						
+//					}
+//			}
+//        	
+//        });
+//        
+//        ActionEvent e = null;
+//        
+//        if(spec.underlayyes.isSelected()==true){
+//			
+//			
+//        	spec.SpecPanel.add(spec.maskType);
+//        	spec.SpecPanel.add(spec.box);
+//			
+//			boxAction.actionPerformed(e);
+//			
+//			spec.SpecPanel.revalidate();
+//			spec.SpecPanel.repaint();
+//		
+//			spec.TotPowerBtn.setEnabled(false);
+//			spec.MaxPowBtn.setEnabled(false);
+//		}
+//                
+//        spec.box.addActionListener(boxAction);
+//        
+//        // Creating Resolution Bandwidth Label and Text Field
+//
+//        Dimension sizeBW = spec.underlayResBW.getPreferredSize();
+//        spec.underlayResBW.setBounds(25, 820, sizeBW.width, sizeBW.height);
+//        spec.SpecPanel.add(spec.underlayResBW);
+//     
+//        spec.underlayResTextField.setColumns(1);
+//        spec.underlayResTextField.setBounds(235, 820, sizeBW.width - 150, 5 + sizeBW.height);
+//        spec.SpecPanel.add(spec.underlayResTextField);
+//
+//        spec.SpecPanel.add(spec.underlaytableContainer, BorderLayout.CENTER);
+//        
+//
+//        // Underlay Buttons
+//             
+//        
+//        Dimension size2 = spec.underlayb3.getPreferredSize();
+//        spec.underlayb1.setBounds(400 + 0, 900,
+//                     size2.width + 30, size2.height);        
+//        spec.underlayb2.setBounds(400 + 0, 950,
+//                size2.width + 30, size2.height);
+//        spec.underlayb3.setBounds(550, 950,
+//                size2.width + 30, size2.height);
+//        spec.underlayb4.setBounds(550, 900, 
+//        		size2.width + 30, size2.height);
+//               
+//        spec.underlayb1.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent arg0) {
+//			
+//				DefaultTableModel model = (DefaultTableModel) spec.underlayTable.getModel();
+//				model.addRow(new Object[]{spec.underlayTable.getRowCount()+1, "", ""});	
+//			}
+//		});
+//		
+//		
+//		
+//		spec.underlayb2.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent arg0) {
+//			
+//				DefaultTableModel model = (DefaultTableModel) spec.underlayTable.getModel();
+//				//model.removeRow(model.getRowCount() - 1);
+//				/*
+//				 * Allowing the deletion of selected rows
+//				 */
+//				int[] selectedRows = spec.underlayTable.getSelectedRows();
+//				   for(int row=selectedRows.length-1;row>=0;row--){
+//					int rowNum = selectedRows[row];
+//				     model.removeRow(rowNum);
+//				     //Updating the index column - count variable appropriately
+//				     if(rowNum!=spec.underlayTable.getRowCount())
+//				     {
+//				    	 spec.underlayTable.getModel().setValueAt(rowNum+1,rowNum ,0 );
+//				     }
+//				     
+//				   }
+//			//	model.removeRow(model.getRowCount() - 1);		 
+//				   for(int i=spec.underlayTable.getRowCount()-1;i>=0;i--)
+//				   {
+//					   int curVal = Integer.parseInt(spec.underlayTable.getModel().getValueAt(i, 0).toString());
+//					   if(curVal!= i+1)
+//					   {
+//						   spec.underlayTable.getModel().setValueAt(i+1, i, 0);
+//					   }
+//				   }
+//			}
+//		});
+//
+//		spec.SpecPanel.add(spec.underlayb1);
+//		spec.SpecPanel.add(spec.underlayb2);
+//		spec.SpecPanel.add(spec.underlayb3);
+//		spec.SpecPanel.add(spec.underlayb4); 
+//        
+//	}
     
-	/*public JPanel getPanel(){
+	public JPanel getPanel(){
 		
         SpecPanel = new JPanel();
         SpecPanel.setLayout(null);
@@ -605,8 +613,8 @@ public class UnderlayMask {
         	
         };
         
-         Setting initial states for Total Power Method vs 
-         * Maximum Power Density Method radio buttons
+//         Setting initial states for Total Power Method vs 
+//         * Maximum Power Density Method radio buttons
          
         
         no.setSelected(noInitialState);
@@ -693,7 +701,8 @@ public class UnderlayMask {
         SpecPanel.add(ResBW);
      
         ResTextField.setColumns(1);
-        ResTextField.setBounds(235, 100 + 80, sizeBW.width - 150, 5 + sizeBW.height);
+        Dimension ResTextFieldSize = ResTextField.getPreferredSize();
+        ResTextField.setBounds(235, 100 + 80, ResTextFieldSize.width , ResTextFieldSize.height);
         SpecPanel.add(ResTextField);
 
         // Positioning Underlay Table
@@ -745,7 +754,7 @@ public class UnderlayMask {
 				DefaultTableModel model = (DefaultTableModel) table.getModel();
 				//model.removeRow(model.getRowCount() - 1);
 				
-				 * Allowing the deletion of selected rows
+//				 * Allowing the deletion of selected rows
 				 
 				int[] selectedRows = table.getSelectedRows();
 				   for(int row=selectedRows.length-1;row>=0;row--){
@@ -777,5 +786,5 @@ public class UnderlayMask {
         
         return SpecPanel;
 	
-	}*/
+	}
 }

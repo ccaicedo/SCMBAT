@@ -73,7 +73,7 @@ public class SCM_MainWindow {
 	public Action Tx_e;
 		
 	private JPanel panel2; 
-  //  private JPanel UnderlayPanel;
+    private JPanel UnderlayPanel;
    // private String MaskType = "Spectrum Mask";
     public JPanel propCard = new JPanel(new CardLayout());
     
@@ -145,6 +145,7 @@ public class SCM_MainWindow {
         tabbedPane.addTab("Reference Power", panel);
         
         panel2 = spec.getPanel();
+        UnderlayPanel = underlay.getPanel();
         
         //Create new panel only if it is in Create mode
         JPanel panel3;
@@ -262,8 +263,8 @@ public class SCM_MainWindow {
        
         tabbedPane.insertTab("Spectrum Mask",null , panel2, null, 1);
         
-       /* if(tabbedPane.indexOfTab("Underlay Mask")==-1)
-        tabbedPane.insertTab("Underlay Mask",null , UnderlayPanel, null, 2);*/
+       if(tabbedPane.indexOfTab("Underlay Mask")==-1)
+        tabbedPane.insertTab("Underlay Mask",null , UnderlayPanel, null, 2);
 		
         // setting up Propagation Map for Transmitter option
         if(tabbedPane.indexOfTab("Propagation Map")==-1)
@@ -303,12 +304,12 @@ public class SCM_MainWindow {
 					
 				control.file.SaveReceiver();
 				tabbedPane.removeTabAt(1);
-				/*MaskType = "Underlay Mask";
+				String MaskType = "Underlay Mask";
 				if(tabbedPane.indexOfTab("Underlay Mask")==-1)
-				tabbedPane.insertTab(MaskType,null , UnderlayPanel, null, 1);				
-				*/
-				tabbedPane.insertTab("Spectrum Mask",null , panel2, null, 1);
-				tabbedPane.removeTabAt(tabbedPane.indexOfTab("Propagation Map"));
+					tabbedPane.insertTab(MaskType,null , UnderlayPanel, null, 1);				
+				
+				//tabbedPane.insertTab("Spectrum Mask",null , panel2, null, 1);
+				//tabbedPane.removeTabAt(tabbedPane.indexOfTab("Spectrum Mask"));
 				tabbedPane.removeTabAt(tabbedPane.indexOfTab("Intermodulation Mask"));
 				if(tabbedPane.indexOfTab("IMA")!=-1)
 				tabbedPane.removeTabAt(tabbedPane.indexOfTab("IMA"));
