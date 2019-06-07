@@ -50,7 +50,7 @@ public class UnderlayMask {
 	public JTextField ResTextField = new JTextField();
 	
 	//Global Buttons
-	JButton b3 = new JButton("Save Data");
+	JButton b3 = new JButton("Save");
     JButton b4 = new JButton("Exit");
     
     String column_names[] = {"#","Frequency (MHz)", "Power (dB)"};
@@ -702,7 +702,7 @@ public class UnderlayMask {
      
         ResTextField.setColumns(1);
         Dimension ResTextFieldSize = ResTextField.getPreferredSize();
-        ResTextField.setBounds(235, 100 + 80, ResTextFieldSize.width , ResTextFieldSize.height);
+        ResTextField.setBounds(235, 100 + 80, ResTextFieldSize.width + 50 , ResTextFieldSize.height);
         SpecPanel.add(ResTextField);
 
         // Positioning Underlay Table

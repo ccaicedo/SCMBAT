@@ -244,7 +244,7 @@ public class Save_XML extends ObjectFactory {
 		
 		UnderlayMask under = new UnderlayMask();
 		//First check if the Underlay Mask was set from Spec Mask tab (Sometimes, both may not be enabled). Otherwise return
-		if(spec.underlayNoButton.isSelected() ||( !spec.underlayYesButton.isSelected() && !spec.underlayNoButton.isSelected()))
+		if(device.equals("Tx") && (spec.underlayNoButton.isSelected() ||( !spec.underlayYesButton.isSelected() && !spec.underlayNoButton.isSelected())))
 		{
 			return;
 		}
@@ -531,7 +531,7 @@ public class Save_XML extends ObjectFactory {
 	/* Adding Propagation Map information to the XML document
 	 * (Considering that we are adding a single Propagation Map)
 	 */
-	public void addPropMap(SCM_gui.PropMap propMap){
+	public void addPropMap(SCM_gui.PropMap propMap, String device){
 		
 		SCMPropagationMap prop = new SCMPropagationMap();
 		prop.setPropMap(new PropMap());
@@ -672,7 +672,11 @@ public class Save_XML extends ObjectFactory {
 			}
 		}
 		
-		TxModel.getScmPropagationMap().add(prop);
+		if(device.equals("Tx")){
+			TxModel.getScmPropagationMap().add(prop);
+		}else{
+			RxModel.getScmPropagationMap().add(prop);
+		}
 	}
 
 	/* Adding Schedule information to the XML document

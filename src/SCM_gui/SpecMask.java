@@ -69,7 +69,7 @@ public class SpecMask {
 	public SpecMask_Hop SpecHop = new SpecMask_Hop();
     
 	//Global Buttons
-	JButton b3 = new JButton("Save Data");
+	JButton b3 = new JButton("Save");
     JButton b4 = new JButton("Exit");
     JButton Test = new JButton("Test");
     
@@ -124,7 +124,7 @@ public class SpecMask {
     JLabel underlayResBW = new JLabel("Resolution Bandwidth (Mhz)");
 	
 	//Global Buttons
-	JButton underlayb3 = new JButton("Save Data");
+	JButton underlayb3 = new JButton("Save");
     JButton underlayb4 = new JButton("Exit");
     
     

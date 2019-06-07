@@ -208,7 +208,7 @@ public class SCM_MainWindow {
         
         //Content for the home page
         
-        JButton Save = new JButton("Save Data");
+        JButton Save = new JButton("Save");
         JButton Exit = new JButton("Exit");
               
         Exit.addActionListener(new ActionListener() {
@@ -291,6 +291,7 @@ public class SCM_MainWindow {
 				panel.add(minPSFD);
 				panel.add(minPSFDfield);
 				
+				tabbedPane.removeTabAt(tabbedPane.indexOfTab("Underlay Mask"));
 				if(tabbedPane.indexOfTab("Propagation Map")==-1)
 				tabbedPane.insertTab("Propagation Map",null, panel4,null,3);// Setting up the Propagation Map Tab			   
 				
@@ -427,6 +428,7 @@ public class SCM_MainWindow {
         Save.addActionListener(control.saveAction);
         spec.b3.addActionListener(control.saveAction);
         spec.underlayb3.addActionListener(control.saveAction);
+        underlay.b3.addActionListener(control.saveAction);
         power.b3.addActionListener(control.saveAction);        
         prop.b3.addActionListener(control.saveAction);        
         imc.b3.addActionListener(control.saveAction);  
@@ -440,6 +442,7 @@ public class SCM_MainWindow {
         
         spec.b4.addActionListener(exitAction);        
         spec.underlayb4.addActionListener(exitAction);
+        underlay.b4.addActionListener(exitAction);
         power.b4.addActionListener(exitAction);
         prop.b4.addActionListener(exitAction);
         imc.b4.addActionListener(exitAction);
