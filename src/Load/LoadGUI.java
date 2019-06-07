@@ -83,17 +83,119 @@ public abstract class LoadGUI {
 	}
 
 // Loading Underlay mask construct	
-public void setUnderlay(SCM_MainWindow scm, UnderlayMask underlay){
+public void setUnderlay(SCM_MainWindow scm, UnderlayMask underlay, String deviceInfo){
 		
-		
+		if (deviceInfo == "Tx") {
+			//Loading Underlay Mask Data 
+			
+			if(underlay!=null){
+				scm.spec.underlayResTextField.setText(String.valueOf(underlay.getResolutionBW()));
+				
+				List<InflectionPnt> infP = underlay.getScmMask().getInflectionPnt();
+				DefaultTableModel model = (DefaultTableModel) scm.spec.underlayTable.getModel();
+			  	model.setRowCount(0);
+			  	
+				for(int i=0; i<infP.size(); i++){
+						
+						String serial = Integer.toString(i+1);
+						String data1 = String.valueOf(infP.get(i).getFrequency());
+						String data2 = String.valueOf(infP.get(i).getRelativePower());
+				  		Object[] rowData = {serial,data1,data2};
+				  		model.addRow(rowData);
+				  	}
+				scm.spec.underlayTable=new JTable(model);
+				
+				scm.spec.noInitialState=true;
+				scm.spec.underlayno.setSelected(true);
+				
+				if(underlay.getMaskPowerMarginMethod().equals("TotalPower")){
+					scm.spec.TotPowerInitialState=true;
+					scm.spec.TotPowerBtn.setSelected(true);
+				}else{
+					scm.spec.TotPowerInitialState=false;
+					scm.spec.MaxPowBtn.setSelected(true);
+				}
+				
+				if(underlay.getRating()!=null){
+					
+					scm.spec.noInitialState=false;
+					scm.spec.underlayyes.setSelected(true);
+					scm.spec.underlayno.setSelected(false);
+					
+					Rating ratedMask = underlay.getRating();
+					if(ratedMask.getRatedBW()!=0.0){
+						scm.spec.box.setSelectedIndex(0);
+						scm.spec.underlayRated.BandRatField.setText(String.valueOf(
+								ratedMask.getRatedBW()));
+					}
+					if(ratedMask.getBwRatedList()!=null){
+						scm.spec.box.setSelectedIndex(1);
+						BWRatedList bwRatedList = ratedMask.getBwRatedList();
+						List<BWRating> bwRating = bwRatedList.getBwRating();
+						DefaultTableModel ratedModel = (DefaultTableModel) scm.spec.underlayRated.table2.getModel();
+						ratedModel.setRowCount(0);
+						
+						for(int i=0; i<bwRating.size(); i++){
+							String data1 = String.valueOf(bwRating.get(i).getRatedBW());		
+							String data2 = String.valueOf(bwRating.get(i).getAdjustment());
+							Object[] rowData = {ratedModel.getRowCount()+1,data1,data2};
+							ratedModel.addRow(rowData);
+						}
+					}
+					
+					if(ratedMask.getRatedBTP()!=0.0){
+						scm.spec.box.setSelectedIndex(2);
+						scm.spec.underlayRated.BTPRatingField.setText(String.valueOf(
+								ratedMask.getRatedBTP()));
+					}
+					if(ratedMask.getBtpRatedList()!=null){
+						scm.spec.box.setSelectedIndex(3);
+						BTPRatedList btpRatedList = ratedMask.getBtpRatedList();
+						List<BTPRating> btpRating = btpRatedList.getBtpRating();
+						DefaultTableModel ratedModel = (DefaultTableModel) scm.spec.underlayRated.table3.getModel();
+						ratedModel.setRowCount(0);
+						
+						for(int i=0; i<btpRating.size(); i++){
+							String data1 = String.valueOf(btpRating.get(i).getBtp());
+							String data2 = String.valueOf(btpRating.get(i).getAdjustment());
+							Object[] rowData = {ratedModel.getRowCount()+1,data1,data2};
+							ratedModel.addRow(rowData);
+						}
+					}
+					if(ratedMask.getDcRatedList()!=null){
+						scm.spec.box.setSelectedIndex(4);
+						DCRatedList dcRatedList = ratedMask.getDcRatedList();
+						List<DCRating> dcRating = dcRatedList.getDcRating();
+						DefaultTableModel ratedModel = (DefaultTableModel) scm.spec.underlayRated.table4.getModel();
+						ratedModel.setRowCount(0);
+						
+						for(int i=0; i<dcRating.size(); i++){
+							String data1 = String.valueOf(dcRating.get(i).getDc());
+							String data2 = String.valueOf(dcRating.get(i).getMaxDwellTime());
+							String data3 = String.valueOf(dcRating.get(i).getAdjustment());
+							Object[] rowData = {ratedModel.getRowCount()+1,data1,data2,data3};
+							ratedModel.addRow(rowData);
+						}
+					}
+					if(ratedMask.getPorPIndex()!=0){
+						scm.spec.box.setSelectedIndex(5);
+						scm.spec.underlayRated.PolicyField.setText(String.valueOf(
+								ratedMask.getPorPIndex()));
+					}
+				
+				}
+				
+			}
+			return;
+		}
 		
 		//Loading Underlay Mask Data 
 		
 		if(underlay!=null){
-			scm.spec.underlayResTextField.setText(String.valueOf(underlay.getResolutionBW()));
+			scm.underlay.ResTextField.setText(String.valueOf(underlay.getResolutionBW()));
 			
 			List<InflectionPnt> infP = underlay.getScmMask().getInflectionPnt();
-			DefaultTableModel model = (DefaultTableModel) scm.spec.underlayTable.getModel();
+			DefaultTableModel model = (DefaultTableModel) scm.underlay.table.getModel();
 		  	model.setRowCount(0);
 		  	
 			for(int i=0; i<infP.size(); i++){
@@ -104,36 +206,36 @@ public void setUnderlay(SCM_MainWindow scm, UnderlayMask underlay){
 			  		Object[] rowData = {serial,data1,data2};
 			  		model.addRow(rowData);
 			  	}
-			scm.spec.underlayTable=new JTable(model);
+			scm.underlay.table=new JTable(model);
 			
-			scm.spec.noInitialState=true;
-			scm.spec.underlayno.setSelected(true);
+			scm.underlay.noInitialState=true;
+			scm.underlay.no.setSelected(true);
 			
 			if(underlay.getMaskPowerMarginMethod().equals("TotalPower")){
-				scm.spec.TotPowerInitialState=true;
-				scm.spec.TotPowerBtn.setSelected(true);
+				scm.underlay.TotPowerInitialState=true;
+				scm.underlay.TotPowerBtn.setSelected(true);
 			}else{
-				scm.spec.TotPowerInitialState=false;
-				scm.spec.MaxPowBtn.setSelected(true);
+				scm.underlay.TotPowerInitialState=false;
+				scm.underlay.MaxPowBtn.setSelected(true);
 			}
 			
 			if(underlay.getRating()!=null){
 				
-				scm.spec.noInitialState=false;
-				scm.spec.underlayyes.setSelected(true);
-				scm.spec.underlayno.setSelected(false);
+				scm.underlay.noInitialState=false;
+				scm.underlay.yes.setSelected(true);
+				scm.underlay.no.setSelected(false);
 				
 				Rating ratedMask = underlay.getRating();
 				if(ratedMask.getRatedBW()!=0.0){
-					scm.spec.box.setSelectedIndex(0);
-					scm.spec.underlayRated.BandRatField.setText(String.valueOf(
+					scm.underlay.box.setSelectedIndex(0);
+					scm.underlay.underlayRated.BandRatField.setText(String.valueOf(
 							ratedMask.getRatedBW()));
 				}
 				if(ratedMask.getBwRatedList()!=null){
-					scm.spec.box.setSelectedIndex(1);
+					scm.underlay.box.setSelectedIndex(1);
 					BWRatedList bwRatedList = ratedMask.getBwRatedList();
 					List<BWRating> bwRating = bwRatedList.getBwRating();
-					DefaultTableModel ratedModel = (DefaultTableModel) scm.spec.underlayRated.table2.getModel();
+					DefaultTableModel ratedModel = (DefaultTableModel) scm.underlay.underlayRated.table2.getModel();
 					ratedModel.setRowCount(0);
 					
 					for(int i=0; i<bwRating.size(); i++){
@@ -145,15 +247,15 @@ public void setUnderlay(SCM_MainWindow scm, UnderlayMask underlay){
 				}
 				
 				if(ratedMask.getRatedBTP()!=0.0){
-					scm.spec.box.setSelectedIndex(2);
-					scm.spec.underlayRated.BTPRatingField.setText(String.valueOf(
+					scm.underlay.box.setSelectedIndex(2);
+					scm.underlay.underlayRated.BTPRatingField.setText(String.valueOf(
 							ratedMask.getRatedBTP()));
 				}
 				if(ratedMask.getBtpRatedList()!=null){
-					scm.spec.box.setSelectedIndex(3);
+					scm.underlay.box.setSelectedIndex(3);
 					BTPRatedList btpRatedList = ratedMask.getBtpRatedList();
 					List<BTPRating> btpRating = btpRatedList.getBtpRating();
-					DefaultTableModel ratedModel = (DefaultTableModel) scm.spec.underlayRated.table3.getModel();
+					DefaultTableModel ratedModel = (DefaultTableModel) scm.underlay.underlayRated.table3.getModel();
 					ratedModel.setRowCount(0);
 					
 					for(int i=0; i<btpRating.size(); i++){
@@ -164,10 +266,10 @@ public void setUnderlay(SCM_MainWindow scm, UnderlayMask underlay){
 					}
 				}
 				if(ratedMask.getDcRatedList()!=null){
-					scm.spec.box.setSelectedIndex(4);
+					scm.underlay.box.setSelectedIndex(4);
 					DCRatedList dcRatedList = ratedMask.getDcRatedList();
 					List<DCRating> dcRating = dcRatedList.getDcRating();
-					DefaultTableModel ratedModel = (DefaultTableModel) scm.spec.underlayRated.table4.getModel();
+					DefaultTableModel ratedModel = (DefaultTableModel) scm.underlay.underlayRated.table4.getModel();
 					ratedModel.setRowCount(0);
 					
 					for(int i=0; i<dcRating.size(); i++){
@@ -179,8 +281,8 @@ public void setUnderlay(SCM_MainWindow scm, UnderlayMask underlay){
 					}
 				}
 				if(ratedMask.getPorPIndex()!=0){
-					scm.spec.box.setSelectedIndex(5);
-					scm.spec.underlayRated.PolicyField.setText(String.valueOf(
+					scm.underlay.box.setSelectedIndex(5);
+					scm.underlay.underlayRated.PolicyField.setText(String.valueOf(
 							ratedMask.getPorPIndex()));
 				}
 			

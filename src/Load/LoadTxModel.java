@@ -137,7 +137,7 @@ public class LoadTxModel extends LoadGUI {
 			}
 			
 			// Setting all other constructs.
-			setUnderlay(scm,txModel.getUnderlayMask());
+			setUnderlay(scm,txModel.getUnderlayMask(), "Tx");
 			setReferencePower(scm,txModel.getReferencePower().get(o));
 			
 			//Set all the location data into the model
