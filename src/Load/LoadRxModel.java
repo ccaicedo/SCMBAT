@@ -67,7 +67,7 @@ public class LoadRxModel extends LoadGUI{
 		scm.schedule = scm.control.scheduleArray.get(0);
 		for(int i =0;i<rxModel.getIntermodulationMask().size();i++)
 		{
-			
+		  setIntermodulationMask(scm,rxModel.getIntermodulationMask().get(i));
 		}
 		//TODO Abhatt need inputs here as i can't see any UI in reciever modal to load data 
 		if (rxModel.getIntermodulationMask().size() == 0) {

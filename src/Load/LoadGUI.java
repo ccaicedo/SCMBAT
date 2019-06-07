@@ -409,34 +409,53 @@ public void setUnderlay(SCM_MainWindow scm, UnderlayMask underlay, String device
 			String dist = "";
 			String n2 = "";
 			
-			for(int i=0; i<propMapValue.size(); i=i+3){
+			String valueType = "";
+			String value = "";
+			
+			for(int i=0; i<propMapValue.size(); i++){				
 								
-				if(propMapValue.get(i).getElevation()!=prevElevation){
-					ele = String.valueOf(propMapValue.get(i).getElevation());
-				}else{
-					ele = "";
+				if(propMapValue.get(i).getElevation()!=null){
+					valueType = "Elevation Angle";
+					value = propMapValue.get(i).getElevation().toString();
+				}
+				else if (propMapValue.get(i).getAzimuth()!=null) {
+					valueType = "Azimuth Angle";
+					value = propMapValue.get(i).getAzimuth().toString();
 				}
 				
-				azi = String.valueOf(propMapValue.get(i+1).getAzimuth());
+				else if(propMapValue.get(i).getPropagationModel() != null) {
+					if (propMapValue.get(i).getPropagationModel().getPiecewiseLinear() != null) {
+						n1 = String.valueOf(propMapValue.get(i).getPropagationModel().
+								getPiecewiseLinear().getFirstExponent());					
+						dist = String.valueOf(propMapValue.get(i).getPropagationModel().
+								getPiecewiseLinear().getBreakpoint());
+						n2 = String.valueOf(propMapValue.get(i).getPropagationModel().
+								getPiecewiseLinear().getSecondExponent());
+						
+						Object[] firstExponentData = {currentProp.table.getRowCount()+1, "First Exponent", n1};
+						model.addRow(firstExponentData);
+						
+						Object[] breakpointData = {currentProp.table.getRowCount()+1, "Breakpoint(meters)", dist};
+						model.addRow(breakpointData);
+						
+						Object[] secondExponentData = {currentProp.table.getRowCount()+1, "Second Exponent", n2};
+						model.addRow(secondExponentData);
+						
+						continue;
+					}
+					else if(propMapValue.get(i).getPropagationModel().getLinear()!=0.0) {
+						valueType = "Prop Exponent";
+						value = String.valueOf(propMapValue.get(i+2).getPropagationModel().getLinear());
+						
+					}
+				}
 				
-				if(propMapValue.get(i+2).getPropagationModel().getPiecewiseLinear()==null ||
-						propMapValue.get(i+2).getPropagationModel().getLinear()!=0.0){
-					n1 = String.valueOf(propMapValue.get(i+2).getPropagationModel().getLinear());
-					Object[] rowData = {currentProp.table.getRowCount()+1,ele,azi,n1,"",""};
-					model.addRow(rowData);
-				}else{
-					
-					n1 = String.valueOf(propMapValue.get(i+2).getPropagationModel().
-							getPiecewiseLinear().getFirstExponent());					
-					dist = String.valueOf(propMapValue.get(i+2).getPropagationModel().
-							getPiecewiseLinear().getBreakpoint());
-					n2 = String.valueOf(propMapValue.get(i+2).getPropagationModel().
-							getPiecewiseLinear().getSecondExponent());
-					Object[] rowData = {currentProp.table.getRowCount()+1,ele,azi,n1,dist,n2};
-					model.addRow(rowData);
+				else {
+					continue;
 				}
 					
-				prevElevation = propMapValue.get(i).getElevation();
+				Object[] rowData = {currentProp.table.getRowCount()+1, valueType, value};
+				model.addRow(rowData);
 			}
 			scm.control.propArray.add(currentProp);
 		}
