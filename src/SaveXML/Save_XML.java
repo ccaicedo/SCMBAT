@@ -240,6 +240,181 @@ public class Save_XML extends ObjectFactory {
 	/* Adding Underlay Mask information to the XML document
 	 * (Considering that we are adding a single Underlay Mask)
 	 */
+	public void addUnderlay(SCM_gui.UnderlayMask spec, String device) {
+		
+		System.out.println("Test");
+		UnderlayMask under = new UnderlayMask();
+		
+		try{
+		under.setResolutionBW(Double.parseDouble(spec.ResTextField.getText()));}
+		catch(Exception e){
+			warningMessage= warningMessage + "\nThe entry in the Resolution BW field should be numeric";
+			warningFlag = true;
+		}
+		under.setScmMask(new SCMMask());
+		
+		Double data = 0.0;
+		TableModel Sdata = spec.table.getModel();
+		for (int i=0; i<Sdata.getRowCount(); i++){
+			InflectionPnt ifPoint = new InflectionPnt();
+			try{
+			if(Sdata.getValueAt(i, 1).toString().equals("")&& Sdata.getValueAt(i, 2).toString().equals(""))
+			{
+				break;
+			}
+			data = Double.parseDouble(Sdata.getValueAt(i, 1).toString());
+			ifPoint.setFrequency(data);
+			data = Double.parseDouble(Sdata.getValueAt(i, 2).toString());
+			ifPoint.setRelativePower(data);
+			under.getScmMask().getInflectionPnt().add(ifPoint);
+			}catch(Exception e){
+				
+				warningMessage = warningMessage + "\nThe entry at row: "+(i+1)+ "in the Underlay Mask table should be numeric";
+				warningFlag = true;
+				/*
+				new Warn().setWarn("warning", "The entry at row: "+(i+1)+
+						" in the Underlay Mask table should be numeric");*/
+			}
+		}
+		
+		
+		if(spec.MaxPowBtn.isSelected()==true){
+			under.setMaskPowerMarginMethod("MaximumPowerDensity");
+		}else{
+			under.setMaskPowerMarginMethod("TotalPower");
+		}
+		
+		// If Underlay Mask is rated		
+		if(spec.yes.isSelected()==true){
+			   
+			   under.setRating(new Rating());
+		       int index = spec.box.getSelectedIndex();
+		       
+		       switch(index){
+		       
+		       case 0: try{under.getRating().
+		       	setRatedBW(Double.parseDouble(spec.underlayRated.BandRatField.getText().toString()));
+		       }catch(Exception e){
+		    	   
+		    	   warningMessage = warningMessage + "\nBW Rating number should be a number";
+		    	   warningFlag = true;
+		    	  // new Warn().setWarn("Warning", "BW Rating number should be a number");
+		       }
+		       break;
+		       
+		       case 1: BWRatedList bwRatedList = new BWRatedList(); 
+		    	data = 0.0;		       
+				Sdata = spec.underlayRated.table2.getModel();
+
+				for (int i=0; i<Sdata.getRowCount(); i++){
+					
+					BWRating bwRating = new BWRating();
+					try{
+					data = Double.parseDouble(Sdata.getValueAt(i, 1).toString());
+					bwRating.setRatedBW(data);
+					data = Double.parseDouble(Sdata.getValueAt(i, 2).toString());
+					bwRating.setAdjustment(data);
+					}catch(Exception e){
+						 warningMessage = warningMessage + "\nThe entry in row: " + i+1 +" in the BW list table should be numerical";
+				    	 warningFlag = true;
+						/*new Warn().setWarn("Warning", "The entry in row: " + i+1 + 
+								" in the BW list table should be numerical");*/
+					}
+					bwRatedList.getBwRating().add(bwRating);
+				}
+		    	
+				under.getRating().setBwRatedList(bwRatedList);
+				break;
+
+		       case 2: try{under.getRating().
+		       	setRatedBTP(Double.parseDouble(spec.underlayRated.BTPRatingField.getText().toString()));
+		       }catch(Exception e){
+		    	   
+		    	 warningMessage = warningMessage  + "\nThe entry in BTP Rated field should be numerical";
+		    	 warningFlag = true;
+		    //	new Warn().setWarn("Warning", "The entry in BTP Rated field should be numerical");   
+		       }
+		       break;
+		       
+		       case 3: BTPRatedList btpRatedList = new BTPRatedList();
+		       data = 0.0;
+		       Sdata = spec.underlayRated.table3.getModel();
+		       
+		       for (int i=0; i<Sdata.getRowCount(); i++){
+		    	   
+		    	   BTPRating btpRating = new BTPRating();
+		    	   try{
+		    	   data = Double.parseDouble(Sdata.getValueAt(i, 1).toString());
+		    	   btpRating.setBtp(data);
+		    	   data = Double.parseDouble(Sdata.getValueAt(i, 2).toString());
+		    	   btpRating.setAdjustment(data);
+		    	   }catch(Exception e){
+		    		   warningMessage = warningMessage  + "\nThe entry in row: " + (i+1)+"in the BTP Rated List table should be numerical";
+				       warningFlag = true;
+		    		   /*new Warn().setWarn("Warning","The entry in row: " + (i+1)+
+		    				   " in the BTP Rated List table should be numerical");*/
+		    	   }
+		    	   btpRatedList.getBtpRating().add(btpRating);
+		       }
+		       
+		       under.getRating().setBtpRatedList(btpRatedList);
+		       break;
+		       
+		       case 4: DCRatedList dcRatedList = new DCRatedList();
+		       data = 0.0;
+		       Sdata = spec.underlayRated.table4.getModel();
+		       
+		       for(int i=0; i<Sdata.getRowCount(); i++){
+		    	   
+		    	   DCRating dcRating = new DCRating();
+		    	   try{
+		    	   data = Double.parseDouble(Sdata.getValueAt(i, 1).toString());
+		    	   dcRating.setDc(data);
+		    	   data = Double.parseDouble(Sdata.getValueAt(i, 2).toString());
+		    	   dcRating.setMaxDwellTime(data);
+		    	   data = Double.parseDouble(Sdata.getValueAt(i, 3).toString());
+		    	   dcRating.setAdjustment(data);
+		    	   }catch(Exception e){
+		    		   
+		    		   warningMessage = warningMessage + "\nThe entry in row:" + (i+1)+"in the DC rating table should be numerical";
+		    		   warningFlag = true;
+		    		   /*new Warn().setWarn("Warning", "The entry in row: " + (i+1)+
+		    				   " in the DC rating table should be numerical");*/
+		    	   }
+		    	   
+		       }
+		       
+		       under.getRating().setDcRatedList(dcRatedList);
+		       break;
+		       		   
+		       case 5: try{under.getRating().
+		        setPorPIndex(Integer.parseInt(spec.underlayRated.PolicyField.getText().toString()));
+		       }catch(Exception e){
+		    	   warningMessage = warningMessage + "\nThe entry for PorP Index should be numerical";
+	    		   warningFlag = true;
+		    	  // new Warn().setWarn("Warning", "The entry for PorP Index should be numerical");
+		       }
+		       break;	       
+		    
+		       default:break;
+		       }
+		       
+		}
+
+
+			if (!(under.getConfidence() == null && under.getRating() == null
+					&& (under.getScmMask().getInflectionPnt() == null
+							|| under.getScmMask().getInflectionPnt().size() == 0)
+					&& under.getScmMask().getRefFrequency() == null
+					&& Double.compare(under.getResolutionBW(), new Double(0.0)) == 0)) {
+				RxModel.getUnderlayMask().add(under);
+			}
+			
+		
+	}
+	/* Adding Underlay Mask information to the XML document
+	 * (Considering that we are adding a single Underlay Mask)
+	 */
 	public void addUnderlay(SpecMask spec, String device) {
 		
 		UnderlayMask under = new UnderlayMask();

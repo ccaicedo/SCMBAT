@@ -151,7 +151,7 @@ public class Save extends Save_XML{
 				*  Underlay Mask 
 				*  and Propagation Map for Transmitter
 				*/
-				addUnderlay(spec, device);
+				addUnderlay(underlay, device);
 				addReferencePower(TotPower, device);
 				for(int i=0;i<propArray.size();i++)
 		        {
