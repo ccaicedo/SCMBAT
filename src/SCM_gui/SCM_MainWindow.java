@@ -125,6 +125,7 @@ public class SCM_MainWindow {
     	        Newframe.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     	        Newframe.setVisible(true);
     	        Newframe.setLayout(null);
+    	        Newframe.setLocationRelativeTo(frame);
     	        
     	        Insets insetsFrame = Newframe.getInsets();
     	        Newframe.setSize(500 + insetsFrame.left + insetsFrame.right,
@@ -136,16 +137,35 @@ public class SCM_MainWindow {
     	                 Fsize1.width, Fsize1.height);
     	        
     	        JButton SButton = new JButton("Exit");
+    	        JButton SaveExitButton = new JButton("Save And Exit");
+    	        JButton cancel = new JButton("Cancel");
+    	        
     	        Dimension ButtonSize = SButton.getPreferredSize();
+    	        SaveExitButton.setBounds(150+insetsFrame.left, 20 + insetsFrame.top, 
+    	        		SaveExitButton.getPreferredSize().width, SaveExitButton.getPreferredSize().height);
     	        SButton.setBounds(300 + insetsFrame.left, 20 + insetsFrame.top,
-    	                ButtonSize.width, ButtonSize.height);       
+    	                ButtonSize.width, ButtonSize.height);
+    	        cancel.setBounds(300 + insetsFrame.left+ButtonSize.width+20, 20 + insetsFrame.top,
+    	                ButtonSize.width, ButtonSize.height);  
     	        
     	        JTextField SField = new JTextField();
     	        SField.setBounds(25 + insetsFrame.left, 20 + insetsFrame.top,
     	                ButtonSize.width + 150, ButtonSize.height);
     	        
+    	        Newframe.add(SaveExitButton);
     	        Newframe.add(lblName);
     	        Newframe.add(SButton);
+    	        Newframe.add(cancel);
+    	        
+    	        SaveExitButton.addActionListener(new ActionListener() {
+    				public void actionPerformed(ActionEvent arg0) {
+    					Newframe.dispatchEvent(new WindowEvent(Newframe, WindowEvent.WINDOW_CLOSING));
+    					Newframe.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    					control.saveAction.actionPerformed(arg0);
+    					frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+    	    			frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    				}
+    			});
     	        SButton.addActionListener(new ActionListener() {
     				public void actionPerformed(ActionEvent arg0) {
     					Newframe.dispatchEvent(new WindowEvent(Newframe, WindowEvent.WINDOW_CLOSING));
@@ -154,6 +174,14 @@ public class SCM_MainWindow {
     	    			frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     				}
     			});
+    	        cancel.addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						Newframe.dispatchEvent(new WindowEvent(Newframe, WindowEvent.WINDOW_CLOSING));
+    					Newframe.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);						
+					}
+				});
 //    		
     			
     		}        	
