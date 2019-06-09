@@ -131,22 +131,24 @@ public class SCM_MainWindow {
     	        Newframe.setSize(500 + insetsFrame.left + insetsFrame.right,
     	                      100 + insetsFrame.top + insetsFrame.bottom);
     	        
-    	        JLabel lblName = new JLabel("Do you want to exit without saving the changes");
+    	        JLabel lblName = new JLabel("Do you want to exit without saving the changes?");
     			Dimension Fsize1 = lblName.getPreferredSize();
     	        lblName.setBounds(25 + insetsFrame.left, 3 + insetsFrame.top,
     	                 Fsize1.width, Fsize1.height);
     	        
-    	        JButton SButton = new JButton("Exit");
+    	        JButton SButton = new JButton("Exit without saving");
     	        JButton SaveExitButton = new JButton("Save And Exit");
     	        JButton cancel = new JButton("Cancel");
     	        
+    	        Dimension SaveExitSize = SaveExitButton.getPreferredSize();
     	        Dimension ButtonSize = SButton.getPreferredSize();
-    	        SaveExitButton.setBounds(150+insetsFrame.left, 20 + insetsFrame.top, 
-    	        		SaveExitButton.getPreferredSize().width, SaveExitButton.getPreferredSize().height);
-    	        SButton.setBounds(300 + insetsFrame.left, 20 + insetsFrame.top,
+    	        Dimension CancelSize = cancel.getPreferredSize();
+    	        SaveExitButton.setBounds(30 + insetsFrame.left, 30 + insetsFrame.top, 
+    	        		SaveExitSize.width, SaveExitSize.height);
+    	        SButton.setBounds(30 + insetsFrame.left + SaveExitSize.width + 10, 30 + insetsFrame.top,
     	                ButtonSize.width, ButtonSize.height);
-    	        cancel.setBounds(300 + insetsFrame.left+ButtonSize.width+20, 20 + insetsFrame.top,
-    	                ButtonSize.width, ButtonSize.height);  
+    	        cancel.setBounds(30 + insetsFrame.left + SaveExitSize.width + ButtonSize.width + 20, 30 + insetsFrame.top,
+    	        		SaveExitSize.width, SaveExitSize.height);  
     	        
     	        JTextField SField = new JTextField();
     	        SField.setBounds(25 + insetsFrame.left, 20 + insetsFrame.top,

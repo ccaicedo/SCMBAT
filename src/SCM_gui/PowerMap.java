@@ -148,8 +148,6 @@ public class PowerMap {
   	public JComboBox<String> ValueTypeComboBox = new JComboBox<String>(DropDownOptions);
   	public JTextField ValueTypeRowItemValue = new JTextField();
   	
-  	public static Boolean firstRowInsertion = true;
-  	
   	public static boolean isNumeric(String strNum) {
   	    try {
   	        double d = Double.parseDouble(strNum);
@@ -459,9 +457,7 @@ public class PowerMap {
 
 				if(isNumeric(ValueTypeRowItemValue.getText())) {
 					DefaultTableModel model = (DefaultTableModel) table.getModel();
-					if(firstRowInsertion) {
-						model.removeRow(model.getRowCount()-3);
-					}
+					model.removeRow(model.getRowCount()-3);
 					count = table.getRowCount();				
 					model.insertRow(model.getRowCount()-2, new Object[]{count-3,ValueTypeComboBox.getSelectedItem().toString() , ValueTypeRowItemValue.getText()});
 					model.insertRow(model.getRowCount()-2, new Object[]{table.getRowCount()-3,"" ,""});
@@ -477,7 +473,6 @@ public class PowerMap {
 				
 				//deleting only the last row
 				if (table.getRowCount() == 4) {
-					firstRowInsertion = true;
 					return;
 				}
 				int selectedRowIndex = table.getRowCount()-4;
@@ -490,7 +485,6 @@ public class PowerMap {
 
 				if(table.getRowCount() == 4) {
 					model.insertRow( model.getRowCount()-2, new Object[]{"1","",""});
-					firstRowInsertion = true;
 				}
 				
 //				   }

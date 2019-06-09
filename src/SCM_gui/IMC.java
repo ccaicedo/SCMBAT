@@ -270,7 +270,7 @@ public class IMC {
 
         // Creating reference frequency text field
         RelFreqField.setColumns(1);
-        RelFreqField.setBounds(255 + 0, 210 + 150, sizeLabel.width - 120, 5 + sizeLabel.height);
+        RelFreqField.setBounds(255 + 0, 210 + 150, sizeLabel.width, 5 + sizeLabel.height);
         panel.add(RelFreqField);        
         
         if(relFreqBtn.isSelected()==false){

@@ -424,7 +424,7 @@ public class SpecMask {
         SpecPanel.add(ResBW);
      
         ResTextField.setColumns(1);
-        ResTextField.setBounds(400 + 220, 180, sizeBW.width - 150, 5 + sizeBW.height);
+        ResTextField.setBounds(400 + 220, 180, sizeBW.width, 5 + sizeBW.height);
         SpecPanel.add(ResTextField);
 
         Dimension RelFreqSize = RelFreq.getPreferredSize();
@@ -443,7 +443,7 @@ public class SpecMask {
 
         // Creating reference frequency text field
         TextField.setColumns(1);
-        TextField.setBounds(240, 180, sizeLabel.width - 120, 5 + sizeLabel.height);
+        TextField.setBounds(240, 180, sizeLabel.width, 5 + sizeLabel.height);
         SpecPanel.add(TextField);
         
         // Positioning table
@@ -891,7 +891,7 @@ public class SpecMask {
         spec.SpecPanel.add(spec.underlayResBW);
      
         spec.underlayResTextField.setColumns(1);
-        spec.underlayResTextField.setBounds(235, 820, sizeBW.width - 150, 5 + sizeBW.height);
+        spec.underlayResTextField.setBounds(235, 820, sizeBW.width, 5 + sizeBW.height);
         spec.SpecPanel.add(spec.underlayResTextField);
 
         spec.SpecPanel.add(spec.underlaytableContainer, BorderLayout.CENTER);

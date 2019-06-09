@@ -399,7 +399,6 @@ public class PropMap {
             	System.out.println(ValueTypeComboBox.getSelectedItem().toString());
             	String currentSelectedItem = event.getItem().toString();
             	if(currentSelectedItem == "Elevation Angle" || currentSelectedItem == "Azimuth Angle") {
-            		PropTypeComboBox.setSelectedIndex(0);
             		PropPanel.remove(PropTypeComboBox);
             		PropPanel.remove(PropModelValueTypeLabel);    
             		PropPanel.add(ValueTypeRowItemValue);
@@ -408,6 +407,10 @@ public class PropMap {
             		PropPanel.remove(PropExpTypeRowItemValue);
             		PropPanel.remove(PiecewiseTypeValueLabel);
             		PropPanel.remove(piecewiseTableContainer);
+
+            		PropTypeComboBox.setSelectedIndex(0);
+            		ValueTypeRowItemValue.setText("");
+            		PropExpTypeRowItemValue.setText("");
             	    
             	    PropPanel.invalidate();
             	    PropPanel.validate();
@@ -420,6 +423,8 @@ public class PropMap {
             		PropPanel.add(PropModelValueTypeLabel);
     				PropPanel.add(PropExpTypeValueLabel);
             		PropPanel.add(PropExpTypeRowItemValue);
+            		
+            		ValueTypeRowItemValue.setText("");
             		
             	    PropPanel.invalidate();
             	    PropPanel.validate();
@@ -447,6 +452,12 @@ public class PropMap {
                 		PropPanel.remove(PiecewiseTypeValueLabel);
                 		PropPanel.remove(piecewiseTableContainer);
                 		
+                		for (int i = 0; i < piecewiseTable.getRowCount(); i++) {
+                		      for(int j = 0; j < piecewiseTable.getColumnCount(); j++) {
+                		    	  piecewiseTable.setValueAt("", i, j);
+                		      }
+                		}
+                		
                 	    PropPanel.invalidate();
                 	    PropPanel.validate();
                 		PropPanel.repaint();
@@ -458,6 +469,8 @@ public class PropMap {
                 		PropPanel.remove(PropExpTypeRowItemValue);
                 		PropPanel.add(PiecewiseTypeValueLabel);
                 		PropPanel.add(piecewiseTableContainer);
+                		
+                		PropExpTypeRowItemValue.setText("");
                 		
                 	    PropPanel.invalidate();
                 	    PropPanel.validate();
@@ -484,20 +497,22 @@ public class PropMap {
 					model.removeRow(model.getRowCount()-3);
 					count = table.getRowCount();
 					model.insertRow(model.getRowCount()-2, new Object[]{count-3, "Prop Exponent" , PropExpTypeRowItemValue.getText()});
+					model.insertRow(model.getRowCount()-2, new Object[]{table.getRowCount()-3,"" ,""});
 				}
 				else if(ValueTypeComboBox.getSelectedItem().toString() == "Propagation Model" && PropTypeComboBox.getSelectedItem().toString() == "Piecewise Linear" && isNumeric(piecewiseTable.getModel().getValueAt(0,0).toString()) && isNumeric(piecewiseTable.getModel().getValueAt(0,1).toString()) && isNumeric(piecewiseTable.getModel().getValueAt(0,2).toString())) {
 					model.removeRow(model.getRowCount()-3);
 					model.insertRow(model.getRowCount()-2, new Object[]{table.getRowCount()-3, "First Exponent" , piecewiseTable.getModel().getValueAt(0,0).toString()});
 					model.insertRow(model.getRowCount()-2, new Object[]{table.getRowCount()-3, "Breakpoint(meters)" , piecewiseTable.getModel().getValueAt(0,1).toString()});
 					model.insertRow(model.getRowCount()-2, new Object[]{table.getRowCount()-3, "Second Exponent" , piecewiseTable.getModel().getValueAt(0,2).toString()});
+					model.insertRow(model.getRowCount()-2, new Object[]{table.getRowCount()-3,"" ,""});
 				}
 				
 				else if(ValueTypeComboBox.getSelectedItem().toString() != "Propagation Model" && isNumeric(ValueTypeRowItemValue.getText())) {
 					model.removeRow(model.getRowCount()-3);
 					count = table.getRowCount();
 					model.insertRow(model.getRowCount()-2, new Object[]{count-3,ValueTypeComboBox.getSelectedItem().toString() , ValueTypeRowItemValue.getText()});
+					model.insertRow(model.getRowCount()-2, new Object[]{table.getRowCount()-3,"" ,""});
 				}
-				model.insertRow(model.getRowCount()-2, new Object[]{table.getRowCount()-3,"" ,""});
 				//firstRowInsertion = false;
 			}
 		});

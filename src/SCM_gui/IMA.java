@@ -171,7 +171,7 @@ public class IMA {
         // Creating reference frequency text field
 
         RelFreqField.setColumns(1);
-        RelFreqField.setBounds(255 + 0, 260-60, sizeLabel.width - 120, 5 + sizeLabel.height);
+        RelFreqField.setBounds(255 + 0, 260-60, sizeLabel.width, 5 + sizeLabel.height);
        
 
         panel.add(RelFreqField);          
