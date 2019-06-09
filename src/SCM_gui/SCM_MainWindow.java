@@ -120,8 +120,41 @@ public class SCM_MainWindow {
     		  });
     	 final ActionListener exitAction = new ActionListener(){
     		public void actionPerformed(ActionEvent e) {
-    			frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
-    			frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    			JFrame Newframe;
+    			Newframe = new JFrame("Save");
+    	        Newframe.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    	        Newframe.setVisible(true);
+    	        Newframe.setLayout(null);
+    	        
+    	        Insets insetsFrame = Newframe.getInsets();
+    	        Newframe.setSize(500 + insetsFrame.left + insetsFrame.right,
+    	                      100 + insetsFrame.top + insetsFrame.bottom);
+    	        
+    	        JLabel lblName = new JLabel("Do you want to exit without saving the changes");
+    			Dimension Fsize1 = lblName.getPreferredSize();
+    	        lblName.setBounds(25 + insetsFrame.left, 3 + insetsFrame.top,
+    	                 Fsize1.width, Fsize1.height);
+    	        
+    	        JButton SButton = new JButton("Exit");
+    	        Dimension ButtonSize = SButton.getPreferredSize();
+    	        SButton.setBounds(300 + insetsFrame.left, 20 + insetsFrame.top,
+    	                ButtonSize.width, ButtonSize.height);       
+    	        
+    	        JTextField SField = new JTextField();
+    	        SField.setBounds(25 + insetsFrame.left, 20 + insetsFrame.top,
+    	                ButtonSize.width + 150, ButtonSize.height);
+    	        
+    	        Newframe.add(lblName);
+    	        Newframe.add(SButton);
+    	        SButton.addActionListener(new ActionListener() {
+    				public void actionPerformed(ActionEvent arg0) {
+    					Newframe.dispatchEvent(new WindowEvent(Newframe, WindowEvent.WINDOW_CLOSING));
+    					Newframe.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    					frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+    	    			frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    				}
+    			});
+//    		
     			
     		}        	
         }; 
@@ -211,14 +244,7 @@ public class SCM_MainWindow {
         JButton Save = new JButton("Save");
         JButton Exit = new JButton("Exit");
               
-        Exit.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-			
-				frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
-				frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-			
-			}
-		});
+        Exit.addActionListener(exitAction);
         
         // GUI Font
         
