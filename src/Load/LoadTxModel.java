@@ -35,6 +35,7 @@ import javax.swing.table.DefaultTableModel;
 
 import org.ieee.dyspansc._1900._5.scm.Band;
 import org.ieee.dyspansc._1900._5.scm.InflectionPnt;
+import org.ieee.dyspansc._1900._5.scm.IntermodulationMask;
 import org.ieee.dyspansc._1900._5.scm.TxModel;
 
 import SCM_gui.SCM_MainWindow;
@@ -137,7 +138,7 @@ public class LoadTxModel extends LoadGUI {
 			}
 			
 			// Setting all other constructs.
-			setUnderlay(scm,txModel.getUnderlayMask());
+			setUnderlay(scm,txModel.getUnderlayMask(), "Tx");
 			setReferencePower(scm,txModel.getReferencePower().get(o));
 			
 			//Set all the location data into the model
@@ -161,10 +162,18 @@ public class LoadTxModel extends LoadGUI {
 				setSchedule(scm,txModel.getScmSchedule().get(i));
 			}
 			scm.schedule = scm.control.scheduleArray.get(0);
+			
+			//TODO Abhatt need inputs here as i can't see any UI in reciever modal to load data 
+			
+			
 			for(int i =0;i<txModel.getIntermodulationMask().size();i++)
 			{
 				setIntermodulationMask(scm,txModel.getIntermodulationMask().get(i));
 			}
+			if (txModel.getIntermodulationMask().size() == 0) {
+				setIntermodulationMask(scm, new IntermodulationMask());
+			}
+		
 			scm.imc = scm.control.imcArray.get(0);
 			
 	}

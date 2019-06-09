@@ -74,7 +74,7 @@ public class Save extends Save_XML{
 			final JTextField TotPower,
 			final String SaveName){
 		
-		Newframe = new JFrame("Save Data");
+		Newframe = new JFrame("Save");
         Newframe.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         Newframe.setVisible(true);
         Newframe.setLayout(null);
@@ -88,7 +88,7 @@ public class Save extends Save_XML{
         lblName.setBounds(25 + insetsFrame.left, 3 + insetsFrame.top,
                  Fsize1.width, Fsize1.height);
         
-        JButton SButton = new JButton("Save data");
+        JButton SButton = new JButton("Save");
         Dimension ButtonSize = SButton.getPreferredSize();
         SButton.setBounds(300 + insetsFrame.left, 20 + insetsFrame.top,
                 ButtonSize.width, ButtonSize.height);       
@@ -137,7 +137,7 @@ public class Save extends Save_XML{
 				for(int i=0;i<propArray.size();i++)
 		        {
 		        	 PropMap prop = propArray.get(i);
-		        	 addPropMap(prop);
+		        	 addPropMap(prop, device);
 		        }
 				for(int i=0;i<imcArray.size();i++)
 				{
@@ -151,8 +151,13 @@ public class Save extends Save_XML{
 				*  Underlay Mask 
 				*  and Propagation Map for Transmitter
 				*/
-				addUnderlay(spec, device);
+				addUnderlay(underlay, device);
 				addReferencePower(TotPower, device);
+				for(int i=0;i<propArray.size();i++)
+		        {
+		        	 PropMap prop = propArray.get(i);
+		        	 addPropMap(prop, device);
+		        }
 				
 					}
 				}

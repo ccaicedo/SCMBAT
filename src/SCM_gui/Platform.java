@@ -36,8 +36,8 @@ public class Platform {
 JPanel panel = new JPanel();
 public JLabel platformLabel = new JLabel("Platform name: ");
 public JTextArea platformTextArea = new JTextArea();
-public JButton b1 = new JButton("Save & Exit");
-public JButton b2 = new JButton("Cancel");
+public JButton b1 = new JButton("Save");
+public JButton b2 = new JButton("Exit");
 
 
 	public JPanel getPanel(){

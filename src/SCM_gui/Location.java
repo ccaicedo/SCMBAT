@@ -272,7 +272,6 @@ public JTextField periodField = new JTextField();
 public JButton add = new JButton("Add Row");
 public JButton del = new JButton("Delete Row");
 public JButton save = new JButton("Save");
-public JButton saveExit = new JButton("Save & Exit");
 public JButton exit = new JButton("Exit");
 
 public int index =0;
@@ -470,7 +469,6 @@ public int index =0;
 		panel.remove(add);
 		panel.remove(del);
 		panel.remove(save);
-		panel.remove(saveExit);
 		panel.remove(exit);
 		
 		panel.repaint();
@@ -492,15 +490,13 @@ public int index =0;
         tableContainer.setBounds(25, 240, 
         		containerSize.width, containerSize.height-250);
 		
-        Dimension btnSize = saveExit.getPreferredSize();
+        Dimension btnSize = save.getPreferredSize();
         save.setBounds(500, 240, btnSize.width, btnSize.height);
-        saveExit.setBounds(500, 240 + 50, btnSize.width, btnSize.height);
-        exit.setBounds(500, 240+100, btnSize.width, btnSize.height);
+        exit.setBounds(500, 240+50, btnSize.width, btnSize.height);
         
 		panel.add(tableContainer);
 		
 		panel.add(save);
-		panel.add(saveExit);
 		panel.add(exit);
 		
 		panel.add(head);
@@ -539,10 +535,9 @@ public int index =0;
         Dimension HAATSize = HAAT.getPreferredSize();
         HAAT.setBounds(350, 150 + 280, HAATSize.width, HAATSize.height);
         
-        Dimension btnSize = saveExit.getPreferredSize();
+        Dimension btnSize = save.getPreferredSize();
         save.setBounds(500, 240, btnSize.width, btnSize.height);
-        saveExit.setBounds(500, 240 + 50, btnSize.width, btnSize.height);
-        exit.setBounds(500, 240+100, btnSize.width, btnSize.height);
+        exit.setBounds(500, 240+50, btnSize.width, btnSize.height);
         
         
         ButtonGroup group2 = new ButtonGroup();
@@ -550,7 +545,6 @@ public int index =0;
         group2.add(HAAT);
 		
         panel.add(save);
-        panel.add(saveExit);
         panel.add(exit);
         
         panel.add(AGL);
@@ -584,10 +578,9 @@ public int index =0;
         
 		panel.add(tableContainer);
 		
-		Dimension btnSize = saveExit.getPreferredSize();
+		Dimension btnSize = save.getPreferredSize();
         save.setBounds(750, 240, btnSize.width, btnSize.height);
-        saveExit.setBounds(750, 240 + 50, btnSize.width, btnSize.height);
-        exit.setBounds(750, 240+100, btnSize.width, btnSize.height);
+        exit.setBounds(750, 240+50, btnSize.width, btnSize.height);
 		
 		Dimension ReferenceSize = ReferenceLabel.getPreferredSize();
         ReferenceLabel.setBounds(250, 130 +280, ReferenceSize.width, ReferenceSize.height);
@@ -612,7 +605,6 @@ public int index =0;
         
         
         panel.add(save);
-        panel.add(saveExit);
         panel.add(exit);
         
         ButtonGroup group2 = new ButtonGroup();
@@ -652,8 +644,7 @@ public int index =0;
 		
 		Dimension btnSize = del.getPreferredSize();
         save.setBounds(870, 240, btnSize.width, btnSize.height);
-        saveExit.setBounds(870, 240 + 50, btnSize.width, btnSize.height);
-        exit.setBounds(870, 240+100, btnSize.width, btnSize.height);
+        exit.setBounds(870, 240+50, btnSize.width, btnSize.height);
 		add.setBounds(740, 240, btnSize.width, btnSize.height);
 		del.setBounds(740, 240+50, btnSize.width, btnSize.height);
         
@@ -681,7 +672,6 @@ public int index =0;
         
         
         panel.add(save);
-        panel.add(saveExit);
         panel.add(exit);
         panel.add(add);
         panel.add(del);
@@ -723,10 +713,9 @@ public int index =0;
         
 		panel.add(tableContainer);
 		
-		Dimension btnSize = saveExit.getPreferredSize();
+		Dimension btnSize = save.getPreferredSize();
         save.setBounds(750, 240, btnSize.width, btnSize.height);
-        saveExit.setBounds(750, 240 + 50, btnSize.width, btnSize.height);
-        exit.setBounds(750, 240+100, btnSize.width, btnSize.height);
+        exit.setBounds(750, 240+50, btnSize.width, btnSize.height);
 		
 		Dimension ReferenceSize = ReferenceLabel.getPreferredSize();
         ReferenceLabel.setBounds(250, 130 +280, ReferenceSize.width, ReferenceSize.height);
@@ -756,7 +745,6 @@ public int index =0;
         group2.add(HAAT);
 		
         panel.add(save);
-        panel.add(saveExit);
         panel.add(exit);
         
         panel.add(AGL);
@@ -792,8 +780,7 @@ public int index =0;
 		
 		Dimension btnSize = del.getPreferredSize();
         save.setBounds(870, 270, btnSize.width, btnSize.height);
-        saveExit.setBounds(870, 270 + 50, btnSize.width, btnSize.height);
-        exit.setBounds(870, 270+100, btnSize.width, btnSize.height);
+        exit.setBounds(870, 270+50, btnSize.width, btnSize.height);
 		add.setBounds(740, 270, btnSize.width, btnSize.height);
 		del.setBounds(740, 270+50, btnSize.width, btnSize.height);
 		
@@ -839,7 +826,6 @@ public int index =0;
         panel.add(add);
         panel.add(del);
         panel.add(save);
-        panel.add(saveExit);
         panel.add(exit);
         
         panel.add(polySideLabel);
@@ -873,8 +859,7 @@ public int index =0;
 		
 		Dimension btnSize = del.getPreferredSize();
         save.setBounds(620, 240, btnSize.width, btnSize.height);
-        saveExit.setBounds(620, 240 + 50, btnSize.width, btnSize.height);
-        exit.setBounds(620, 240+100, btnSize.width, btnSize.height);
+        exit.setBounds(620, 240+50, btnSize.width, btnSize.height);
 		add.setBounds(490, 240, btnSize.width, btnSize.height);
 		del.setBounds(490, 240+50, btnSize.width, btnSize.height);
 		
@@ -909,7 +894,6 @@ public int index =0;
         panel.add(add);
         panel.add(del);
         panel.add(save);
-        panel.add(saveExit);
         panel.add(exit);
         
         panel.add(periodField);
