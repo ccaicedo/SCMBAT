@@ -79,6 +79,7 @@ public class PowerMap {
 			
     };
     
+    
     public JTable table1 = new JTable(table_model1) {
     	/**
 		 * 
@@ -331,6 +332,21 @@ public class PowerMap {
 	    table1.setShowGrid(true);
 	    table1.setGridColor(Color.BLACK);
 	    
+	    table1.setDefaultRenderer(Object.class, new DefaultTableCellRenderer()
+	    {
+	        @Override
+	        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
+	        {
+	        	int rowCount = table.getModel().getRowCount();
+	            final Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+	            if (!isSelected) {
+	            	c.setBackground(row  == 0 || row == 1 || row == rowCount-1 || row == rowCount-2? Color.LIGHT_GRAY : Color.WHITE);
+	            }
+	            
+	            return c;
+	        }
+	    });
+	    
 	    DefaultTableCellRenderer headerRenderer = new DefaultTableCellRenderer();
 	    headerRenderer.setBackground(Color.lightGray);
 	    
@@ -339,7 +355,7 @@ public class PowerMap {
 	    	
 	    table1.getTableHeader().setOpaque(false);
 	    table1.getTableHeader().setBackground(Color.lightGray);
-	    
+
 	    table = table1;
 	  //To allow the element on the last edit to be saved
 	    table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);

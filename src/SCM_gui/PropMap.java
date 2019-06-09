@@ -27,6 +27,7 @@ along with program.  If not, see <http://www.gnu.org/licenses/>.
 package SCM_gui;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -281,6 +282,21 @@ public class PropMap {
         
 	    table.setShowGrid(true);
 	    table.setGridColor(Color.BLACK);
+	    
+	    table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer()
+	    {
+	        @Override
+	        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
+	        {
+	        	int rowCount = table.getModel().getRowCount();
+	            final Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+	            if (!isSelected) {
+	            	c.setBackground(row  == 0 || row == 1 || row == rowCount-1 || row == rowCount-2? Color.LIGHT_GRAY : Color.WHITE);
+	            }
+	            
+	            return c;
+	        }
+	    });
 	    
 	    DefaultTableCellRenderer headerRenderer = new DefaultTableCellRenderer();
 	    headerRenderer.setBackground(Color.lightGray);
