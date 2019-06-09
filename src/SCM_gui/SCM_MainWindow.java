@@ -161,9 +161,7 @@ public class SCM_MainWindow {
     				public void actionPerformed(ActionEvent arg0) {
     					Newframe.dispatchEvent(new WindowEvent(Newframe, WindowEvent.WINDOW_CLOSING));
     					Newframe.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-    					control.saveAction.actionPerformed(arg0);
-    					frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
-    	    			frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    					control.saveAction.actionPerformed(arg0);    					
     				}
     			});
     	        SButton.addActionListener(new ActionListener() {
