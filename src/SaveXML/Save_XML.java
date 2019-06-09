@@ -409,6 +409,13 @@ public class Save_XML extends ObjectFactory {
 					&& Double.compare(under.getResolutionBW(), new Double(0.0)) == 0)) {
 				RxModel.getUnderlayMask().add(under);
 			}
+			else {
+				  
+	    		   warningMessage = warningMessage + "\nUnderlay Mask field can not be empty";
+	    		   warningFlag = true;
+	    		   /*new Warn().setWarn("Warning", "The entry in row: " + (i+1)+
+	    				   " in the DC rating table should be numerical");*/
+			}
 			
 		
 	}

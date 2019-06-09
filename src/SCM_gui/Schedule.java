@@ -49,8 +49,7 @@ public class Schedule {
 	public JButton Next = new JButton("Next");
 	
 	public JButton b1 = new JButton("Save");
-	public JButton b2 = new JButton("Save & Exit");
-	public JButton b3 = new JButton("Cancel");
+	public JButton b3 = new JButton("Exit");
 	
 	public JLabel SchedLabel = new JLabel("Schedule: (yyyy-mm-dd hh:mm:ss)");
 	public JLabel TimeZoneLabel = new JLabel("TimeZone Offset (from GMT): hours:minutes");
@@ -216,13 +215,11 @@ public class Schedule {
         
         // Button placement
         
-        Dimension btnSize = b2.getPreferredSize();
+        Dimension btnSize = b1.getPreferredSize();
         b1.setBounds(620, 150, btnSize.width, btnSize.height);
-        b2.setBounds(620, 200, btnSize.width, btnSize.height);
-        b3.setBounds(620, 250, btnSize.width, btnSize.height);
+        b3.setBounds(620, 200, btnSize.width, btnSize.height);
         
         panel.add(b1);
-        panel.add(b2);
         panel.add(b3);
         
 		return panel;
