@@ -49,7 +49,7 @@ public class UnderlayRated {
 	JTextField StartTextField;
 
 	//Global Buttons
-	JButton b3 = new JButton("Save Data");
+	JButton b3 = new JButton("Save");
     JButton b4 = new JButton("Exit");
     JTable table;
     

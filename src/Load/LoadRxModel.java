@@ -26,6 +26,7 @@ along with program.  If not, see <http://www.gnu.org/licenses/>.
 
 package Load;
 
+import org.ieee.dyspansc._1900._5.scm.IntermodulationMask;
 import org.ieee.dyspansc._1900._5.scm.RxModel;
 import org.ieee.dyspansc._1900._5.scm.TxModel;
 
@@ -46,7 +47,7 @@ public class LoadRxModel extends LoadGUI{
 		
 		int o=0;
 		
-		setUnderlay(scm,rxModel.getUnderlayMask().get(o));
+		setUnderlay(scm,rxModel.getUnderlayMask().get(o), "Rx");
 		setReferencePower(scm,rxModel.getReferencePower().get(o));
 		for(int i =0;i<rxModel.getScmLocation().size();i++)
 		{
@@ -66,9 +67,16 @@ public class LoadRxModel extends LoadGUI{
 		scm.schedule = scm.control.scheduleArray.get(0);
 		for(int i =0;i<rxModel.getIntermodulationMask().size();i++)
 		{
-			setIntermodulationMask(scm,rxModel.getIntermodulationMask().get(i));
+		  setIntermodulationMask(scm,rxModel.getIntermodulationMask().get(i));
 		}
-		scm.imc = scm.control.imcArray.get(0);
+		//TODO Abhatt need inputs here as i can't see any UI in reciever modal to load data 
+		if (rxModel.getIntermodulationMask().size() == 0) {
+			setIntermodulationMask(scm, new IntermodulationMask());
+		}
+		if (scm.control.imcArray.size() > 0) {
+			scm.imc = scm.control.imcArray.get(0);
+		}
+		
 		
 	}	
 }
