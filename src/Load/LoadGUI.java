@@ -435,7 +435,7 @@ public void setUnderlay(SCM_MainWindow scm, UnderlayMask underlay, String device
 						Object[] firstExponentData = {currentProp.table.getRowCount()+1, "First Exponent", n1};
 						model.addRow(firstExponentData);
 						
-						Object[] breakpointData = {currentProp.table.getRowCount()+1, "Breakpoint(meters)", dist};
+						Object[] breakpointData = {currentProp.table.getRowCount()+1, "Breakpoint(m)", dist};
 						model.addRow(breakpointData);
 						
 						Object[] secondExponentData = {currentProp.table.getRowCount()+1, "Second Exponent", n2};
