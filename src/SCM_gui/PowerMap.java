@@ -454,13 +454,15 @@ public class PowerMap {
 	    
 		b1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-
+				//adding only if any numeric data has been entered.
 				if(isNumeric(ValueTypeRowItemValue.getText())) {
 					DefaultTableModel model = (DefaultTableModel) table.getModel();
 					model.removeRow(model.getRowCount()-3);
 					count = table.getRowCount();				
 					model.insertRow(model.getRowCount()-2, new Object[]{count-3,ValueTypeComboBox.getSelectedItem().toString() , ValueTypeRowItemValue.getText()});
 					model.insertRow(model.getRowCount()-2, new Object[]{table.getRowCount()-3,"" ,""});
+					//resetting the data in the text field
+					ValueTypeRowItemValue.setText("");
 				}
 			}
 		});

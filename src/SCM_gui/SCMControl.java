@@ -153,6 +153,7 @@ public class SCMControl {
 					scheduleArray,
 					TotPower,
 					SaveName);
+			
 		}
     };
 

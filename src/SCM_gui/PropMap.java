@@ -65,7 +65,7 @@ public class PropMap {
 	public JRadioButton antHeightNo = new JRadioButton("No");
 	public JRadioButton AGL = new JRadioButton("AGL (Above Ground Level)");
 	public JRadioButton HAAT = new JRadioButton("HAAT (Height Above Average Terrain)");
-	public JLabel HeightLabel = new JLabel("Height (meters)");
+	public JLabel HeightLabel = new JLabel("Height (m)");
 	public JTextField HeightField = new JTextField();
 	public JLabel ReferenceLabel = new JLabel("Reference: ");
 	
@@ -92,7 +92,7 @@ public class PropMap {
     };
     
 	Object rowData_piecewise[][] = { { "", "", "" } };
-	Object columnData_piecewise[] = {"First Exponent","Breakpoint(meters)","Second Exponent"};
+	Object columnData_piecewise[] = {"First Exponent","Breakpoint (m)","Second Exponent"};
     
 	//table for piecewise linear model
     TableModel piecewise_table_model = new DefaultTableModel(rowData_piecewise, columnData_piecewise) {
@@ -399,6 +399,10 @@ public class PropMap {
             	System.out.println(ValueTypeComboBox.getSelectedItem().toString());
             	String currentSelectedItem = event.getItem().toString();
             	if(currentSelectedItem == "Elevation Angle" || currentSelectedItem == "Azimuth Angle") {
+            		PropTypeComboBox.setSelectedIndex(0);
+            		ValueTypeRowItemValue.setText("");
+            		PropExpTypeRowItemValue.setText("");
+            		
             		PropPanel.remove(PropTypeComboBox);
             		PropPanel.remove(PropModelValueTypeLabel);    
             		PropPanel.add(ValueTypeRowItemValue);
@@ -408,15 +412,14 @@ public class PropMap {
             		PropPanel.remove(PiecewiseTypeValueLabel);
             		PropPanel.remove(piecewiseTableContainer);
 
-            		PropTypeComboBox.setSelectedIndex(0);
-            		ValueTypeRowItemValue.setText("");
-            		PropExpTypeRowItemValue.setText("");
             	    
             	    PropPanel.invalidate();
             	    PropPanel.validate();
             		PropPanel.repaint();
             	}
             	else {
+            		ValueTypeRowItemValue.setText("");
+            		
             		PropPanel.remove(ValueTypeValueLabel);
             		PropPanel.remove(ValueTypeRowItemValue);
             		PropPanel.add(PropTypeComboBox);
@@ -424,7 +427,6 @@ public class PropMap {
     				PropPanel.add(PropExpTypeValueLabel);
             		PropPanel.add(PropExpTypeRowItemValue);
             		
-            		ValueTypeRowItemValue.setText("");
             		
             	    PropPanel.invalidate();
             	    PropPanel.validate();
@@ -445,32 +447,27 @@ public class PropMap {
         			System.out.println(PropTypeComboBox.getSelectedItem().toString());
         			String currentSelectedItem = event.getItem().toString();
         			if(currentSelectedItem == "Linear") {
-//        				linearSelected = true;
-//        				piecewiseLinearSelected = false;
+                		for (int i = 0; i < piecewiseTable.getRowCount(); i++) {
+              		      for(int j = 0; j < piecewiseTable.getColumnCount(); j++) {
+              		    	  piecewiseTable.setValueAt("", i, j);
+              		      }
+                		}
         				PropPanel.add(PropExpTypeValueLabel);
                 		PropPanel.add(PropExpTypeRowItemValue);
                 		PropPanel.remove(PiecewiseTypeValueLabel);
                 		PropPanel.remove(piecewiseTableContainer);
-                		
-                		for (int i = 0; i < piecewiseTable.getRowCount(); i++) {
-                		      for(int j = 0; j < piecewiseTable.getColumnCount(); j++) {
-                		    	  piecewiseTable.setValueAt("", i, j);
-                		      }
-                		}
                 		
                 	    PropPanel.invalidate();
                 	    PropPanel.validate();
                 		PropPanel.repaint();
         			}
         			else {
-//        				linearSelected = false;
-//        				piecewiseLinearSelected = true;
+                		PropExpTypeRowItemValue.setText("");
+                		
         				PropPanel.remove(PropExpTypeValueLabel);
                 		PropPanel.remove(PropExpTypeRowItemValue);
                 		PropPanel.add(PiecewiseTypeValueLabel);
                 		PropPanel.add(piecewiseTableContainer);
-                		
-                		PropExpTypeRowItemValue.setText("");
                 		
                 	    PropPanel.invalidate();
                 	    PropPanel.validate();
@@ -498,13 +495,21 @@ public class PropMap {
 					count = table.getRowCount();
 					model.insertRow(model.getRowCount()-2, new Object[]{count-3, "Prop Exponent" , PropExpTypeRowItemValue.getText()});
 					model.insertRow(model.getRowCount()-2, new Object[]{table.getRowCount()-3,"" ,""});
+					//resetting text field data
+					PropExpTypeRowItemValue.setText("");
 				}
 				else if(ValueTypeComboBox.getSelectedItem().toString() == "Propagation Model" && PropTypeComboBox.getSelectedItem().toString() == "Piecewise Linear" && isNumeric(piecewiseTable.getModel().getValueAt(0,0).toString()) && isNumeric(piecewiseTable.getModel().getValueAt(0,1).toString()) && isNumeric(piecewiseTable.getModel().getValueAt(0,2).toString())) {
 					model.removeRow(model.getRowCount()-3);
 					model.insertRow(model.getRowCount()-2, new Object[]{table.getRowCount()-3, "First Exponent" , piecewiseTable.getModel().getValueAt(0,0).toString()});
-					model.insertRow(model.getRowCount()-2, new Object[]{table.getRowCount()-3, "Breakpoint(meters)" , piecewiseTable.getModel().getValueAt(0,1).toString()});
+					model.insertRow(model.getRowCount()-2, new Object[]{table.getRowCount()-3, "Breakpoint(m)" , piecewiseTable.getModel().getValueAt(0,1).toString()});
 					model.insertRow(model.getRowCount()-2, new Object[]{table.getRowCount()-3, "Second Exponent" , piecewiseTable.getModel().getValueAt(0,2).toString()});
 					model.insertRow(model.getRowCount()-2, new Object[]{table.getRowCount()-3,"" ,""});
+					//resetting piecewise linear table data
+					for (int i = 0; i < piecewiseTable.getRowCount(); i++) {
+            		      for(int j = 0; j < piecewiseTable.getColumnCount(); j++) {
+            		    	  piecewiseTable.setValueAt("", i, j);
+            		      }
+              		}
 				}
 				
 				else if(ValueTypeComboBox.getSelectedItem().toString() != "Propagation Model" && isNumeric(ValueTypeRowItemValue.getText())) {
@@ -512,6 +517,7 @@ public class PropMap {
 					count = table.getRowCount();
 					model.insertRow(model.getRowCount()-2, new Object[]{count-3,ValueTypeComboBox.getSelectedItem().toString() , ValueTypeRowItemValue.getText()});
 					model.insertRow(model.getRowCount()-2, new Object[]{table.getRowCount()-3,"" ,""});
+					ValueTypeRowItemValue.setText("");
 				}
 				//firstRowInsertion = false;
 			}

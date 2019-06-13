@@ -65,6 +65,9 @@ public class SCM_MainWindow {
 	public String SaveName;
 	public String device;
 	
+	//boolean to specify if we have to save and then exit also
+	public static boolean saveAndExit = false;
+	
 	//private String RefFreq;
 	public JTextField RefPowerField = new JTextField();
     
@@ -95,7 +98,7 @@ public class SCM_MainWindow {
 	
 	//OpenedModels HahhMap
 	HashMap<String, Boolean> openedModels = new HashMap<String, Boolean>();
-	final JFrame frame = new JFrame();
+	static final JFrame frame = new JFrame();
 	
 	public SCM_MainWindow()
 	{
@@ -104,6 +107,13 @@ public class SCM_MainWindow {
 	public SCM_MainWindow(HashMap<String, Boolean> openedModels)
 	{
 		this.openedModels = openedModels;
+	}
+	
+	//this function exits the window;
+	public void exitWindow() {
+		frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); 
+		saveAndExit = false;
 	}
 	
     public void design(final int Index) {
@@ -136,16 +146,16 @@ public class SCM_MainWindow {
     	        lblName.setBounds(25 + insetsFrame.left, 3 + insetsFrame.top,
     	                 Fsize1.width, Fsize1.height);
     	        
-    	        JButton SButton = new JButton("Exit without saving");
+    	        JButton exitWOSaving = new JButton("Exit without saving");
     	        JButton SaveExitButton = new JButton("Save And Exit");
     	        JButton cancel = new JButton("Cancel");
     	        
     	        Dimension SaveExitSize = SaveExitButton.getPreferredSize();
-    	        Dimension ButtonSize = SButton.getPreferredSize();
+    	        Dimension ButtonSize = exitWOSaving.getPreferredSize();
     	        Dimension CancelSize = cancel.getPreferredSize();
     	        SaveExitButton.setBounds(30 + insetsFrame.left, 30 + insetsFrame.top, 
     	        		SaveExitSize.width, SaveExitSize.height);
-    	        SButton.setBounds(30 + insetsFrame.left + SaveExitSize.width + 10, 30 + insetsFrame.top,
+    	        exitWOSaving.setBounds(30 + insetsFrame.left + SaveExitSize.width + 10, 30 + insetsFrame.top,
     	                ButtonSize.width, ButtonSize.height);
     	        cancel.setBounds(30 + insetsFrame.left + SaveExitSize.width + ButtonSize.width + 20, 30 + insetsFrame.top,
     	        		SaveExitSize.width, SaveExitSize.height);  
@@ -156,22 +166,23 @@ public class SCM_MainWindow {
     	        
     	        Newframe.add(SaveExitButton);
     	        Newframe.add(lblName);
-    	        Newframe.add(SButton);
+    	        Newframe.add(exitWOSaving);
     	        Newframe.add(cancel);
     	        
     	        SaveExitButton.addActionListener(new ActionListener() {
     				public void actionPerformed(ActionEvent arg0) {
     					Newframe.dispatchEvent(new WindowEvent(Newframe, WindowEvent.WINDOW_CLOSING));
     					Newframe.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-    					control.saveAction.actionPerformed(arg0);    					
+    					control.saveAction.actionPerformed(arg0);   	
+    					//exitWindow();
+    					saveAndExit = true;
     				}
     			});
-    	        SButton.addActionListener(new ActionListener() {
+    	        exitWOSaving.addActionListener(new ActionListener() {
     				public void actionPerformed(ActionEvent arg0) {
     					Newframe.dispatchEvent(new WindowEvent(Newframe, WindowEvent.WINDOW_CLOSING));
     					Newframe.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-    					frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
-    	    			frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    					exitWindow();
     				}
     			});
     	        cancel.addActionListener(new ActionListener() {
@@ -346,6 +357,7 @@ public class SCM_MainWindow {
 				panel.add(minPSFDfield);
 				
 				tabbedPane.removeTabAt(tabbedPane.indexOfTab("Underlay Mask"));
+				tabbedPane.removeTabAt(tabbedPane.indexOfTab("Intermodulation Mask"));
 				if(tabbedPane.indexOfTab("Propagation Map")==-1)
 				tabbedPane.insertTab("Propagation Map",null, panel4,null,3);// Setting up the Propagation Map Tab			   
 				
@@ -400,8 +412,8 @@ public class SCM_MainWindow {
 			indLabel.setBounds(25, 380, indLabelSize.width, indLabelSize.height);
 			paramLabel.setBounds(25, 410, paramLabelSize.width, paramLabelSize.height);
 			polNameField.setBounds(225, 345, polFieldSize.width + 100, polFieldSize.height);
-			indexField.setBounds(225, 375, indFieldSize.width + 50, indFieldSize.height);
-			paramField.setBounds(225, 405, paramFieldSize.width + 50, paramFieldSize.height);
+			indexField.setBounds(225, 375, indFieldSize.width + 100, indFieldSize.height);
+			paramField.setBounds(225, 405, paramFieldSize.width + 100, paramFieldSize.height);
 			polNo.setBounds(550, 295, polNoSize.width, polNoSize.height);
 			polYes.setBounds(500, 295, polYesSize.width, polYesSize.height);
 		
