@@ -154,7 +154,7 @@ public class Save_XML extends ObjectFactory {
 		TxModel.getSpectrumMask().get(o).setScmMask(new SCMMask());
 		
 		try{
-			TxModel.getSpectrumMask().get(o).getScmMask().setRefFrequency(Double.parseDouble(specMask.TextField.getText()));
+			TxModel.getSpectrumMask().get(o).getScmMask().setRefFrequency(Double.parseDouble(specMask.centerFreqTextField.getText()));
 		}catch(Exception e){
 			TxModel.getSpectrumMask().get(o).getScmMask().setRefFrequency(0.0);
 		}
@@ -778,7 +778,7 @@ public class Save_XML extends ObjectFactory {
 				prop.getPropMap().getPropMapValue().get((propMapIndex)).setPropagationModel(propModel);
 			}
 			
-			else if (strData.equals("Breakpoint(meters)")) {
+			else if (strData.equals("Breakpoint(m)")) {
 				prop.getPropMap().getPropMapValue().add(new PropMapValue());
 				PropagationModel propModel = new PropagationModel();
 				PiecewiseLinear plinear = new PiecewiseLinear();

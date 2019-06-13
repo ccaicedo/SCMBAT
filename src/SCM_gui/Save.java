@@ -227,6 +227,12 @@ public class Save extends Save_XML{
 			    }
 				Newframe.dispatchEvent(new WindowEvent(Newframe, WindowEvent.WINDOW_CLOSING));
 				Newframe.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+				
+				//close the main window as well
+				if(SCM_MainWindow.saveAndExit) {
+					SCM_MainWindow mainWindowObj = new SCM_MainWindow();
+					mainWindowObj.exitWindow();
+				}
 			}
 		});
         
