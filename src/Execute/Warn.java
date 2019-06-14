@@ -35,6 +35,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
+import SCM_gui.SCM_MainWindow;
+
 public class Warn {
 
 	private JFrame Newframe;
@@ -62,6 +64,11 @@ public class Warn {
 	public void showWarnings(String title, String message)
 	{
 		JOptionPane.showMessageDialog(null, message,title,JOptionPane.WARNING_MESSAGE);
+
+		if(SCM_MainWindow.saveAndExit) {
+			SCM_MainWindow mainWindowObj = new SCM_MainWindow();
+			mainWindowObj.exitWindow();
+		}
 
 	}
 }
