@@ -56,10 +56,10 @@ public class Create {
 	JButton Exit = new JButton("Exit");
 	JButton Back = new JButton("Back");
 	JButton Create = new JButton("Create");
+	SCM_MainWindow BuildSCM;
 	
     private String ModelText;
-	
-	SCM_MainWindow BuildSCM = new SCM_MainWindow();
+
 	
 	public JPanel getPanel(){
 		
@@ -115,26 +115,26 @@ public class Create {
         Dimension btnSize = btn.getPreferredSize();
         btn.setBounds(100, 100, btnSize.width + 10, btnSize.height + 10);
         
-        rdbtnReceiver.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				BuildSCM.mode=false;
-			}
-        });
-        
-        rdbtnTransmitter.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				BuildSCM.mode=true;
-			}
-        });
+//        rdbtnReceiver.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//				BuildSCM.mode=false;
+//			}
+//        });
+//        
+//        rdbtnTransmitter.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//				BuildSCM.mode=true;
+//			}
+//        });
         
         // Setting Create button operation
         
         Create.addActionListener(new ActionListener(){
         	public void actionPerformed(ActionEvent arg0) {
+        		BuildSCM = null;
+        		BuildSCM = new SCM_MainWindow();
         		
         		ModelText=ModelName.getText().replaceAll(" ", "");
-        		
-        		BuildSCM=new SCM_MainWindow();
         	    
         	    if(rdbtnTransmitter.isSelected()==true){
         	    	BuildSCM.mode=true;
