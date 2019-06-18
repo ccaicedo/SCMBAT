@@ -676,31 +676,31 @@ public class SpecMask {
         
         
         Dimension maskTypeSize = spec.maskType.getPreferredSize();
-        spec.maskType.setBounds(490, 540 - 150, maskTypeSize.width, maskTypeSize.height);
+        spec.maskType.setBounds(490, 540 + 150, maskTypeSize.width, maskTypeSize.height);
         
         Dimension boxSize = spec.box.getPreferredSize();
-        spec.box.setBounds(620, 538 - 150, boxSize.width + 50, boxSize.height);
+        spec.box.setBounds(620, 538 + 150, boxSize.width + 50, boxSize.height);
         
         Dimension ratedLabelSize = spec.ratedLabel.getPreferredSize();
-        spec.ratedLabel.setBounds(25, 540 - 150, ratedLabelSize.width, ratedLabelSize.height);
+        spec.ratedLabel.setBounds(25, 540 + 150, ratedLabelSize.width, ratedLabelSize.height);
         
         Dimension noSize = spec.underlayno.getPreferredSize();
         Dimension yesSize = spec.underlayyes.getPreferredSize();
         
-        spec.underlayno.setBounds(380, 536 - 150, noSize.width, noSize.height);
-        spec.underlayyes.setBounds(430, 536 - 150, yesSize.width, yesSize.height);
+        spec.underlayno.setBounds(380, 536 + 150, noSize.width, noSize.height);
+        spec.underlayyes.setBounds(430, 536 + 150, yesSize.width, yesSize.height);
         
         // Calculation Method
         
                
         Dimension PowerSize = spec.PowerMarginLabel.getPreferredSize();
-        spec.PowerMarginLabel.setBounds(25, 770 - 150, PowerSize.width, PowerSize.height);
+        spec.PowerMarginLabel.setBounds(25, 770 - 150 - 200, PowerSize.width, PowerSize.height);
         
         Dimension TotPowSize = spec.TotPowerBtn.getPreferredSize();
         Dimension MaxPowSize = spec.MaxPowBtn.getPreferredSize();
         
-        spec.TotPowerBtn.setBounds(250, 770 - 150, TotPowSize.width, TotPowSize.height);
-        spec.MaxPowBtn.setBounds(250, 790 - 150, MaxPowSize.width, MaxPowSize.height);
+        spec.TotPowerBtn.setBounds(250, 770 - 150 - 200, TotPowSize.width, TotPowSize.height);
+        spec.MaxPowBtn.setBounds(250, 790 - 150 - 200, MaxPowSize.width, MaxPowSize.height);
         
         // Positioning Underlay Table
         
@@ -713,7 +713,7 @@ public class SpecMask {
         spec.underlayTable.getTableHeader().setReorderingAllowed(true);
         spec.underlayTable.getColumnModel().getColumn(0).setPreferredWidth(15);
         spec.underlayTable.getColumnModel().getColumn(0);
-        spec.underlaytableContainer.setBounds(25, 860 - 150,
+        spec.underlaytableContainer.setBounds(25, 860 - 150 - 200,
                 size3.width - 100, size3.height - 250);
           
 	}
@@ -931,11 +931,11 @@ public class SpecMask {
         // Creating Resolution Bandwidth Label and Text Field
 
         Dimension sizeBW = spec.underlayResBW.getPreferredSize();
-        spec.underlayResBW.setBounds(25, 820 - 150, sizeBW.width, sizeBW.height);
+        spec.underlayResBW.setBounds(25, 820 - 150 - 200, sizeBW.width, sizeBW.height);
         spec.SpecPanel.add(spec.underlayResBW);
      
         spec.underlayResTextField.setColumns(1);
-        spec.underlayResTextField.setBounds(235, 820 - 150, sizeBW.width, 5 + sizeBW.height);
+        spec.underlayResTextField.setBounds(235, 820 - 150 - 200, sizeBW.width, 5 + sizeBW.height);
         spec.SpecPanel.add(spec.underlayResTextField);
 
         spec.SpecPanel.add(spec.underlaytableContainer, BorderLayout.CENTER);
@@ -945,13 +945,13 @@ public class SpecMask {
              
         
         Dimension size2 = spec.underlayb3.getPreferredSize();
-        spec.underlayb1.setBounds(400 + 0, 900 - 150,
+        spec.underlayb1.setBounds(400 + 0, 900 - 150 - 200,
                      size2.width + 30, size2.height);        
-        spec.underlayb2.setBounds(400 + 0, 950 - 150,
+        spec.underlayb2.setBounds(400 + 0, 950 - 150 - 200,
                 size2.width + 30, size2.height);
-        spec.underlayb3.setBounds(550, 950 - 150,
+        spec.underlayb3.setBounds(550, 950 - 150 - 200,
                 size2.width + 30, size2.height);
-        spec.underlayb4.setBounds(550, 900 - 150, 
+        spec.underlayb4.setBounds(550, 900 - 150 - 200, 
         		size2.width + 30, size2.height);
                
         spec.underlayb1.addActionListener(new ActionListener() {
