@@ -147,7 +147,7 @@ public class Create {
         	    }
         	    
            		BuildSCM.SaveName=ModelText;
-        	    BuildSCM.design(-1);
+        	    BuildSCM.design(-1, BuildSCM);
         	    
         	}
         });

@@ -60,6 +60,11 @@ public class LoadRxModel extends LoadGUI{
 		}
 		scm.power = scm.control.powerArray.get(0);
 		
+//		for(int i =0;i<rxModel.getScmPropagationMap().size();i++)
+//		{
+//			setPropMap(scm,rxModel.getScmPropagationMap().get(i));
+//		}
+//		scm.prop = scm.control.propArray.get(0);
 		for(int i =0;i<rxModel.getScmSchedule().size();i++)
 		{
 			setSchedule(scm,rxModel.getScmSchedule().get(i));

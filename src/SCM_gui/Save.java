@@ -72,7 +72,8 @@ public class Save extends Save_XML{
 			final ArrayList<Platform> platformArray,
 			final ArrayList<Schedule> scheduleArray,
 			final JTextField TotPower,
-			final String SaveName){
+			final String SaveName,
+			SCM_MainWindow scmMainObj){
 		
 		Newframe = new JFrame("Save");
         Newframe.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -181,7 +182,7 @@ public class Save extends Save_XML{
 				
 				if(warningFlag)
 				{
-					new Warn().showWarnings("Warnings",warningMessage);
+					new Warn().showWarnings("Warnings",warningMessage, scmMainObj);
 					//Setting it back to false
 					warningFlag = false;
 					
@@ -230,8 +231,7 @@ public class Save extends Save_XML{
 				
 				//close the main window as well
 				if(SCM_MainWindow.saveAndExit) {
-					SCM_MainWindow mainWindowObj = new SCM_MainWindow();
-					mainWindowObj.exitWindow();
+					scmMainObj.exitWindow();
 				}
 			}
 		});

@@ -103,19 +103,15 @@ public class SCM_MainWindow {
 		this.openedModels = openedModels;
 	}
 
-	public static void resetAllTabData() {
-
-	}
-
 	// this function exits the window;
 	public void exitWindow() {
 		frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		frame.dispose();
 		saveAndExit = false;
 	}
 
-	public void design(final int Index) {
+	public void design(final int Index, SCM_MainWindow scmMainObj) {
+		control.setSCM_MainWindowObj(scmMainObj);
 		frame.setTitle("Spectrum Consumption Model Builder - " + SaveName);
 
 		frame.addWindowListener(new WindowAdapter() {
@@ -124,7 +120,6 @@ public class SCM_MainWindow {
 				if (Index != -1) {
 					openedModels.put("Current", false);
 				}
-				evt.getWindow().dispose();
 			}
 		});
 		final ActionListener exitAction = new ActionListener() {
@@ -172,8 +167,8 @@ public class SCM_MainWindow {
 						Newframe.dispatchEvent(new WindowEvent(Newframe, WindowEvent.WINDOW_CLOSING));
 						Newframe.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 						control.saveAction.actionPerformed(arg0);
-						// exitWindow();
 						saveAndExit = true;
+//						exitWindow();
 					}
 				});
 				exitWOSaving.addActionListener(new ActionListener() {
