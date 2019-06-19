@@ -105,9 +105,9 @@ public class SCM_MainWindow {
 
 	// this function exits the window;
 	public void exitWindow() {
+		saveAndExit = false;
 		frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		saveAndExit = false;
 	}
 
 	public void design(final int Index, SCM_MainWindow scmMainObj) {
@@ -166,8 +166,8 @@ public class SCM_MainWindow {
 					public void actionPerformed(ActionEvent arg0) {
 						Newframe.dispatchEvent(new WindowEvent(Newframe, WindowEvent.WINDOW_CLOSING));
 						Newframe.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-						control.saveAction.actionPerformed(arg0);
 						saveAndExit = true;
+						control.saveAction.actionPerformed(arg0);
 //						exitWindow();
 					}
 				});

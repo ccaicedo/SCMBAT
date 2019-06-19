@@ -76,7 +76,7 @@ public class LoadRxModel extends LoadGUI{
 		}
 		//TODO Abhatt need inputs here as i can't see any UI in reciever modal to load data 
 		if (rxModel.getIntermodulationMask().size() == 0) {
-			setIntermodulationMask(scm, new IntermodulationMask());
+//			setIntermodulationMask(scm, new IntermodulationMask());
 		}
 		if (scm.control.imcArray.size() > 0) {
 			scm.imc = scm.control.imcArray.get(0);

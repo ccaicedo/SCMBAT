@@ -77,7 +77,9 @@ public class Save extends Save_XML{
 		
 		Newframe = new JFrame("Save");
         Newframe.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        Newframe.setVisible(true);
+        
+//***************** setting to false to hide the layout, to make it visible, set it to true *********************************
+        Newframe.setVisible(false);
         Newframe.setLayout(null);
         
         Insets insetsFrame = Newframe.getInsets();
@@ -101,10 +103,12 @@ public class Save extends Save_XML{
         Newframe.add(lblName);
         Newframe.add(SButton);
         
+        SButton.doClick();
+        
         // Save Operations
         
-        SButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
+//        SButton.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent arg0) {
 			
 				SpecMask spec = specArray.get(0);
 		        UnderlayMask underlay = underlayArray.get(0);
@@ -229,12 +233,8 @@ public class Save extends Save_XML{
 				Newframe.dispatchEvent(new WindowEvent(Newframe, WindowEvent.WINDOW_CLOSING));
 				Newframe.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 				
-				//close the main window as well
-				if(SCM_MainWindow.saveAndExit) {
-					scmMainObj.exitWindow();
-				}
-			}
-		});
+//			}
+//		});
         
 	}
 	
