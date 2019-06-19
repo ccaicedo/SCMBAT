@@ -231,7 +231,7 @@ public class SCM_MainWindow {
 				panel4 = prop.getPanel();
 			}
 
-			panel5 = control.imcArray.get(0).mainPanel;
+//			panel5 = control.imcArray.get(0).mainPanel;
 			panel8 = control.locationArray.get(0).panel;
 			panel9 = control.scheduleArray.get(0).panel;
 		}
@@ -243,8 +243,8 @@ public class SCM_MainWindow {
 
 		// Changing the Panel title to Intermodulation Mask from IMC
 
-		if (tabbedPane.indexOfTab("Intermodulation Mask") == -1)
-			tabbedPane.addTab("Intermodulation Mask", panel5);
+//		if (tabbedPane.indexOfTab("Intermodulation Mask") == -1)
+//			tabbedPane.addTab("Intermodulation Mask", panel5);
 
 		JPanel panel7 = platform.getPanel();
 		if (tabbedPane.indexOfTab("Platform") == -1)
@@ -336,7 +336,7 @@ public class SCM_MainWindow {
 			panel.add(minPSFDfield);
 
 			tabbedPane.removeTabAt(tabbedPane.indexOfTab("Underlay Mask"));
-			tabbedPane.removeTabAt(tabbedPane.indexOfTab("Intermodulation Mask"));
+//			tabbedPane.removeTabAt(tabbedPane.indexOfTab("Intermodulation Mask"));
 			if (tabbedPane.indexOfTab("Propagation Map") == -1)
 				tabbedPane.insertTab("Propagation Map", null, panel4, null, 3);// Setting up the Propagation Map Tab
 
@@ -355,7 +355,7 @@ public class SCM_MainWindow {
 
 			// tabbedPane.insertTab("Spectrum Mask",null , panel2, null, 1);
 			// tabbedPane.removeTabAt(tabbedPane.indexOfTab("Spectrum Mask"));
-			tabbedPane.removeTabAt(tabbedPane.indexOfTab("Intermodulation Mask"));
+//			tabbedPane.removeTabAt(tabbedPane.indexOfTab("Intermodulation Mask"));
 			if (tabbedPane.indexOfTab("IMA") != -1)
 				tabbedPane.removeTabAt(tabbedPane.indexOfTab("IMA"));
 
