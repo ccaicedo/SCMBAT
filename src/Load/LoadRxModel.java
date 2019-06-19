@@ -47,7 +47,9 @@ public class LoadRxModel extends LoadGUI{
 		
 		int o=0;
 		
-		setUnderlay(scm,rxModel.getUnderlayMask().get(o), "Rx");
+		if (rxModel.getUnderlayMask().size()>0) {
+		 setUnderlay(scm,rxModel.getUnderlayMask().get(o), "Rx");
+		}
 		setReferencePower(scm,rxModel.getReferencePower().get(o));
 		for(int i =0;i<rxModel.getScmLocation().size();i++)
 		{
@@ -60,11 +62,11 @@ public class LoadRxModel extends LoadGUI{
 		}
 		scm.power = scm.control.powerArray.get(0);
 		
-//		for(int i =0;i<rxModel.getScmPropagationMap().size();i++)
-//		{
-//			setPropMap(scm,rxModel.getScmPropagationMap().get(i));
-//		}
-//		scm.prop = scm.control.propArray.get(0);
+		for(int i =0;i<rxModel.getScmPropagationMap().size();i++)
+		{
+			setPropMap(scm,rxModel.getScmPropagationMap().get(i));
+		}
+		scm.prop = scm.control.propArray.get(0);
 		for(int i =0;i<rxModel.getScmSchedule().size();i++)
 		{
 			setSchedule(scm,rxModel.getScmSchedule().get(i));
