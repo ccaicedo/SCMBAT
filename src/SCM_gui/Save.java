@@ -102,13 +102,12 @@ public class Save extends Save_XML{
         
         Newframe.add(lblName);
         Newframe.add(SButton);
-        
-        SButton.doClick();
+
         
         // Save Operations
         
-//        SButton.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent arg0) {
+        SButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
 			
 				SpecMask spec = specArray.get(0);
 		        UnderlayMask underlay = underlayArray.get(0);
@@ -233,8 +232,12 @@ public class Save extends Save_XML{
 				Newframe.dispatchEvent(new WindowEvent(Newframe, WindowEvent.WINDOW_CLOSING));
 				Newframe.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 				
-//			}
-//		});
+			}
+		});
+        
+        
+        //Programmatically clicks the save button to open up the next dialog box.
+        SButton.doClick();
         
 	}
 	
