@@ -72,11 +72,14 @@ public class Save extends Save_XML{
 			final ArrayList<Platform> platformArray,
 			final ArrayList<Schedule> scheduleArray,
 			final JTextField TotPower,
-			final String SaveName){
+			final String SaveName,
+			SCM_MainWindow scmMainObj){
 		
 		Newframe = new JFrame("Save");
         Newframe.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        Newframe.setVisible(true);
+        
+//***************** setting to false to hide the layout, to make it visible, set it to true *********************************
+        Newframe.setVisible(false);
         Newframe.setLayout(null);
         
         Insets insetsFrame = Newframe.getInsets();
@@ -99,6 +102,7 @@ public class Save extends Save_XML{
         
         Newframe.add(lblName);
         Newframe.add(SButton);
+
         
         // Save Operations
         
@@ -181,7 +185,7 @@ public class Save extends Save_XML{
 				
 				if(warningFlag)
 				{
-					new Warn().showWarnings("Warnings",warningMessage);
+					new Warn().showWarnings("Warnings",warningMessage, scmMainObj);
 					//Setting it back to false
 					warningFlag = false;
 					
@@ -228,13 +232,12 @@ public class Save extends Save_XML{
 				Newframe.dispatchEvent(new WindowEvent(Newframe, WindowEvent.WINDOW_CLOSING));
 				Newframe.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 				
-				//close the main window as well
-				if(SCM_MainWindow.saveAndExit) {
-					SCM_MainWindow mainWindowObj = new SCM_MainWindow();
-					mainWindowObj.exitWindow();
-				}
 			}
 		});
+        
+        
+        //Programmatically clicks the save button to open up the next dialog box.
+        SButton.doClick();
         
 	}
 	
