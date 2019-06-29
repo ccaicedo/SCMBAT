@@ -445,7 +445,8 @@ public void setUnderlay(SCM_MainWindow scm, UnderlayMask underlay, String device
 					}
 					else if(propMapValue.get(i).getPropagationModel().getLinear()!=0.0) {
 						valueType = "Prop Exponent";
-						value = String.valueOf(propMapValue.get(i+2).getPropagationModel().getLinear());
+//						value = String.valueOf(propMapValue.get(i+2).getPropagationModel().getLinear());
+						value = String.valueOf(propMapValue.get(i).getPropagationModel().getLinear());
 						
 					}
 				}
