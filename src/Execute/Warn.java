@@ -61,14 +61,19 @@ public class Warn {
         
 	}
 	//Showing the warning messages when the creation of the model fails with incorrect values
-	public void showWarnings(String title, String message)
+	public void showWarnings(String title, String message, SCM_MainWindow scmMainObj)
 	{
 		JOptionPane.showMessageDialog(null, message,title,JOptionPane.WARNING_MESSAGE);
 
 		if(SCM_MainWindow.saveAndExit) {
-			SCM_MainWindow mainWindowObj = new SCM_MainWindow();
-			mainWindowObj.exitWindow();
+			scmMainObj.exitWindow();
 		}
+
+	}
+	
+	public void showWarnings(String title, String message)
+	{
+		JOptionPane.showMessageDialog(null, message,title,JOptionPane.WARNING_MESSAGE);
 
 	}
 }

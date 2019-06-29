@@ -229,7 +229,7 @@ public class Open {
 				
 			if(!openedModels.containsKey("Current") || openedModels.get("Current")==false)
 			{
-				scm.design(Index);
+				scm.design(Index, scm);
 				openedModels.put("Current",true);
 				
 			}
