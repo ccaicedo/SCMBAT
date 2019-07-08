@@ -93,7 +93,9 @@ public class MethodAnalysis {
             BufferedReader bufferedReader = new BufferedReader(filereader);
 
             while((line = bufferedReader.readLine()) != null) {
-              homeDirectoryPath =  line.split("=")[1];
+            	if (line != null && !line.isEmpty()) {
+            		 homeDirectoryPath =  line.split("=")[1];
+            	}             
             }   
 
             // Always close files.
