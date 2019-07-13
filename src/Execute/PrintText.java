@@ -77,24 +77,57 @@ public class PrintText {
 				String gain = "";
 				double prevElevation = 0.0;
 				
+				String dataValue = "";
+				String strData = "";
+				
+				
+//				strData = tableData.getValueAt(i, 1).toString().replaceAll(" ", "");
+//				dataValue = tableData.getValueAt(i, 2).toString().replaceAll(" ", "");
+				//Elevation Angle","Azimuth Angle", "Gain (dB)
+//				if (strData.equals("ElevationAngle")) {
+//					power.getGainMap().getGainMapValue().add(new GainMapValue());
+//					power.getGainMap().getGainMapValue().get((i)).setElevation(Double.parseDouble(dataValue));
+//					
+//				}
+//				if (strData.equals("AzimuthAngle")) {
+//					power.getGainMap().getGainMapValue().add(new GainMapValue());
+//					power.getGainMap().getGainMapValue().get((i)).setAzimuth(Double.parseDouble(dataValue));
+//					
+//				}
+//				if (strData.equals("Gain(dB)")) {
+//					power.getGainMap().getGainMapValue().add(new GainMapValue());
+//					power.getGainMap().getGainMapValue().get((i)).setGain(Double.parseDouble(dataValue));
+//					
+//				}
 				for(int i=0; i<gainMapValue.size(); i++){
 					
-					if(gainMapValue.get(i).getElevation()!=prevElevation && 
-							gainMapValue.get(i).getElevation()!=0.0){
-						ele = 360 + " " + String.valueOf(gainMapValue.get(i).getElevation()) + " ";
-					}else{
-						ele = "";
-					}
+//					if(gainMapValue.get(i).getElevation()!=prevElevation && 
+//							gainMapValue.get(i).getElevation()!=0.0){
+//						ele = 360 + " " + String.valueOf(gainMapValue.get(i).getElevation()) + " ";
+//					}else{
+//						ele = "";
+//					}
+					ele = String.valueOf(gainMapValue.get(i).getElevation());
 					azi = String.valueOf(gainMapValue.get(i).getAzimuth());
 					gain = String.valueOf(gainMapValue.get(i).getGain());
-					
-					PowerStringBuilder.append(ele);
-					if(gainMapValue.get(i).getAzimuth()!=0.0){
-						PowerStringBuilder.append(azi + " ");
+					if (ele != null && !ele.equalsIgnoreCase("null") ) {
+						PowerStringBuilder.append(360 + " " + String.valueOf(ele) + " ");
 					}
-					PowerStringBuilder.append(gain + " ");
+					else if(azi != null && !azi.equalsIgnoreCase("null") ) {
+						PowerStringBuilder.append(azi+" ");
+					}
+					else if(gain != null && !gain.equalsIgnoreCase("null") ) {
+						PowerStringBuilder.append(gain+" ");
+					}
 					
-					prevElevation = gainMapValue.get(i).getElevation();
+//					PowerStringBuilder.append("\n");
+					
+//					if(gainMapValue.get(i).getAzimuth()!=0.0){
+//						PowerStringBuilder.append(azi + " ");
+//					}
+//					PowerStringBuilder.append(gain + " ");
+					
+//					prevElevation = gainMapValue.get(i).getElevation();
 				}
 				PowerStringBuilder.append(0.0);
 				PowerPrintData = PowerStringBuilder.toString();
