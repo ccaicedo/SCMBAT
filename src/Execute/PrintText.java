@@ -32,6 +32,7 @@ import java.util.List;
 
 import org.ieee.dyspansc._1900._5.scm.GainMapValue;
 import org.ieee.dyspansc._1900._5.scm.PropMapValue;
+import org.ieee.dyspansc._1900._5.scm.PropagationModel;
 import org.ieee.dyspansc._1900._5.scm.ReferencePower;
 import org.ieee.dyspansc._1900._5.scm.SCMLocation;
 import org.ieee.dyspansc._1900._5.scm.SCMPowerMap;
@@ -78,35 +79,9 @@ public class PrintText {
 				double prevElevation = 0.0;
 				
 				String dataValue = "";
-				String strData = "";
+				String strData = "";				
 				
-				
-//				strData = tableData.getValueAt(i, 1).toString().replaceAll(" ", "");
-//				dataValue = tableData.getValueAt(i, 2).toString().replaceAll(" ", "");
-				//Elevation Angle","Azimuth Angle", "Gain (dB)
-//				if (strData.equals("ElevationAngle")) {
-//					power.getGainMap().getGainMapValue().add(new GainMapValue());
-//					power.getGainMap().getGainMapValue().get((i)).setElevation(Double.parseDouble(dataValue));
-//					
-//				}
-//				if (strData.equals("AzimuthAngle")) {
-//					power.getGainMap().getGainMapValue().add(new GainMapValue());
-//					power.getGainMap().getGainMapValue().get((i)).setAzimuth(Double.parseDouble(dataValue));
-//					
-//				}
-//				if (strData.equals("Gain(dB)")) {
-//					power.getGainMap().getGainMapValue().add(new GainMapValue());
-//					power.getGainMap().getGainMapValue().get((i)).setGain(Double.parseDouble(dataValue));
-//					
-//				}
 				for(int i=0; i<gainMapValue.size(); i++){
-					
-//					if(gainMapValue.get(i).getElevation()!=prevElevation && 
-//							gainMapValue.get(i).getElevation()!=0.0){
-//						ele = 360 + " " + String.valueOf(gainMapValue.get(i).getElevation()) + " ";
-//					}else{
-//						ele = "";
-//					}
 					ele = String.valueOf(gainMapValue.get(i).getElevation());
 					azi = String.valueOf(gainMapValue.get(i).getAzimuth());
 					gain = String.valueOf(gainMapValue.get(i).getGain());
@@ -119,15 +94,6 @@ public class PrintText {
 					else if(gain != null && !gain.equalsIgnoreCase("null") ) {
 						PowerStringBuilder.append(gain+" ");
 					}
-					
-//					PowerStringBuilder.append("\n");
-					
-//					if(gainMapValue.get(i).getAzimuth()!=0.0){
-//						PowerStringBuilder.append(azi + " ");
-//					}
-//					PowerStringBuilder.append(gain + " ");
-					
-//					prevElevation = gainMapValue.get(i).getElevation();
 				}
 				PowerStringBuilder.append(0.0);
 				PowerPrintData = PowerStringBuilder.toString();
@@ -178,35 +144,62 @@ public class PrintText {
 				
 				for(int i=0; i<propMapValue.size(); i++){
 					
-					if(propMapValue.get(i).getElevation()!=prevElevation && 
-							propMapValue.get(i).getElevation()!=0.0){
-						ele = 360 + " " + String.valueOf(propMapValue.get(i).getElevation()) + " ";
-					}else{
-						ele = "";
-					}
+					ele = String.valueOf(propMapValue.get(i).getElevation());
 					azi = String.valueOf(propMapValue.get(i).getAzimuth());
+					PropagationModel propModal = (propMapValue.get(i).getPropagationModel());
 					
-					propStringBuilder.append(ele);
-					if(propMapValue.get(i).getAzimuth()!=0.0){
-						propStringBuilder.append(azi + " ");
+					if (ele != null && !ele.equalsIgnoreCase("null") ) {
+						propStringBuilder.append(360 + " " + String.valueOf(ele) + " ");
 					}
-					
-					if(propMapValue.get(i).getPropagationModel().getPiecewiseLinear()==null ||
-							propMapValue.get(i).getPropagationModel().getLinear()!=0.0){
-						n1 = String.valueOf(propMapValue.get(i).getPropagationModel().getLinear());
-						propStringBuilder.append(n1+" ");
-					}else{
+					else if(azi != null && !azi.equalsIgnoreCase("null") ) {
+						propStringBuilder.append(azi+" ");
+					}
+					else if(propModal != null ) {
+						if (propModal.getPiecewiseLinear() == null || propModal.getLinear()!=0.0 ) {
+							n1 = String.valueOf(propModal.getLinear());
+							propStringBuilder.append(n1+" ");
+						}
+						else if(propModal.getPiecewiseLinear() == null ) {
+							n1 = String.valueOf(propModal.
+									getPiecewiseLinear().getFirstExponent());					
+							dist = String.valueOf(propModal.
+									getPiecewiseLinear().getBreakpoint());
+							n2 = String.valueOf(propModal.
+									getPiecewiseLinear().getSecondExponent());
+							propStringBuilder.append(n1+" "+dist+" "+n2+" ");
+						}
 						
-						n1 = String.valueOf(propMapValue.get(i).getPropagationModel().
-								getPiecewiseLinear().getFirstExponent());					
-						dist = String.valueOf(propMapValue.get(i).getPropagationModel().
-								getPiecewiseLinear().getBreakpoint());
-						n2 = String.valueOf(propMapValue.get(i).getPropagationModel().
-								getPiecewiseLinear().getSecondExponent());
-						propStringBuilder.append(n1+" "+dist+" "+n2+" ");
 					}
 					
-					prevElevation = propMapValue.get(i).getElevation();
+//					if(propMapValue.get(i).getElevation()!=prevElevation && 
+//							propMapValue.get(i).getElevation()!=0.0){
+//						ele = 360 + " " + String.valueOf(propMapValue.get(i).getElevation()) + " ";
+//					}else{
+//						ele = "";
+//					}
+//					azi = String.valueOf(propMapValue.get(i).getAzimuth());
+//					
+//					propStringBuilder.append(ele);
+//					if(propMapValue.get(i).getAzimuth()!=0.0){
+//						propStringBuilder.append(azi + " ");
+//					}
+//					
+//					if(propMapValue.get(i).getPropagationModel().getPiecewiseLinear()==null ||
+//							propMapValue.get(i).getPropagationModel().getLinear()!=0.0){
+//						n1 = String.valueOf(propMapValue.get(i).getPropagationModel().getLinear());
+//						propStringBuilder.append(n1+" ");
+//					}else{
+//						
+//						n1 = String.valueOf(propMapValue.get(i).getPropagationModel().
+//								getPiecewiseLinear().getFirstExponent());					
+//						dist = String.valueOf(propMapValue.get(i).getPropagationModel().
+//								getPiecewiseLinear().getBreakpoint());
+//						n2 = String.valueOf(propMapValue.get(i).getPropagationModel().
+//								getPiecewiseLinear().getSecondExponent());
+//						propStringBuilder.append(n1+" "+dist+" "+n2+" ");
+//					}
+//					
+//					prevElevation = propMapValue.get(i).getElevation();
 				}
 				propStringBuilder.append(0.0);
 				propPrintData = propStringBuilder.toString();
