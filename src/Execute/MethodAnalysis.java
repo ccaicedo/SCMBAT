@@ -260,7 +260,7 @@ public class MethodAnalysis {
 				
 			}else{
 				
-				String totPowFile = dirName +  "/" + "TotPow.sh " + dirName + " "+compatTestDirectory;
+				String totPowFile = dirName + "TotPow.sh " + dirName + " "+compatTestDirectory;
 				System.out.println("total power file is : " + totPowFile);
 				Command0 = "chmod u+x " + totPowFile;
 				Command1 = totPowFile;
