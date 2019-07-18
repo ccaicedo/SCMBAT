@@ -93,7 +93,9 @@ public class MethodAnalysis {
             BufferedReader bufferedReader = new BufferedReader(filereader);
 
             while((line = bufferedReader.readLine()) != null) {
-              homeDirectoryPath =  line.split("=")[1];
+            	if (line != null && !line.isEmpty()) {
+            		 homeDirectoryPath =  line.split("=")[1];
+            	}             
             }   
 
             // Always close files.
@@ -258,8 +260,9 @@ public class MethodAnalysis {
 				
 			}else{
 				
-				String totPowFile = dirName+"TotPow.sh "+dirName + " "+compatTestDirectory;
-				Command0 = "chmod u+x "+totPowFile;
+				String totPowFile = dirName + "TotPow.sh " + dirName + " "+compatTestDirectory;
+				System.out.println("total power file is : " + totPowFile);
+				Command0 = "chmod u+x " + totPowFile;
 				Command1 = totPowFile;
 				
 				
