@@ -40,137 +40,128 @@ import org.ieee.dyspansc._1900._5.scm.SCMPropagationMap;
 import org.ieee.dyspansc._1900._5.scm.SCMSchedule;
 
 public class PrintText {
-	
-	public String printReferencePower(ReferencePower refPower, 
-			PrintWriter printfile, 
-			String device){
-		 String warningMessage="\n";
-		try{			
+
+	public String printReferencePower(ReferencePower refPower, PrintWriter printfile, String device) {
+		String warningMessage = "\n";
+		try {
 			Double data = refPower.getValue();
-			printfile.println("# name: "+device+"_TotPow");
+			printfile.println("# name: " + device + "_TotPow");
 			printfile.println("# type: scalar");
-		    printfile.println (data);
-		    printfile.println("");
+			printfile.println(data);
 			printfile.println("");
-		}catch(Exception e){
+			printfile.println("");
+		} catch (Exception e) {
 			e.printStackTrace();
-			warningMessage = warningMessage + "\nIn the "+device +" model, Inconsistent Data, the data for reference power is inconsisent";
-			
-			//new Warn().setWarn("Inconsistent Data", "the data for reference power is inconsisent");
-		}	
+			warningMessage = warningMessage + "\nIn the " + device
+					+ " model, Inconsistent Data, the data for reference power is inconsisent";
+
+			// new Warn().setWarn("Inconsistent Data", "the data for reference power is
+			// inconsisent");
+		}
 		return warningMessage;
 	}
-	
-	public String printPowerMap(SCMPowerMap powMap,
-			PrintWriter printfile,
-			String device){
-		 String warningMessage= "\n";
-		if(powMap.getGainMap()!=null){
+
+	public String printPowerMap(SCMPowerMap powMap, PrintWriter printfile, String device) {
+		String warningMessage = "\n";
+		if (powMap.getGainMap() != null) {
 			String PowerPrintData;
-			try{
+			try {
 				List<GainMapValue> gainMapValue = powMap.getGainMap().getGainMapValue();
-				
-				StringBuilder PowerStringBuilder = new StringBuilder();				
+
+				StringBuilder PowerStringBuilder = new StringBuilder();
 				PowerStringBuilder.setLength(0);
-				
+
 				String ele = "";
 				String azi = "";
 				String gain = "";
 				double prevElevation = 0.0;
-				
+
 				String dataValue = "";
-				String strData = "";				
-				
-				for(int i=0; i<gainMapValue.size(); i++){
+				String strData = "";
+
+				for (int i = 0; i < gainMapValue.size(); i++) {
 					ele = String.valueOf(gainMapValue.get(i).getElevation());
 					azi = String.valueOf(gainMapValue.get(i).getAzimuth());
 					gain = String.valueOf(gainMapValue.get(i).getGain());
-					if (ele != null && !ele.equalsIgnoreCase("null") ) {
+					if (ele != null && !ele.equalsIgnoreCase("null")) {
 						PowerStringBuilder.append(360 + " " + String.valueOf(ele) + " ");
-					}
-					else if(azi != null && !azi.equalsIgnoreCase("null") ) {
-						PowerStringBuilder.append(azi+" ");
-					}
-					else if(gain != null && !gain.equalsIgnoreCase("null") ) {
-						PowerStringBuilder.append(gain+" ");
+					} else if (azi != null && !azi.equalsIgnoreCase("null")) {
+						PowerStringBuilder.append(azi + " ");
+					} else if (gain != null && !gain.equalsIgnoreCase("null")) {
+						PowerStringBuilder.append(gain + " ");
 					}
 				}
 				PowerStringBuilder.append(0.0);
 				PowerPrintData = PowerStringBuilder.toString();
-				String PowerTest=PowerPrintData.replaceAll(" ", "");
-			    if(PowerTest.equals("") || PowerTest.equals("0")){
-			    	PowerPrintData="0 0";
-			    }
-			}catch(Exception e){
-				warningMessage = warningMessage +"\nIn the "+device+" model, Inconsistent Data, the data for power map is inconsistent or necessary";
-				
-				//new Warn().setWarn("Inconsistent Data", "the data for power map is inconsistent or necessary");
-				PowerPrintData="0 0";
+				String PowerTest = PowerPrintData.replaceAll(" ", "");
+				if (PowerTest.equals("") || PowerTest.equals("0")) {
+					PowerPrintData = "0 0";
+				}
+			} catch (Exception e) {
+				warningMessage = warningMessage + "\nIn the " + device
+						+ " model, Inconsistent Data, the data for power map is inconsistent or necessary";
+
+				// new Warn().setWarn("Inconsistent Data", "the data for power map is
+				// inconsistent or necessary");
+				PowerPrintData = "0 0";
 			}
-			
-			printfile.println("# name: "+device+"_PowerMap");
+
+			printfile.println("# name: " + device + "_PowerMap");
 			printfile.println("# type: matrix");
-			printfile.println("# rows: 1");				
+			printfile.println("# rows: 1");
 			String[] dataList = PowerPrintData.split(" ");
 			printfile.println("# columns: " + dataList.length);
-		    printfile.println(PowerPrintData);
-		    printfile.println("");
+			printfile.println(PowerPrintData);
 			printfile.println("");
-			
+			printfile.println("");
+
 		}
 		return warningMessage;
 	}
-			
-	public String printPropagationMap(SCMPropagationMap propMap,
-			PrintWriter printfile,
-			String device){
-		
-		 String warningMessage="\n";
-		if(propMap.getPropMap()!=null){
+
+	public String printPropagationMap(SCMPropagationMap propMap, PrintWriter printfile, String device) {
+
+		String warningMessage = "\n";
+		if (propMap.getPropMap() != null) {
 			String propPrintData;
-			try{
+			try {
 				List<PropMapValue> propMapValue = propMap.getPropMap().getPropMapValue();
-				
-				StringBuilder propStringBuilder = new StringBuilder();				
+
+				StringBuilder propStringBuilder = new StringBuilder();
 				propStringBuilder.setLength(0);
-				
+
 				String ele = "";
 				String azi = "";
 				String n1 = "";
 				String dist = "";
 				String n2 = "";
-				
+
 				double prevElevation = 0.0;
-				
-				for(int i=0; i<propMapValue.size(); i++){
-					
+
+				for (int i = 0; i < propMapValue.size(); i++) {
+
 					ele = String.valueOf(propMapValue.get(i).getElevation());
 					azi = String.valueOf(propMapValue.get(i).getAzimuth());
 					PropagationModel propModal = (propMapValue.get(i).getPropagationModel());
-					
-					if (ele != null && !ele.equalsIgnoreCase("null") ) {
-						propStringBuilder.append(360 + " " + String.valueOf(ele) + " ");
-					}
-					else if(azi != null && !azi.equalsIgnoreCase("null") ) {
-						propStringBuilder.append(azi+" ");
-					}
-					else if(propModal != null ) {
-						if (propModal.getPiecewiseLinear() == null || propModal.getLinear()!=0.0 ) {
+
+					if (ele != null && !ele.equalsIgnoreCase("null")) {
+//						propStringBuilder.append(360 + " " + String.valueOf(ele) + " ");
+						propStringBuilder.append(String.valueOf(ele) + " ");
+					} else if (azi != null && !azi.equalsIgnoreCase("null")) {
+						propStringBuilder.append(azi + " ");
+					} else if (propModal != null) {
+						if (propModal.getPiecewiseLinear() == null || propModal.getLinear() != 0.0) {
 							n1 = String.valueOf(propModal.getLinear());
-							propStringBuilder.append(n1+" ");
+							propStringBuilder.append(n1 + " ");
+						} else if (propModal.getPiecewiseLinear() == null) {
+							n1 = String.valueOf(propModal.getPiecewiseLinear().getFirstExponent());
+							dist = String.valueOf(propModal.getPiecewiseLinear().getBreakpoint());
+							n2 = String.valueOf(propModal.getPiecewiseLinear().getSecondExponent());
+							propStringBuilder.append(n1 + " " + dist + " " + n2 + " ");
 						}
-						else if(propModal.getPiecewiseLinear() == null ) {
-							n1 = String.valueOf(propModal.
-									getPiecewiseLinear().getFirstExponent());					
-							dist = String.valueOf(propModal.
-									getPiecewiseLinear().getBreakpoint());
-							n2 = String.valueOf(propModal.
-									getPiecewiseLinear().getSecondExponent());
-							propStringBuilder.append(n1+" "+dist+" "+n2+" ");
-						}
-						
+
 					}
-					
+
 //					if(propMapValue.get(i).getElevation()!=prevElevation && 
 //							propMapValue.get(i).getElevation()!=0.0){
 //						ele = 360 + " " + String.valueOf(propMapValue.get(i).getElevation()) + " ";
@@ -201,62 +192,60 @@ public class PrintText {
 //					
 //					prevElevation = propMapValue.get(i).getElevation();
 				}
-				propStringBuilder.append(0.0);
+//				propStringBuilder.append(0.0);
 				propPrintData = propStringBuilder.toString();
-				String propTest=propPrintData.replaceAll(" ", "");
-			    if(propTest.equals("") || propTest.equals("0")){
-			    	propPrintData="0 0";
-			    }
-			}catch(Exception e){
-				warningMessage = warningMessage + "\n In the "+device+" model, Inconsistent Data, the data for power map is inconsistent or necessary";
-				
-				//new Warn().setWarn("Inconsistent Data", "the data for power map is inconsistent or necessary");
-				propPrintData="0 0";
+				String propTest = propPrintData.replaceAll(" ", "");
+				if (propTest.equals("") || propTest.equals("0")) {
+					propPrintData = "0 0";
+				}
+			} catch (Exception e) {
+				warningMessage = warningMessage + "\n In the " + device
+						+ " model, Inconsistent Data, the data for power map is inconsistent or necessary";
+
+				// new Warn().setWarn("Inconsistent Data", "the data for power map is
+				// inconsistent or necessary");
+				propPrintData = "0 0";
 			}
-			
-			printfile.println("# name: "+device+"_PropMap");
+
+			printfile.println("# name: " + device + "_PropMap");
 			printfile.println("# type: matrix");
-			printfile.println("# rows: 1");				
+			printfile.println("# rows: 1");
 			String[] dataList = propPrintData.split(" ");
 			printfile.println("# columns: " + dataList.length);
-		    printfile.println(propPrintData);
-		    printfile.println("");
+			printfile.println(propPrintData);
+			printfile.println("");
 			printfile.println("");
 		}
 		return warningMessage;
 	}
-	
-	public void printLocation(SCMLocation loc,
-			PrintWriter printfile,
-			String device){
-		
-		if(loc.getLocation().getPoint()!=null){
-			
-			printfile.println("# name: "+device+"_Alt");
+
+	public void printLocation(SCMLocation loc, PrintWriter printfile, String device) {
+
+		if (loc.getLocation().getPoint() != null) {
+
+			printfile.println("# name: " + device + "_Alt");
 			printfile.println("# type: scalar");
-		    printfile.println (loc.getLocation().getPoint().getAltitude());
-		    printfile.println("");
+			printfile.println(loc.getLocation().getPoint().getAltitude());
 			printfile.println("");
-			
-			printfile.println("# name: "+device+"_Long");
-			printfile.println("# type: scalar");
-		    printfile.println (loc.getLocation().getPoint().getLongitude());
-		    printfile.println("");
 			printfile.println("");
-			
-			printfile.println("# name: "+device+"_Lat");
+
+			printfile.println("# name: " + device + "_Long");
 			printfile.println("# type: scalar");
-		    printfile.println (loc.getLocation().getPoint().getLatitude());
-		    printfile.println("");
+			printfile.println(loc.getLocation().getPoint().getLongitude());
+			printfile.println("");
+			printfile.println("");
+
+			printfile.println("# name: " + device + "_Lat");
+			printfile.println("# type: scalar");
+			printfile.println(loc.getLocation().getPoint().getLatitude());
+			printfile.println("");
 			printfile.println("");
 		}
 
 	}
-	
-	public void printTime(SCMSchedule sched,
-			PrintWriter printfile,
-			String device){
-		
+
+	public void printTime(SCMSchedule sched, PrintWriter printfile, String device) {
+
 	}
-	
+
 }
