@@ -41,19 +41,22 @@ ind_theta_e=0;
 
 %Finding all the indexes of 360 in PowerMap, the vector index360 shall contain index of all theh 360s present in PowerMap
 
-index360(end+1)=0;
-index360=find(P==360);
+index360=find(P==360.0);
 
 %This part identifies and marks the phi_s and phi_e, i.e. the block where required elevation resides
 
 index=1;
-
+ind_phi_curr=index;
+ind_phi_nxt=index360(index)+1;
 while true
-    ind_phi_curr=index360(index);
-    ind_phi_nxt=index360(index+1);
-    if(phi_0>=P(ind_phi_curr+1) && phi_0<P(ind_phi_nxt+1))
-        ind_phi_s=ind_phi_curr+1;
+    if(phi_0>=P(ind_phi_curr) && phi_0<P(ind_phi_nxt))
+        ind_phi_s=ind_phi_curr;
         ind_phi_e=ind_phi_nxt;
+        break;
+    end
+    ind_phi_curr=index360(index)+1;
+    ind_phi_nxt=index360(index+1)+1;
+    if(index==c)
         break;
     end
     index++;
@@ -61,10 +64,10 @@ end
 
 %This part identifies and marks the theta_s and theta_e indexes i.e. the piece where the required azimuth resides
 
+index=ind_phi_s+1;
 if(ind_phi_e - ind_phi_s==3)
     p=P(ind_phi_s+2);
 else
-    index=ind_phi_s+1;
     while index <= ind_phi_e-2
         ind_theta_curr=index;
         ind_theta_next=index+2;
@@ -75,4 +78,3 @@ else
         index=index+2;
     end
 end
-

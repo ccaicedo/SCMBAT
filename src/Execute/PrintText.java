@@ -84,14 +84,15 @@ public class PrintText {
 					azi = String.valueOf(gainMapValue.get(i).getAzimuth());
 					gain = String.valueOf(gainMapValue.get(i).getGain());
 					if (ele != null && !ele.equalsIgnoreCase("null")) {
-						PowerStringBuilder.append(360 + " " + String.valueOf(ele) + " ");
+//						PowerStringBuilder.append(360 + " " + String.valueOf(ele) + " ");
+						PowerStringBuilder.append(String.valueOf(ele) + " ");
 					} else if (azi != null && !azi.equalsIgnoreCase("null")) {
 						PowerStringBuilder.append(azi + " ");
 					} else if (gain != null && !gain.equalsIgnoreCase("null")) {
 						PowerStringBuilder.append(gain + " ");
 					}
 				}
-				PowerStringBuilder.append(0.0);
+//				PowerStringBuilder.append(0.0);
 				PowerPrintData = PowerStringBuilder.toString();
 				String PowerTest = PowerPrintData.replaceAll(" ", "");
 				if (PowerTest.equals("") || PowerTest.equals("0")) {
@@ -151,9 +152,11 @@ public class PrintText {
 						propStringBuilder.append(azi + " ");
 					} else if (propModal != null) {
 						if (propModal.getPiecewiseLinear() == null || propModal.getLinear() != 0.0) {
+							propStringBuilder.append("0 ");
 							n1 = String.valueOf(propModal.getLinear());
 							propStringBuilder.append(n1 + " ");
 						} else if (propModal.getPiecewiseLinear() == null) {
+							propStringBuilder.append("1 ");
 							n1 = String.valueOf(propModal.getPiecewiseLinear().getFirstExponent());
 							dist = String.valueOf(propModal.getPiecewiseLinear().getBreakpoint());
 							n2 = String.valueOf(propModal.getPiecewiseLinear().getSecondExponent());
@@ -161,6 +164,8 @@ public class PrintText {
 						}
 
 					}
+					
+
 
 //					if(propMapValue.get(i).getElevation()!=prevElevation && 
 //							propMapValue.get(i).getElevation()!=0.0){
