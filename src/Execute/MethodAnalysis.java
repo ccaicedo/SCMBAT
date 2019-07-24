@@ -247,12 +247,11 @@ public class MethodAnalysis {
 
 				warningFlag = true;
 				warningMessage = warningMessage + "\nSystems are compatible due to non-overlapping schedules";
-				// new Warn().setWarn("Systems Compatible", "Systems are compatible due to
-				// non-overlapping schedules");
-
-			} else {
-
-				String totPowFile = dirName + "/" + "TotPow.sh " + dirName + " " + compatTestDirectory;
+			//	new Warn().setWarn("Systems Compatible", "Systems are compatible due to non-overlapping schedules");
+				
+			}else{
+				
+				String totPowFile = dirName + "TotPow.sh " + dirName + " "+compatTestDirectory;
 				System.out.println("total power file is : " + totPowFile);
 				Command0 = "chmod u+x " + totPowFile;
 				Command1 = totPowFile;
