@@ -45,8 +45,7 @@ R=[Rx_Lat,Rx_Long,Rx_Alt];
 %Compare frequency range
 if((Tx_SpecMask(1)<Rx_UnderlayMask(1) && Tx_SpecMask(end-1)<Rx_UnderlayMask(1)) || (Tx_SpecMask(1)>Rx_UnderlayMask(end-1) && Tx_SpecMask(end-1)>Rx_UnderlayMask(end-1)) )
     disp('System is compatible')
-    break;
-    else
+    return;
 end
 
 %Transmitter Power map attenuation to Total Power;
