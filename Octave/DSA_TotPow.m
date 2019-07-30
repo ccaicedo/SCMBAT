@@ -50,11 +50,16 @@ end
 
 %Transmitter Power map attenuation to Total Power;
 p=PowerMap_find(theta_Txo,phi_Txo,Tx_PowerMap);
+%disp("the p value for transmitter is : "), disp(p);
+%disp("the total power value is: "), disp(Tx_TotPow);
 Power=Tx_TotPow+p;
+%disp("the final power is : " ), disp(Power);
 Power=Power+(10*log10(1e-3/Tx_ResBW)); % Bringing the Reference Bandwidth to 1 Khz;
 
 %Attenuation due to Propagation Map
 [n0,d_break,n1]=PropMap_find_piece(theta_Txo,phi_Txo,Tx_PropMap,Min_Dist);
+%disp("the returned values of n0, d_break, n1 is : " ), disp(n0), disp(d_break), disp(n1);
+%disp("the minimum distance is : "), disp(Min_Dist);
 if(Min_Dist>d_break && d_break!=0.0)
   Power = Power - (10*n0*log10(d_break)) - (10*n1*log10(Min_Dist/d_break));
 else
@@ -69,6 +74,7 @@ else
     theta_Rxo=theta_Txo+180;
 end
 p2=PowerMap_find(theta_Rxo,phi_Rxo,Rx_PowerMap);
+%disp("the p power value for receiver model is : " ), disp(p2);
 Power=Power+(10*log10(Rx_ResBW/1e-3));
 Power=Power+p2;
 

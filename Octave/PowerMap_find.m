@@ -67,12 +67,14 @@ end
 index=ind_phi_s+1;
 if(ind_phi_e - ind_phi_s==3)
     p=P(ind_phi_s+2);
+    %disp("the value of p(powermap) is: " ), disp(p);
 else
     while index <= ind_phi_e-2
         ind_theta_curr=index;
         ind_theta_next=index+2;
         if(theta_0 >= P(ind_theta_curr) && theta_0 < P(ind_theta_next))
             p=P(ind_theta_curr+1);
+            %disp("the value of p(powermap) is: " ), disp(p);
             break;
         end
         index=index+2;

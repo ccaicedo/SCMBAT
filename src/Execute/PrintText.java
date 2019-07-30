@@ -151,11 +151,11 @@ public class PrintText {
 					} else if (azi != null && !azi.equalsIgnoreCase("null")) {
 						propStringBuilder.append(azi + " ");
 					} else if (propModal != null) {
-						if (propModal.getPiecewiseLinear() == null || propModal.getLinear() != 0.0) {
+						if (propModal.getPiecewiseLinear() == null || propModal.getLinear() != null) {
 							propStringBuilder.append("0 ");
 							n1 = String.valueOf(propModal.getLinear());
 							propStringBuilder.append(n1 + " ");
-						} else if (propModal.getPiecewiseLinear() == null) {
+						} else if (propModal.getPiecewiseLinear() != null) {
 							propStringBuilder.append("1 ");
 							n1 = String.valueOf(propModal.getPiecewiseLinear().getFirstExponent());
 							dist = String.valueOf(propModal.getPiecewiseLinear().getBreakpoint());

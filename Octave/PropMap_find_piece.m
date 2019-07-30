@@ -68,17 +68,30 @@ end
 
 %This part identifies and marks the theta_s and theta_e indexes i.e. the piece where the required azimuth resides
 
-if(ind_phi_e - ind_phi_s == 4 || ind_phi_e - ind_phi_s == 6)
+n0=0;
+d_break=0;
+n1=0;
+
+%disp("the phi at start is : "), disp(P(ind_phi_s));
+%disp("the phi at end is : "), disp(P(ind_phi_e));
+%disp("diff is : "), disp(ind_phi_e - ind_phi_s);
+if(ind_phi_e - ind_phi_s == 5 || ind_phi_e - ind_phi_s == 7)
+    ind_theta_curr=ind_phi_s+1;
+    %disp("the theta current is : "), disp(P(ind_theta_curr));
+    %disp("the theta current + 1 is : "), disp(P(ind_theta_curr+1));
     if(P(ind_theta_curr+1)==0)          % 0 refers to linear type
+        %disp("it's linear type");
         n0=P(ind_theta_curr+2);
         d_break=0;
         n1=0;
     end
     if(P(ind_theta_curr+1)==1)          % 1 refers to piecewise linear
-        n0=ind_theta_curr+2;
-        d_break=ind_theta_curr+3;
-        n1=ind_theta_curr+4;
+        %disp("it's piecewise linear");
+        n0=P(ind_theta_curr+2);
+        d_break=P(ind_theta_curr+3);
+        n1=P(ind_theta_curr+4);
     end
+    %disp("the values are: " ), disp(n0), disp(d_break), disp(n1);
 else
     ind_theta_next=ind_phi_s+1;
 
@@ -87,23 +100,28 @@ else
 
         % Finding next theta depends on whether we have linear or piecewise linear
         if(P(ind_theta_curr + 1) == 0)          % 0 refers to linear type
+            %disp("setting next for linear type");
             ind_theta_next=ind_theta_curr+3;
         end
         if(P(ind_theta_curr + 1) == 1)          % 1 refers to piecewise linear
+            %disp("setting next for piecewise linear");
             ind_theta_next=ind_theta_curr+5;
         end
 
         if(theta_0 >= P(ind_theta_curr) && theta_0 < P(ind_theta_next))
             if(P(ind_theta_curr + 1) == 0)          % 0 refers to linear type
+                %disp("it's linear type");
                 n0 = P(ind_theta_curr + 2);
                 d_break = 0;
                 n1 = 0;
             end
             if(P(ind_theta_curr + 1) == 1)          % 1 refers to piecewise linear
+                %disp("it's piecewise linear");
                 n0 = P(ind_theta_curr + 2);
                 d_break = P(ind_theta_curr + 3);
                 n1 = P(ind_theta_curr + 4);
             end
+            %disp("the values are: " ), disp(n0), disp(d_break), disp(n1);
             break;
         end
     end
