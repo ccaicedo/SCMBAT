@@ -32,6 +32,10 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -213,6 +217,12 @@ public class Home {
     	String filename = meth.getFilePath()+"logs/SCM_logFile_"+curDate+".log";//+"_"+log_number+".log";
         try
         {
+        	new File(meth.getFilePath()+"logs").mkdirs();
+//        	Path dir = Paths.get(meth.getFilePath()+"logs");
+//        	Files.createDirectory(dir);
+        	
+        	new File(filename).createNewFile();
+
         	 PatternLayout layout = new PatternLayout(); 
         	 layout.setConversionPattern("%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n");
              appender =  new RollingFileAppender();
@@ -227,8 +237,8 @@ public class Home {
         }
         catch(Exception e)
         {
-        	
         	System.out.println("Exception in loading the logger in the Home");
+        	System.out.println(e);
         }
     }
     

@@ -99,27 +99,31 @@ if(isempty(list_2)==0)
   Spec_mask_new=[Underlay_freq_list(end),p2,Spec_mask_new(2*list_2(end)+2:end)];
 end
 
-fig1 = figure;
+fig1 = figure ();
 plot(Tx_SpecMask(1:2:end-1),Tx_SpecMask(2:2:end),'b.-','LineWidth',2)
 hold all
 plot(Spec_mask_new(1:2:end-1),Spec_mask_new(2:2:end),'r.-','LineWidth',2)
 grid on
 xlabel('Frequency (MHz)');
 ylabel('Power (dB)');
-saveas(fig1, 'Analysis_Figure_1.png')
-movefile('Analysis_Figure_1.png', report_directory)
+title("Analysis Figure 1");
+saveas(fig1, 'Analysis_Figure_1.png');
+movefile('Analysis_Figure_1.png', report_directory);
 
+%this pause value is used to allow the octave code to flush the first figure and create the second figure, in the absense of this pause, the second figure might not get generated.
+%this pause value might need to be increased for the slower systems. (initially set to .4 seconds)
+pause (.4);
 
-fig2 = figure;
+fig2 = figure ();
 plot(Rx_UnderlayMask(1:2:end-1),Rx_UnderlayMask(2:2:end),'b.-','LineWidth',2)
 hold all
 plot(Spec_mask_new(1:2:end-1),Spec_mask_new(2:2:end),'r.-','LineWidth',2)
 grid on
 xlabel('Frequency (MHz)');
 ylabel('Power (dB)');
-
-saveas(fig2,'CompatAnalysis.png')
-movefile('CompatAnalysis.png', report_directory)
+title("Compat Analysis");
+saveas(fig2,'CompatAnalysis.png');
+movefile('CompatAnalysis.png', report_directory);
 	
 
 %SCM compatibility
