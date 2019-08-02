@@ -110,7 +110,9 @@ title("Analysis Figure 1");
 saveas(fig1, 'Analysis_Figure_1.png');
 movefile('Analysis_Figure_1.png', report_directory);
 
-%pause (.4);
+%this pause value is used to allow the octave code to flush the first figure and create the second figure, in the absense of this pause, the second figure might not get generated.
+%this pause value might need to be increased for the slower systems. (initially set to .4 seconds)
+pause (.4);
 
 fig2 = figure ();
 plot(Rx_UnderlayMask(1:2:end-1),Rx_UnderlayMask(2:2:end),'b.-','LineWidth',2)
