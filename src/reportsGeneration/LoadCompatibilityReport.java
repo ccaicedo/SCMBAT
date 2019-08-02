@@ -62,7 +62,7 @@ public class LoadCompatibilityReport {
            
            //Navigate the document and obtain the division element where the content needs to be added
            Element divElem =  rootDoc.getElementById("div02");
-           
+           divElem.empty();
            
            //Update the image src in the img elements
            Element imgElem_1 = rootDoc.getElementById("img1");
