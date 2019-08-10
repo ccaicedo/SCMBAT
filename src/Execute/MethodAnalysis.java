@@ -180,7 +180,7 @@ public class MethodAnalysis {
 
 // Executing compatibility based on method specified. 	
 	public void execCompat(String method, int[] txIndex, ArrayList<TxModel> TxData, ArrayList<SCM_home.Model> txArray,
-			int[] rxIndex, ArrayList<RxModel> RxData, ArrayList<SCM_home.Model> rxArray) {
+			int[] rxIndex, ArrayList<RxModel> RxData, ArrayList<SCM_home.Model> rxArray, Boolean OctaveLogging) {
 
 		// ExecuteFrame execFrame =null;
 		String Command0 = null;
@@ -251,10 +251,10 @@ public class MethodAnalysis {
 				
 			}else{
 				
-				String totPowFile = dirName + "TotPow.sh " + dirName + " "+compatTestDirectory;
+				String totPowFile = dirName + "TotPow.sh " + dirName + " " + compatTestDirectory;
 				System.out.println("total power file is : " + totPowFile);
 				Command0 = "chmod u+x " + totPowFile;
-				Command1 = totPowFile;
+				Command1 = totPowFile + " " + OctaveLogging;
 				System.out.println("Command0 is : " + Command0);
 				System.out.println("Command1 is : " + Command1);
 

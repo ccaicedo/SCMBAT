@@ -1,1 +1,1 @@
-HOME_DIR=/Users/ab/git/SCMBAT_new/
+HOME_DIR=/home/ab/git/SCMBAT/
