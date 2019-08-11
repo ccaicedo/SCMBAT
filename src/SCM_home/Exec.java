@@ -171,7 +171,8 @@ public class Exec {
 			String ratedMethod = methAn.analyseRatedMethod(TxData, RxData);
 			System.out.println(ratedMethod);
 			logger.debug(ratedMethod);
-			methAn.execCompat(ratedMethod, txBoxIndices, TxData, TxArray, rxBoxIndices, RxData, RxArray, false);
+			methAn.execCompat(ratedMethod, txBoxIndices, TxData, TxArray, rxBoxIndices, 
+					RxData, RxArray, loggingEnabled, reportGeneration, resultFilePath);
 			if (methAn.warningFlag) {
 				new Warn().showWarnings("Systems Compatible", methAn.warningMessage);
 				methAn.warningFlag = false;
@@ -410,7 +411,7 @@ public class Exec {
 					System.out.println(ratedMethod);
 					logger.debug(ratedMethod);
 					methAn.execCompat(ratedMethod, txBoxIndices, TxData, TxArray, 
-							rxBoxIndices, RxData, RxArray, OctaveLogging);
+							rxBoxIndices, RxData, RxArray, OctaveLogging, true, null);
 					if(methAn.warningFlag)
 					{
 						new Warn().showWarnings("Systems Compatible", methAn.warningMessage);

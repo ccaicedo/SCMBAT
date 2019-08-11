@@ -70,12 +70,87 @@ public class Home {
 	static String LOG_FILE_NAME= "./resources/logging.properties";
 	public static RollingFileAppender appender =null;
 	
+    public Home() {}
     
-    
-	public Home(){
+    //overloaded constructor for the class Home
+    //argsPresent - tells whether there are any arguments present or not i.e. if the program is being run from command line or not.
+    //args - set of arguments passed while running the program in command line; null if being run from GUI.
+	public Home(Boolean argsPresent, String[] args){
 		initializeLogger();
-		design();
+		if(argsPresent)
+			execute(args);
+		else
+			design();
 	}
+	
+	//this function is called when the program is being executed through command line 
+	//args - the set of argument received through the command line
+	//returns - void
+	public void execute(String[] args) {
+		List<String> txModels = new ArrayList<String>();
+		List<String> rxModels = new ArrayList<String>();
+    	Boolean loggingEnabled = false, reportGeneration = false, txPresent = false, rxPresent = false;
+    	String resultFilePath = null;
+		int index = 0, argLength = args.length;
+		while(index < argLength) {
+			String arg = args[index++];
+			
+			switch (arg) {
+			case "-tx":
+//				for(int item = index; item < argLength; item++) {
+				while(true) {
+					if(args[index].startsWith("-")) {
+//						index = item;
+						break;
+					}
+					txModels.add(args[index++]);
+					txPresent = true;
+				}
+				continue;
+				
+			case "-rx":
+				while(true) {
+					if(args[index].startsWith("-")) {
+//						index = item;
+						break;
+					}
+					rxModels.add(args[index++]);
+					rxPresent = true;
+				}
+				continue;
+
+			case "-logging":
+				if(args[index++].equalsIgnoreCase("true"))
+					loggingEnabled = true;
+				continue;
+
+			case "-report":
+				if(args[index++].equalsIgnoreCase("true"))
+					reportGeneration = true;
+				continue;
+
+			case "-result":
+				resultFilePath = args[index++];
+				continue;
+
+			default:
+				System.out.println("Invalid argument detected: '" + arg + "', Please retry.");
+				break;
+			}
+		}
+		
+		if(!txPresent) {
+			System.out.println("Missing required transmitter (-tx) switch in the arguments, Please retry.");
+			return;
+		}
+		if(!rxPresent) {
+			System.out.println("Missing required receiver (-rx) switch in the arguments, Please retry.");
+			return;
+		}
+		Exec.ExecuteCompatiabilityTestFromCLI(txModels, rxModels, loggingEnabled, reportGeneration, resultFilePath);
+
+	}
+	
     public void design() {
     	
     	MainPanel=new JPanel(new CardLayout());
@@ -246,80 +321,32 @@ public class Home {
         }
     }
     
+    //The main function for the Application
+    //this is called when the application is ran, both from command line and GUI
     public static void main(String[] args) {
 		// Schedule a job for the event-dispatching thread:
-		// creating and showing this application's GUI.
 		// -tx transmitter_file1_path transmitter_file2_path -rx receiver_file_path
 		if (args != null && args.length >= 4) {
-			List<String> txModels = new ArrayList<String>();
-			List<String> rxModels = new ArrayList<String>();
-	    	Boolean loggingEnabled = false, reportGeneration = true;
-	    	String resultFilePath = null;
-			int index = 0, argLength = args.length;
-//			boolean rxPath = false;
-//			for (int i = 1; i < args.length; i++) {
-//				if (args[i].equalsIgnoreCase("-rx")) {
-//					rxPath = true;
-//					continue;
-//				}
-//				if (rxPath) {
-//					rxModels.add(args[i]);
-//				} else {
-//					txModels.add(args[i]);
-//				}
-//
-//			}
-			while(index < argLength) {
-				String arg = args[index++];
-				String[] switches = {"-tx", "-rx", "-logging", "-result", "-report"};
-				switch (arg) {
-				case "-tx":
-					for(int item = index; item < argLength; item++) {
-						if(args[item].startsWith("-")) {
-							index = item;
-							continue;
-							}
-						txModels.add(args[item++]);
-					}
-					continue;
-					
-				case "-rx":
-					for(int item = index; item < argLength; item++) {
-						if(args[item].startsWith("-")) {
-							index = item;
-							continue;
-							}
-						rxModels.add(args[item++]);
-					}
-					continue;
-
-				case "-logging":
-					if(args[index++].equalsIgnoreCase("true"))
-						loggingEnabled = true;
-					continue;
-
-				case "-report":
-					if(args[index++].equalsIgnoreCase("true"))
-						reportGeneration = true;
-					continue;
-
-				case "-result":
-					resultFilePath = args[index++];
-					continue;
-
-				default:
-					System.out.println("Invalid argument detected: '" + arg + "', Please retry.");
-					break;
-				}
-			}
-			
-			Exec.ExecuteCompatiabilityTestFromCLI(txModels, rxModels, loggingEnabled, reportGeneration, resultFilePath);
-		} else {
+			//running directly without showing the GUI.
 			javax.swing.SwingUtilities.invokeLater(new Runnable() {
 				public void run() {
 					try {
 
-						Home fr = new Home();
+						Home fr = new Home(true, args);
+						fr.setVisible(true);
+
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			});
+		} else {
+			// creating and showing this application's GUI.
+			javax.swing.SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
+					try {
+
+						Home fr = new Home(false, null);
 						fr.setVisible(true);
 
 					} catch (Exception e) {

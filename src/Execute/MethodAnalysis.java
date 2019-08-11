@@ -35,6 +35,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -177,10 +178,44 @@ public class MethodAnalysis {
 	public void setCompatTestDirectory(String compatTestDirectory) {
 		this.compatTestDirectory = compatTestDirectory;
 	}
+	
+//function to generate result file
+	public void genreateResultFile(String resultFilePath, String method, String result, String powerMargin) {
+		PrintWriter writer = null;
+		File file = new File(resultFilePath);
+		file.delete();
+		try {
+			writer = new PrintWriter(resultFilePath, "UTF-8");
+			writer.println("Compatibility Analysis Report Results");
+		} catch (FileNotFoundException e1) {
+			logger.error("File not found " + resultFilePath);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+
+		/*
+		 * Write the results into the Report file
+		 */
+		try {
+			// Add in the results file
+
+			writer.println(method);
+			writer.println();
+			writer.println("Compatibility Result: " + result);
+			if(powerMargin != null) {
+				writer.println("");
+				writer.println("Power Margin: " + powerMargin);
+			}
+
+		} catch (Exception e) {
+			logger.error(e.toString());
+		}
+		writer.close();
+	}
 
 // Executing compatibility based on method specified. 	
 	public void execCompat(String method, int[] txIndex, ArrayList<TxModel> TxData, ArrayList<SCM_home.Model> txArray,
-			int[] rxIndex, ArrayList<RxModel> RxData, ArrayList<SCM_home.Model> rxArray, Boolean OctaveLogging) {
+			int[] rxIndex, ArrayList<RxModel> RxData, ArrayList<SCM_home.Model> rxArray, Boolean OctaveLogging, Boolean reportGeneration, String resultFilePath) {
 
 		// ExecuteFrame execFrame =null;
 		String Command0 = null;
@@ -189,7 +224,7 @@ public class MethodAnalysis {
 		String PowerMargin = null;
 		String dirName = getFilePath();
 		PrintWriter printfile = null;
-
+		
 		if (dirName == "") {
 			warningMessage = warningMessage + "\nError in getting directory path for Compatability Analysis";
 		}
@@ -284,22 +319,8 @@ public class MethodAnalysis {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-
-				/*
-				 * Write the results into the Report file
-				 */
-				try {
-					// Add in the results file
-
-					printfile.println("");
-					printfile.println("Method: Total Power");
-					printfile.println("Compatibility Result: " + CompatStat);
-					printfile.println("");
-					printfile.println("Power Margin: " + PowerMargin);
-
-				} catch (Exception e) {
-					logger.error(e.toString());
-				}
+				
+				genreateResultFile(resultFile, "Method: Total Power", CompatStat, PowerMargin);
 
 				/*
 				 * execFrame = new ExecuteFrame(); execFrame.setPlotPath(compatTestDirectory);
@@ -307,7 +328,12 @@ public class MethodAnalysis {
 				 */
 
 				// Call the load html page method
-				loadCompRep.displayCompatibilityReport(CompatStat, PowerMargin, compatTestDirectory);
+				if(reportGeneration)
+					loadCompRep.displayCompatibilityReport(CompatStat, PowerMargin, compatTestDirectory);
+				
+				//generate result file from the command line if the path is specified
+				if(resultFilePath != null)
+					genreateResultFile(resultFilePath, "Method: Total Power", CompatStat, PowerMargin);
 			}
 
 			break;
@@ -362,27 +388,19 @@ public class MethodAnalysis {
 					e.printStackTrace();
 				}
 
-				/*
-				 * Write the results into the Report file
-				 */
-				try {
-					// Add in the results file
-
-					printfile.println("");
-					printfile.println("Method: MaximumPowerDensity");
-					printfile.println("Compatibility Result: " + CompatStat);
-					printfile.println("");
-					printfile.println("Power Margin: " + PowerMargin);
-					printfile.println("");
-				} catch (Exception e) {
-					logger.error(e.toString());
-				}
+				//generate result file in the reports folder
+				genreateResultFile(resultFilePath, "Method: MaximumPowerDensity", CompatStat, null);
 
 				/*
 				 * execFrame = new ExecuteFrame(); execFrame.getFrame(CompatStat,PowerMargin);
 				 */
 				// Call the load html page method
-				loadCompRep.displayCompatibilityReport(CompatStat, PowerMargin, compatTestDirectory);
+				if(reportGeneration)
+					loadCompRep.displayCompatibilityReport(CompatStat, PowerMargin, compatTestDirectory);
+				
+				//generate result file from the command line if the path is specified
+				if(resultFilePath != null)
+					genreateResultFile(resultFilePath, "Method: MaximumPowerDensity", CompatStat, null);
 			}
 
 			break;
@@ -503,7 +521,8 @@ public class MethodAnalysis {
 				 */
 
 				// Load the html page using the method
-				loadCompRep.displayBWRatedAnalysis(allCompatModelList, nonCompatModelList, compatModelList,
+				if(reportGeneration)
+					loadCompRep.displayBWRatedAnalysis(allCompatModelList, nonCompatModelList, compatModelList,
 						compatTestDirectory);
 
 			}
@@ -628,7 +647,8 @@ public class MethodAnalysis {
 				 * execBWRated.buildNonCompatList(nonCompatModelList);
 				 * execBWRated.getFrame(BW,PSD,indexList);
 				 */
-				loadCompRep.displayBWRatedAnalysis(allCompatModelList, nonCompatModelList, compatModelList,
+				if(reportGeneration)
+					loadCompRep.displayBWRatedAnalysis(allCompatModelList, nonCompatModelList, compatModelList,
 						compatTestDirectory);
 
 			}
@@ -749,7 +769,8 @@ public class MethodAnalysis {
 				 * execBTPRated.buildCompatList(compatList);
 				 * execBTPRated.buildNonCompatList(nonCompatList); execBTPRated.getFrame();
 				 */
-				loadCompRep.displayBTPRatedAnalysis(nonCompatList, compatList, compatTestDirectory);
+				if(reportGeneration)
+					loadCompRep.displayBTPRatedAnalysis(nonCompatList, compatList, compatTestDirectory);
 
 			}
 
@@ -870,7 +891,8 @@ public class MethodAnalysis {
 				 * execBTPRated.buildCompatList(compatList);
 				 * execBTPRated.buildNonCompatList(nonCompatList); execBTPRated.getFrame();
 				 */
-				loadCompRep.displayBTPRatedAnalysis(nonCompatList, compatList, compatTestDirectory);
+				if(reportGeneration)
+					loadCompRep.displayBTPRatedAnalysis(nonCompatList, compatList, compatTestDirectory);
 
 			}
 
@@ -973,7 +995,8 @@ public class MethodAnalysis {
 				 * execDutyRated.buildNonCompatList(dutyNonCompatList);
 				 * execDutyRated.getFrame();
 				 */
-				loadCompRep.displayDCRatedAnalysis(dutyNonCompatList, dutyCompatList, compatTestDirectory);
+				if(reportGeneration)
+					loadCompRep.displayDCRatedAnalysis(dutyNonCompatList, dutyCompatList, compatTestDirectory);
 
 			}
 
