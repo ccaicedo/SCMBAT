@@ -250,24 +250,70 @@ public class Home {
 		// Schedule a job for the event-dispatching thread:
 		// creating and showing this application's GUI.
 		// -tx transmitter_file1_path transmitter_file2_path -rx receiver_file_path
-
-		if (args != null && args.length >= 4 && args[0].equalsIgnoreCase("-tx")) {
+		if (args != null && args.length >= 4) {
 			List<String> txModels = new ArrayList<String>();
 			List<String> rxModels = new ArrayList<String>();
-			boolean rxPath = false;
-			for (int i = 1; i < args.length; i++) {
-				if (args[i].equalsIgnoreCase("-rx")) {
-					rxPath = true;
+	    	Boolean loggingEnabled = false, reportGeneration = true;
+	    	String resultFilePath = null;
+			int index = 0, argLength = args.length;
+//			boolean rxPath = false;
+//			for (int i = 1; i < args.length; i++) {
+//				if (args[i].equalsIgnoreCase("-rx")) {
+//					rxPath = true;
+//					continue;
+//				}
+//				if (rxPath) {
+//					rxModels.add(args[i]);
+//				} else {
+//					txModels.add(args[i]);
+//				}
+//
+//			}
+			while(index < argLength) {
+				String arg = args[index++];
+				String[] switches = {"-tx", "-rx", "-logging", "-result", "-report"};
+				switch (arg) {
+				case "-tx":
+					for(int item = index; item < argLength; item++) {
+						if(args[item].startsWith("-")) {
+							index = item;
+							continue;
+							}
+						txModels.add(args[item++]);
+					}
 					continue;
-				}
-				if (rxPath) {
-					rxModels.add(args[i]);
-				} else {
-					txModels.add(args[i]);
-				}
+					
+				case "-rx":
+					for(int item = index; item < argLength; item++) {
+						if(args[item].startsWith("-")) {
+							index = item;
+							continue;
+							}
+						rxModels.add(args[item++]);
+					}
+					continue;
 
+				case "-logging":
+					if(args[index++].equalsIgnoreCase("true"))
+						loggingEnabled = true;
+					continue;
+
+				case "-report":
+					if(args[index++].equalsIgnoreCase("true"))
+						reportGeneration = true;
+					continue;
+
+				case "-result":
+					resultFilePath = args[index++];
+					continue;
+
+				default:
+					System.out.println("Invalid argument detected: '" + arg + "', Please retry.");
+					break;
+				}
 			}
-			Exec.ExecuteCompatiabilityTestFromCLI(txModels, rxModels);
+			
+			Exec.ExecuteCompatiabilityTestFromCLI(txModels, rxModels, loggingEnabled, reportGeneration, resultFilePath);
 		} else {
 			javax.swing.SwingUtilities.invokeLater(new Runnable() {
 				public void run() {

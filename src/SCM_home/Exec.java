@@ -104,7 +104,7 @@ public class Exec {
 
 
 	public static String ExecuteCompatiabilityTestFromCLI(List<String> txModelsFilePaths,
-			List<String> rxModelsFilePaths) {
+			List<String> rxModelsFilePaths, Boolean loggingEnabled, Boolean reportGeneration, String resultFilePath) {
 
 		StringBuilder errorMessage = new StringBuilder();
 		final Logger logger = Logger.getLogger(Exec.class);
