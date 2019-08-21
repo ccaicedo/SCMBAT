@@ -226,7 +226,7 @@ public void setUnderlay(SCM_MainWindow scm, UnderlayMask underlay, String device
 				scm.underlay.no.setSelected(false);
 				
 				Rating ratedMask = underlay.getRating();
-				if(ratedMask.getRatedBW()!=0.0){
+				if(ratedMask.getRatedBW()!=null){
 					scm.underlay.box.setSelectedIndex(0);
 					scm.underlay.underlayRated.BandRatField.setText(String.valueOf(
 							ratedMask.getRatedBW()));
@@ -246,7 +246,7 @@ public void setUnderlay(SCM_MainWindow scm, UnderlayMask underlay, String device
 					}
 				}
 				
-				if(ratedMask.getRatedBTP()!=0.0){
+				if(ratedMask.getRatedBTP()!=null){
 					scm.underlay.box.setSelectedIndex(2);
 					scm.underlay.underlayRated.BTPRatingField.setText(String.valueOf(
 							ratedMask.getRatedBTP()));
@@ -280,7 +280,7 @@ public void setUnderlay(SCM_MainWindow scm, UnderlayMask underlay, String device
 						ratedModel.addRow(rowData);
 					}
 				}
-				if(ratedMask.getPorPIndex()!=0){
+				if(ratedMask.getPorPIndex()!=null){
 					scm.underlay.box.setSelectedIndex(5);
 					scm.underlay.underlayRated.PolicyField.setText(String.valueOf(
 							ratedMask.getPorPIndex()));

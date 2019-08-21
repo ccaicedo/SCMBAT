@@ -33,6 +33,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.geom.Line2D;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -339,11 +340,12 @@ public class SpecMask {
 						System.out.println("Frequency List selected");
 						logger.info("Frequency List selected");
 						SpecHop.removeBandList(SpecPanel);
-						SpecPanel.revalidate();
+						SpecPanel.validate();
 						SpecPanel.repaint();
 						
 						SpecHop.getFreqList(SpecPanel);
-						SpecPanel.revalidate();
+						SpecPanel.invalidate();
+						SpecPanel.validate();
 						SpecPanel.repaint();
 					}else{
 						
@@ -351,7 +353,7 @@ public class SpecMask {
 			}        	
        };
 
-    // Setting Band List Radio Button Operation
+    // Setting definition Radio Button Operation
        
       final ActionListener BandAction = new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
@@ -360,11 +362,14 @@ public class SpecMask {
 					logger.info("Band List selected");
 					System.out.println("Band List selected");
 					SpecHop.removeFreqList(SpecPanel);
-					SpecPanel.revalidate();
+					SpecPanel.invalidate();
+					SpecPanel.validate();
 					SpecPanel.repaint();
 					
 					SpecHop.getBandList(SpecPanel);
-					SpecPanel.revalidate();
+					Line2D line = new Line2D.Float(675, 150, 675, 500);
+					SpecPanel.invalidate();
+					SpecPanel.validate();
 					SpecPanel.repaint();
 				}
 			}        	
@@ -381,7 +386,8 @@ public class SpecMask {
     		   
     		   SpecHop.removeBandList(SpecPanel);
     		   SpecHop.removeFreqList(SpecPanel);
-    		   SpecPanel.revalidate();
+			   SpecPanel.invalidate();
+    		   SpecPanel.validate();
     		   SpecPanel.repaint();
     	   } 
        }); 
@@ -549,7 +555,7 @@ public class SpecMask {
 		 //underlayText.setFont(new Font("Arial", Font.BOLD, 14));
 		// underlayYesButton.setFont(new Font("Arial", Font.BOLD, 14));
 		 //underlayNoButton.setFont(new Font("Arial", Font.BOLD, 14));
-		 underlayText.setBounds(25,510 - 150,size2.width + 160, size2.height);
+		 underlayText.setBounds(25,510 - 150,size2.width + 200, size2.height);
 		 underlayYesButton.setBounds(280,510 - 150,size2.width-10, size2.height);
 		 underlayNoButton.setBounds(390,510 - 150,size2.width, size2.height);
 		 

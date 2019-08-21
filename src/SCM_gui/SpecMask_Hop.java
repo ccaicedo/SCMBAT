@@ -135,25 +135,25 @@ public class SpecMask_Hop {
 		// Dwell Time
         Dwell = new JLabel("Dwell Time (ms)");
 		Dimension DwellLabelSize = Dwell.getPreferredSize();
-        Dwell.setBounds(700 - 225, 400,
+        Dwell.setBounds(700 + 25, 160,
                  DwellLabelSize.width, DwellLabelSize.height);
         
         DwellField.setColumns(10);
-        DwellField.setBounds(800 - 180, 400, DwellLabelSize.width + 10, DwellLabelSize.height + 5);
+        DwellField.setBounds(800 + 75, 160, DwellLabelSize.width + 10, DwellLabelSize.height + 5);
         
         // Revisit Period
         RevisitLabel = new JLabel("Revisit Period (ms)");
 		Dimension RevisitLabelSize = RevisitLabel.getPreferredSize();
-        RevisitLabel.setBounds(700- 225, 440,
+        RevisitLabel.setBounds(700 + 25, 200,
                  RevisitLabelSize.width, RevisitLabelSize.height);
         
         RevisitField.setColumns(10); 
-        RevisitField.setBounds(800 - 180, 440, DwellLabelSize.width + 10, DwellLabelSize.height +5);
+        RevisitField.setBounds(800 + 75, 200, DwellLabelSize.width + 10, DwellLabelSize.height +5);
         
         // FreqList Table
 		FreqListLabel = new JLabel("Center frequency list definition");
 		Dimension FreqLabSize = FreqListLabel.getPreferredSize();
-		FreqListLabel.setBounds(25, 320, FreqLabSize.width, FreqLabSize.height);
+		FreqListLabel.setBounds(725, 130, FreqLabSize.width, FreqLabSize.height);
         
 		//To allow the element on the last edit to be saved
         table2.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
@@ -167,7 +167,7 @@ public class SpecMask_Hop {
         table2.getTableHeader().setReorderingAllowed(true);
         table2.getColumnModel().getColumn(0).setPreferredWidth(15);
         table2.getColumnModel().getColumn(0);
-        tableContainer2.setBounds(700 - 675, 350,
+        tableContainer2.setBounds(700 + 25, 280,
                 size4.width - 300 , size4.height - 250);
 		
         // Frequency List Buttons
@@ -175,9 +175,9 @@ public class SpecMask_Hop {
         Remove2 = new JButton("Remove Row");
         
         Dimension sizeBtn = Add2.getPreferredSize();
-        Add2.setBounds(900 - 625, 350,
+        Add2.setBounds(900 + 25, 300,
                      sizeBtn.width + 50, sizeBtn.height);
-        Remove2.setBounds(900 - 625, 400,
+        Remove2.setBounds(900 + 25, 350,
                 sizeBtn.width + 50, sizeBtn.height);
         
         Add2.addActionListener(new ActionListener() {
@@ -231,7 +231,7 @@ public class SpecMask_Hop {
 		//Band List Data
 		BandListLabel = new JLabel("Band list definition");
 		Dimension BandLabSize = BandListLabel.getPreferredSize();
-		BandListLabel.setBounds(25, 320, BandLabSize.width, BandLabSize.height);
+		BandListLabel.setBounds(725, 130, BandLabSize.width, BandLabSize.height);
 		
         tableContainer3 = new JScrollPane(table3);
         Dimension size6 = tableContainer3.getPreferredSize();
@@ -239,23 +239,23 @@ public class SpecMask_Hop {
         table3.getTableHeader().setReorderingAllowed(true);
         table3.getColumnModel().getColumn(0).setPreferredWidth(15);
         table3.getColumnModel().getColumn(0);
-        tableContainer3.setBounds(700 - 675, 350,
+        tableContainer3.setBounds(700 + 25, 250,
                 size6.width - 220 , size6.height - 250);
         
         tableContainer4 = new JScrollPane(table4);
         Dimension size7 = tableContainer4.getPreferredSize();
         
         table4.getTableHeader().setReorderingAllowed(true);
-        tableContainer4.setBounds(700 - 675, 350,
+        tableContainer4.setBounds(700 + 25, 280,
                 size7.width - 220 , size7.height - 250);
         
         // Band List Add and Remove Buttons
         Add3 = new JButton("Add Row");
         Remove3 = new JButton("Remove Row");
 
-        Add3.setBounds(900 - 625, 350,
+        Add3.setBounds(900 + 75, 280,
                      sizeBtn.width + 50, sizeBtn.height);
-        Remove3.setBounds(900 - 625, 400 + 0,
+        Remove3.setBounds(900 + 75, 330 + 0,
                 sizeBtn.width + 50, sizeBtn.height);
         
         
@@ -306,11 +306,11 @@ public class SpecMask_Hop {
 		});		
 		
 		Dimension btn1Size = freqListBtn1.getPreferredSize();
-		freqListBtn1.setBounds(900-625, 440, btn1Size.width, btn1Size.height);
+		freqListBtn1.setBounds(900-175, 240, btn1Size.width, btn1Size.height);
 		freqListBtn1.setSelected(true);
 		
 		Dimension btn2Size = freqListBtn2.getPreferredSize();
-		freqListBtn2.setBounds(900-625, 470, btn2Size.width, btn2Size.height);
+		freqListBtn2.setBounds(900-55, 240, btn2Size.width, btn2Size.height);
 	
 		ButtonGroup freqListgroup = new ButtonGroup();
 		freqListgroup.add(freqListBtn1);
@@ -340,8 +340,9 @@ public class SpecMask_Hop {
 				panel.add(Remove2);
 				panel.remove(tableContainer4);
 				
+				panel.invalidate();
+				panel.validate();
 				panel.repaint();
-				panel.revalidate();
 			}
 			
 		});
@@ -353,14 +354,16 @@ public class SpecMask_Hop {
 				panel.remove(Add2);
 				panel.remove(Remove2);
 				panel.add(tableContainer4);
-				
+
+				panel.invalidate();
+				panel.validate();
 				panel.repaint();
-				panel.revalidate();
 			}
 			
 		});
-        
-        panel.revalidate();
+
+		panel.invalidate();
+        panel.validate();
 		panel.repaint();
 	}
 	
@@ -376,8 +379,9 @@ public class SpecMask_Hop {
         panel.remove(FreqListLabel);
         panel.remove(freqListBtn1);
         panel.remove(freqListBtn2);
-        
-        panel.revalidate();
+
+		panel.invalidate();
+        panel.validate();
 		panel.repaint();
 		
 	}
@@ -392,8 +396,9 @@ public class SpecMask_Hop {
         panel.add(RevisitLabel);
         panel.add(RevisitField);
         panel.add(BandListLabel);
-        
-        panel.revalidate();
+
+		panel.invalidate();
+        panel.validate();
 		panel.repaint();
         
 	}
@@ -408,8 +413,9 @@ public class SpecMask_Hop {
         panel.remove(RevisitLabel);
         panel.remove(RevisitField);
         panel.remove(BandListLabel);
-        
-        panel.revalidate();
+
+		panel.invalidate();
+        panel.validate();
 		panel.repaint();
 	}
 		

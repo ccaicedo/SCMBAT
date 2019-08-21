@@ -186,6 +186,9 @@ public class LoadCompatibilityReport {
            Element divElem_1 =  rootDoc.getElementById("div03");
            Element divElem_2 =  rootDoc.getElementById("div04");
            Element divElem_3 =  rootDoc.getElementById("div05");
+           divElem_1.empty();
+           divElem_2.empty();
+           divElem_3.empty();
            
            divElem_1.appendChild(nonCompTable);
            divElem_2.appendChild(allcompTable);
@@ -283,6 +286,8 @@ public class LoadCompatibilityReport {
           
            Element divElem_1 =  rootDoc.getElementById("div03");
            Element divElem_2 =  rootDoc.getElementById("div04");
+           divElem_1.empty();
+           divElem_2.empty();
            
            divElem_1.appendChild(nonCompTable);
            divElem_2.appendChild(compTable);
@@ -363,6 +368,8 @@ public class LoadCompatibilityReport {
           
            Element divElem_1 =  rootDoc.getElementById("div03");
            Element divElem_2 =  rootDoc.getElementById("div04");
+           divElem_1.empty();
+           divElem_2.empty();
            
            divElem_1.appendChild(nonCompTable);
            divElem_2.appendChild(compTable);
