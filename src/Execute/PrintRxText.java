@@ -95,7 +95,7 @@ public class PrintRxText extends PrintText {
 
 					Rating ratedMask = model.getUnderlayMask().get(o).getRating();
 
-					if (ratedMask.getRatedBW() != 0.0) {
+					if (ratedMask.getRatedBW() != null) {
 
 						printfile.println("# name: Rx_BWRatedList");
 						printfile.println("# type: matrix");
@@ -126,7 +126,7 @@ public class PrintRxText extends PrintText {
 						printfile.println("");
 					}
 
-					if (ratedMask.getRatedBTP() != 0.0) {
+					if (ratedMask.getRatedBTP() != null) {
 
 						printfile.println("# name: Rx_BTPRatedList");
 						printfile.println("# type: matrix");
@@ -180,7 +180,7 @@ public class PrintRxText extends PrintText {
 
 					}
 
-					if (ratedMask.getPorPIndex() != 0) {
+					if (ratedMask.getPorPIndex() != null) {
 						printfile.println("# name: Rx_Policy");
 						printfile.println("# type: scalar");
 						printfile.println(ratedMask.getPorPIndex());
@@ -199,7 +199,7 @@ public class PrintRxText extends PrintText {
 
 			printfile.close();
 		} catch (Exception e) {
-
+			e.printStackTrace();
 			warningMessage = warningMessage + "\nERROR - Couldn't save the Receiver data correctly";
 			// new Warn().setWarn("Error", "Couldn't save the Receiver data correctly");
 		}

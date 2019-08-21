@@ -32,27 +32,34 @@ function [p] = find_power(fo,p0)
 fv=p0(1:2:end-1);
 pv=p0(2:2:end);
 
+%disp("fv is: "), disp(fv);
+%disp("pv is: "), disp(pv);
+
 %plot(fv,pv,'r-','LineWidth',2);
 
  ind=find(fo==fv);
- 
+ %disp("ind is : " ), disp(ind);
+
  if(isempty(ind)==1)
      
      
      ind2=find(fv>fo);
+     %disp("ind2 is: "), disp(ind2);
      if(isempty(ind2)==0)
          i=min(ind2);
          if(i==1)
              p=pv(1);
+	     %disp("i==1, and the power is :"), disp(p);
          else
              if(pv(i)==pv(i-1))
                  p=pv(i);
+	         %disp("inside if, the power is :"), disp(p);
              else
                  b1=(pv(i)-pv(i-1))./( fv(i)-fv(i-1) );
                  b0=pv(i-1)-(b1*fv(i-1));
                  
                  p=b0+(b1*fo);
-                 
+	         %disp("inside else, the power is :"), disp(p);
              end
          end
      else
@@ -63,6 +70,6 @@ pv=p0(2:2:end);
      p=pv(ind);     
  end
                  
-             
+%disp("the value of p is: "), disp(p);       
 
 end
