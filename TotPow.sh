@@ -10,11 +10,15 @@ then
     then
 	cd $1/Octave
 	#pwd
-	octave --silent --eval "DSA_TotPow('$2', '$3');"
+	octave --silent --eval "DSA_TotPow('$2');"  > temp.txt;
+	awk '{gsub("result:", "");print}' <<<  cat temp.txt;
+	rm -f temp.txt;
     else
 	cd $1/Octave
 	#pwd
-	octave --silent --eval "DSA_TotPow('$2', 0);"
+	octave --silent --eval "DSA_TotPow('$2');" |  grep 'result:' > temp.txt;
+	awk '{gsub("result:", "");print}' <<<  cat temp.txt;
+	rm -f temp.txt;
     fi
 
 else

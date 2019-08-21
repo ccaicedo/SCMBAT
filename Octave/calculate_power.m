@@ -27,9 +27,9 @@ along with program.  If not, see <http://www.gnu.org/licenses/>.
   p0: spectrum/underlay mask representation: [f0,p0,f1,p1....fn,pn],
   RBW: Resolution Bandwidth
 %}
-
 function [P_net,P_net_dB] = calculate_power(p0,RBW)
-
+disp("************* Inside calculate_power **************");
+RBW = RBW*1e+6;			% adjusting RBW to Hertz (previously MHz)
 fv=p0(1:2:end-1)*1e+6;
 pv=p0(2:2:end);
 %plot(fv,pv,'r-','LineWidth',2);
@@ -51,4 +51,5 @@ for i=1:length(fv)-1
     end
     P_net_dB=10*log10(P_net);
 end
+disp("************* Exiting calculate_power **************");
 end

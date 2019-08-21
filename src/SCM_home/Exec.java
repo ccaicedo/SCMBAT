@@ -137,7 +137,7 @@ public class Exec {
 				System.out.println(TxData.get(i).toString());
 				logger.debug(TxData.get(i).toString());
 			} catch (Exception exp) {
-
+				exp.printStackTrace();
 				errorMessage.append("\nIncorrect Format - File is of invalid format");
 			}
 		}
@@ -162,7 +162,7 @@ public class Exec {
 				System.out.println(RxData.get(i).toString());
 				logger.debug(RxData.get(i).toString());
 			} catch (Exception exp) {
-
+				exp.printStackTrace();
 				errorMessage.append("\nIncorrect Format - File is of invalid format");
 			}
 		}
@@ -180,7 +180,7 @@ public class Exec {
 			}
 
 		} catch (Exception exp) {
-
+			exp.printStackTrace();
 			errorMessage.append("Warning " + methAn.warningMessage);
 		}
 
@@ -323,6 +323,7 @@ public class Exec {
 				try {
 					Desktop.getDesktop().open(htmlURL);
 				} catch (IOException e1) {
+					e1.printStackTrace();
 					logger.error("Error in opening the web page"+ e1.getMessage() );
 				}
 			}
@@ -358,6 +359,7 @@ public class Exec {
 					System.out.println(TxData.get(i).toString());
 					logger.debug(TxData.get(i).toString());
 					}catch(Exception exp){
+						exp.printStackTrace();
 						methAn.warningFlag = true;
 						methAn.warningMessage = methAn.warningMessage + "\nIncorrect Format - File is of invalid format";
 						
@@ -393,6 +395,7 @@ public class Exec {
 					System.out.println(RxData.get(i).toString());
 					logger.debug(RxData.get(i).toString());
 					}catch(Exception exp){
+						exp.printStackTrace();
 						methAn.warningFlag = true;
 						methAn.warningMessage = methAn.warningMessage + "\n Incorrect Format -File is of invalid format";
 						
@@ -421,10 +424,11 @@ public class Exec {
 					
 					
 				}catch(Exception exp){
+					exp.printStackTrace();
 					new Warn().showWarnings("Warning", methAn.warningMessage);
 					methAn.warningFlag = false;
 					methAn.warningMessage = "\n";
-				}				
+				}		
 				
 			}        	
         };

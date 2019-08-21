@@ -146,13 +146,13 @@ public class MethodAnalysis {
 
 			if (Rx.getUnderlayMask().get(0).getRating() != null) {
 				Rating ratedMask = Rx.getUnderlayMask().get(0).getRating();
-				if (ratedMask.getRatedBW() != 0.0) {
+				if (ratedMask.getRatedBW() != null) {
 					ratedMethod = "ratedBW";
 				}
 				if (ratedMask.getBwRatedList() != null) {
 					ratedMethod = "bwRatedList";
 				}
-				if (ratedMask.getRatedBTP() != 0.0) {
+				if (ratedMask.getRatedBTP() != null) {
 					ratedMethod = "ratedBTP";
 				}
 				if (ratedMask.getBtpRatedList() != null) {
@@ -161,7 +161,7 @@ public class MethodAnalysis {
 				if (ratedMask.getDcRatedList() != null) {
 					ratedMethod = "dcRatedList";
 				}
-				if (ratedMask.getPorPIndex() != 0) {
+				if (ratedMask.getPorPIndex() != null) {
 					ratedMethod = "pOrPIndex";
 				}
 			} else {
