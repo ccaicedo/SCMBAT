@@ -59,7 +59,7 @@ public class IMC {
 	public JLabel RelFreq = new JLabel("Center Frequency (MHz)");
 	public JRadioButton relFreqBtn = new JRadioButton("Use relative frequency values");
 	
-    public JButton b3 = new JButton("Save Data");
+    public JButton b3 = new JButton("Save");
     JButton b4 = new JButton("Exit");
  
     JButton b1 = new JButton("Add Row");
@@ -105,7 +105,7 @@ public class IMC {
 	public JLabel imaRelFreq = new JLabel("Center Frequency (MHz)");
 	public JRadioButton imarelFreqBtn = new JRadioButton("Use relative frequency values");
 
-    JButton imab3 = new JButton("Save Data");
+    JButton imab3 = new JButton("Save");
     JButton imab4 = new JButton("Exit");
  
     JButton imab1 = new JButton("Add Row");
@@ -270,7 +270,7 @@ public class IMC {
 
         // Creating reference frequency text field
         RelFreqField.setColumns(1);
-        RelFreqField.setBounds(255 + 0, 210 + 150, sizeLabel.width - 120, 5 + sizeLabel.height);
+        RelFreqField.setBounds(255 + 0, 210 + 150, sizeLabel.width, 5 + sizeLabel.height);
         panel.add(RelFreqField);        
         
         if(relFreqBtn.isSelected()==false){

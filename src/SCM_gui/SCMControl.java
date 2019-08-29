@@ -46,6 +46,12 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
 public class SCMControl {
+	
+	public SCM_MainWindow scmMainObj;
+	
+	public void setSCM_MainWindowObj (SCM_MainWindow scmMainObjParam){
+		scmMainObj = scmMainObjParam;
+	}
 
 	
 	public class createListener implements ActionListener {
@@ -152,7 +158,8 @@ public class SCMControl {
 					platformArray,
 					scheduleArray,
 					TotPower,
-					SaveName);
+					SaveName, scmMainObj);
+			
 		}
     };
 

@@ -79,6 +79,7 @@ public class PowerMap {
 			
     };
     
+    
     public JTable table1 = new JTable(table_model1) {
     	/**
 		 * 
@@ -146,8 +147,6 @@ public class PowerMap {
     String DropDownOptions[] = { "Elevation Angle", "Azimuth Angle", "Gain (dB)" };
   	public JComboBox<String> ValueTypeComboBox = new JComboBox<String>(DropDownOptions);
   	public JTextField ValueTypeRowItemValue = new JTextField();
-  	
-  	public static Boolean firstRowInsertion = true;
   	
   	public static boolean isNumeric(String strNum) {
   	    try {
@@ -331,6 +330,21 @@ public class PowerMap {
 	    table1.setShowGrid(true);
 	    table1.setGridColor(Color.BLACK);
 	    
+	    table1.setDefaultRenderer(Object.class, new DefaultTableCellRenderer()
+	    {
+	        @Override
+	        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
+	        {
+	        	int rowCount = table.getModel().getRowCount();
+	            final Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+	            if (!isSelected) {
+	            	c.setBackground(row  == 0 || row == 1 || row == rowCount-1 || row == rowCount-2? Color.LIGHT_GRAY : Color.WHITE);
+	            }
+	            
+	            return c;
+	        }
+	    });
+	    
 	    DefaultTableCellRenderer headerRenderer = new DefaultTableCellRenderer();
 	    headerRenderer.setBackground(Color.lightGray);
 	    
@@ -339,7 +353,7 @@ public class PowerMap {
 	    	
 	    table1.getTableHeader().setOpaque(false);
 	    table1.getTableHeader().setBackground(Color.lightGray);
-	    
+
 	    table = table1;
 	  //To allow the element on the last edit to be saved
 	    table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
@@ -440,15 +454,15 @@ public class PowerMap {
 	    
 		b1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-
+				//adding only if any numeric data has been entered.
 				if(isNumeric(ValueTypeRowItemValue.getText())) {
 					DefaultTableModel model = (DefaultTableModel) table.getModel();
-					if(firstRowInsertion) {
-						model.removeRow(model.getRowCount()-3);
-					}
+					model.removeRow(model.getRowCount()-3);
 					count = table.getRowCount();				
 					model.insertRow(model.getRowCount()-2, new Object[]{count-3,ValueTypeComboBox.getSelectedItem().toString() , ValueTypeRowItemValue.getText()});
 					model.insertRow(model.getRowCount()-2, new Object[]{table.getRowCount()-3,"" ,""});
+					//resetting the data in the text field
+					ValueTypeRowItemValue.setText("");
 				}
 			}
 		});
@@ -461,7 +475,6 @@ public class PowerMap {
 				
 				//deleting only the last row
 				if (table.getRowCount() == 4) {
-					firstRowInsertion = true;
 					return;
 				}
 				int selectedRowIndex = table.getRowCount()-4;
@@ -474,7 +487,6 @@ public class PowerMap {
 
 				if(table.getRowCount() == 4) {
 					model.insertRow( model.getRowCount()-2, new Object[]{"1","",""});
-					firstRowInsertion = true;
 				}
 				
 //				   }

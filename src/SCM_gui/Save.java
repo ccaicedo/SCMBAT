@@ -72,11 +72,14 @@ public class Save extends Save_XML{
 			final ArrayList<Platform> platformArray,
 			final ArrayList<Schedule> scheduleArray,
 			final JTextField TotPower,
-			final String SaveName){
+			final String SaveName,
+			SCM_MainWindow scmMainObj){
 		
-		Newframe = new JFrame("Save Data");
+		Newframe = new JFrame("Save");
         Newframe.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        Newframe.setVisible(true);
+        
+//***************** setting to false to hide the layout, to make it visible, set it to true *********************************
+        Newframe.setVisible(false);
         Newframe.setLayout(null);
         
         Insets insetsFrame = Newframe.getInsets();
@@ -88,7 +91,7 @@ public class Save extends Save_XML{
         lblName.setBounds(25 + insetsFrame.left, 3 + insetsFrame.top,
                  Fsize1.width, Fsize1.height);
         
-        JButton SButton = new JButton("Save data");
+        JButton SButton = new JButton("Save");
         Dimension ButtonSize = SButton.getPreferredSize();
         SButton.setBounds(300 + insetsFrame.left, 20 + insetsFrame.top,
                 ButtonSize.width, ButtonSize.height);       
@@ -99,6 +102,7 @@ public class Save extends Save_XML{
         
         Newframe.add(lblName);
         Newframe.add(SButton);
+
         
         // Save Operations
         
@@ -137,7 +141,7 @@ public class Save extends Save_XML{
 				for(int i=0;i<propArray.size();i++)
 		        {
 		        	 PropMap prop = propArray.get(i);
-		        	 addPropMap(prop);
+		        	 addPropMap(prop, device);
 		        }
 				for(int i=0;i<imcArray.size();i++)
 				{
@@ -151,8 +155,13 @@ public class Save extends Save_XML{
 				*  Underlay Mask 
 				*  and Propagation Map for Transmitter
 				*/
-				addUnderlay(spec, device);
+				addUnderlay(underlay, device);
 				addReferencePower(TotPower, device);
+				for(int i=0;i<propArray.size();i++)
+		        {
+		        	 PropMap prop = propArray.get(i);
+		        	 addPropMap(prop, device);
+		        }
 				
 					}
 				}
@@ -176,7 +185,7 @@ public class Save extends Save_XML{
 				
 				if(warningFlag)
 				{
-					new Warn().showWarnings("Warnings",warningMessage);
+					new Warn().showWarnings("Warnings",warningMessage, scmMainObj);
 					//Setting it back to false
 					warningFlag = false;
 					
@@ -222,8 +231,13 @@ public class Save extends Save_XML{
 			    }
 				Newframe.dispatchEvent(new WindowEvent(Newframe, WindowEvent.WINDOW_CLOSING));
 				Newframe.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+				
 			}
 		});
+        
+        
+        //Programmatically clicks the save button to open up the next dialog box.
+        SButton.doClick();
         
 	}
 	

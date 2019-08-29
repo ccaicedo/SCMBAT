@@ -37,12 +37,12 @@ T=[Tx_Lat,Tx_Long,Tx_Alt];
 R=[Rx_Lat,Rx_Long,Rx_Alt];
 
 [phi_Txo,theta_Txo,Min_Dist]=find_direction(T,R);
-disp('orientation')
+disp('orientation');
 [phi_Txo,theta_Txo,Min_Dist]
 
 %Compare frequency range
 if((Tx_SpecMask(1)<Rx_UnderlayMask(1) && Tx_SpecMask(end-1)<Rx_UnderlayMask(1)) || (Tx_SpecMask(1)>Rx_UnderlayMask(end-1) && Tx_UnderlayMask(end-1)>Rx_SpecMask(end-1)) )
-    disp('System is compatible')
+    disp('System is compatible');
     break;
     else
 end
@@ -51,13 +51,15 @@ end
 p=PowerMap_find(theta_Txo,phi_Txo,Tx_PowerMap);
 Power=Tx_TotPow+p;
 Power=Power+(10*log10(1e-3/Tx_ResBW)); % Bringing the Reference Bandwidth to 1 Khz;
+
 %Attenuation due to Propagation Map
 [n0,d_break,n1]=PropMap_find_piece(theta_Txo,phi_Txo,Tx_PropMap,Min_Dist);
 if(Min_Dist>d_break && d_break!=0.0)
-Power = Power - (10*n0*log10(d_break)) - (10*n1*log10(Min_Dist/d_break));
+    Power = Power - (10*n0*log10(d_break)) - (10*n1*log10(Min_Dist/d_break));
 else
-Power = Power - (10*n0*log(Min_Dist));
+    Power = Power - (10*n0*log(Min_Dist));
 end
+
 %Attenuation due to the Receiver Power Map
 phi_Rxo=-phi_Txo;
 if(theta_Txo>180)
@@ -65,6 +67,7 @@ if(theta_Txo>180)
 else
     theta_Rxo=theta_Txo+180;
 end
+
 p2=PowerMap_find(theta_Rxo,phi_Rxo,Rx_PowerMap);
 Power=Power+(10*log10(Rx_ResBW/1e-3));
 Power=Power+p2;
@@ -72,8 +75,7 @@ Power=Power+p2;
 
 Spec_mask_new=Tx_SpecMask;
 Spec_mask_new(2:2:end)=Tx_SpecMask(2:2:end)+Power;
-Underlay_mask=Rx_UnderlayMask;
-
+Underlay_mask=Rx_UnderlayMask
 Underlay_freq_list=Underlay_mask(1:2:end-1);
 Underlay_power_list=Underlay_mask(2:2:end);
 Underlay_min_pow_freq=Underlay_freq_list( find(Underlay_power_list==min(Underlay_power_list)) );
@@ -96,15 +98,15 @@ i1=1;
 
 
 for i=1:length(BWRated_BW_List)
-
-BWRatedMask=Underlay_mask;
-BWRatedMask(2:2:end)=BWRatedMask(2:2:end)+BWRated_Power_List(i);
-
-MaxPSD=Spec_MaxPower;
-MaxPSD
-
-Underlay_pow_cent=find_power(Spec_cent_freq,BWRatedMask);
   
+    BWRatedMask=Underlay_mask;
+    BWRatedMask(2:2:end)=BWRatedMask(2:2:end)+BWRated_Power_List(i);
+
+    MaxPSD=Spec_MaxPower;
+    MaxPSD
+
+    Underlay_pow_cent=find_power(Spec_cent_freq,BWRatedMask);
+
     if(Spec_MaxPower<Underlay_pow_cent && Spec_BW<=BWRated_BW_List(i))
       
         if(Spec_cent_freq<Underlay_min_pow_freq(1) || Spec_cent_freq>Underlay_min_pow_freq(end))

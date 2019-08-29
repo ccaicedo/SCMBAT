@@ -50,7 +50,7 @@ public class IMA {
 	JLabel RelFreq = new JLabel("Center Frequency (MHz)");
 	JRadioButton relFreqBtn = new JRadioButton("Use relative frequency values");
 
-    JButton b3 = new JButton("Save Data");
+    JButton b3 = new JButton("Save");
     JButton b4 = new JButton("Exit");
  
     JButton b1 = new JButton("Add Row");
@@ -171,7 +171,7 @@ public class IMA {
         // Creating reference frequency text field
 
         RelFreqField.setColumns(1);
-        RelFreqField.setBounds(255 + 0, 260-60, sizeLabel.width - 120, 5 + sizeLabel.height);
+        RelFreqField.setBounds(255 + 0, 260-60, sizeLabel.width, 5 + sizeLabel.height);
        
 
         panel.add(RelFreqField);          

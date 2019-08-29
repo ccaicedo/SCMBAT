@@ -35,6 +35,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
+import SCM_gui.SCM_MainWindow;
+
 public class Warn {
 
 	private JFrame Newframe;
@@ -59,6 +61,16 @@ public class Warn {
         
 	}
 	//Showing the warning messages when the creation of the model fails with incorrect values
+	public void showWarnings(String title, String message, SCM_MainWindow scmMainObj)
+	{
+		JOptionPane.showMessageDialog(null, message,title,JOptionPane.WARNING_MESSAGE);
+
+		if(SCM_MainWindow.saveAndExit) {
+			scmMainObj.exitWindow();
+		}
+
+	}
+	
 	public void showWarnings(String title, String message)
 	{
 		JOptionPane.showMessageDialog(null, message,title,JOptionPane.WARNING_MESSAGE);
