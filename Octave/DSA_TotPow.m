@@ -223,7 +223,7 @@ disp("[Power_Rx,Power_Rx_dB] @ '[Power_Rx,Power_Rx_dB] = calculate_power(p_Rx_ne
 
 %Power_Tx_dB
 AllowablePower=Power_Rx_dB;
-Power_Margin_Difference = AllowablePower-Power_Tx_dB;
+Power_Margin_Difference = Power_Tx_dB-AllowablePower;
 if(AllowablePower>Power_Tx_dB)
     disp(strcat('result: ', 'System is compatible'));
     disp(strcat('result: ', num2str(Power_Margin_Difference)));
