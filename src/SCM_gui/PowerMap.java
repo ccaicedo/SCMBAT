@@ -44,6 +44,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -450,13 +451,38 @@ public class PowerMap {
 	    		}
 	    	}
 	    });	    
-	    // Button Actions
 	    
+	    // Button Actions
+	    //b1 = add new entry button
 		b1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				DefaultTableModel model = (DefaultTableModel) table.getModel();
+				//checking if new elevation is being added to the table
+				//if yes, check if the previous label was azimuth and the value was 360
+				if((ValueTypeComboBox.getSelectedItem().toString() == "Elevation Angle")) {
+					System.out.println("Inside first.");
+				}
+				System.out.println("Escaped first: " + ValueTypeComboBox.getSelectedItem().toString());
+				if(model.getValueAt(model.getRowCount()-4, 1) == "Azimuth Angle") {
+					System.out.println("Inside Second.");
+				}
+				System.out.println("escaped second: " + model.getValueAt(model.getRowCount()-4, 1) );
+				
+				if(!(model.getValueAt(model.getRowCount()-4, 2).toString()).equals("360")) {
+					System.out.println("Inside Third.");
+				}
+				System.out.println("escaped Third: '" + model.getValueAt(model.getRowCount()-4, 2).toString()+"'");
+//				System.out.println("escaped Third, at 0th index is : " + model.getValueAt(model.getRowCount()-4, 1).toString());
+				
+				if((ValueTypeComboBox.getSelectedItem().toString() == "Elevation Angle") && (model.getValueAt(model.getRowCount()-4, 1) != "Azimuth Angle" || 
+						(model.getValueAt(model.getRowCount()-4, 1) == "Azimuth Angle" && !(model.getValueAt(model.getRowCount()-4, 2).toString()).equals("360")))) {
+					JOptionPane.showMessageDialog(null, "Please close the Azimuth circle Before entering a new Elevation Angle");
+					ValueTypeRowItemValue.setText("");
+					return;
+				}
+				
 				//adding only if any numeric data has been entered.
 				if(isNumeric(ValueTypeRowItemValue.getText())) {
-					DefaultTableModel model = (DefaultTableModel) table.getModel();
 					model.removeRow(model.getRowCount()-3);
 					count = table.getRowCount();				
 					model.insertRow(model.getRowCount()-2, new Object[]{count-3,ValueTypeComboBox.getSelectedItem().toString() , ValueTypeRowItemValue.getText()});
@@ -467,7 +493,7 @@ public class PowerMap {
 			}
 		});
 		
-		
+		//b2 = remove last entry button
 		b2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 			

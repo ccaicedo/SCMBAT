@@ -41,6 +41,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -481,7 +482,7 @@ public class PropMap {
 
         
         // Button Actions       		
-        
+        //b1 = Add new Entry button
         b1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				DefaultTableModel model = (DefaultTableModel) table.getModel();
@@ -490,6 +491,7 @@ public class PropMap {
 				if (piecewiseTable.isEditing())
 					piecewiseTable.getCellEditor().stopCellEditing();
 				
+				//checking if the case is Linear
 				if(ValueTypeComboBox.getSelectedItem().toString() == "Propagation Model" && PropTypeComboBox.getSelectedItem().toString() == "Linear" && isNumeric(PropExpTypeRowItemValue.getText())) {
 					model.removeRow(model.getRowCount()-3);
 					count = table.getRowCount();
@@ -498,12 +500,14 @@ public class PropMap {
 					//resetting text field data
 					PropExpTypeRowItemValue.setText("");
 				}
+				//checking if the case is piecewise linear
 				else if(ValueTypeComboBox.getSelectedItem().toString() == "Propagation Model" && PropTypeComboBox.getSelectedItem().toString() == "Piecewise Linear" && isNumeric(piecewiseTable.getModel().getValueAt(0,0).toString()) && isNumeric(piecewiseTable.getModel().getValueAt(0,1).toString()) && isNumeric(piecewiseTable.getModel().getValueAt(0,2).toString())) {
 					model.removeRow(model.getRowCount()-3);
 					model.insertRow(model.getRowCount()-2, new Object[]{table.getRowCount()-3, "First Exponent" , piecewiseTable.getModel().getValueAt(0,0).toString()});
 					model.insertRow(model.getRowCount()-2, new Object[]{table.getRowCount()-3, "Breakpoint(m)" , piecewiseTable.getModel().getValueAt(0,1).toString()});
 					model.insertRow(model.getRowCount()-2, new Object[]{table.getRowCount()-3, "Second Exponent" , piecewiseTable.getModel().getValueAt(0,2).toString()});
 					model.insertRow(model.getRowCount()-2, new Object[]{table.getRowCount()-3,"" ,""});
+					
 					//resetting piecewise linear table data
 					for (int i = 0; i < piecewiseTable.getRowCount(); i++) {
             		      for(int j = 0; j < piecewiseTable.getColumnCount(); j++) {
@@ -511,7 +515,14 @@ public class PropMap {
             		      }
               		}
 				}
-				
+				//if elevation angle is being entered, then checking the last entered value; making sure that the azimuth was closed
+				if((ValueTypeComboBox.getSelectedItem().toString() == "Elevation Angle") && (model.getValueAt(model.getRowCount()-4, 1) != "Azimuth Angle" || 
+						(model.getValueAt(model.getRowCount()-4, 1) == "Azimuth Angle" && !(model.getValueAt(model.getRowCount()-4, 2).toString()).equals("360")))) {
+					JOptionPane.showMessageDialog(null, "Please close the Azimuth circle Before entering a new Elevation Angle");
+					ValueTypeRowItemValue.setText("");
+					return;
+				}
+				//for entering Elevation and Azimuth angles
 				else if(ValueTypeComboBox.getSelectedItem().toString() != "Propagation Model" && isNumeric(ValueTypeRowItemValue.getText())) {
 					model.removeRow(model.getRowCount()-3);
 					count = table.getRowCount();
@@ -524,7 +535,7 @@ public class PropMap {
 		});
 		
 		
-		
+		//b2 = Remove last entry button
 		b2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 			
