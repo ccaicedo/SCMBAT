@@ -329,7 +329,7 @@ public class MethodAnalysis {
 
 				// Call the load html page method
 				if(reportGeneration)
-					loadCompRep.displayCompatibilityReport(CompatStat, PowerMargin, compatTestDirectory);
+					loadCompRep.displayCompatibilityReport(CompatStat, PowerMargin, compatTestDirectory, "Total Power");
 				
 				//generate result file from the command line if the path is specified
 				if(resultFilePath != null)
@@ -363,7 +363,9 @@ public class MethodAnalysis {
 
 				String maxPowFile = dirName + "MaxPow.sh " + dirName + " " + compatTestDirectory;
 				Command0 = "chmod u+x " + maxPowFile;
-				Command1 = maxPowFile;
+				Command1 = maxPowFile + " " + OctaveLogging;
+				System.out.println("The command 0 is : " + Command0);
+				System.out.println("The command 1 is : " + Command1);
 				Process p2;
 				try {
 					p2 = Runtime.getRuntime().exec(Command0);
@@ -375,6 +377,9 @@ public class MethodAnalysis {
 					ArrayList<String> dispData = new ArrayList<String>();
 					try {
 						while ((line = br.readLine()) != null) {
+							System.out.println(line);
+
+							logger.info(line);
 							dispData.add(line);
 						}
 					} catch (Exception e) {
@@ -389,14 +394,14 @@ public class MethodAnalysis {
 				}
 
 				//generate result file in the reports folder
-				genreateResultFile(resultFilePath, "Method: MaximumPowerDensity", CompatStat, null);
+				genreateResultFile(resultFile, "Method: MaximumPowerDensity", CompatStat, null);
 
 				/*
 				 * execFrame = new ExecuteFrame(); execFrame.getFrame(CompatStat,PowerMargin);
 				 */
 				// Call the load html page method
 				if(reportGeneration)
-					loadCompRep.displayCompatibilityReport(CompatStat, PowerMargin, compatTestDirectory);
+					loadCompRep.displayCompatibilityReport(CompatStat, PowerMargin, compatTestDirectory, "MaximumPowerDensity");
 				
 				//generate result file from the command line if the path is specified
 				if(resultFilePath != null)

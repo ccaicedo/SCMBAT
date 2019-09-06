@@ -461,7 +461,7 @@ public class PowerMap {
 				//if yes, check if the previous label was azimuth and the value was 360
 				if((ValueTypeComboBox.getSelectedItem().toString() == "Elevation Angle") && (model.getValueAt(model.getRowCount()-4, 1) != "Azimuth Angle" || 
 						(model.getValueAt(model.getRowCount()-4, 1) == "Azimuth Angle" && !(model.getValueAt(model.getRowCount()-4, 2).toString()).equals("360")))) {
-					JOptionPane.showMessageDialog(null, "Please close the Azimuth circle Before entering a new Elevation Angle");
+					JOptionPane.showMessageDialog(null, "Please provide an Azimuth angle entry with value 360 before entering a new Elevation angle");
 					ValueTypeRowItemValue.setText("");
 					return;
 				}

@@ -28,7 +28,7 @@ along with program.  If not, see <http://www.gnu.org/licenses/>.
   RBW: Resolution Bandwidth
 %}
 function [P_net,P_net_dB] = calculate_power(p0,RBW)
-disp("************* Inside calculate_power **************");
+%disp("************* Inside calculate_power function **************");
 RBW = RBW*1e+6;			% adjusting RBW to Hertz (previously MHz)
 fv=p0(1:2:end-1)*1e+6;
 pv=p0(2:2:end);
@@ -51,5 +51,5 @@ for i=1:length(fv)-1
     end
     P_net_dB=10*log10(P_net);
 end
-disp("************* Exiting calculate_power **************");
+%disp("************* Exiting calculate_power function **************");
 end
