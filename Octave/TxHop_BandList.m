@@ -123,10 +123,12 @@ end
 end
 
 if(compatBWList==0)
-disp('System not at all compatible')
+    disp(strcat('result: ', 'System is not at all compatible'));
+    return;
 else
-disp('System compatible with: ')
-disp(compatBWList);
+    disp(strcat('result: ', 'System compatible with: '));
+    disp(strcat('result: ', num2str(compatBWList)));
+    return;
 end
 
 %figure

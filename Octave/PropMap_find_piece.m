@@ -33,7 +33,7 @@ along with program.  If not, see <http://www.gnu.org/licenses/>.
 
 function [n0,d_break,n1] = PropMap_find_piece(theta_0,phi_0,PropMap,Min_Dist)
 
-disp("Inside the PropMap_find_piece function"), disp("theta_0 is: "), disp(theta_0), disp("phi_0 is:"), disp(phi_0), disp("PropMap is : "), disp(PropMap);
+%disp("Inside the PropMap_find_piece function"), disp("theta_0 is: "), disp(theta_0), disp("phi_0 is:"), disp(phi_0), disp("PropMap is : "), disp(PropMap);
 
 P=PropMap;
 c=length(P);
@@ -74,57 +74,58 @@ n0=0;
 d_break=0;
 n1=0;
 
-disp("the phi at start is : "), disp(P(ind_phi_s));
-disp("the phi at end is : "), disp(P(ind_phi_e));
-disp("diff is : "), disp(ind_phi_e - ind_phi_s);
+%disp("the phi at start is : "), disp(P(ind_phi_s));
+%disp("the phi at end is : "), disp(P(ind_phi_e));
+%disp("diff is : "), disp(ind_phi_e - ind_phi_s);
 if(ind_phi_e - ind_phi_s == 5 || ind_phi_e - ind_phi_s == 7)
     ind_theta_curr=ind_phi_s+1;
-    disp("the theta current is : "), disp(P(ind_theta_curr));
-    disp("the theta current + 1 is : "), disp(P(ind_theta_curr+1));
+    %disp("the theta current is : "), disp(P(ind_theta_curr));
+    %disp("the theta current + 1 is : "), disp(P(ind_theta_curr+1));
     if(P(ind_theta_curr+1)==0)          % 0 refers to linear type
-        disp("it's linear type");
+        %disp("it's linear type");
         n0=P(ind_theta_curr+2);
         d_break=0;
         n1=0;
     end
     if(P(ind_theta_curr+1)==1)          % 1 refers to piecewise linear
-        disp("it's piecewise linear");
+        %disp("it's piecewise linear");
         n0=P(ind_theta_curr+2);
         d_break=P(ind_theta_curr+3);
         n1=P(ind_theta_curr+4);
     end
-    disp("the values are: " ), disp(n0), disp(d_break), disp(n1);
+    %disp("the values are: " ), disp(n0), disp(d_break), disp(n1);
 else
     ind_theta_next=ind_phi_s+1;
 
     while index <= ind_phi_e-2
         ind_theta_curr=ind_theta_next;
-	disp("ind_theta_curr is: "), disp(P(ind_theta_curr));
+	%disp("ind_theta_curr is: "), disp(P(ind_theta_curr));
         % Finding next theta depends on whether we have linear or piecewise linear
         if (P(ind_theta_curr + 1) == 0)          % 0 refers to linear type
-            disp("setting theta next for linear type");
+            %disp("setting theta next for linear type");
             ind_theta_next=ind_theta_curr+3;
         elseif (P(ind_theta_curr + 1) == 1)          % 1 refers to piecewise linear
-            disp("setting theta next for piecewise linear");
+            %disp("setting theta next for piecewise linear");
             ind_theta_next=ind_theta_curr+5;
         endif
 	index=index+2;
-	disp("ind_theta_next is: "), disp(P(ind_theta_next));
+	%disp("ind_theta_next is: "), disp(P(ind_theta_next));
         if(theta_0 >= P(ind_theta_curr) && theta_0 < P(ind_theta_next))
             if(P(ind_theta_curr + 1) == 0)          % 0 refers to linear type
-                disp("it's linear type");
+                %disp("it's linear type");
                 n0 = P(ind_theta_curr + 2);
                 d_break = 0;
                 n1 = 0;
             end
             if(P(ind_theta_curr + 1) == 1)          % 1 refers to piecewise linear
-                disp("it's piecewise linear");
+                %disp("it's piecewise linear");
                 n0 = P(ind_theta_curr + 2);
                 d_break = P(ind_theta_curr + 3);
                 n1 = P(ind_theta_curr + 4);
             end
-            disp("the values are: " ), disp(n0), disp(d_break), disp(n1);
+            %disp("the values are: " ), disp(n0), disp(d_break), disp(n1);
             break;
         end
     end
+%disp("Exiting the PropMap_find_piece function")
 end

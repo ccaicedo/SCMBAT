@@ -99,9 +99,8 @@ else
  end
 
 if(NewBandList==0)
-disp('System is Compatible')
-break;
-else
+    disp(strcat('result: ', 'System is compatible'));
+    return;
 end
 
 DutyCylceList = Rx_DutyList(1:3:end-2);
@@ -152,10 +151,12 @@ end
 
 
 if(compatDutyList==0)
-disp('System not at all compatible')
+    disp(strcat('result: ', 'System is not at all compatible'));
+    return;
 else
-disp('System compatible with: ')
-disp(compatDutyList);
+    disp(strcat('result: ', 'System compatible with: '));
+    disp(strcat('result: ', num2str(compatDutyList)));
+    return;
 end
 
 %figure

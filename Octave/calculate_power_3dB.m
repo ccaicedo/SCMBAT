@@ -28,13 +28,16 @@ along with program.  If not, see <http://www.gnu.org/licenses/>.
 %}
 
 function [p_new] = calculate_power_3dB(p0,RBW)
+%disp("Inside the function calculate_power_3dB");
+%disp("p0 is : ") , disp(p0);
 
 fv=p0(1:2:end-1)*1e+6;
 pv=p0(2:2:end);
 %plot(fv,pv,'r-','LineWidth',2);
 P_net=0;
 pl=min(pv);
-po=pl*(10^(.3));
+
+%po=pl*(10^(.3));	% unused variable
 
 ind=find(pv==pl);
 
@@ -73,4 +76,5 @@ p_new(2:2:end)=[p1,pl,pl,p2];
 %figure
 %plot(p_new(1:2:end-1),p_new(2:2:end),'b-','LineWidth',2);
 
+%disp("Exiting calculate_power_3dB function");
 end
