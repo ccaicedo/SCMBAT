@@ -1,6 +1,22 @@
 <!DOCTYPE html>
 <html>
- <head></head> 
+ <head> 
+  <style>
+h1   {color: blue;}
+p    {color: red;}
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+  border-spacing: 5px;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top:5px;
+  padding-bottom:5px;
+  min-width:400px;
+  min-height:100px
+} 
+</style> 
+ </head> 
  <body> 
   <link rel="StyleSheet" type="text/css" href="reportstyle.css"> 
   <h2 class="maintitle">Spectrum Consumption Model Builder and Analysis Tool</h2> 
@@ -9,82 +25,37 @@
   <div id="div01" class="imagediv"> 
    <h2 class="subtitle_1">Graphical Results</h2> 
    <h3 class="first_subheading">Intermediate Analysis Figure</h3> 
-   <img id="img1" class="first_img" src="/home/ab/git/SCMBAT/Reports/2019-13-08_02:04/Analysis_Figure_1.png" alt="Analysis Figure " width="600" height="400"> 
+   <img id="img1" class="first_img" src="/home/ab/git/SCMBAT/Reports/2019-06-09_14:29/Analysis_Figure_1.png" alt="Analysis Figure " width="600" height="400"> 
    <h3 class="second_subheading">Final Result</h3> 
-   <img id="img2" class="second_img" src="/home/ab/git/SCMBAT/Reports/2019-13-08_02:04/BWRatedAnalysis.png" alt="CompatAnalysis" width="600" height="400"> 
+   <img id="img2" class="second_img" src="/home/ab/git/SCMBAT/Reports/2019-06-09_14:29/BWRatedAnalysis.png" alt="CompatAnalysis" width="600" height="400"> 
   </div> 
   <div id="div02" class="resultsdiv"> 
    <h3 class="subtitle_2">Compatibility Results</h3> 
    <p></p> 
    <h3>Not Compatible</h3> 
    <div id="div03" class="subdiv">  
-    <table id="notcomp" class="compattable"> 
-     <tbody> 
-      <tr> 
-       <td>Tx_narrowB.xml</td> 
-      </tr> 
-      <tr> 
-       <td>Tx_narrowD.xml</td> 
-      </tr> 
-     </tbody> 
-     <tbody> 
-      <tr> 
-       <td>Tx_narrowB.xml</td> 
-      </tr> 
-      <tr> 
-       <td>Tx_narrowD.xml</td> 
-      </tr> 
-     </tbody> 
-     <tbody>
-      <tr> 
-       <td>Tx_narrowB.xml</td> 
-      </tr> 
-     </tbody>
+    <table id="notcomp" class="compattable">
      <tr>
       <td>Tx_narrowB.xml</td>
      </tr>
      <tr>
       <td>Tx_narrowD.xml</td>
      </tr>
-     <tr>
-      <td>Tx_narrowF.xml</td>
-     </tr>
     </table>
    </div> 
    <p></p> 
    <h3>Compatible with all</h3> 
    <div id="div04" class="subdiv">  
-    <table id="allcomp" class="compattable"> 
+    <table id="allcomp" class="compattable">
+     <tr>
+      <td>None </td>
+     </tr>
     </table>
    </div> 
    <p></p> 
    <h3>Compatible with specific masks</h3> 
    <div id="div05" class="subdiv">  
-    <table id="speccomp" class="compattable"> 
-     <tbody> 
-      <tr> 
-       <td>Tx_narrowA.xml with [0.25, 30.0, 0.05, 20.0]</td> 
-      </tr> 
-      <tr> 
-       <td>Tx_narrowC.xml with [0.25, 30.0]</td> 
-      </tr> 
-      <tr> 
-       <td>Tx_narrowE.xml with [0.25, 30.0]</td> 
-      </tr> 
-      <tr> 
-       <td>Tx_narrowF.xml with [0.25, 30.0]</td> 
-      </tr> 
-     </tbody> 
-     <tbody> 
-      <tr> 
-       <td>Tx_narrowA.xml with [0.25, 30.0, 0.05, 20.0]</td> 
-      </tr> 
-     </tbody> 
-     <tbody> 
-      <tr> 
-       <td>Tx_narrowA.xml with [0.25, 30.0, 0.05, 20.0]</td> 
-      </tr> 
-     </tbody> 
+    <table id="speccomp" class="compattable">
      <tr>
       <td>Tx_narrowA.xml with [0.25, 30.0, 0.05, 20.0]</td>
      </tr>
@@ -93,6 +64,9 @@
      </tr>
      <tr>
       <td>Tx_narrowE.xml with [0.25, 30.0]</td>
+     </tr>
+     <tr>
+      <td>Tx_narrowF.xml with [0.25, 30.0]</td>
      </tr>
     </table>
    </div> 
