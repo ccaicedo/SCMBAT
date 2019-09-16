@@ -125,13 +125,13 @@ movefile('CompatAnalysis.png', report_directory)
 ind=find(P_diff<0);
 
 %Power_Tx_dB
-PowerMargin = min((P_diff));
+PowerMargin = min((P_diff));	 								% the actual power margin is the negative of this value
 if(isempty(ind)==1)
     disp(strcat('result: ', 'System is compatible'));
-    disp(strcat('result: ', num2str(PowerMargin)));
+    disp(strcat('result: ', num2str(PowerMargin * -1)));		% the system is compaitable when the power margin is negative
 else
     disp(strcat('result: ', 'System is not compatible'));
-    disp(strcat('result: ', num2str(PowerMargin)));
+    disp(strcat('result: ', num2str(PowerMargin * -1)));
 end
 
 end
