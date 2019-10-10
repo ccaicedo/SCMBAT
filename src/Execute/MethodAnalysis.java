@@ -219,7 +219,7 @@ public class MethodAnalysis {
 		writer.close();
 	}
 	
-	public ArrayList<String> initOctave(File workingDir, String methodTyp, String loggingEnabled, String reportDir, String specTagg) {
+	public ArrayList<String> initOctave(File workingDir, String methodTyp, String loggingEnabled, String reportDir, String specTagg, String numberOfTx, String execPattern) {
 		String secondLastLine = null, lastLine = null;
 		try {
 			OctaveEngineFactory octaveFactory = new OctaveEngineFactory();
@@ -230,6 +230,8 @@ public class MethodAnalysis {
 			OctaveString logging = new OctaveString(loggingEnabled);
 			OctaveString reportdirectoryString = new OctaveString(reportDir);
 			OctaveString specTag = new OctaveString(specTagg);
+			OctaveString transmitterNum = new OctaveString(numberOfTx);
+			OctaveString executionPattern = new OctaveString(execPattern);
 			
 			System.out.println("trying running the Octave Code");
 			
@@ -237,9 +239,11 @@ public class MethodAnalysis {
 			octave.put("logging", logging);
 			octave.put("reportdirectoryString", reportdirectoryString);
 			octave.put("specTag", specTag);
+			octave.put("transmitterNum", transmitterNum);
+			octave.put("executionPattern", executionPattern);
 			
 			octave.eval("[retVal1, retVal2, retVal3, retVal4] = Coupler(reportdirectoryString,"
-					+ " methodType, logging, specTag)");
+					+ " methodType, logging, specTag, transmitterNum, executionPattern)");
 			
 			retVal1.add(octave.get(OctaveDouble.class, "retVal1"));
 			retVal2.add(octave.get(OctaveDouble.class, "retVal2"));
@@ -282,6 +286,7 @@ public class MethodAnalysis {
 		String CompatStat = null;
 		String PowerMargin = null;
 		String dirName = getFilePath();
+		String txFileName = "";
 		PrintWriter printfile = null;
 		
 		if (dirName == "") {
@@ -297,14 +302,13 @@ public class MethodAnalysis {
 
 		// Update the file that must the results of transmitter and receiver
 		// compatibility report details
-		// String printTFile = current_Dir + "/SCM_transmitter_java.txt";
-		// String printRFile = current_Dir + "/SCM_receiver_java.txt";
-
-		String printTFile = dirName + "Octave/SCM_transmitter_java.txt";
+		String printTFile = dirName + "Octave/SCM_transmitter_java";
 		String printRFile = dirName + "Octave/SCM_receiver_java.txt";
 		String resultFile = current_Dir + "/Results.txt";
 
 		try {
+			File prntFile = new File(resultFile);
+			prntFile.getParentFile().mkdirs();
 			printfile = new PrintWriter(resultFile);
 			printfile.println("Compatibility Analysis Report Results");
 		} catch (FileNotFoundException e1) {
@@ -326,7 +330,11 @@ public class MethodAnalysis {
 		case "TotalPower":
 			System.out.println("Total Power Method being executed");
 			logger.info("Total Power Method being executed");
-			warningMessage = warningMessage + printTx.printText(TxData.get(0), printTFile);
+			
+			//modifying the name of the printTFile
+			//since in this case we only have a single transmitter file we will name it 1.txt
+			txFileName = printTFile + "1" + ".txt";
+			warningMessage = warningMessage + printTx.printText(TxData.get(0), txFileName);
 			warningMessage = warningMessage + printRx.printText(RxData.get(0), printRFile);
 
 			int o = 0;
@@ -355,7 +363,7 @@ public class MethodAnalysis {
 
 				//passing arguments to be passed to the octave code, therefore they have been formatted so that octave code
 				//may understand them
-				ArrayList returnedList = initOctave(workingDir, "TotalPower", OctaveLogging.toString(), compatTestDirectory, "null");
+				ArrayList returnedList = initOctave(workingDir, "TotalPower", OctaveLogging.toString(), compatTestDirectory, "null", "1", "null");
 				CompatStat = (String) returnedList.get(0);
 				PowerMargin =  (String) returnedList.get(1);
 				
@@ -379,7 +387,10 @@ public class MethodAnalysis {
 		case "MaximumPowerDensity":
 			System.out.println("Max Power Density Method being executed");
 			logger.info("Max Power Density Method being executed");
-			warningMessage = warningMessage + printTx.printText(TxData.get(0), printTFile);
+			//modifying the name of the printTFile
+			//since in this case we only have a single transmitter file we will name it 1.txt
+			txFileName = printTFile + "1" + ".txt";
+			warningMessage = warningMessage + printTx.printText(TxData.get(0), txFileName);
 			warningMessage = warningMessage + printRx.printText(RxData.get(0), printRFile);
 
 			o = 0;
@@ -408,7 +419,7 @@ public class MethodAnalysis {
 				
 				//passing arguments to be passed to the octave code, therefore they have been formatted so that octave code
 				//may understand them
-				ArrayList returnedList = initOctave(workingDir, "MaxPower", OctaveLogging.toString(), compatTestDirectory, "null");
+				ArrayList returnedList = initOctave(workingDir, "MaxPower", OctaveLogging.toString(), compatTestDirectory, "null", "1", "null");
 				CompatStat = (String) returnedList.get(0);
 				PowerMargin =  (String) returnedList.get(1);
 
@@ -472,15 +483,17 @@ public class MethodAnalysis {
 //				octave.eval("movefile('Analysis_Figure_1.png','" + compatTestDirectory + "')");
 				
 				
-				initOctave(workingDir, "PlotBWRated", OctaveLogging.toString(), compatTestDirectory, "null");
+//				initOctave(workingDir, "PlotBWRated", OctaveLogging.toString(), compatTestDirectory, "null");
 				
 
 				// Process p3;
 //				try {
 
 					for (int i = 0; i < TxData.size(); i++) {
-
-						warningMessage = warningMessage + printTx.printText(TxData.get(i), printTFile);
+						//modifying the name of the printTFile
+						//since in this case we only have a single transmitter file we will name it as 1.txt, 2.txt ...so on
+						txFileName = printTFile + i + ".txt";
+						warningMessage = warningMessage + printTx.printText(TxData.get(i), txFileName);
 						
 						
 						
@@ -505,16 +518,20 @@ public class MethodAnalysis {
 //						PowerMargin = dispData.get(DataLength - 1);
 						
 						
-						
-						initOctave(workingDir, "RatedBW", OctaveLogging.toString(), 
-								compatTestDirectory, txArray.get(txIndex[i]).ModelName);
+//						
+//						initOctave(workingDir, "RatedBW", OctaveLogging.toString(), 
+//								compatTestDirectory, txArray.get(txIndex[i]).ModelName);
+//						SpecMask.addAll(retVal1);
+//						PSD.addAll(retVal2);
+//						BW.addAll(retVal3);
+//						compatBWList.addAll(retVal4);
 						
 
 //						octave.eval("[SpecMask,PSD,BW,compatBWList] = TxMPSD();");
-						SpecMask.addAll(retVal1);
-						PSD.addAll(retVal2);
-						BW.addAll(retVal3);
-						compatBWList.addAll(retVal4);
+//						SpecMask.addAll(retVal1);
+//						PSD.addAll(retVal2);
+//						BW.addAll(retVal3);
+//						compatBWList.addAll(retVal4);
 
 //						OctaveString specTag = new OctaveString(txArray.get(txIndex[i]).ModelName);
 //						octave.put("specTag", specTag);
@@ -523,6 +540,13 @@ public class MethodAnalysis {
 //						octave.eval("minSpecPow=min(SpecMask(2:2:end));");
 //						octave.eval("text(xpoint,minSpecPow-1,specTag)");
 					}
+
+					initOctave(workingDir, "PlotBWRated", OctaveLogging.toString(), compatTestDirectory, txArray.get(txIndex[0]).ModelName, Integer.toString((TxData.size()-1)), "null");
+					
+					SpecMask.addAll(retVal1);
+					PSD.addAll(retVal2);
+					BW.addAll(retVal3);
+					compatBWList.addAll(retVal4);
 //
 //				} catch (Exception e) {
 //					e.printStackTrace();
@@ -536,7 +560,7 @@ public class MethodAnalysis {
 				 ************/
 //				String moveCmd = "movefile('BWRatedAnalysis.png','" + compatTestDirectory + "')";
 //				octave.eval(moveCmd);
-				initOctave(workingDir, "mvBWRatedAnalysis", OctaveLogging.toString(), compatTestDirectory, "null");
+//				initOctave(workingDir, "mvBWRatedAnalysis", OctaveLogging.toString(), compatTestDirectory, "null");
 
 				ArrayList<String> compatModelList = new ArrayList<String>();
 				ArrayList<String> nonCompatModelList = new ArrayList<String>();
@@ -628,14 +652,17 @@ public class MethodAnalysis {
 //				octave.eval("movefile('Analysis_Figure_1.png','" + compatTestDirectory + "')");
 				
 
-				initOctave(workingDir, "PlotBWRated", OctaveLogging.toString(), compatTestDirectory, "null");
+//				initOctave(workingDir, "PlotBWRated", OctaveLogging.toString(), compatTestDirectory, "null");
 
 				// octave.eval("fig2=figure");
 //				try {
 
 					for (int i = 0; i < TxData.size(); i++) {
 
-						warningMessage = warningMessage + printTx.printText(TxData.get(i), printTFile);
+						//modifying the name of the printTFile
+						//since in this case we only have a single transmitter file we will name it as 1.txt, 2.txt ...so on
+						txFileName = printTFile + i + ".txt";
+						warningMessage = warningMessage + printTx.printText(TxData.get(i), txFileName);
 
 						// p3 = Runtime.getRuntime().exec(Command0);
 						// p3 = Runtime.getRuntime().exec(Command1);
@@ -645,14 +672,13 @@ public class MethodAnalysis {
 //						PSD.add(octave.get(OctaveDouble.class, "PSD"));
 //						BW.add(octave.get(OctaveDouble.class, "BW"));
 //						compatBWList.add(octave.get(OctaveDouble.class, "compatBWList"));
-
-						initOctave(workingDir, "RatedBW", OctaveLogging.toString(), 
-								compatTestDirectory, txArray.get(txIndex[i]).ModelName);
-
-						SpecMask.addAll(retVal1);
-						PSD.addAll(retVal2);
-						BW.addAll(retVal3);
-						compatBWList.addAll(retVal4);
+//
+//						initOctave(workingDir, "RatedBW", OctaveLogging.toString(), compatTestDirectory, txArray.get(txIndex[i]).ModelName);
+//
+//						SpecMask.addAll(retVal1);
+//						PSD.addAll(retVal2);
+//						BW.addAll(retVal3);
+//						compatBWList.addAll(retVal4);
 
 //						OctaveString specTag = new OctaveString(txArray.get(txIndex[i]).ModelName);
 //						octave.put("specTag", specTag);
@@ -661,6 +687,13 @@ public class MethodAnalysis {
 //						octave.eval("minSpecPow=min(SpecMask(2:2:end));");
 //						octave.eval("text(xpoint,minSpecPow-1,specTag)");
 					}
+					
+					initOctave(workingDir, "PlotBWRated", OctaveLogging.toString(), compatTestDirectory, txArray.get(txIndex[0]).ModelName, Integer.toString((TxData.size()-1)), "null");
+
+					SpecMask.addAll(retVal1);
+					PSD.addAll(retVal2);
+					BW.addAll(retVal3);
+					compatBWList.addAll(retVal4);
 
 //				} catch (Exception e) {
 //					e.printStackTrace();
@@ -676,7 +709,7 @@ public class MethodAnalysis {
 //				octave.eval(moveCmd);
 //
 //				octave.close();
-				initOctave(workingDir, "mvBWRatedAnalysis", OctaveLogging.toString(), compatTestDirectory, "null");
+//				initOctave(workingDir, "mvBWRatedAnalysis", OctaveLogging.toString(), compatTestDirectory, "null");
 
 				ArrayList<String> compatModelList = new ArrayList<String>();
 				ArrayList<String> nonCompatModelList = new ArrayList<String>();
@@ -744,6 +777,7 @@ public class MethodAnalysis {
 			} else {
 				ArrayList<OctaveDouble> Spec_BTP = new ArrayList<OctaveDouble>();
 				ArrayList<OctaveDouble> compatBTPList = new ArrayList<OctaveDouble>();
+				String execPattern = "";
 
 				File workingBTPDir = new File(dirName + "Octave");
 
@@ -758,16 +792,26 @@ public class MethodAnalysis {
 //				octaveBTP.eval("movefile('Analysis_Figure_1.png','" + compatTestDirectory + "')");
 				
 
-				initOctave(workingDir, "PlotBTPRated", OctaveLogging.toString(), compatTestDirectory, "null");
+//				initOctave(workingDir, "PlotBTPRated", OctaveLogging.toString(), compatTestDirectory, "null");
 				
+				//boolean to check if the request should be sent to the octave code
+				//it will be false in case if the program reaches the else block inside the loop
+				boolean validHoppingSystem = false;
 
 				for (int i = 0; i < TxData.size(); i++) {
 
 					if (TxData.get(i).getSpectrumMask().get(o).getHoppingData() != null) {
+						
+						//set the boolean to true
+						validHoppingSystem = true;
 
-						warningMessage = warningMessage + printTx.printText(TxData.get(i), printTFile);
+						//modifying the name of the printTFile
+						//since in this case we only have a single transmitter file we will name it as 1.txt, 2.txt ...so on
+						txFileName = printTFile + i + ".txt";
+						warningMessage = warningMessage + printTx.printText(TxData.get(i), txFileName);
 
 						if (TxData.get(i).getSpectrumMask().get(o).getHoppingData().getFrequencyList() != null) {
+							execPattern += "f";
 //							octaveBTP.eval("[Spec_BTP,ExtSpecMask,compatBTPList] = TxHop_FreqList()");
 //							octaveBTP.eval("plot(ExtSpecMask(1:2:end-1),ExtSpecMask(2:2:end),'r.-','LineWidth',2)");
 //							OctaveString specTag = new OctaveString(txArray.get(txIndex[i]).ModelName);
@@ -775,12 +819,12 @@ public class MethodAnalysis {
 //							octaveBTP.eval("xpoint=ExtSpecMask(1);");
 //							octaveBTP.eval("minSpecPow=min(ExtSpecMask(2:2:end));");
 //							octaveBTP.eval("text(xpoint,minSpecPow-1,specTag)");
-							initOctave(workingDir, "RatedBTPFreq", OctaveLogging.toString(), 
-									compatTestDirectory, txArray.get(txIndex[i]).ModelName);
-							Spec_BTP.addAll(retVal1);
-							compatBTPList.addAll(retVal3);
+//							initOctave(workingDir, "RatedBTPFreq", OctaveLogging.toString(), compatTestDirectory, txArray.get(txIndex[i]).ModelName);
+//							Spec_BTP.addAll(retVal1);
+//							compatBTPList.addAll(retVal3);
 
 						} else {
+							execPattern += "b";
 //							octaveBTP.eval("[Spec_BTP,NewBandList,Spec_MaxPower,compatBTPList] = TxHop_BandList()");
 //							octaveBTP.eval(
 //									"plot(NewBandList,Spec_MaxPower*ones(1,length(NewBandList)),'r.-','LineWidth',2)");
@@ -790,10 +834,9 @@ public class MethodAnalysis {
 //							octaveBTP.eval("xpoint=NewBandList(1);");
 //							octaveBTP.eval("minSpecPow=Spec_MaxPower;");
 //							octaveBTP.eval("text(xpoint,minSpecPow-1,specTag)");
-							initOctave(workingDir, "RatedBTPBand", OctaveLogging.toString(), 
-									compatTestDirectory, txArray.get(txIndex[i]).ModelName);
-							Spec_BTP.addAll(retVal1);
-							compatBTPList.addAll(retVal4);
+//							initOctave(workingDir, "RatedBTPBand", OctaveLogging.toString(), compatTestDirectory, txArray.get(txIndex[i]).ModelName);
+//							Spec_BTP.addAll(retVal1);
+//							compatBTPList.addAll(retVal4);
 						}
 
 					} else {
@@ -807,6 +850,12 @@ public class MethodAnalysis {
 						 */
 					}
 				}
+				if(validHoppingSystem) {
+					initOctave(workingDir, "PlotBTPRated", OctaveLogging.toString(), compatTestDirectory, txArray.get(txIndex[0]).ModelName, Integer.toString((TxData.size()-1)), execPattern);
+					Spec_BTP.addAll(retVal1);
+					compatBTPList.addAll(retVal3);
+					compatBTPList.addAll(retVal4);
+				}
 
 //				octaveBTP.eval("saveas(fig2,'BTPRatedAnalysis.png')");
 
@@ -819,7 +868,7 @@ public class MethodAnalysis {
 //
 //				octaveBTP.close();
 
-				initOctave(workingDir, "mvBTPRatedAnalysis", OctaveLogging.toString(), compatTestDirectory, "null");
+//				initOctave(workingDir, "mvBTPRatedAnalysis", OctaveLogging.toString(), compatTestDirectory, "null");
 
 				ArrayList<String> compatList = new ArrayList<String>();
 				ArrayList<String> nonCompatList = new ArrayList<String>();
@@ -877,6 +926,7 @@ public class MethodAnalysis {
 			} else {
 				ArrayList<OctaveDouble> Spec_BTP = new ArrayList<OctaveDouble>();
 				ArrayList<OctaveDouble> compatBTPList = new ArrayList<OctaveDouble>();
+				String execPattern = "";
 
 				File workingBTPDir = new File(dirName + "Octave");
 
@@ -889,17 +939,27 @@ public class MethodAnalysis {
 //
 //				octaveBTP.eval("saveas(fig2, 'Analysis_Figure_1.png')");
 //				octaveBTP.eval("movefile('Analysis_Figure_1.png','" + compatTestDirectory + "')");
+
+				//boolean to check if the request should be sent to the octave code
+				//it will be false in case if the program reaches the else block inside the loop
+				boolean validHoppingSystem = false;
 				
 
-				initOctave(workingDir, "PlotBTPRated", OctaveLogging.toString(), compatTestDirectory, "null");
+//				initOctave(workingDir, "PlotBTPRated", OctaveLogging.toString(), compatTestDirectory, "null");
 
 				for (int i = 0; i < TxData.size(); i++) {
 
 					if (TxData.get(i).getSpectrumMask().get(o).getHoppingData() != null) {
+						//setting boolean to true
+						validHoppingSystem = true;
 
-						warningMessage = warningMessage + printTx.printText(TxData.get(i), printTFile);
+						//modifying the name of the printTFile
+						//since in this case we only have a single transmitter file we will name it as 1.txt, 2.txt ...so on
+						txFileName = printTFile + i + ".txt";
+						warningMessage = warningMessage + printTx.printText(TxData.get(i), txFileName);
 
 						if (TxData.get(i).getSpectrumMask().get(o).getHoppingData().getFrequencyList() != null) {
+							execPattern += "f";
 //							octaveBTP.eval("[Spec_BTP,ExtSpecMask,compatBTPList] = TxHop_FreqList()");
 //							octaveBTP.eval("plot(ExtSpecMask(1:2:end-1),ExtSpecMask(2:2:end),'r.-','LineWidth',2)");
 //							OctaveString specTag = new OctaveString(txArray.get(txIndex[i]).ModelName);
@@ -907,12 +967,12 @@ public class MethodAnalysis {
 //							octaveBTP.eval("xpoint=ExtSpecMask(1);");
 //							octaveBTP.eval("minSpecPow=min(ExtSpecMask(2:2:end));");
 //							octaveBTP.eval("text(xpoint,minSpecPow-1,specTag)");
-							initOctave(workingDir, "RatedBTPFreq", OctaveLogging.toString(), 
-									compatTestDirectory, txArray.get(txIndex[i]).ModelName);
-							Spec_BTP.addAll(retVal1);
-							compatBTPList.addAll(retVal3);
+//							initOctave(workingDir, "RatedBTPFreq", OctaveLogging.toString(), compatTestDirectory, txArray.get(txIndex[i]).ModelName);
+//							Spec_BTP.addAll(retVal1);
+//							compatBTPList.addAll(retVal3);
 
 						} else {
+							execPattern += "b";
 //							octaveBTP.eval("[Spec_BTP,NewBandList,Spec_MaxPower,compatBTPList] = TxHop_BandList()");
 //							octaveBTP.eval(
 //									"plot(NewBandList,Spec_MaxPower*ones(1,length(NewBandList)),'r.-','LineWidth',2)");
@@ -922,10 +982,9 @@ public class MethodAnalysis {
 //							octaveBTP.eval("xpoint=NewBandList(1);");
 //							octaveBTP.eval("minSpecPow=Spec_MaxPower;");
 //							octaveBTP.eval("text(xpoint,minSpecPow-1,specTag)");
-							initOctave(workingDir, "RatedBTPBand", OctaveLogging.toString(), 
-									compatTestDirectory, txArray.get(txIndex[i]).ModelName);
-							Spec_BTP.addAll(retVal1);
-							compatBTPList.addAll(retVal4);
+//							initOctave(workingDir, "RatedBTPBand", OctaveLogging.toString(), compatTestDirectory, txArray.get(txIndex[i]).ModelName);
+//							Spec_BTP.addAll(retVal1);
+//							compatBTPList.addAll(retVal4);
 						}
 						
 					} else {
@@ -939,6 +998,13 @@ public class MethodAnalysis {
 						 */
 					}
 				}
+				
+				if(validHoppingSystem) {
+					initOctave(workingDir, "PlotBTPRated", OctaveLogging.toString(), compatTestDirectory, txArray.get(txIndex[0]).ModelName, Integer.toString((TxData.size()-1)), execPattern);
+					Spec_BTP.addAll(retVal1);
+					compatBTPList.addAll(retVal3);
+					compatBTPList.addAll(retVal4);
+				}
 
 //				octaveBTP.eval("saveas(fig2,'BTPRatedAnalysis.png')");
 
@@ -950,7 +1016,7 @@ public class MethodAnalysis {
 //				octaveBTP.eval(moveCmd);
 
 //				octaveBTP.close();
-				initOctave(workingDir, "mvBTPRatedAnalysis", OctaveLogging.toString(), compatTestDirectory, "null");
+//				initOctave(workingDir, "mvBTPRatedAnalysis", OctaveLogging.toString(), compatTestDirectory, "null");
 
 
 				ArrayList<String> compatList = new ArrayList<String>();
@@ -986,6 +1052,7 @@ public class MethodAnalysis {
 		case "dcRatedList":
 			System.out.println("DC Rated List Analysis Running");
 			logger.info("DC Rated List Analysis Running");
+			String execPattern = "";
 
 			warningMessage = warningMessage + printRx.printText(RxData.get(0), printRFile);
 
@@ -1016,29 +1083,38 @@ public class MethodAnalysis {
 //				OctaveEngine octaveDuty = dutyOctaveFactory.getScriptEngine();
 
 //				octaveDuty.eval("fig3=figure");
+				
+				//boolean to check if the request should be sent to the octave code
+				//it will be false in case if the program reaches the else block inside the loop
+				boolean validHoppingSystem = false;
 
-				initOctave(workingDir, "PlotDCRated", OctaveLogging.toString(), compatTestDirectory, "null");
+//				initOctave(workingDir, "PlotDCRated", OctaveLogging.toString(), compatTestDirectory, "null");
 				// octaveDuty.eval("retval = plotDutyRated();");
 
 				for (int i = 0; i < TxData.size(); i++) {
 
 					if (TxData.get(i).getSpectrumMask().get(o).getHoppingData() != null) {
+						//setting the boolean to true
+						validHoppingSystem = true;
 
-						warningMessage = warningMessage + printTx.printText(TxData.get(i), printTFile);
+						//modifying the name of the printTFile
+						//since in this case we only have a single transmitter file we will name it as 1.txt, 2.txt ...so on
+						txFileName = printTFile + i + ".txt";
+						warningMessage = warningMessage + printTx.printText(TxData.get(i), txFileName);
 
 						if (TxData.get(i).getSpectrumMask().get(o).getHoppingData().getFrequencyList() != null) {
+							execPattern += "f";
 //							octaveDuty.eval("[Spec_mask_new,p_Tx_new,compatDutyList] = TxDuty_FreqList();");
-							initOctave(workingDir, "DCRatedListFreq", OctaveLogging.toString(), 
-									compatTestDirectory, txArray.get(txIndex[i]).ModelName);
+//							initOctave(workingDir, "DCRatedListFreq", OctaveLogging.toString(), compatTestDirectory, txArray.get(txIndex[i]).ModelName);
 							// octaveBTP.eval("plot(ExtSpecMask(1:2:end-1),ExtSpecMask(2:2:end),'r.-','LineWidth',2)");
 						} else {
+							execPattern += "b";
 //							octaveDuty.eval("[Spec_mask_new,p_Tx_new,compatDutyList] = TxDuty_BandList();");
 							// octaveBTP.eval("plot(NewBandList,Spec_MaxPower*ones(1,length(NewBandList)),'r.-','LineWidth',2)");
-							initOctave(workingDir, "DCRatedListBand", OctaveLogging.toString(), 
-									compatTestDirectory, txArray.get(txIndex[i]).ModelName);
+//							initOctave(workingDir, "DCRatedListBand", OctaveLogging.toString(), compatTestDirectory, txArray.get(txIndex[i]).ModelName);
 						}
 
-						compatDutyList.addAll(retVal3);
+//						compatDutyList.addAll(retVal3);
 
 					} else {
 						warningFlag = true;
@@ -1050,6 +1126,13 @@ public class MethodAnalysis {
 						 */
 					}
 				}
+				
+
+				if(validHoppingSystem) {
+					initOctave(workingDir, "PlotDCRated", OctaveLogging.toString(), compatTestDirectory, txArray.get(txIndex[0]).ModelName, Integer.toString((TxData.size()-1)), execPattern);
+					compatDutyList.addAll(retVal3);
+				}
+				
 //				octaveDuty.eval("saveas(fig3,'DCRatedAnalysis.png')");
 
 				/*****
@@ -1058,7 +1141,7 @@ public class MethodAnalysis {
 				 ************/
 //				String moveCmd = "movefile('DCRatedAnalysis.png','" + compatTestDirectory + "')";
 //				octaveDuty.eval(moveCmd);
-				initOctave(workingDir, "mvDCRatedAnalysis", OctaveLogging.toString(), compatTestDirectory, "null");
+//				initOctave(workingDir, "mvDCRatedAnalysis", OctaveLogging.toString(), compatTestDirectory, "null");
 
 //				octaveDuty.close();
 
