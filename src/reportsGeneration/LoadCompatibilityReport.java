@@ -378,16 +378,25 @@ public class LoadCompatibilityReport {
     	}
        if(stringHTML != null)
        {
-    	    
+   	    
            Document rootDoc = Jsoup.parse(stringHTML); 
            
            //Navigate the document and obtain the division element where the content needs to be added
          
-          
+           
+           //Update the image src in the img elements
+           Element imgElem_1 = rootDoc.getElementById("img1");
+//           imgElem_1.attr("src", image_1);
+           
+           //Update the image src in the img elements
+           Element imgElem_2 = rootDoc.getElementById("img2");
+//           imgElem_2.attr("src", image_2);
+           
                      
            //Add the non compatible table contents
            
            Element nonCompTable = rootDoc.getElementById("notcomp");
+           nonCompTable.empty();
          
            for(int i=0;i<nonCompatModelList.size();i++)
            {
@@ -398,9 +407,17 @@ public class LoadCompatibilityReport {
                nonCompTable.appendChild(row);
                
            }
+           if(nonCompatModelList.size() == 0) {
+        	   Element row = rootDoc.createElement("tr");
+               Element cell = rootDoc.createElement("td");
+               cell.appendText("None ");
+               row.appendChild(cell);
+               nonCompTable.appendChild(row);
+        	   }
            
           
            Element compTable = rootDoc.getElementById("speccomp");
+           compTable.empty();
            
            for(int i=0;i<compatModelList.size();i++)
            {
@@ -411,12 +428,17 @@ public class LoadCompatibilityReport {
                compTable.appendChild(row);
                
            }
+           if(compatModelList.size() == 0) {
+        	   Element row = rootDoc.createElement("tr");
+               Element cell = rootDoc.createElement("td");
+               cell.appendText("None ");
+               row.appendChild(cell);
+               compTable.appendChild(row);
+        	   }
            //Add the tables to the div
           
            Element divElem_1 =  rootDoc.getElementById("div03");
            Element divElem_2 =  rootDoc.getElementById("div04");
-           divElem_1.empty();
-           divElem_2.empty();
            
            divElem_1.appendChild(nonCompTable);
            divElem_2.appendChild(compTable);
@@ -443,6 +465,7 @@ public class LoadCompatibilityReport {
            
            
        }
+
 	}
 	
 

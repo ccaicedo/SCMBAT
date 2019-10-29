@@ -30,15 +30,14 @@ along with program.  If not, see <http://www.gnu.org/licenses/>.
 function [retVal1, retVal2, retVal3, retVal4] = Coupler(report_directory, method, logging, specTag, numOfTransmitterString, execPattern)
 
 disp('displaying from the coupler file.');
-disp(report_directory), disp(method), disp(logging);
+disp(report_directory), disp(method), disp(logging), disp(numOfTransmitterString);
 
 %converting string to decimal, so that we may loop over it.
-numOfTransmitter = bin2dec(numOfTransmitterString)
+numOfTransmitter = str2num(numOfTransmitterString)
 
 switch (method)
 
-case 'TotalPower'
-        fileToBeReplaced = strcat('SCM_transmitter_java', num2str(i), '.txt')
+	case 'TotalPower'
         rename('SCM_transmitter_java1.txt', 'SCM_transmitter_java.txt')
         [Spec_mask_new,Underlay_mask] = DSA_TotPow(report_directory);
 		return;
@@ -50,7 +49,7 @@ case 'TotalPower'
 		return;
 
 
-	case 'RatedBW'
+	case 'PlotBWRated'
 		disp('inside bandwidth switch case');
         fig1=figure;
         retval = plotBWRated();
@@ -58,16 +57,38 @@ case 'TotalPower'
         movefile('Analysis_Figure_1.png', report_directory);
         disp('inside RatedBW');
 
+		%initializing the return values
+		retVal1 = []
+        retVal2 = []
+        retVal3 = []
+        retVal4 = []
+
+		specTagIndex = 1
+		
         for i  = 1:numOfTransmitter
             %changing the name of the file
             fileToBeReplaced = strcat('SCM_transmitter_java', num2str(i), '.txt')
-            rename('SCM_transmitter_java1.txt', 'SCM_transmitter_java.txt')
+			disp('file to be replaced is: '), disp(fileToBeReplaced);
+            rename(fileToBeReplaced, 'SCM_transmitter_java.txt')
+			disp('rename done');
+			
+			disp('spec Tag is : '), disp(specTag);
+			%fetch the specTagName from the specTagList
+			%get the length of next name
+			disp('trying to fetch length of specNameTag');
+			len = str2num(substr(specTag, specTagIndex, 2));
+			disp('len is '), disp(len);
+			specTagName = substr(specTag, specTagIndex+2, len);
+			disp('specTagName is: '), disp(specTagName);
+			
+			%update the specTagIndex to point to next name
+			specTagIndex = specTagIndex+2+len
 
             [SpecMask,PSD,BW,compatBWList] = TxMPSD();
             plot(SpecMask(1:2:end-1),SpecMask(2:2:end),'r.-','LineWidth',2);
             xpoint=(SpecMask(length(SpecMask)/2-1)+SpecMask(length(SpecMask)/2+1))/2;
             minSpecPow=min(SpecMask(2:2:end));
-            text(xpoint,minSpecPow-1,specTag);
+            text(xpoint,minSpecPow-1,specTagName);
             #setting all the values to standard return value variable names
             retVal1 = [retVal1, SpecMask]
             retVal2 = [retVal2, PSD]
@@ -77,7 +98,7 @@ case 'TotalPower'
 
         saveas(fig1,'BWRatedAnalysis.png');
         movefile('BWRatedAnalysis.png', report_directory);
-		break;
+		return;
 
 
 	case 'PlotBTPRated'
@@ -88,19 +109,43 @@ case 'TotalPower'
         saveas(fig2, 'Analysis_Figure_1.png');
         movefile('Analysis_Figure_1.png', report_directory);
 
+		%initializing the return values
+		retVal1 = []
+        retVal2 = []
+        retVal3 = []
+        retVal4 = []
+		%initialize specTagName index
+		specTagIndex = 1
+
         for i  = 1:numOfTransmitter
             %changing the name of the file
             fileToBeReplaced = strcat('SCM_transmitter_java', num2str(i), '.txt')
-            rename('SCM_transmitter_java1.txt', 'SCM_transmitter_java.txt')
+			disp('file to be replaced is: '), disp(fileToBeReplaced);
+            rename(fileToBeReplaced, 'SCM_transmitter_java.txt')
+			
+			disp('spec Tag is : '), disp(specTag);
+			%fetch the specTagName from the specTagList
+			%get the length of next name
+			disp('trying to fetch length of specNameTag');
+			len = str2num(substr(specTag, specTagIndex, 2));
+			disp('len is '), disp(len);
+			specTagName = substr(specTag, specTagIndex+2, len);
+			disp('specTagName is: '), disp(specTagName);
+			
+			%update the specTagIndex to point to next name
+			specTagIndex = specTagIndex+2+len
 
-            ch = substr(execPattern, i, i+1)
+			%fetching whether it's frequency based or bandwidth based system
+            ch = substr(execPattern, i, 1)
+			disp('the char is:'), disp(ch);
+
             %in case of freq
             if(ch == "f")
                 [Spec_BTP,ExtSpecMask,compatBTPList] = TxHop_FreqList();
                 plot(ExtSpecMask(1:2:end-1),ExtSpecMask(2:2:end),'r.-','LineWidth',2);
                 xpoint=ExtSpecMask(1);
                 minSpecPow=min(ExtSpecMask(2:2:end));
-                text(xpoint,minSpecPow-1,specTag);
+                text(xpoint,minSpecPow-1,specTagName);
                 #setting all the values to standard return value variable names
                 retVal1 = [retVal1, Spec_BTP]
                 retVal2 = [retVal2, ExtSpecMask]
@@ -113,7 +158,7 @@ case 'TotalPower'
                 plot(NewBandList,Spec_MaxPower*ones(1,length(NewBandList)),'r.-','LineWidth',2);
                 xpoint=NewBandList(1);
                 minSpecPow=Spec_MaxPower;
-                text(xpoint,minSpecPow-1,specTag);
+                text(xpoint,minSpecPow-1,specTagName);
                 #setting all the values to standard return value variable names
                 retVal1 = [retVal1, Spec_BTP]
                 retVal2 = [retVal2, NewBandList]
@@ -123,19 +168,29 @@ case 'TotalPower'
         endfor
         saveas(fig2,'BTPRatedAnalysis.png');
         movefile('BTPRatedAnalysis.png', report_directory);
-		break;
+		return;
 
 
 	case 'PlotDCRated'
-			disp('inside PlotDCRated');
-			octaveDuty.eval("fig3=figure");
+		disp('inside PlotDCRated');
+		fig3=figure;
+
+		%initializing the return values
+		retVal1 = []
+        retVal2 = []
+        retVal3 = []
+        retVal4 = []
 
         for i  = 1:numOfTransmitter
             % changing the name of the file
             fileToBeReplaced = strcat('SCM_transmitter_java', num2str(i), '.txt')
-            rename('SCM_transmitter_java1.txt', 'SCM_transmitter_java.txt')
+			disp('file to be replaced is: '), disp(fileToBeReplaced);
+            rename(fileToBeReplaced, 'SCM_transmitter_java.txt')
+			
+			%fetching whether it's frequency based or bandwidth based system
+            ch = substr(execPattern, i, 1)
+			disp('the char is:'), disp(ch);
 
-            ch = substr(execPattern, i, i+1)
             %in case of freq
             if(ch == "f")
                 [Spec_mask_new,p_Tx_new,compatDutyList] = TxDuty_FreqList();
@@ -156,11 +211,11 @@ case 'TotalPower'
         endfor
 
         saveas(fig3,'DCRatedAnalysis.png');
-        movefile('DCRatedAnalysis.png','" + compatTestDirectory + "');
-		break;
+        movefile('DCRatedAnalysis.png', report_directory);
+		return;
 
 	otherwise
 		%nothing to do!! We don't have a default case!!
-		break;
+		return;
 endswitch
 

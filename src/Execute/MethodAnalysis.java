@@ -28,6 +28,7 @@ along with program.  If not, see <http://www.gnu.org/licenses/>.
 package Execute;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -35,11 +36,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.Map;
 import java.util.Set;
@@ -54,7 +57,10 @@ import SCM_home.Home;
 import dk.ange.octave.OctaveEngine;
 import dk.ange.octave.OctaveEngineFactory;
 import dk.ange.octave.type.OctaveDouble;
+import dk.ange.octave.type.OctaveObject;
 import dk.ange.octave.type.OctaveString;
+import dk.ange.octave.io.*;
+import dk.ange.octave.io.spi.OctaveDataReader;
 import reportsGeneration.LoadCompatibilityReport;
 
 public class MethodAnalysis {
@@ -80,6 +86,9 @@ public class MethodAnalysis {
 
 	// Directory Path name variables
 	public String compatTestDirectory = "";
+	
+	//string to store the result and store it
+	public String result = "";
 	
 	//Lists for the Octave return values, 4 lists are returned irrespective of which function is called
 	public ArrayList<OctaveDouble> retVal1 = new ArrayList<OctaveDouble>();
@@ -242,20 +251,31 @@ public class MethodAnalysis {
 			octave.put("transmitterNum", transmitterNum);
 			octave.put("executionPattern", executionPattern);
 			
-			octave.eval("[retVal1, retVal2, retVal3, retVal4] = Coupler(reportdirectoryString,"
-					+ " methodType, logging, specTag, transmitterNum, executionPattern)");
+			StringWriter writer = new StringWriter();
+			octave.setWriter(writer);
 			
+			Process p1;
+			try {
+			octave.eval("[retVal1, retVal2, retVal3, retVal4] = Coupler(reportdirectoryString, methodType, logging, specTag, transmitterNum, executionPattern)");
+			}
+			catch(Exception e) {}
 			retVal1.add(octave.get(OctaveDouble.class, "retVal1"));
 			retVal2.add(octave.get(OctaveDouble.class, "retVal2"));
 			retVal3.add(octave.get(OctaveDouble.class, "retVal3"));
 			retVal4.add(octave.get(OctaveDouble.class, "retVal4"));
+
+			String reader = writer.toString();
 			
-			InputStreamReader isr = new InputStreamReader(System.in);
-			BufferedReader br = new BufferedReader(isr);
 			String line;
 			ArrayList<String> dispData = new ArrayList<String>();
+			
+			InputStream is = new ByteArrayInputStream( reader.getBytes( "UTF-8"));
+			InputStreamReader isr = new InputStreamReader(is);
+			BufferedReader br = new BufferedReader(isr);
+			
 			try {
-				while ((line = br.readLine()) != null) {
+				while (br.ready()) {
+					line = br.readLine();
 					System.out.println(line);
 	
 					logger.info(line);
@@ -265,8 +285,9 @@ public class MethodAnalysis {
 				e.printStackTrace();
 			}
 			int DataLength = dispData.size();
-			secondLastLine = dispData.get(DataLength - 2);
-			lastLine = dispData.get(DataLength - 1);
+			secondLastLine = dispData.get(DataLength - 6);
+			lastLine = dispData.get(DataLength - 5);
+			result = dispData.get(DataLength - 13);
 	
 			octave.close();
 		} catch (Exception e) {
@@ -363,7 +384,7 @@ public class MethodAnalysis {
 
 				//passing arguments to be passed to the octave code, therefore they have been formatted so that octave code
 				//may understand them
-				ArrayList returnedList = initOctave(workingDir, "TotalPower", OctaveLogging.toString(), compatTestDirectory, "null", "1", "null");
+				ArrayList<String> returnedList = initOctave(workingDir, "TotalPower", OctaveLogging.toString(), compatTestDirectory, "null", "1", "null");
 				CompatStat = (String) returnedList.get(0);
 				PowerMargin =  (String) returnedList.get(1);
 				
@@ -419,7 +440,7 @@ public class MethodAnalysis {
 				
 				//passing arguments to be passed to the octave code, therefore they have been formatted so that octave code
 				//may understand them
-				ArrayList returnedList = initOctave(workingDir, "MaxPower", OctaveLogging.toString(), compatTestDirectory, "null", "1", "null");
+				ArrayList<String> returnedList = initOctave(workingDir, "MaxPower", OctaveLogging.toString(), compatTestDirectory, "null", "1", "null");
 				CompatStat = (String) returnedList.get(0);
 				PowerMargin =  (String) returnedList.get(1);
 
@@ -470,97 +491,40 @@ public class MethodAnalysis {
 				final ArrayList<OctaveDouble> PSD = new ArrayList<OctaveDouble>();
 				final ArrayList<OctaveDouble> BW = new ArrayList<OctaveDouble>();
 				ArrayList<OctaveDouble> compatBWList = new ArrayList<OctaveDouble>();
-
-//				OctaveEngineFactory octaveFactory = new OctaveEngineFactory();
-//				octaveFactory.setWorkingDir(workingDir);
-//				OctaveEngine octave = octaveFactory.getScriptEngine();
-
-//				octave.eval("fig1=figure");
-//				octave.eval("retval = plotBWRated();");
-//
-//				// Save the intermediate figures into the report folder
-//				octave.eval("saveas(fig1, 'Analysis_Figure_1.png')");
-//				octave.eval("movefile('Analysis_Figure_1.png','" + compatTestDirectory + "')");
 				
-				
-//				initOctave(workingDir, "PlotBWRated", OctaveLogging.toString(), compatTestDirectory, "null");
-				
+				//the names of all the transmitter files are concatenated into the same list 
+				//because they need to be sent to Octave for plotting
+				String specNameList = "";
 
-				// Process p3;
-//				try {
 
 					for (int i = 0; i < TxData.size(); i++) {
 						//modifying the name of the printTFile
 						//since in this case we only have a single transmitter file we will name it as 1.txt, 2.txt ...so on
-						txFileName = printTFile + i + ".txt";
+						int ind = i+1;
+						txFileName = printTFile + ind + ".txt";
 						warningMessage = warningMessage + printTx.printText(TxData.get(i), txFileName);
 						
-						
-						
-						
-//						
-//						InputStreamReader isr = initOctave(workingDir, "RatedBW", OctaveLogging.toString(), compatTestDirectory, "null");
-//						BufferedReader br = new BufferedReader(isr);
-//						String line;
-//						ArrayList<String> dispData = new ArrayList<String>();
-//						try {
-//							while ((line = br.readLine()) != null) {
-//								System.out.println(line);
-//
-//								logger.info(line);
-//								dispData.add(line);
-//							}
-//						} catch (Exception e) {
-//							e.printStackTrace();
-//						}
-//						int DataLength = dispData.size();
-//						CompatStat = dispData.get(DataLength - 2);
-//						PowerMargin = dispData.get(DataLength - 1);
-						
-						
-//						
-//						initOctave(workingDir, "RatedBW", OctaveLogging.toString(), 
-//								compatTestDirectory, txArray.get(txIndex[i]).ModelName);
-//						SpecMask.addAll(retVal1);
-//						PSD.addAll(retVal2);
-//						BW.addAll(retVal3);
-//						compatBWList.addAll(retVal4);
-						
+						//fetch the model name and add it to the string along with the string length
+						//we add string length so that while reading inside Octave code we can identify how long is the name of 
+						//current transmitter model
+						String modelName = txArray.get(txIndex[i]).ModelName;
+						if(modelName.length() < 10)
+							specNameList = specNameList + 0 + modelName.length() + modelName;
+						else
+							specNameList = specNameList + modelName.length() + modelName;
+						}
 
-//						octave.eval("[SpecMask,PSD,BW,compatBWList] = TxMPSD();");
-//						SpecMask.addAll(retVal1);
-//						PSD.addAll(retVal2);
-//						BW.addAll(retVal3);
-//						compatBWList.addAll(retVal4);
-
-//						OctaveString specTag = new OctaveString(txArray.get(txIndex[i]).ModelName);
-//						octave.put("specTag", specTag);
-//						octave.eval("plot(SpecMask(1:2:end-1),SpecMask(2:2:end),'r.-','LineWidth',2)");
-//						octave.eval("xpoint=(SpecMask(length(SpecMask)/2-1)+SpecMask(length(SpecMask)/2+1))/2;");
-//						octave.eval("minSpecPow=min(SpecMask(2:2:end));");
-//						octave.eval("text(xpoint,minSpecPow-1,specTag)");
-					}
-
-					initOctave(workingDir, "PlotBWRated", OctaveLogging.toString(), compatTestDirectory, txArray.get(txIndex[0]).ModelName, Integer.toString((TxData.size()-1)), "null");
+					initOctave(workingDir, "PlotBWRated", OctaveLogging.toString(), compatTestDirectory, specNameList, Integer.toString((TxData.size())), "null");
 					
 					SpecMask.addAll(retVal1);
 					PSD.addAll(retVal2);
 					BW.addAll(retVal3);
 					compatBWList.addAll(retVal4);
-//
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-
-//				octave.eval("saveas(fig1,'BWRatedAnalysis.png')");
 
 				/*****
 				 * After evaluation, move the images to the respective folder in the Reports
 				 * directory
 				 ************/
-//				String moveCmd = "movefile('BWRatedAnalysis.png','" + compatTestDirectory + "')";
-//				octave.eval(moveCmd);
-//				initOctave(workingDir, "mvBWRatedAnalysis", OctaveLogging.toString(), compatTestDirectory, "null");
 
 				ArrayList<String> compatModelList = new ArrayList<String>();
 				ArrayList<String> nonCompatModelList = new ArrayList<String>();
@@ -589,13 +553,6 @@ public class MethodAnalysis {
 
 				printRep.printBWRated(printfile, allCompatModelList, nonCompatModelList, compatModelList, 0);
 
-				/*
-				 * execBWRated.setPlotPath(compatTestDirectory);
-				 * execBWRated.buildAllCompatList(allCompatModelList);
-				 * execBWRated.buildCompatList(compatModelList);
-				 * execBWRated.buildNonCompatList(nonCompatModelList);
-				 * execBWRated.getFrame(BW,PSD,indexList);
-				 */
 
 				// Load the html page using the method
 				if(reportGeneration)
@@ -638,84 +595,45 @@ public class MethodAnalysis {
 				final ArrayList<OctaveDouble> BW = new ArrayList<OctaveDouble>();
 				ArrayList<OctaveDouble> compatBWList = new ArrayList<OctaveDouble>();
 
+				//the names of all the transmitter files are concatenated into the same list 
+				//because they need to be sent to Octave for plotting
+				String specNameList = "";
 
-//				OctaveEngineFactory octaveFactory = new OctaveEngineFactory();
-//				octaveFactory.setWorkingDir(workingDir);
-//				OctaveEngine octave = octaveFactory.getScriptEngine();
-//
-//				octave.eval("fig1=figure");
-//				octave.eval("retval = plotBWRated();");
-//
-//				// Process p3;
-//
-//				octave.eval("saveas(fig1, 'Analysis_Figure_1.png')");
-//				octave.eval("movefile('Analysis_Figure_1.png','" + compatTestDirectory + "')");
-				
-
-//				initOctave(workingDir, "PlotBWRated", OctaveLogging.toString(), compatTestDirectory, "null");
-
-				// octave.eval("fig2=figure");
-//				try {
 
 					for (int i = 0; i < TxData.size(); i++) {
 
 						//modifying the name of the printTFile
 						//since in this case we only have a single transmitter file we will name it as 1.txt, 2.txt ...so on
-						txFileName = printTFile + i + ".txt";
+						int ind = i+1;
+						txFileName = printTFile + ind + ".txt";
 						warningMessage = warningMessage + printTx.printText(TxData.get(i), txFileName);
 
-						// p3 = Runtime.getRuntime().exec(Command0);
-						// p3 = Runtime.getRuntime().exec(Command1);
-
-//						octave.eval("[SpecMask,PSD,BW,compatBWList] = TxMPSD();");
-//						SpecMask.add(octave.get(OctaveDouble.class, "SpecMask"));
-//						PSD.add(octave.get(OctaveDouble.class, "PSD"));
-//						BW.add(octave.get(OctaveDouble.class, "BW"));
-//						compatBWList.add(octave.get(OctaveDouble.class, "compatBWList"));
-//
-//						initOctave(workingDir, "RatedBW", OctaveLogging.toString(), compatTestDirectory, txArray.get(txIndex[i]).ModelName);
-//
-//						SpecMask.addAll(retVal1);
-//						PSD.addAll(retVal2);
-//						BW.addAll(retVal3);
-//						compatBWList.addAll(retVal4);
-
-//						OctaveString specTag = new OctaveString(txArray.get(txIndex[i]).ModelName);
-//						octave.put("specTag", specTag);
-//						octave.eval("plot(SpecMask(1:2:end-1),SpecMask(2:2:end),'r.-','LineWidth',2)");
-//						octave.eval("xpoint=(SpecMask(length(SpecMask)/2-1)+SpecMask(length(SpecMask)/2+1))/2;");
-//						octave.eval("minSpecPow=min(SpecMask(2:2:end));");
-//						octave.eval("text(xpoint,minSpecPow-1,specTag)");
+						//fetch the model name and add it to the string along with the string length
+						//we add string length so that while reading inside Octave code we can identify how long is the name of 
+						//current transmitter model
+						String modelName = txArray.get(txIndex[i]).ModelName;
+						if(modelName.length() < 10)
+							specNameList = specNameList + 0 + modelName.length() + modelName;
+						else
+							specNameList = specNameList + modelName.length() + modelName;
 					}
 					
-					initOctave(workingDir, "PlotBWRated", OctaveLogging.toString(), compatTestDirectory, txArray.get(txIndex[0]).ModelName, Integer.toString((TxData.size()-1)), "null");
+					initOctave(workingDir, "PlotBWRated", OctaveLogging.toString(), compatTestDirectory, specNameList, Integer.toString((TxData.size())), "null");
 
 					SpecMask.addAll(retVal1);
 					PSD.addAll(retVal2);
 					BW.addAll(retVal3);
 					compatBWList.addAll(retVal4);
 
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-
-//				octave.eval("saveas(fig1,'BWRatedAnalysis.png')");
-
 				/*****
 				 * After evaluation, move the images to the respective folder in the Reports
 				 * directory
 				 ************/
-//				String moveCmd = "movefile('BWRatedAnalysis.png','" + compatTestDirectory + "')";
-//				octave.eval(moveCmd);
-//
-//				octave.close();
-//				initOctave(workingDir, "mvBWRatedAnalysis", OctaveLogging.toString(), compatTestDirectory, "null");
 
 				ArrayList<String> compatModelList = new ArrayList<String>();
 				ArrayList<String> nonCompatModelList = new ArrayList<String>();
 				ArrayList<String> allCompatModelList = new ArrayList<String>();
 
-				// ExecuteBWRated execBWRated = new ExecuteBWRated();
 
 				final ArrayList<Integer> indexList = new ArrayList<Integer>();
 				for (int i = 0; i < PSD.size(); i++) {
@@ -737,13 +655,6 @@ public class MethodAnalysis {
 				}
 				printRep.printBWRated(printfile, allCompatModelList, nonCompatModelList, compatModelList, 1);
 
-				/*
-				 * execBWRated.setPlotPath(compatTestDirectory);
-				 * execBWRated.buildAllCompatList(allCompatModelList);
-				 * execBWRated.buildCompatList(compatModelList);
-				 * execBWRated.buildNonCompatList(nonCompatModelList);
-				 * execBWRated.getFrame(BW,PSD,indexList);
-				 */
 				if(reportGeneration)
 					loadCompRep.displayBWRatedAnalysis(allCompatModelList, nonCompatModelList, compatModelList,
 						compatTestDirectory);
@@ -778,21 +689,10 @@ public class MethodAnalysis {
 				ArrayList<OctaveDouble> Spec_BTP = new ArrayList<OctaveDouble>();
 				ArrayList<OctaveDouble> compatBTPList = new ArrayList<OctaveDouble>();
 				String execPattern = "";
-
-				File workingBTPDir = new File(dirName + "Octave");
-
-//				OctaveEngineFactory BTPoctaveFactory = new OctaveEngineFactory();
-//				BTPoctaveFactory.setWorkingDir(workingBTPDir);
-//				OctaveEngine octaveBTP = BTPoctaveFactory.getScriptEngine();
-
-//				octaveBTP.eval("fig2=figure");
-//				octaveBTP.eval("retval = plotBTPRated();");
-//
-//				octaveBTP.eval("saveas(fig2, 'Analysis_Figure_1.png')");
-//				octaveBTP.eval("movefile('Analysis_Figure_1.png','" + compatTestDirectory + "')");
 				
-
-//				initOctave(workingDir, "PlotBTPRated", OctaveLogging.toString(), compatTestDirectory, "null");
+				//the names of all the transmitter files are concatenated into the same list 
+				//because they need to be sent to Octave for plotting
+				String specNameList = "";
 				
 				//boolean to check if the request should be sent to the octave code
 				//it will be false in case if the program reaches the else block inside the loop
@@ -807,36 +707,26 @@ public class MethodAnalysis {
 
 						//modifying the name of the printTFile
 						//since in this case we only have a single transmitter file we will name it as 1.txt, 2.txt ...so on
-						txFileName = printTFile + i + ".txt";
+						int ind = i+1;
+						txFileName = printTFile + ind + ".txt";
 						warningMessage = warningMessage + printTx.printText(TxData.get(i), txFileName);
+						
+						//fetch the model name and add it to the string along with the string length
+						//we add string length so that while reading inside Octave code we can identify how long is the name of 
+						//current transmitter model
+						String modelName = txArray.get(txIndex[i]).ModelName;
+						if(modelName.length() < 10)
+							specNameList = specNameList + 0 + modelName.length() + modelName;
+						else
+							specNameList = specNameList + modelName.length() + modelName;
 
+						
+						//identify whether the model is frequency based or bandwidth based
 						if (TxData.get(i).getSpectrumMask().get(o).getHoppingData().getFrequencyList() != null) {
 							execPattern += "f";
-//							octaveBTP.eval("[Spec_BTP,ExtSpecMask,compatBTPList] = TxHop_FreqList()");
-//							octaveBTP.eval("plot(ExtSpecMask(1:2:end-1),ExtSpecMask(2:2:end),'r.-','LineWidth',2)");
-//							OctaveString specTag = new OctaveString(txArray.get(txIndex[i]).ModelName);
-//							octaveBTP.put("specTag", specTag);
-//							octaveBTP.eval("xpoint=ExtSpecMask(1);");
-//							octaveBTP.eval("minSpecPow=min(ExtSpecMask(2:2:end));");
-//							octaveBTP.eval("text(xpoint,minSpecPow-1,specTag)");
-//							initOctave(workingDir, "RatedBTPFreq", OctaveLogging.toString(), compatTestDirectory, txArray.get(txIndex[i]).ModelName);
-//							Spec_BTP.addAll(retVal1);
-//							compatBTPList.addAll(retVal3);
 
 						} else {
 							execPattern += "b";
-//							octaveBTP.eval("[Spec_BTP,NewBandList,Spec_MaxPower,compatBTPList] = TxHop_BandList()");
-//							octaveBTP.eval(
-//									"plot(NewBandList,Spec_MaxPower*ones(1,length(NewBandList)),'r.-','LineWidth',2)");
-//							OctaveString specTag = new OctaveString(txArray.get(txIndex[i]).ModelName);
-//							octaveBTP.put("specTag", specTag);
-//							// octaveBTP.eval("NewBandList");
-//							octaveBTP.eval("xpoint=NewBandList(1);");
-//							octaveBTP.eval("minSpecPow=Spec_MaxPower;");
-//							octaveBTP.eval("text(xpoint,minSpecPow-1,specTag)");
-//							initOctave(workingDir, "RatedBTPBand", OctaveLogging.toString(), compatTestDirectory, txArray.get(txIndex[i]).ModelName);
-//							Spec_BTP.addAll(retVal1);
-//							compatBTPList.addAll(retVal4);
 						}
 
 					} else {
@@ -850,25 +740,19 @@ public class MethodAnalysis {
 						 */
 					}
 				}
+				
+				//send the request to Octave only if it's a valid Hopping system
 				if(validHoppingSystem) {
-					initOctave(workingDir, "PlotBTPRated", OctaveLogging.toString(), compatTestDirectory, txArray.get(txIndex[0]).ModelName, Integer.toString((TxData.size()-1)), execPattern);
+					initOctave(workingDir, "PlotBTPRated", OctaveLogging.toString(), compatTestDirectory, specNameList, Integer.toString((TxData.size())), execPattern);
 					Spec_BTP.addAll(retVal1);
 					compatBTPList.addAll(retVal3);
-					compatBTPList.addAll(retVal4);
 				}
 
-//				octaveBTP.eval("saveas(fig2,'BTPRatedAnalysis.png')");
 
 				/*****
 				 * After evaluation, move the images to the respective folder in the Reports
 				 * directory
 				 ************/
-//				String moveCmd = "movefile('BTPRatedAnalysis.png','" + compatTestDirectory + "')";
-//				octaveBTP.eval(moveCmd);
-//
-//				octaveBTP.close();
-
-//				initOctave(workingDir, "mvBTPRatedAnalysis", OctaveLogging.toString(), compatTestDirectory, "null");
 
 				ArrayList<String> compatList = new ArrayList<String>();
 				ArrayList<String> nonCompatList = new ArrayList<String>();
@@ -888,11 +772,6 @@ public class MethodAnalysis {
 
 				printRep.printBTPRated(printfile, compatList, nonCompatList, 0);
 
-				/*
-				 * execBTPRated.setPlotPath(compatTestDirectory);
-				 * execBTPRated.buildCompatList(compatList);
-				 * execBTPRated.buildNonCompatList(nonCompatList); execBTPRated.getFrame();
-				 */
 				if(reportGeneration)
 					loadCompRep.displayBTPRatedAnalysis(nonCompatList, compatList, compatTestDirectory);
 
@@ -928,17 +807,9 @@ public class MethodAnalysis {
 				ArrayList<OctaveDouble> compatBTPList = new ArrayList<OctaveDouble>();
 				String execPattern = "";
 
-				File workingBTPDir = new File(dirName + "Octave");
-
-//				OctaveEngineFactory BTPoctaveFactory = new OctaveEngineFactory();
-//				BTPoctaveFactory.setWorkingDir(workingBTPDir);
-//				OctaveEngine octaveBTP = BTPoctaveFactory.getScriptEngine();
-//
-//				octaveBTP.eval("fig2=figure");
-//				octaveBTP.eval("retval = plotBTPRated();");
-//
-//				octaveBTP.eval("saveas(fig2, 'Analysis_Figure_1.png')");
-//				octaveBTP.eval("movefile('Analysis_Figure_1.png','" + compatTestDirectory + "')");
+				//the names of all the transmitter files are concatenated into the same list 
+				//because they need to be sent to Octave for plotting
+				String specNameList = "";
 
 				//boolean to check if the request should be sent to the octave code
 				//it will be false in case if the program reaches the else block inside the loop
@@ -955,36 +826,26 @@ public class MethodAnalysis {
 
 						//modifying the name of the printTFile
 						//since in this case we only have a single transmitter file we will name it as 1.txt, 2.txt ...so on
-						txFileName = printTFile + i + ".txt";
+						int ind = i+1;
+						txFileName = printTFile + ind + ".txt";
 						warningMessage = warningMessage + printTx.printText(TxData.get(i), txFileName);
 
+						//fetch the model name and add it to the string along with the string length
+						//we add string length so that while reading inside Octave code we can identify how long is the name of 
+						//current transmitter model
+						String modelName = txArray.get(txIndex[i]).ModelName;
+						if(modelName.length() < 10)
+							specNameList = specNameList + 0 + modelName.length() + modelName;
+						else
+							specNameList = specNameList + modelName.length() + modelName;
+
+						
+						//identify whether the model is frequency based or bandwidth based
 						if (TxData.get(i).getSpectrumMask().get(o).getHoppingData().getFrequencyList() != null) {
 							execPattern += "f";
-//							octaveBTP.eval("[Spec_BTP,ExtSpecMask,compatBTPList] = TxHop_FreqList()");
-//							octaveBTP.eval("plot(ExtSpecMask(1:2:end-1),ExtSpecMask(2:2:end),'r.-','LineWidth',2)");
-//							OctaveString specTag = new OctaveString(txArray.get(txIndex[i]).ModelName);
-//							octaveBTP.put("specTag", specTag);
-//							octaveBTP.eval("xpoint=ExtSpecMask(1);");
-//							octaveBTP.eval("minSpecPow=min(ExtSpecMask(2:2:end));");
-//							octaveBTP.eval("text(xpoint,minSpecPow-1,specTag)");
-//							initOctave(workingDir, "RatedBTPFreq", OctaveLogging.toString(), compatTestDirectory, txArray.get(txIndex[i]).ModelName);
-//							Spec_BTP.addAll(retVal1);
-//							compatBTPList.addAll(retVal3);
 
 						} else {
 							execPattern += "b";
-//							octaveBTP.eval("[Spec_BTP,NewBandList,Spec_MaxPower,compatBTPList] = TxHop_BandList()");
-//							octaveBTP.eval(
-//									"plot(NewBandList,Spec_MaxPower*ones(1,length(NewBandList)),'r.-','LineWidth',2)");
-//							OctaveString specTag = new OctaveString(txArray.get(txIndex[i]).ModelName);
-//							octaveBTP.put("specTag", specTag);
-//							// octaveBTP.eval("NewBandList");
-//							octaveBTP.eval("xpoint=NewBandList(1);");
-//							octaveBTP.eval("minSpecPow=Spec_MaxPower;");
-//							octaveBTP.eval("text(xpoint,minSpecPow-1,specTag)");
-//							initOctave(workingDir, "RatedBTPBand", OctaveLogging.toString(), compatTestDirectory, txArray.get(txIndex[i]).ModelName);
-//							Spec_BTP.addAll(retVal1);
-//							compatBTPList.addAll(retVal4);
 						}
 						
 					} else {
@@ -1000,10 +861,9 @@ public class MethodAnalysis {
 				}
 				
 				if(validHoppingSystem) {
-					initOctave(workingDir, "PlotBTPRated", OctaveLogging.toString(), compatTestDirectory, txArray.get(txIndex[0]).ModelName, Integer.toString((TxData.size()-1)), execPattern);
+					initOctave(workingDir, "PlotBTPRated", OctaveLogging.toString(), compatTestDirectory, specNameList, Integer.toString((TxData.size())), execPattern);
 					Spec_BTP.addAll(retVal1);
 					compatBTPList.addAll(retVal3);
-					compatBTPList.addAll(retVal4);
 				}
 
 //				octaveBTP.eval("saveas(fig2,'BTPRatedAnalysis.png')");
@@ -1012,12 +872,6 @@ public class MethodAnalysis {
 				 * After evaluation, move the images to the respective folder in the Reports
 				 * directory
 				 ************/
-//				String moveCmd = "movefile('BTPRatedAnalysis.png','" + compatTestDirectory + "')";
-//				octaveBTP.eval(moveCmd);
-
-//				octaveBTP.close();
-//				initOctave(workingDir, "mvBTPRatedAnalysis", OctaveLogging.toString(), compatTestDirectory, "null");
-
 
 				ArrayList<String> compatList = new ArrayList<String>();
 				ArrayList<String> nonCompatList = new ArrayList<String>();
@@ -1075,14 +929,10 @@ public class MethodAnalysis {
 
 			} else {
 				ArrayList<OctaveDouble> compatDutyList = new ArrayList<OctaveDouble>();
-
-//				File workingDutyDir = new File(dirName + "Octave");
-//
-//				OctaveEngineFactory dutyOctaveFactory = new OctaveEngineFactory();
-//				dutyOctaveFactory.setWorkingDir(workingDutyDir);
-//				OctaveEngine octaveDuty = dutyOctaveFactory.getScriptEngine();
-
-//				octaveDuty.eval("fig3=figure");
+				
+				//the names of all the transmitter files are concatenated into the same list 
+				//because they need to be sent to Octave for plotting
+				String specNameList = "";
 				
 				//boolean to check if the request should be sent to the octave code
 				//it will be false in case if the program reaches the else block inside the loop
@@ -1099,19 +949,25 @@ public class MethodAnalysis {
 
 						//modifying the name of the printTFile
 						//since in this case we only have a single transmitter file we will name it as 1.txt, 2.txt ...so on
-						txFileName = printTFile + i + ".txt";
+						int ind = i+1;
+						txFileName = printTFile + ind + ".txt";
 						warningMessage = warningMessage + printTx.printText(TxData.get(i), txFileName);
 
+						//fetch the model name and add it to the string along with the string length
+						//we add string length so that while reading inside Octave code we can identify how long is the name of 
+						//current transmitter model
+						String modelName = txArray.get(txIndex[i]).ModelName;
+						if(modelName.length() < 10)
+							specNameList = specNameList + 0 + modelName.length() + modelName;
+						else
+							specNameList = specNameList + modelName.length() + modelName;
+
+						
+						//identify whether the model is frequency based or bandwidth based
 						if (TxData.get(i).getSpectrumMask().get(o).getHoppingData().getFrequencyList() != null) {
 							execPattern += "f";
-//							octaveDuty.eval("[Spec_mask_new,p_Tx_new,compatDutyList] = TxDuty_FreqList();");
-//							initOctave(workingDir, "DCRatedListFreq", OctaveLogging.toString(), compatTestDirectory, txArray.get(txIndex[i]).ModelName);
-							// octaveBTP.eval("plot(ExtSpecMask(1:2:end-1),ExtSpecMask(2:2:end),'r.-','LineWidth',2)");
 						} else {
 							execPattern += "b";
-//							octaveDuty.eval("[Spec_mask_new,p_Tx_new,compatDutyList] = TxDuty_BandList();");
-							// octaveBTP.eval("plot(NewBandList,Spec_MaxPower*ones(1,length(NewBandList)),'r.-','LineWidth',2)");
-//							initOctave(workingDir, "DCRatedListBand", OctaveLogging.toString(), compatTestDirectory, txArray.get(txIndex[i]).ModelName);
 						}
 
 //						compatDutyList.addAll(retVal3);
@@ -1129,46 +985,37 @@ public class MethodAnalysis {
 				
 
 				if(validHoppingSystem) {
-					initOctave(workingDir, "PlotDCRated", OctaveLogging.toString(), compatTestDirectory, txArray.get(txIndex[0]).ModelName, Integer.toString((TxData.size()-1)), execPattern);
+					initOctave(workingDir, "PlotDCRated", OctaveLogging.toString(), compatTestDirectory, specNameList, Integer.toString((TxData.size())), execPattern);
 					compatDutyList.addAll(retVal3);
 				}
 				
-//				octaveDuty.eval("saveas(fig3,'DCRatedAnalysis.png')");
 
 				/*****
 				 * After evaluation, move the images to the respective folder in the Reports
 				 * directory
 				 ************/
-//				String moveCmd = "movefile('DCRatedAnalysis.png','" + compatTestDirectory + "')";
-//				octaveDuty.eval(moveCmd);
-//				initOctave(workingDir, "mvDCRatedAnalysis", OctaveLogging.toString(), compatTestDirectory, "null");
-
-//				octaveDuty.close();
 
 				ArrayList<String> dutyCompatList = new ArrayList<String>();
 				ArrayList<String> dutyNonCompatList = new ArrayList<String>();
 
-				// ExecuteDuty execDutyRated = new ExecuteDuty();
 
 				for (int i = 0; i < compatDutyList.size(); i++) {
-
-					if (compatDutyList.get(i).getData()[0] == 0.00) {
-						dutyNonCompatList.add(txArray.get(txIndex[i]).ModelName);
-						// Pass the model name to all compatible
-					} else {
-						dutyCompatList.add(txArray.get(txIndex[i]).ModelName + " with Duty Cycle "
-								+ Arrays.toString(compatDutyList.get(i).getData()));
+					try {
+						if (compatDutyList.get(i).getData()[0] == 0.0) {
+							dutyNonCompatList.add(txArray.get(txIndex[i]).ModelName);
+							// Pass the model name to all compatible
+						} else {
+							dutyCompatList.add(txArray.get(txIndex[i]).ModelName + " with Duty Cycle "
+									+ Arrays.toString(compatDutyList.get(i).getData()));
+						}
+					}catch(Exception e) {
+						if(result == "result:System is compatible")
+							dutyCompatList.add(txArray.get(txIndex[i]).ModelName);
 					}
 				}
 
 				printRep.printDuty(printfile, dutyCompatList, dutyNonCompatList);
 
-				/*
-				 * execDutyRated.setPlotPath(compatTestDirectory);
-				 * execDutyRated.buildCompatList(dutyCompatList);
-				 * execDutyRated.buildNonCompatList(dutyNonCompatList);
-				 * execDutyRated.getFrame();
-				 */
 				if(reportGeneration)
 					loadCompRep.displayDCRatedAnalysis(dutyNonCompatList, dutyCompatList, compatTestDirectory);
 
