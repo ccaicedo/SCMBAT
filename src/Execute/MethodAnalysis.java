@@ -194,6 +194,28 @@ public class MethodAnalysis {
 		this.compatTestDirectory = compatTestDirectory;
 	}
 	
+	//split arrayList on the basis of delimiter number - used from the reply received from Octave
+	public ArrayList<OctaveDouble> splistArrayList(ArrayList<OctaveDouble> list) {
+		ArrayList<OctaveDouble> al = new ArrayList<OctaveDouble>();
+
+		int ptr1 = 0, ptr2 = 0;
+		
+		//keep on looping while ptr2 reaches the end
+		while(ptr2 < list.size()) {
+			//first find the delimiter
+			while(true) {
+				if(Double.valueOf(list.get(ptr2).toString()) == 123456.789)
+					break;
+				ptr2++;
+			}
+			//reaching here we found our delimiter
+			//now we take out the substring
+			al.add((OctaveDouble) list.subList(ptr1, ptr2));
+			ptr1 = ptr2++;
+		}
+		return al;
+	}
+	
 //function to generate result file
 	public void genreateResultFile(String resultFilePath, String method, String result, String powerMargin) {
 		PrintWriter writer = null;
@@ -228,13 +250,22 @@ public class MethodAnalysis {
 		writer.close();
 	}
 	
+	//replace all the non- alphanumeric chars  in the fileName before sending it to the Octave
+	public String replaceNonAlnum(String strng) {
+		return strng.replaceAll("[^A-Za-z0-9]", "");
+	}
+	
+	//this function is responsible for initiating the connection to the Octave part of the application
+	//it uses JavaOctave library for establishing the communication
 	public ArrayList<String> initOctave(File workingDir, String methodTyp, String loggingEnabled, String reportDir, String specTagg, String numberOfTx, String execPattern) {
 		String secondLastLine = null, lastLine = null;
 		try {
+			//create the JavaOctave objects
 			OctaveEngineFactory octaveFactory = new OctaveEngineFactory();
 			octaveFactory.setWorkingDir(workingDir);
 			OctaveEngine octave = octaveFactory.getScriptEngine();
 			
+			//convert normal Java string into Octave String, that could be sent to Octave by JavaOctave
 			OctaveString methodType = new OctaveString(methodTyp);
 			OctaveString logging = new OctaveString(loggingEnabled);
 			OctaveString reportdirectoryString = new OctaveString(reportDir);
@@ -242,8 +273,7 @@ public class MethodAnalysis {
 			OctaveString transmitterNum = new OctaveString(numberOfTx);
 			OctaveString executionPattern = new OctaveString(execPattern);
 			
-			System.out.println("trying running the Octave Code");
-			
+			//add the newly created OctaveStrings to the Octave object, so that it may be sent
 			octave.put("methodType", methodType);
 			octave.put("logging", logging);
 			octave.put("reportdirectoryString", reportdirectoryString);
@@ -251,24 +281,30 @@ public class MethodAnalysis {
 			octave.put("transmitterNum", transmitterNum);
 			octave.put("executionPattern", executionPattern);
 			
+			//set custom Octave writer so that we may read the output
 			StringWriter writer = new StringWriter();
 			octave.setWriter(writer);
 			
-			Process p1;
+			//heart of the function, initiates the Octave connection
 			try {
 			octave.eval("[retVal1, retVal2, retVal3, retVal4] = Coupler(reportdirectoryString, methodType, logging, specTag, transmitterNum, executionPattern)");
 			}
 			catch(Exception e) {}
+			
+			//fetch the returned values by the Octave
 			retVal1.add(octave.get(OctaveDouble.class, "retVal1"));
 			retVal2.add(octave.get(OctaveDouble.class, "retVal2"));
 			retVal3.add(octave.get(OctaveDouble.class, "retVal3"));
 			retVal4.add(octave.get(OctaveDouble.class, "retVal4"));
 
+			//convert the writer output into string
 			String reader = writer.toString();
 			
+			//declare string variable to read line by line data
 			String line;
 			ArrayList<String> dispData = new ArrayList<String>();
 			
+			//converting data into inputStream
 			InputStream is = new ByteArrayInputStream( reader.getBytes( "UTF-8"));
 			InputStreamReader isr = new InputStreamReader(is);
 			BufferedReader br = new BufferedReader(isr);
@@ -276,6 +312,12 @@ public class MethodAnalysis {
 			try {
 				while (br.ready()) {
 					line = br.readLine();
+					
+					//if line contains the word compatibility, then this is the result line
+					//this result as of now is used only in case of dutyCycle.
+					if(line.contains("compatible"))
+						result = line;
+					
 					System.out.println(line);
 	
 					logger.info(line);
@@ -284,10 +326,15 @@ public class MethodAnalysis {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			//fetching the overall size of data
 			int DataLength = dispData.size();
+			
+			//fetch the secondLast line - this tells whether system is compatible or not
+			//or this may also be set to result
 			secondLastLine = dispData.get(DataLength - 6);
+			
+			//fetch the lastLine, this tells the value
 			lastLine = dispData.get(DataLength - 5);
-			result = dispData.get(DataLength - 13);
 	
 			octave.close();
 		} catch (Exception e) {
@@ -508,6 +555,7 @@ public class MethodAnalysis {
 						//we add string length so that while reading inside Octave code we can identify how long is the name of 
 						//current transmitter model
 						String modelName = txArray.get(txIndex[i]).ModelName;
+						modelName = replaceNonAlnum(modelName);
 						if(modelName.length() < 10)
 							specNameList = specNameList + 0 + modelName.length() + modelName;
 						else
@@ -519,7 +567,7 @@ public class MethodAnalysis {
 					SpecMask.addAll(retVal1);
 					PSD.addAll(retVal2);
 					BW.addAll(retVal3);
-					compatBWList.addAll(retVal4);
+					compatBWList = splistArrayList(retVal4);
 
 				/*****
 				 * After evaluation, move the images to the respective folder in the Reports
@@ -612,6 +660,7 @@ public class MethodAnalysis {
 						//we add string length so that while reading inside Octave code we can identify how long is the name of 
 						//current transmitter model
 						String modelName = txArray.get(txIndex[i]).ModelName;
+						modelName = replaceNonAlnum(modelName);
 						if(modelName.length() < 10)
 							specNameList = specNameList + 0 + modelName.length() + modelName;
 						else
@@ -623,7 +672,7 @@ public class MethodAnalysis {
 					SpecMask.addAll(retVal1);
 					PSD.addAll(retVal2);
 					BW.addAll(retVal3);
-					compatBWList.addAll(retVal4);
+					compatBWList = splistArrayList(retVal4);
 
 				/*****
 				 * After evaluation, move the images to the respective folder in the Reports
@@ -715,6 +764,7 @@ public class MethodAnalysis {
 						//we add string length so that while reading inside Octave code we can identify how long is the name of 
 						//current transmitter model
 						String modelName = txArray.get(txIndex[i]).ModelName;
+						modelName = replaceNonAlnum(modelName);
 						if(modelName.length() < 10)
 							specNameList = specNameList + 0 + modelName.length() + modelName;
 						else
@@ -745,7 +795,7 @@ public class MethodAnalysis {
 				if(validHoppingSystem) {
 					initOctave(workingDir, "PlotBTPRated", OctaveLogging.toString(), compatTestDirectory, specNameList, Integer.toString((TxData.size())), execPattern);
 					Spec_BTP.addAll(retVal1);
-					compatBTPList.addAll(retVal3);
+					compatBTPList = splistArrayList(retVal3);
 				}
 
 
@@ -834,6 +884,7 @@ public class MethodAnalysis {
 						//we add string length so that while reading inside Octave code we can identify how long is the name of 
 						//current transmitter model
 						String modelName = txArray.get(txIndex[i]).ModelName;
+						modelName = replaceNonAlnum(modelName);
 						if(modelName.length() < 10)
 							specNameList = specNameList + 0 + modelName.length() + modelName;
 						else
@@ -863,7 +914,7 @@ public class MethodAnalysis {
 				if(validHoppingSystem) {
 					initOctave(workingDir, "PlotBTPRated", OctaveLogging.toString(), compatTestDirectory, specNameList, Integer.toString((TxData.size())), execPattern);
 					Spec_BTP.addAll(retVal1);
-					compatBTPList.addAll(retVal3);
+					compatBTPList = splistArrayList(retVal3);
 				}
 
 //				octaveBTP.eval("saveas(fig2,'BTPRatedAnalysis.png')");
@@ -957,6 +1008,7 @@ public class MethodAnalysis {
 						//we add string length so that while reading inside Octave code we can identify how long is the name of 
 						//current transmitter model
 						String modelName = txArray.get(txIndex[i]).ModelName;
+						modelName = replaceNonAlnum(modelName);
 						if(modelName.length() < 10)
 							specNameList = specNameList + 0 + modelName.length() + modelName;
 						else
@@ -986,7 +1038,7 @@ public class MethodAnalysis {
 
 				if(validHoppingSystem) {
 					initOctave(workingDir, "PlotDCRated", OctaveLogging.toString(), compatTestDirectory, specNameList, Integer.toString((TxData.size())), execPattern);
-					compatDutyList.addAll(retVal3);
+					compatDutyList = splistArrayList(retVal3);
 				}
 				
 

@@ -83,8 +83,7 @@ public class Home {
 			design();
 	}
 
-	// this function is called when the program is being executed through command
-	// line
+	// this function is called when the program is being executed through command line
 	// args - the set of argument received through the command line
 	// returns - void
 	public void execute(String[] args) {
@@ -344,7 +343,7 @@ public class Home {
 		// Schedule a job for the event-dispatching thread:
 		// -tx transmitter_file1_path transmitter_file2_path -rx receiver_file_path
 		if (args != null && args.length >= 4) {
-			// running directly without showing the GUI.
+			// for CLI - running directly without showing the GUI.
 			javax.swing.SwingUtilities.invokeLater(new Runnable() {
 				public void run() {
 					try {
