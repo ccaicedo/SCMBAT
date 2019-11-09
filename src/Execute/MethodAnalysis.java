@@ -195,7 +195,7 @@ public class MethodAnalysis {
 	}
 	
 	//split arrayList on the basis of delimiter number - used from the reply received from Octave
-	public ArrayList<OctaveDouble> splistArrayList(ArrayList<OctaveDouble> list) {
+	public ArrayList<OctaveDouble> splitArrayList(ArrayList<OctaveDouble> list) {
 		ArrayList<OctaveDouble> al = new ArrayList<OctaveDouble>();
 
 		int ptr1 = 0, ptr2 = 0;
@@ -204,7 +204,7 @@ public class MethodAnalysis {
 		while(ptr2 < list.size()) {
 			//first find the delimiter
 			while(true) {
-				if(Double.valueOf(list.get(ptr2).toString()) == 123456.789)
+				if(Double.valueOf(list.get(ptr2).getData()[0]) == 123456.789)
 					break;
 				ptr2++;
 			}
@@ -567,7 +567,7 @@ public class MethodAnalysis {
 					SpecMask.addAll(retVal1);
 					PSD.addAll(retVal2);
 					BW.addAll(retVal3);
-					compatBWList = splistArrayList(retVal4);
+					compatBWList = splitArrayList(retVal4);
 
 				/*****
 				 * After evaluation, move the images to the respective folder in the Reports
@@ -672,7 +672,7 @@ public class MethodAnalysis {
 					SpecMask.addAll(retVal1);
 					PSD.addAll(retVal2);
 					BW.addAll(retVal3);
-					compatBWList = splistArrayList(retVal4);
+					compatBWList = splitArrayList(retVal4);
 
 				/*****
 				 * After evaluation, move the images to the respective folder in the Reports
@@ -795,7 +795,7 @@ public class MethodAnalysis {
 				if(validHoppingSystem) {
 					initOctave(workingDir, "PlotBTPRated", OctaveLogging.toString(), compatTestDirectory, specNameList, Integer.toString((TxData.size())), execPattern);
 					Spec_BTP.addAll(retVal1);
-					compatBTPList = splistArrayList(retVal3);
+					compatBTPList = splitArrayList(retVal3);
 				}
 
 
@@ -914,7 +914,7 @@ public class MethodAnalysis {
 				if(validHoppingSystem) {
 					initOctave(workingDir, "PlotBTPRated", OctaveLogging.toString(), compatTestDirectory, specNameList, Integer.toString((TxData.size())), execPattern);
 					Spec_BTP.addAll(retVal1);
-					compatBTPList = splistArrayList(retVal3);
+					compatBTPList = splitArrayList(retVal3);
 				}
 
 //				octaveBTP.eval("saveas(fig2,'BTPRatedAnalysis.png')");
@@ -1038,7 +1038,7 @@ public class MethodAnalysis {
 
 				if(validHoppingSystem) {
 					initOctave(workingDir, "PlotDCRated", OctaveLogging.toString(), compatTestDirectory, specNameList, Integer.toString((TxData.size())), execPattern);
-					compatDutyList = splistArrayList(retVal3);
+					compatDutyList = splitArrayList(retVal3);
 				}
 				
 
