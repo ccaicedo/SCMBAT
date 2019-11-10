@@ -93,7 +93,9 @@ switch (method)
             retVal1 = [retVal1, SpecMask]
             retVal2 = [retVal2, PSD]
             retVal3 = [retVal3, BW]
-            retVal4 = [retVal4, compatBWList]
+            retVal4 = [retVal4, compatBWList, 123456.789]
+			disp('compatBWList is:'), disp(compatBWList);
+			disp('retval4 is:'), disp(retVal4);
         endfor
 
         saveas(fig1,'BWRatedAnalysis.png');
@@ -149,7 +151,7 @@ switch (method)
                 #setting all the values to standard return value variable names
                 retVal1 = [retVal1, Spec_BTP]
                 retVal2 = [retVal2, ExtSpecMask]
-                retVal3 = [retVal3, compatBTPList]
+                retVal3 = [retVal3, compatBTPList, 123456.789]
             endif
 
             %in case of bandwidth
@@ -163,7 +165,7 @@ switch (method)
                 retVal1 = [retVal1, Spec_BTP]
                 retVal2 = [retVal2, NewBandList]
                 retVal3 = [retVal3, Spec_MaxPower]
-                retVal4 = [retVal4, compatBTPList]
+                retVal4 = [retVal4, compatBTPList, 123456.789]
             endif
         endfor
         saveas(fig2,'BTPRatedAnalysis.png');
@@ -197,7 +199,7 @@ switch (method)
                 #setting all the values to standard return value variable names
                 retVal1 = [retVal1, Spec_mask_new]
                 retVal2 = [retVal2, p_Tx_new]
-                retVal3 = [retVal3, compatDutyList]
+                retVal3 = [retVal3, compatDutyList, 123456.789]
             endif
 
             %in case of bandwidth
@@ -206,7 +208,7 @@ switch (method)
                 #setting all the values to standard return value variable names
                 retVal1 = [retVal1, Spec_mask_new]
                 retVal2 = [retVal2, p_Tx_new]
-                retVal3 = [retVal3, compatDutyList]
+                retVal3 = [retVal3, compatDutyList, 123456.789]
             endif
         endfor
 

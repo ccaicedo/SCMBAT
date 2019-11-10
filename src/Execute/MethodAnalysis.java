@@ -196,23 +196,27 @@ public class MethodAnalysis {
 	
 	//split arrayList on the basis of delimiter number - used from the reply received from Octave
 	public ArrayList<OctaveDouble> splitArrayList(ArrayList<OctaveDouble> list) {
+		ArrayList<OctaveDouble> list2 = new ArrayList<OctaveDouble>();
+		list2.addAll(list);
 		ArrayList<OctaveDouble> al = new ArrayList<OctaveDouble>();
 
 		int ptr1 = 0, ptr2 = 0;
 		
-		//keep on looping while ptr2 reaches the end
-		while(ptr2 < list.size()) {
-			//first find the delimiter
-			while(true) {
-				if(Double.valueOf(list.get(ptr2).getData()[0]) == 123456.789)
-					break;
-				ptr2++;
+		try {
+			//keep on looping while ptr2 reaches the end
+			while(ptr2 < list2.size()) {
+				//first find the delimiter
+				while((list.get(ptr2).getData()[0] == 123456.789)) {
+					ptr2++;
+				}
+				//reaching here we found our delimiter
+				//now we take out the substring
+				al.add((OctaveDouble) list.subList(ptr1, ptr2));
+				ptr1 = ptr2++;
 			}
-			//reaching here we found our delimiter
-			//now we take out the substring
-			al.add((OctaveDouble) list.subList(ptr1, ptr2));
-			ptr1 = ptr2++;
-		}
+		}catch(Exception e) {
+			e.printStackTrace();
+			};
 		return al;
 	}
 	
@@ -292,6 +296,7 @@ public class MethodAnalysis {
 			catch(Exception e) {}
 			
 			//fetch the returned values by the Octave
+			Object obj = octave.get(OctaveDouble.class, "retVal1");
 			retVal1.add(octave.get(OctaveDouble.class, "retVal1"));
 			retVal2.add(octave.get(OctaveDouble.class, "retVal2"));
 			retVal3.add(octave.get(OctaveDouble.class, "retVal3"));
@@ -567,7 +572,7 @@ public class MethodAnalysis {
 					SpecMask.addAll(retVal1);
 					PSD.addAll(retVal2);
 					BW.addAll(retVal3);
-					compatBWList = splitArrayList(retVal4);
+					compatBWList.addAll(retVal4);
 
 				/*****
 				 * After evaluation, move the images to the respective folder in the Reports
@@ -580,23 +585,42 @@ public class MethodAnalysis {
 
 				// ExecuteBWRated execBWRated = new ExecuteBWRated();
 
+				int j = 0;
 				final ArrayList<Integer> indexList = new ArrayList<Integer>();
-				for (int i = 0; i < PSD.size(); i++) {
-
-					if (compatBWList.get(i).getData()[0] == 1.00) {
-						allCompatModelList.add(txArray.get(txIndex[i]).ModelName);
-						// Pass the model name to all compatible
-					} else {
-						if (compatBWList.get(i).getData()[0] == 0.00) {
-							nonCompatModelList.add(txArray.get(txIndex[i]).ModelName);
-							// Pass the model name to all non compatible
+				for (int i = 0; i < PSD.get(0).getData().length; i++) {
+					ArrayList<Double> al = new ArrayList<Double>();
+					
+					while(j < compatBWList.get(0).getData().length) {
+						if(compatBWList.get(0).getData()[j] == 123456.789) 
+							break;
+						if (compatBWList.get(0).getData()[j] == 1.00) {
+							allCompatModelList.add(txArray.get(txIndex[i]).ModelName);
+							// Pass the model name to all compatible
 						} else {
-							compatModelList.add(txArray.get(txIndex[i]).ModelName + " with "
-									+ Arrays.toString(compatBWList.get(i).getData()));
-							indexList.add(i);
+							if (compatBWList.get(0).getData()[j] == 0.00) {
+								nonCompatModelList.add(txArray.get(txIndex[i]).ModelName);
+								// Pass the model name to all non compatible
+							} else {
+								al.add(compatBWList.get(0).getData()[j]);
+								//check if the next double is the delimiter
+								if(compatBWList.get(0).getData()[j+1] == 123456.789) {
+									String listString = "";
+									for (Double s : al)
+									{
+									    listString += Double.toString(s) + ", ";
+									}
+									
+									compatModelList.add(txArray.get(txIndex[i]).ModelName + " with "
+											+ "[" + listString + "]");
+									indexList.add(i);
+								}
+							}
 						}
+						//increment the j pointer
+						j++;
 					}
-
+					//increment j pointer once more to get rid of delimiter
+					j++;
 				}
 
 				printRep.printBWRated(printfile, allCompatModelList, nonCompatModelList, compatModelList, 0);
@@ -672,7 +696,7 @@ public class MethodAnalysis {
 					SpecMask.addAll(retVal1);
 					PSD.addAll(retVal2);
 					BW.addAll(retVal3);
-					compatBWList = splitArrayList(retVal4);
+					compatBWList.addAll(retVal4);
 
 				/*****
 				 * After evaluation, move the images to the respective folder in the Reports
@@ -683,24 +707,41 @@ public class MethodAnalysis {
 				ArrayList<String> nonCompatModelList = new ArrayList<String>();
 				ArrayList<String> allCompatModelList = new ArrayList<String>();
 
-
+				int j = 0;
 				final ArrayList<Integer> indexList = new ArrayList<Integer>();
-				for (int i = 0; i < PSD.size(); i++) {
-
-					if (compatBWList.get(i).getData()[0] == 1.00) {
-						allCompatModelList.add(txArray.get(txIndex[i]).ModelName);
-						// Pass the model name to all compatible
-					} else {
-						if (compatBWList.get(i).getData()[0] == 0.00) {
-							nonCompatModelList.add(txArray.get(txIndex[i]).ModelName);
-							// Pass the model name to all non compatible
+				for (int i = 0; i < PSD.get(0).getData().length; i++) {
+					ArrayList<Double> al = new ArrayList<Double>();
+					
+					while(j < compatBWList.get(0).getData().length) {
+						if(compatBWList.get(0).getData()[j] == 123456.789) 
+							break;
+						if (compatBWList.get(0).getData()[j] == 1.00) {
+							allCompatModelList.add(txArray.get(txIndex[i]).ModelName);
+							// Pass the model name to all compatible
 						} else {
-							compatModelList.add(txArray.get(txIndex[i]).ModelName + " with "
-									+ Arrays.toString(compatBWList.get(i).getData()));
-							indexList.add(i);
+							if (compatBWList.get(0).getData()[j] == 0.00) {
+								nonCompatModelList.add(txArray.get(txIndex[i]).ModelName);
+								// Pass the model name to all non compatible
+							} else {
+								al.add(compatBWList.get(0).getData()[j]);
+								if(compatBWList.get(0).getData()[j+1] == 123456.789) {
+									String listString = "";
+									for (Double s : al)
+									{
+									    listString += Double.toString(s) + ", ";
+									}
+									
+									compatModelList.add(txArray.get(txIndex[i]).ModelName + " with "
+											+ "[" + listString + "]");
+									indexList.add(i);
+								}
+							}
 						}
+						//increment the j pointer
+						j++;
 					}
-
+					//increment j pointer once more to get rid of delimiter
+					j++;
 				}
 				printRep.printBWRated(printfile, allCompatModelList, nonCompatModelList, compatModelList, 1);
 
@@ -795,7 +836,7 @@ public class MethodAnalysis {
 				if(validHoppingSystem) {
 					initOctave(workingDir, "PlotBTPRated", OctaveLogging.toString(), compatTestDirectory, specNameList, Integer.toString((TxData.size())), execPattern);
 					Spec_BTP.addAll(retVal1);
-					compatBTPList = splitArrayList(retVal3);
+					compatBTPList.addAll(retVal3);
 				}
 
 
@@ -809,15 +850,36 @@ public class MethodAnalysis {
 
 				/// ExecuteBTPRated execBTPRated = new ExecuteBTPRated();
 
-				for (int i = 0; i < Spec_BTP.size(); i++) {
-
-					if (compatBTPList.get(i).getData()[0] == 0.00) {
-						nonCompatList.add(txArray.get(txIndex[i]).ModelName);
-						// Pass the model name to all compatible
-					} else {
-						compatList.add(txArray.get(txIndex[i]).ModelName + " with "
-								+ Arrays.toString(compatBTPList.get(i).getData()));
+				
+				int j = 0;
+				for (int i = 0; i < Spec_BTP.get(0).getData().length; i++) {
+					ArrayList<Double> al = new ArrayList<Double>();
+					
+					while(j < compatBTPList.get(0).getData().length) {
+						if(compatBTPList.get(0).getData()[j] == 123456.789) 
+							break;
+						if (compatBTPList.get(0).getData()[j] == 0.00) {
+							nonCompatList.add(txArray.get(txIndex[i]).ModelName);
+							// Pass the model name to all non compatible
+						} else {
+							al.add(compatBTPList.get(0).getData()[j]);
+							//check if the next double is the delimiter
+							if(compatBTPList.get(0).getData()[j+1] == 123456.789) {
+								String listString = "";
+								for (Double s : al)
+								{
+								    listString += Double.toString(s) + ", ";
+								}
+								
+								compatList.add(txArray.get(txIndex[i]).ModelName + " with "
+										+ "[" + listString + "]");
+							}
+						}
+						//increment the j pointer
+						j++;
 					}
+					//increment j pointer once more to get rid of delimiter
+					j++;
 				}
 
 				printRep.printBTPRated(printfile, compatList, nonCompatList, 0);
@@ -914,7 +976,7 @@ public class MethodAnalysis {
 				if(validHoppingSystem) {
 					initOctave(workingDir, "PlotBTPRated", OctaveLogging.toString(), compatTestDirectory, specNameList, Integer.toString((TxData.size())), execPattern);
 					Spec_BTP.addAll(retVal1);
-					compatBTPList = splitArrayList(retVal3);
+					compatBTPList.addAll(retVal3);
 				}
 
 //				octaveBTP.eval("saveas(fig2,'BTPRatedAnalysis.png')");
@@ -929,15 +991,35 @@ public class MethodAnalysis {
 
 				// ExecuteBTPRated execBTPRated = new ExecuteBTPRated();
 
-				for (int i = 0; i < Spec_BTP.size(); i++) {
-
-					if (compatBTPList.get(i).getData()[0] == 0.00) {
-						nonCompatList.add(txArray.get(txIndex[i]).ModelName);
-						// Pass the model name to all compatible
-					} else {
-						compatList.add(txArray.get(txIndex[i]).ModelName + " with "
-								+ Arrays.toString(compatBTPList.get(i).getData()));
+				int j = 0;
+				for (int i = 0; i < Spec_BTP.get(0).getData().length; i++) {
+					ArrayList<Double> al = new ArrayList<Double>();
+					
+					while(j < compatBTPList.get(0).getData().length) {
+						if(compatBTPList.get(0).getData()[j] == 123456.789) 
+							break;
+						if (compatBTPList.get(0).getData()[j] == 0.00) {
+							nonCompatList.add(txArray.get(txIndex[i]).ModelName);
+							// Pass the model name to all non compatible
+						} else {
+							al.add(compatBTPList.get(0).getData()[j]);
+							//check if the next double is the delimiter
+							if(compatBTPList.get(0).getData()[j+1] == 123456.789) {
+								String listString = "";
+								for (Double s : al)
+								{
+								    listString += Double.toString(s) + ", ";
+								}
+								
+								compatList.add(txArray.get(txIndex[i]).ModelName + " with "
+										+ "[" + listString + "]");
+							}
+						}
+						//increment the j pointer
+						j++;
 					}
+					//increment j pointer once more to get rid of delimiter
+					j++;
 				}
 
 				printRep.printBTPRated(printfile, compatList, nonCompatList, 1);
@@ -1038,7 +1120,7 @@ public class MethodAnalysis {
 
 				if(validHoppingSystem) {
 					initOctave(workingDir, "PlotDCRated", OctaveLogging.toString(), compatTestDirectory, specNameList, Integer.toString((TxData.size())), execPattern);
-					compatDutyList = splitArrayList(retVal3);
+					compatDutyList.addAll(retVal3);
 				}
 				
 
@@ -1051,19 +1133,54 @@ public class MethodAnalysis {
 				ArrayList<String> dutyNonCompatList = new ArrayList<String>();
 
 
-				for (int i = 0; i < compatDutyList.size(); i++) {
-					try {
-						if (compatDutyList.get(i).getData()[0] == 0.0) {
-							dutyNonCompatList.add(txArray.get(txIndex[i]).ModelName);
-							// Pass the model name to all compatible
-						} else {
-							dutyCompatList.add(txArray.get(txIndex[i]).ModelName + " with Duty Cycle "
-									+ Arrays.toString(compatDutyList.get(i).getData()));
+//				for (int i = 0; i < compatDutyList.size(); i++) {
+//					try {
+//						if (compatDutyList.get(i).getData()[0] == 0.0) {
+//							dutyNonCompatList.add(txArray.get(txIndex[i]).ModelName);
+//							// Pass the model name to all compatible
+//						} else {
+//							dutyCompatList.add(txArray.get(txIndex[i]).ModelName + " with Duty Cycle "
+//									+ Arrays.toString(compatDutyList.get(i).getData()));
+//						}
+//					}catch(Exception e) {
+//						if(result == "result:System is compatible")
+//							dutyCompatList.add(txArray.get(txIndex[i]).ModelName);
+//					}
+//				}
+				
+				int j = 0;
+				int i = 0;
+				ArrayList<Double> al = new ArrayList<Double>();
+				try {
+					while(j < compatDutyList.get(0).getData().length) {
+						if(compatDutyList.get(0).getData()[j] == 123456.789) {
+							j++;
+							continue;
 						}
-					}catch(Exception e) {
-						if(result == "result:System is compatible")
-							dutyCompatList.add(txArray.get(txIndex[i]).ModelName);
+						if (compatDutyList.get(0).getData()[j] == 0.00) {
+							dutyNonCompatList.add(txArray.get(txIndex[i]).ModelName);
+							// Pass the model name to all non compatible
+						} else {
+							al.add(compatDutyList.get(0).getData()[j]);
+							//check if the next double is the delimiter
+							if(compatDutyList.get(0).getData()[j+1] == 123456.789) {
+								String listString = "";
+								for (Double s : al)
+								{
+								    listString += Double.toString(s) + ", ";
+								}
+								
+								dutyCompatList.add(txArray.get(txIndex[i]).ModelName + " with "
+										+ "[" + listString + "]");
+							}
+						}
+						//increment the j pointer
+						j++;
+						i++;
 					}
+				}catch(Exception e) {
+					if(result == "result:System is compatible")
+					dutyCompatList.add(txArray.get(txIndex[i]).ModelName);
 				}
 
 				printRep.printDuty(printfile, dutyCompatList, dutyNonCompatList);
