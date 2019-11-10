@@ -45,7 +45,7 @@ R=[Rx_Lat,Rx_Long,Rx_Alt];
 
 %Compare frequency range
 if((Tx_SpecMask(1)<Rx_UnderlayMask(1) && Tx_SpecMask(end-1)<Rx_UnderlayMask(1)) || (Tx_SpecMask(1)>Rx_UnderlayMask(end-1) && Tx_SpecMask(end-1)>Rx_SpecMask(end-1)) )
-    disp(strcat('result: ', 'System is compatible'));
+    disp('System is compatible');
     return;
 end
 
@@ -127,11 +127,11 @@ ind=find(P_diff<0);
 %Power_Tx_dB
 PowerMargin = min((P_diff));	 								% the actual power margin is the negative of this value
 if(isempty(ind)==1)
-    disp(strcat('result: ', 'System is compatible'));
-    disp(strcat('result: ', num2str(PowerMargin * -1)));		% the system is compaitable when the power margin is negative
+    disp('System is compatible');
+    disp(PowerMargin * -1);										% the system is compaitable when the power margin is negative
 else
-    disp(strcat('result: ', 'System is not compatible'));
-    disp(strcat('result: ', num2str(PowerMargin * -1)));
+    disp('System is not compatible');
+    disp(PowerMargin * -1);
 end
 
 end

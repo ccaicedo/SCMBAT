@@ -59,8 +59,6 @@ public class PrintRxText extends PrintText {
 			// printfile = new PrintWriter (meth.getFilePath()+"Octave/" + SaveName);
 			printfile = new PrintWriter(SaveName);
 
-			// Create the file name
-			// String savefileName = SaveName_getCurrentDate;
 
 			// Adding the new Directory for adding the output files
 			// printfile = new PrintWriter ("CompatabilityAnalysis/" + SaveName);
