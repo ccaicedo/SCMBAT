@@ -1,0 +1,25 @@
+FROM dorowu/ubuntu-desktop-lxde-vnc
+
+MAINTAINER Ashwani Bhatt <abhatt02@syr.edu>
+
+RUN sudo apt-get -y update && sudo apt-get install -y apt-utils && sudo apt-get install -y curl && sudo apt-get install -y openjdk-11-jdk && sudo apt-get install -y octave && sudo apt-get install -y transfig
+
+ENV MAVEN_VERSION 3.3.9
+
+RUN mkdir -p /usr/share/maven \
+  && curl -fsSL http://apache.osuosl.org/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz \
+    | tar -xzC /usr/share/maven --strip-components=1 \
+  && ln -s /usr/share/maven/bin/mvn /usr/bin/mvn
+
+ENV MAVEN_HOME /usr/share/maven
+
+VOLUME /root/.m2
+
+CMD ["mvn"]
+EXPOSE 6080
+
+RUN echo pwd
+RUN sudo mkdir -p /root/Desktop/scmbat
+COPY scmbat.tar.gz /root/Desktop/scmbat/
+RUN chmod +x  /root/Desktop/scmbat/scmbat.tar.gz
+RUN tar -xvzf /root/Desktop/scmbat/scmbat.tar.gz -C /root/Desktop/scmbat/
