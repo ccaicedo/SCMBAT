@@ -100,6 +100,7 @@ ExtSpecMask=reshape(ExtSpecMask',1,matrixSize(1)*matrixSize(2));
 
 
 if(FreqList==0)
+	disp('FreqList is 0');
     disp(strcat('result: ', 'System is compatible'));
     return;
 end
@@ -140,8 +141,8 @@ if(compatBWList==0)
     disp(strcat('result: ', 'System is not at all compatible'));
     return;
 else
-    disp(strcat('result: ', 'System compatible with: '));
-    disp(strcat('result: ', num2str(compatBWList)));
+    disp(strcat('result: ', 'System is compatible'));
+    disp(compatBWList);
     return;
 end
 

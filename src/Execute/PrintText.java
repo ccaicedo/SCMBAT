@@ -55,8 +55,6 @@ public class PrintText {
 			warningMessage = warningMessage + "\nIn the " + device
 					+ " model, Inconsistent Data, the data for reference power is inconsisent";
 
-			// new Warn().setWarn("Inconsistent Data", "the data for reference power is
-			// inconsisent");
 		}
 		return warningMessage;
 	}
@@ -84,7 +82,6 @@ public class PrintText {
 					azi = String.valueOf(gainMapValue.get(i).getAzimuth());
 					gain = String.valueOf(gainMapValue.get(i).getGain());
 					if (ele != null && !ele.equalsIgnoreCase("null")) {
-//						PowerStringBuilder.append(360 + " " + String.valueOf(ele) + " ");
 						PowerStringBuilder.append(String.valueOf(ele) + " ");
 					} else if (azi != null && !azi.equalsIgnoreCase("null")) {
 						PowerStringBuilder.append(azi + " ");
@@ -92,7 +89,6 @@ public class PrintText {
 						PowerStringBuilder.append(gain + " ");
 					}
 				}
-//				PowerStringBuilder.append(0.0);
 				PowerPrintData = PowerStringBuilder.toString();
 				String PowerTest = PowerPrintData.replaceAll(" ", "");
 				if (PowerTest.equals("") || PowerTest.equals("0")) {
@@ -102,8 +98,6 @@ public class PrintText {
 				warningMessage = warningMessage + "\nIn the " + device
 						+ " model, Inconsistent Data, the data for power map is inconsistent or necessary";
 
-				// new Warn().setWarn("Inconsistent Data", "the data for power map is
-				// inconsistent or necessary");
 				PowerPrintData = "0 0";
 			}
 
@@ -164,40 +158,8 @@ public class PrintText {
 						}
 
 					}
-					
-
-
-//					if(propMapValue.get(i).getElevation()!=prevElevation && 
-//							propMapValue.get(i).getElevation()!=0.0){
-//						ele = 360 + " " + String.valueOf(propMapValue.get(i).getElevation()) + " ";
-//					}else{
-//						ele = "";
-//					}
-//					azi = String.valueOf(propMapValue.get(i).getAzimuth());
-//					
-//					propStringBuilder.append(ele);
-//					if(propMapValue.get(i).getAzimuth()!=0.0){
-//						propStringBuilder.append(azi + " ");
-//					}
-//					
-//					if(propMapValue.get(i).getPropagationModel().getPiecewiseLinear()==null ||
-//							propMapValue.get(i).getPropagationModel().getLinear()!=0.0){
-//						n1 = String.valueOf(propMapValue.get(i).getPropagationModel().getLinear());
-//						propStringBuilder.append(n1+" ");
-//					}else{
-//						
-//						n1 = String.valueOf(propMapValue.get(i).getPropagationModel().
-//								getPiecewiseLinear().getFirstExponent());					
-//						dist = String.valueOf(propMapValue.get(i).getPropagationModel().
-//								getPiecewiseLinear().getBreakpoint());
-//						n2 = String.valueOf(propMapValue.get(i).getPropagationModel().
-//								getPiecewiseLinear().getSecondExponent());
-//						propStringBuilder.append(n1+" "+dist+" "+n2+" ");
-//					}
-//					
-//					prevElevation = propMapValue.get(i).getElevation();
+				
 				}
-//				propStringBuilder.append(0.0);
 				propPrintData = propStringBuilder.toString();
 				String propTest = propPrintData.replaceAll(" ", "");
 				if (propTest.equals("") || propTest.equals("0")) {
@@ -207,8 +169,6 @@ public class PrintText {
 				warningMessage = warningMessage + "\n In the " + device
 						+ " model, Inconsistent Data, the data for power map is inconsistent or necessary";
 
-				// new Warn().setWarn("Inconsistent Data", "the data for power map is
-				// inconsistent or necessary");
 				propPrintData = "0 0";
 			}
 

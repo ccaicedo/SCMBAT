@@ -49,7 +49,7 @@ disp("phi_Txo: "), disp(phi_Txo), disp("theta_Txo: "), disp(theta_Txo), disp("Mi
 %Compare frequency range
 disp("Comparing Frequency range.");
 if((Tx_SpecMask(1)<Rx_UnderlayMask(1) && Tx_SpecMask(end-1)<Rx_UnderlayMask(1)) || (Tx_SpecMask(1)>Rx_UnderlayMask(end-1) && Tx_SpecMask(end-1)>Rx_UnderlayMask(end-1)) )
-    disp(strcat('result:', 'System is compatible'));
+    disp('System is compatible');
     return;
 end
 
@@ -225,11 +225,11 @@ disp("[Power_Rx,Power_Rx_dB] @ '[Power_Rx,Power_Rx_dB] = calculate_power(p_Rx_ne
 AllowablePower=Power_Rx_dB;
 Power_Margin_Difference = Power_Tx_dB-AllowablePower;
 if(AllowablePower>Power_Tx_dB)
-    disp(strcat('result: ', 'System is compatible'));
-    disp(strcat('result: ', num2str(Power_Margin_Difference)));
+    disp('System is compatible');
+    disp(Power_Margin_Difference);
 else
-    disp(strcat('result: ', 'System is not compatible')); 
-    disp(strcat('result: ', num2str(Power_Margin_Difference)));
+    disp('System is not compatible');
+    disp(Power_Margin_Difference);
 end
 
 
