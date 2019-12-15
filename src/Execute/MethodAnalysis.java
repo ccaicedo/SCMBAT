@@ -180,7 +180,7 @@ public class MethodAnalysis {
 					ratedMethod = "pOrPIndex";
 				}
 			} else {
-				ratedMethod = Rx.getUnderlayMask().get(0).getMaskPowerMarginMethod();
+				ratedMethod = Rx.getUnderlayMask().get(0).getMaskPowerMarginMethod().value();
 			}
 		}
 		return ratedMethod;

@@ -34,9 +34,9 @@ import org.ieee.dyspansc._1900._5.scm.BTPRatedList;
 import org.ieee.dyspansc._1900._5.scm.BTPRating;
 import org.ieee.dyspansc._1900._5.scm.BWRatedList;
 import org.ieee.dyspansc._1900._5.scm.BWRating;
+import org.ieee.dyspansc._1900._5.scm.ControlPoint;
 import org.ieee.dyspansc._1900._5.scm.DCRatedList;
 import org.ieee.dyspansc._1900._5.scm.DCRating;
-import org.ieee.dyspansc._1900._5.scm.InflectionPnt;
 import org.ieee.dyspansc._1900._5.scm.Rating;
 import org.ieee.dyspansc._1900._5.scm.RxModel;
 
@@ -70,13 +70,13 @@ public class PrintRxText extends PrintText {
 				printfile.println("# name: Rx_UnderlayMask");
 				printfile.println("# type: matrix");
 				printfile.println("# rows: 1");
-				List<InflectionPnt> infPoint = model.getUnderlayMask().get(o).getScmMask().getInflectionPnt();
+				List<ControlPoint> controlPoint = model.getUnderlayMask().get(o).getScmMask().getControlPoint();
 				String data = "";
-				for (int i = 0; i < infPoint.size(); i++) {
-					data = data + infPoint.get(i).getFrequency() + " ";
-					data = data + infPoint.get(i).getRelativePower() + " ";
+				for (int i = 0; i < controlPoint.size(); i++) {
+					data = data + controlPoint.get(i).getFrequency() + " ";
+					data = data + controlPoint.get(i).getRelativePower() + " ";
 				}
-				printfile.println("# columns: " + infPoint.size() * 2);
+				printfile.println("# columns: " + controlPoint.size() * 2);
 				printfile.println(data);
 				printfile.println("");
 				printfile.println("");

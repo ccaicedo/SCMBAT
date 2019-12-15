@@ -52,7 +52,6 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
-import org.ieee.dyspansc._1900._5.scm.PiecewiseLinear;
 
 public class PropMap {
 
