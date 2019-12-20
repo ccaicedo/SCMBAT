@@ -47,6 +47,9 @@ import org.ieee.dyspansc._1900._5.scm.DCRating;
 import org.ieee.dyspansc._1900._5.scm.GainMapValue;
 import org.ieee.dyspansc._1900._5.scm.ControlPoint;
 import org.ieee.dyspansc._1900._5.scm.IntermodulationMask;
+import org.ieee.dyspansc._1900._5.scm.LinearLossValue;
+import org.ieee.dyspansc._1900._5.scm.LinearLosses;
+import org.ieee.dyspansc._1900._5.scm.LogLinearValue;
 import org.ieee.dyspansc._1900._5.scm.PathPoint;
 import org.ieee.dyspansc._1900._5.scm.PiecewiseLogLinear;
 import org.ieee.dyspansc._1900._5.scm.PointSurface;
@@ -428,28 +431,42 @@ public void setUnderlay(SCM_MainWindow scm, UnderlayMask underlay, String device
 					if (piecewiseLogLinear.getLogLinearValue().size() > 0) {
 						
 						//TODO bhatt now, LogLinearValue is the list, don't know what to do here ?
-						n1 = String.valueOf(piecewiseLogLinear.get);					
-						dist = String.valueOf(propMapValue.get(i).getPropagationModel().
-								getPiecewiseLinear().getBreakpoint());
-						n2 = String.valueOf(propMapValue.get(i).getPropagationModel().
-								getPiecewiseLinear().getSecondExponent());
 						
-						Object[] firstExponentData = {currentProp.table.getRowCount()+1, "First Exponent", n1};
-						model.addRow(firstExponentData);
-						
-						Object[] breakpointData = {currentProp.table.getRowCount()+1, "Breakpoint(m)", dist};
-						model.addRow(breakpointData);
-						
-						Object[] secondExponentData = {currentProp.table.getRowCount()+1, "Second Exponent", n2};
-						model.addRow(secondExponentData);
+						for(int logLinearIndex=0;logLinearIndex < piecewiseLogLinear.getLogLinearValue().size(); logLinearIndex++) {
+							LogLinearValue logLinear = piecewiseLogLinear.getLogLinearValue().get(logLinearIndex);
+							
+							n1 = String.valueOf(logLinear.getExponent());					
+							dist = String.valueOf(logLinear.getBreakpoint());
+							
+							
+							Object[] firstExponentData = {currentProp.table.getRowCount()+1, "First Exponent", n1};
+							model.addRow(firstExponentData);
+							
+							Object[] breakpointData = {currentProp.table.getRowCount()+1, "Breakpoint(m)", dist};
+							model.addRow(breakpointData);
+						}
+					
 						
 						continue;
 					}
-					else if(propMapValue.get(i).getPropagationModel().getLinear()!=0.0) {
-						valueType = "Prop Exponent";
-//						value = String.valueOf(propMapValue.get(i+2).getPropagationModel().getLinear());
-						value = String.valueOf(propMapValue.get(i).getPropagationModel().getLinear());
+					else if(propMapValue.get(i).getPropagationModel().getLinearLosses().getLinearLossValue().size()>0) {
+						LinearLosses linearLosses = propMapValue.get(i).getPropagationModel().getLinearLosses();
 						
+						for(int linearLossesIndex=0;linearLossesIndex < linearLosses.getLinearLossValue().size(); linearLossesIndex++) {
+							LinearLossValue linearLossesValue = linearLosses.getLinearLossValue().get(linearLossesIndex);
+							
+							n1 = String.valueOf(linearLossesValue.getDistance());					
+							dist = String.valueOf(linearLossesValue.getLoss());
+							
+							
+							Object[] firstExponentData = {currentProp.table.getRowCount()+1, "Distance", n1};
+							model.addRow(firstExponentData);
+							
+							Object[] breakpointData = {currentProp.table.getRowCount()+1, "Loss", dist};
+							model.addRow(breakpointData);
+						}				
+						
+						continue;						
 					}
 				}
 				

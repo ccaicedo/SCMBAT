@@ -753,6 +753,9 @@ public class Save_XML extends ObjectFactory {
 		int propMapIndex = -1;
 		String firstExponent = "";
 		String breakpoint = "";
+		
+		String DistanceLinearLoss = "";
+		
 		for (int i = 0; i < tableData.getRowCount(); i++) {
 			try{
 			
@@ -773,13 +776,19 @@ public class Save_XML extends ObjectFactory {
 				prop.getPropMap().getPropMapValue().get((propMapIndex)).setAzimuth(Double.parseDouble(dataValue));
 			}
 			
-			else if (strData.equals("PropExponent")) {
+			else if (strData.equals("Distance")) {
+
+				DistanceLinearLoss = dataValue;
+				
+			}
+			else if(strData.equals("Loss")) {
 				++propMapIndex;
 				prop.getPropMap().getPropMapValue().add(new PropMapValue());
 				PropagationModel propModel = new PropagationModel();
 				
 				LinearLossValue linearLossValue = new LinearLossValue();
 				linearLossValue.setLoss(Double.parseDouble(dataValue));
+				linearLossValue.setDistance(Double.parseDouble(DistanceLinearLoss));
 				
 				//TODO bhatt
 //				linearLossValue.setDistance(value);
