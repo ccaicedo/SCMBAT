@@ -74,7 +74,7 @@ public class SpecMask_Hop {
         public boolean isCellEditable(int row, int column)
         {
             // make read only column
-			if(column ==0 )
+			if(column == 0 )
 			{
 				return false;
 			}
@@ -96,7 +96,7 @@ public class SpecMask_Hop {
         public boolean isCellEditable(int row, int column)
         {
             // make read only column
-			if(column ==0 )
+			if(column == 0 )
 			{
 				return false;
 			}

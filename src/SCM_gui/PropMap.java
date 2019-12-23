@@ -75,6 +75,8 @@ public class PropMap {
 	public JButton NewMap = new JButton("Add new map");
 	public JButton Previous = new JButton("Previous");
 	public JButton Next = new JButton("Next");
+	
+	private int count = 2;
 
 	Object rowData[][] = { { "", "Elevation Angle","-90"},  { "", "Azimuth Angle","0"}, { "1","",""}, { "", "Azimuth Angle","360"}, { "", "Elevation Angle","90"} };
 	Object columnNames[] = {"#","Value Type","Value"};
@@ -84,16 +86,24 @@ public class PropMap {
 		private static final long serialVersionUID = 4471013790258970066L;
 
 		@Override
-        public boolean isCellEditable(int row, int column)
+		public boolean isCellEditable(int row, int column)
         {
-			return false;
+            // make read only column
+			if(column ==0 )
+			{
+				return false;
+			}
+			else
+			{
+				return true;
+			}
         }
     	
     };
     
-	Object rowData_piecewise[][] = { { "", "" } };
-	Object columnData_piecewise[] = {"First Exponent","Breakpoint (m)"};
-	Object columnData_linear_loss[] = {"Distance","Loss"};
+	Object rowData_piecewise[][] = { { "1","", "" } };
+	Object columnData_piecewise[] = {"#", "First Exponent","Breakpoint (m)"};
+	Object columnData_linear_loss[] = {"#", "Distance","Loss"};
     
 	//table for piecewise linear model
     TableModel piecewise_table_model = new DefaultTableModel(rowData_piecewise, columnData_piecewise) {
@@ -104,9 +114,17 @@ public class PropMap {
 		private static final long serialVersionUID = -6638870939760639702L;
 
 		@Override
-        public boolean isCellEditable(int row, int column)
+		public boolean isCellEditable(int row, int column)
         {
-			return true;
+            // make read only column
+			if(column == 0 )
+			{
+				return false;
+			}
+			else
+			{
+				return true;
+			}
         }
     	
     };
@@ -120,9 +138,17 @@ public class PropMap {
 		private static final long serialVersionUID = -6638870912760639702L;
 
 		@Override
-        public boolean isCellEditable(int row, int column)
+		public boolean isCellEditable(int row, int column)
         {
-			return true;
+            // make read only column
+			if(column == 0 )
+			{
+				return false;
+			}
+			else
+			{
+				return true;
+			}
         }
     	
     };
@@ -150,18 +176,23 @@ public class PropMap {
   	
   	//for propagation model
   	JLabel PropModelValueTypeLabel = new JLabel("Type:");
-  	String PropTypeDropDownOptions[] = { "Linear", "Piecewise Linear" };
+  	String PropTypeDropDownOptions[] = { "Linear Loss", "Piecewise Log Linear" };
   	public JComboBox<String> PropTypeComboBox = new JComboBox<String>(PropTypeDropDownOptions);
   	
   	//for linear - propagation model
     JLabel PropExpTypeValueLabel = new JLabel("Prop. exponent:");
-//  	public JTextField PropExpTypeRowItemValue = new JTextField();
-  	public JTable PropExpTypeRowItemValue = new JTable(linear_table_model);
-	JScrollPane PropExpTypeRowItemValueContainer = new JScrollPane(PropExpTypeRowItemValue);
-  	//for piecewise linear - propagation model
+//  	public JTextField linearTable = new JTextField();
+  	public JTable linearTable = new JTable(linear_table_model);
+	JScrollPane PropExpTypeRowItemValueContainer = new JScrollPane(linearTable);
+  	
+	//for piecewise linear - propagation model
   	JLabel PiecewiseTypeValueLabel = new JLabel("Values:");
   	public JTable piecewiseTable = new JTable(piecewise_table_model);
 	JScrollPane piecewiseTableContainer = new JScrollPane(piecewiseTable);
+	
+	//buttons to add and remove rows
+    JButton AddButton; 
+    JButton RemoveButton;
   	
   	
   	public static boolean isNumeric(String strNum) {
@@ -179,6 +210,16 @@ public class PropMap {
 		PropPanel.setLayout(null);
 		// Basic Font
         Font font = new Font("Arial", Font.PLAIN, 12);
+
+    	//To allow the element on the last edit to be saved
+        table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
+        table.getColumnModel().getColumn(0).setPreferredWidth(15);
+        
+        piecewiseTable.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
+        piecewiseTable.getColumnModel().getColumn(0).setPreferredWidth(15);
+        
+        linearTable.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
+        linearTable.getColumnModel().getColumn(0).setPreferredWidth(15);
         
         // Panel for Confidence
         
@@ -361,13 +402,102 @@ public class PropMap {
 	    Dimension PropExpTypeValueLabelSize = PropExpTypeValueLabel.getPreferredSize();
 	    PropExpTypeValueLabel.setBounds(400+25, 160 + 80 - 20 + 50 + 10 + 50, PropExpTypeValueLabelSize.width, PropExpTypeValueLabelSize.height);
 	    Dimension PropExpTypeRowItemValueContainerSize = PropExpTypeRowItemValueContainer.getPreferredSize();
-	    PropExpTypeRowItemValueContainer.setBounds(400+25+PropExpTypeValueLabelSize.width, 160 + 80 - 25 + 50 + 10 + 50, 350, 150);
+	    PropExpTypeRowItemValueContainer.setBounds(400+25+PropExpTypeValueLabelSize.width, 160 + 80 - 25 + 100, 350, 145);
 	    
 	    //piecewise linear
 	    Dimension PiecewiseTypeValueLabelSize = PiecewiseTypeValueLabel.getPreferredSize();
 	    PiecewiseTypeValueLabel.setBounds(400+25, 160 + 80 - 25 + 50 + 10 + 50, PiecewiseTypeValueLabelSize.width, PiecewiseTypeValueLabelSize.height);
 	    Dimension piecewiseTableContainerSize = piecewiseTableContainer.getPreferredSize();
-	    piecewiseTableContainer.setBounds(400+25+PiecewiseTypeValueLabelSize.width, 160 + 80 - 25 + 50 + 10 + 50, 350, 200);
+	    piecewiseTableContainer.setBounds(400+25+PropExpTypeValueLabelSize.width, 160 + 80 - 25 + 100, 350, 145);
+	    
+	    
+	    //add remove buttons for Linear and piecewise linear tables
+        
+        AddButton = new JButton("Add Row");
+        RemoveButton = new JButton("Remove Row");
+
+        Dimension sizeBtn = AddButton.getPreferredSize();
+
+        AddButton.setBounds(900, 350,
+                     sizeBtn.width + 50, sizeBtn.height);
+        RemoveButton.setBounds(900, 400 + 0,
+                sizeBtn.width + 50, sizeBtn.height);
+        
+        //add button action listener
+        AddButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				//check whether Linear or piecewise linear table are selected
+				if(PropTypeComboBox.getSelectedItem().toString() == "Linear Loss") {
+					((DefaultTableModel) linear_table_model).addRow(new Object[]{count, ""});	
+				    count++;
+				}
+				else {
+					((DefaultTableModel) piecewise_table_model).addRow(new Object[]{count, ""});	
+				    count++;
+				}
+			}
+		});
+			
+        //remove button action listener
+        RemoveButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				if(PropTypeComboBox.getSelectedItem().toString() == "Linear Loss") {
+					DefaultTableModel model = (DefaultTableModel) linearTable.getModel();
+
+					/*
+					 * Allowing the deletion of selected rows
+					 */
+					int[] selectedRows =  linearTable.getSelectedRows();
+					int numberOfRows = selectedRows.length;
+					   for(int row=selectedRows.length-1;row>=0;row--){
+						int rowNum = selectedRows[row];
+						model.removeRow(rowNum);
+					     //Updating the index column - count variable appropriately
+					     if(rowNum!=((DefaultTableModel) linear_table_model).getRowCount())
+					     {
+					    	 model.setValueAt(rowNum+1,rowNum ,0 );
+					     }
+					   }
+					   count = count - numberOfRows;
+					   for(int i=count;i>=0;i--)
+					   {
+						   int curVal = Integer.parseInt(model.getValueAt(i, 0).toString());
+						   if(curVal!= i+1)
+						   {
+							   model.setValueAt(i+1, i, 0);
+						   }
+					   }
+				}
+				else {
+					DefaultTableModel model = (DefaultTableModel) piecewiseTable.getModel();
+
+					/*
+					 * Allowing the deletion of selected rows
+					 */
+					int[] selectedRows =  piecewiseTable.getSelectedRows();
+					int numberOfRows = selectedRows.length;
+					   for(int row=selectedRows.length-1;row>=0;row--){
+						int rowNum = selectedRows[row];
+						model.removeRow(rowNum);
+					     //Updating the index column - count variable appropriately
+					     if(rowNum!=((DefaultTableModel) piecewise_table_model).getRowCount())
+					     {
+					    	 model.setValueAt(rowNum+1,rowNum ,0 );
+					     } 
+					   }
+					   count = count - numberOfRows;
+					   for(int i=count;i>=0;i--)
+					   {
+						   int curVal = Integer.parseInt(model.getValueAt(i, 0).toString());
+						   if(curVal!= i+1)
+						   {
+							   model.setValueAt(i+1, i, 0);
+						   }
+					   }
+				}
+			}
+		});		
 	    
         // Creating and placing buttons for the panel.
         
@@ -375,13 +505,13 @@ public class PropMap {
         JButton b2 = new JButton("Remove Last Entry");
         
         Dimension size2 = b2.getPreferredSize();
-	    b1.setBounds(400 + 30, 280 + 260,
+	    b1.setBounds(400 + 30, 280 + 210,
 	                 size2.width, size2.height);
-	    b2.setBounds(400 + 30, 330 + 260,
+	    b2.setBounds(400 + 30, 330 + 210,
 	                 size2.width, size2.height);
-	    b3.setBounds(400 + size2.width + 30, 280 + 260,
+	    b3.setBounds(400 + size2.width + 30, 280 + 210,
 	                 size2.width, size2.height);
-	    b4.setBounds(400 + size2.width + 30, 330 + 260,
+	    b4.setBounds(400 + size2.width + 30, 330 + 210,
 	                 size2.width, size2.height);
 	    
 	    Dimension NewMapSize = NewMap.getPreferredSize();
@@ -419,18 +549,19 @@ public class PropMap {
             	if(currentSelectedItem == "Elevation Angle" || currentSelectedItem == "Azimuth Angle") {
             		PropTypeComboBox.setSelectedIndex(0);
             		ValueTypeRowItemValue.setText("");
-//            		PropExpTypeRowItemValue.setText("");
+//            		linearTable.setText("");
             		
             		PropPanel.remove(PropTypeComboBox);
             		PropPanel.remove(PropModelValueTypeLabel);    
-            		PropPanel.add(ValueTypeRowItemValue);
-            	    PropPanel.add(ValueTypeValueLabel);
     				PropPanel.remove(PropExpTypeValueLabel);
             		PropPanel.remove(PropExpTypeRowItemValueContainer);
             		PropPanel.remove(PiecewiseTypeValueLabel);
             		PropPanel.remove(piecewiseTableContainer);
+                    PropPanel.remove(AddButton);
+                    PropPanel.remove(RemoveButton);
+            		PropPanel.add(ValueTypeRowItemValue);
+            	    PropPanel.add(ValueTypeValueLabel);
 
-            	    
             	    PropPanel.invalidate();
             	    PropPanel.validate();
             		PropPanel.repaint();
@@ -444,7 +575,8 @@ public class PropMap {
             		PropPanel.add(PropModelValueTypeLabel);
     				PropPanel.add(PropExpTypeValueLabel);
             		PropPanel.add(PropExpTypeRowItemValueContainer);
-            		
+                    PropPanel.add(AddButton);
+                    PropPanel.add(RemoveButton);
             		
             	    PropPanel.invalidate();
             	    PropPanel.validate();
@@ -464,24 +596,47 @@ public class PropMap {
         			System.out.println(event.getItem().toString());
         			System.out.println(PropTypeComboBox.getSelectedItem().toString());
         			String currentSelectedItem = event.getItem().toString();
-        			if(currentSelectedItem == "Linear") {
+        			if(currentSelectedItem == "Linear Loss") {
+        				//Linear loss has been selected
+        				
+        				//clear out the piecewise table
                 		for (int i = 0; i < piecewiseTable.getRowCount(); i++) {
               		      for(int j = 0; j < piecewiseTable.getColumnCount(); j++) {
               		    	  piecewiseTable.setValueAt("", i, j);
               		      }
                 		}
-        				PropPanel.add(PropExpTypeValueLabel);
-                		PropPanel.add(PropExpTypeRowItemValue);
+                		//reset the count to 2
+                		count = 2;
+                		
+                		//fillup the first row
+        				DefaultTableModel model = (DefaultTableModel) linearTable.getModel();
+        				model.setValueAt("1", 0, 0);
+                		
                 		PropPanel.remove(PiecewiseTypeValueLabel);
                 		PropPanel.remove(piecewiseTableContainer);
+        				PropPanel.add(PropExpTypeValueLabel);
+                		PropPanel.add(PropExpTypeRowItemValueContainer);
                 		
                 	    PropPanel.invalidate();
                 	    PropPanel.validate();
                 		PropPanel.repaint();
         			}
         			else {
-//                		PropExpTypeRowItemValue.setText("");
-        				
+        				//Piecewise Log Linear has been selected
+//                		
+        				//clear out the linear table
+                		for (int i = 0; i < linearTable.getRowCount(); i++) {
+              		      for(int j = 0; j < linearTable.getColumnCount(); j++) {
+              		    	linearTable.setValueAt("", i, j);
+              		      }
+                		}
+                		//reset the count to 2
+                		count = 2;
+                		
+                		//fillup the first row
+        				DefaultTableModel model = (DefaultTableModel) piecewiseTable.getModel();
+        				model.setValueAt("1", 0, 0);
+                		
         				PropPanel.remove(PropExpTypeValueLabel);
                 		PropPanel.remove(PropExpTypeRowItemValueContainer);
                 		PropPanel.add(PiecewiseTypeValueLabel);
@@ -502,47 +657,79 @@ public class PropMap {
         //b1 = Add new Entry button
         b1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				System.out.println("Add new entry clicked!!");
 				DefaultTableModel model = (DefaultTableModel) table.getModel();
 				int count;
 				int piecewiseTableRowIndex = piecewiseTable.getRowCount()-1;
-				int linearTableRowIndex = PropExpTypeRowItemValue.getRowCount()-1;
+				int linearTableRowIndex = linearTable.getRowCount()-1;
 				
 				if (piecewiseTable.isEditing())
 					piecewiseTable.getCellEditor().stopCellEditing();
 				
 				//checking if the case is Linear
 				if (linearTableRowIndex>-1 && ValueTypeComboBox.getSelectedItem().toString() == "Propagation Model"
-						&& PropTypeComboBox.getSelectedItem().toString() == "Linear"
-						&& isNumeric(PropExpTypeRowItemValue.getModel().getValueAt(linearTableRowIndex, 0).toString())
-						&& isNumeric(PropExpTypeRowItemValue.getModel().getValueAt(linearTableRowIndex, 1).toString())) {
+						&& PropTypeComboBox.getSelectedItem().toString() == "Linear Loss"
+						&& isNumeric(linearTable.getModel().getValueAt(linearTableRowIndex, 1).toString())
+						&& isNumeric(linearTable.getModel().getValueAt(linearTableRowIndex, 2).toString())) {
+					//remove the last empty row
 					model.removeRow(model.getRowCount() - 3);
-					count = table.getRowCount();				
+					//fetch the model
+					DefaultTableModel LinearModel = (DefaultTableModel) linearTable.getModel();	
 					
-					model.insertRow(model.getRowCount()-2, new Object[]{table.getRowCount()-3, "Distance" , PropExpTypeRowItemValue.getModel().getValueAt(0,0).toString()});
-					model.insertRow(model.getRowCount()-2, new Object[]{table.getRowCount()-3, "Loss" , PropExpTypeRowItemValue.getModel().getValueAt(0,1).toString()});
+					//keep on adding the rows from the linear table to the main table until the linear table is empty
+					while(linearTable.getRowCount() != 0) {
+						model.insertRow(model.getRowCount() - 2, new Object[] { table.getRowCount() - 3, "Distance",
+								linearTable.getModel().getValueAt(0,1).toString()});
+						model.insertRow(model.getRowCount()-2, new Object[]{table.getRowCount()-3, "Loss" , linearTable.getModel().getValueAt(0,2).toString()});
+					
+						//remove the first row from the linearTable
+						LinearModel.removeRow(0);
+						
+					}
+					
+					//insert empty row
 					model.insertRow(model.getRowCount() - 2, new Object[] { table.getRowCount() - 3, "", "" });
 					
+					//resetting linear table data
+					for (int i = 0; i < linearTable.getRowCount(); i++) {
+            		      for(int j = 0; j < linearTable.getColumnCount(); j++) {
+            		    	  linearTable.setValueAt("", i, j);
+            		      }
+              		}
 				}
 				//checking if the case is piecewise linear
 				
 				else if (piecewiseTableRowIndex > -1 && ValueTypeComboBox.getSelectedItem().toString() == "Propagation Model"
-						&& PropTypeComboBox.getSelectedItem().toString() == "Piecewise Linear"
-						&& isNumeric(piecewiseTable.getModel().getValueAt(piecewiseTableRowIndex, 0).toString())
-						&& isNumeric(piecewiseTable.getModel().getValueAt(piecewiseTableRowIndex, 1).toString())) {
-					
+						&& PropTypeComboBox.getSelectedItem().toString() == "Piecewise Log Linear"
+						&& isNumeric(piecewiseTable.getModel().getValueAt(piecewiseTableRowIndex, 1).toString())
+						&& isNumeric(piecewiseTable.getModel().getValueAt(piecewiseTableRowIndex, 2).toString())) {
+					//remove the last empty row
 					model.removeRow(model.getRowCount() - 3);
-					model.insertRow(model.getRowCount() - 2, new Object[] { table.getRowCount() - 3, "First Exponent",
-							piecewiseTable.getModel().getValueAt(piecewiseTableRowIndex, 0).toString() });
-					model.insertRow(model.getRowCount() - 2, new Object[] { table.getRowCount() - 3, "Breakpoint(m)",
-							piecewiseTable.getModel().getValueAt(piecewiseTableRowIndex, 1).toString() });
+					
+					//fetch the model for piecewise log linear
+					DefaultTableModel piecewiseModel = (DefaultTableModel) piecewiseTable.getModel();
+					
+					//keep on adding the rows from the linear table to the main table until the linear table is empty
+					while(piecewiseTable.getRowCount() != 0) {
+						model.insertRow(model.getRowCount() - 2, new Object[] { table.getRowCount() - 3, "First Exponent",
+								piecewiseTable.getModel().getValueAt(0, 1).toString() });
+						model.insertRow(model.getRowCount() - 2, new Object[] { table.getRowCount() - 3, "Breakpoint(m)",
+								piecewiseTable.getModel().getValueAt(0, 2).toString() });
+					
+						//remove the first row from the linearTable
+						piecewiseModel.removeRow(0);
+						
+					}
+					
+					//insert empty row at the end
 					model.insertRow(model.getRowCount() - 2, new Object[] { table.getRowCount() - 3, "", "" });
 
-//					//resetting piecewise linear table data
-//					for (int i = 0; i < piecewiseTable.getRowCount(); i++) {
-//            		      for(int j = 0; j < piecewiseTable.getColumnCount(); j++) {
-//            		    	  piecewiseTable.setValueAt("", i, j);
-//            		      }
-//              		}
+					//resetting piecewise linear table data
+					for (int i = 0; i < piecewiseTable.getRowCount(); i++) {
+            		      for(int j = 0; j < piecewiseTable.getColumnCount(); j++) {
+            		    	  piecewiseTable.setValueAt("", i, j);
+            		      }
+              		}
 				}
 				//if elevation angle is being entered, then checking the last entered value; making sure that the azimuth was closed
 				if((ValueTypeComboBox.getSelectedItem().toString() == "Elevation Angle") && (model.getValueAt(model.getRowCount()-4, 1) != "Azimuth Angle" || 

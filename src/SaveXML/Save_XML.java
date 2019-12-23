@@ -113,7 +113,7 @@ public class Save_XML extends ObjectFactory {
 	DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 	DocumentBuilder docBuilder;
 	Document doc;
-		
+	
 	TxModel TxModel;
 	RxModel RxModel;
 	Object Model;
@@ -162,7 +162,7 @@ public class Save_XML extends ObjectFactory {
 		TxModel.getSpectrumMask().get(o).setScmMask(new SCMMask());
 		
 		try{
-			TxModel.getSpectrumMask().get(o).getScmMask().setRefFrequency(Double.parseDouble(specMask.centerFreqTextField.getText()));
+			TxModel.getSpectrumMask().get(o).getScmMask().setRefFrequency(Double.parseDouble(specMask.refFreqTextField.getText()));
 		}catch(Exception e){
 			TxModel.getSpectrumMask().get(o).getScmMask().setRefFrequency(0.0);
 		}

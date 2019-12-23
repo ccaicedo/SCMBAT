@@ -72,7 +72,7 @@ public class LoadTxModel extends LoadGUI {
 			scm.spec.relFreqNo.setSelected(true);
 		} else {
 			scm.spec.relFreqYes.setSelected(true);
-			scm.spec.centerFreqTextField
+			scm.spec.refFreqTextField
 					.setText(String.valueOf(txModel.getSpectrumMask().get(o).getScmMask().getRefFrequency()));
 		}
 
