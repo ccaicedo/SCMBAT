@@ -42,9 +42,8 @@ disp('orientation');
 
 %Compare frequency range
 if((Tx_SpecMask(1)<Rx_UnderlayMask(1) && Tx_SpecMask(end-1)<Rx_UnderlayMask(1)) || (Tx_SpecMask(1)>Rx_UnderlayMask(end-1) && Tx_UnderlayMask(end-1)>Rx_SpecMask(end-1)) )
-    disp('System is compatible');
-    break;
-    else
+    disp(strcat('result: ', 'System is compatible'));
+    return;
 end
 
 %Transmitter Power map attenuation to Total Power;

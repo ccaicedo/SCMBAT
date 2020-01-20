@@ -26,6 +26,7 @@ along with program.  If not, see <http://www.gnu.org/licenses/>.
 
 function [Spec_mask_new,Underlay_mask] = DSA_MaxPow(report_directory)
 
+disp("the report directory is: " ), disp(report_directory);
 load SCM_transmitter_java.txt;
 load SCM_receiver_java.txt;
 
@@ -44,15 +45,15 @@ R=[Rx_Lat,Rx_Long,Rx_Alt];
 
 %Compare frequency range
 if((Tx_SpecMask(1)<Rx_UnderlayMask(1) && Tx_SpecMask(end-1)<Rx_UnderlayMask(1)) || (Tx_SpecMask(1)>Rx_UnderlayMask(end-1) && Tx_SpecMask(end-1)>Rx_SpecMask(end-1)) )
-    disp('System is compatible')
-    break;
-    else
+    disp('System is compatible');
+    return;
 end
 
 %Transmitter Power map attenuation to Total Power;
 p=PowerMap_find(theta_Txo,phi_Txo,Tx_PowerMap);
 Power=Tx_TotPow+p;
 Power=Power+(10*log10(1e-3/Tx_ResBW)); % Bringing the Reference Bandwidth to 1 Khz;
+
 %Attenuation due to Propagation Map
 [n0,d_break,n1]=PropMap_find_piece(theta_Txo,phi_Txo,Tx_PropMap,Min_Dist);
 
@@ -61,6 +62,15 @@ if(Min_Dist>d_break && d_break!=0.0)
 else
   Power = Power - (10*n0*log(Min_Dist));
 end
+
+
+Spec_mask_new=Tx_SpecMask;
+Spec_mask_new(2:2:end)=Tx_SpecMask(2:2:end)+Power;
+
+
+%%---- Computations for the Receiver Model -------
+
+rx_PowAdj = Rx_TotPow;
 
 %Attenuation due to the Receiver Power Map
 phi_Rxo=-phi_Txo;
@@ -71,12 +81,14 @@ else
 end
 
 p2=PowerMap_find(theta_Rxo,phi_Rxo,Rx_PowerMap);
-Power=Power+(10*log10(Rx_ResBW/1e-3));
-Power=Power+p2;
 
-Spec_mask_new=Tx_SpecMask;
-Spec_mask_new(2:2:end)=Tx_SpecMask(2:2:end)+Power;
+rx_PowAdj=rx_PowAdj+(10*log10(1e-3/Rx_ResBW));
+
+rx_PowAdj=rx_PowAdj+p2;
+
 Underlay_mask=Rx_UnderlayMask;
+
+Underlay_mask(2:2:end) = Rx_UnderlayMask(2:2:end) + rx_PowAdj;
 
 Underlay_freq_list=Underlay_mask(1:2:end-1);
 Spec_freq_list=Spec_mask_new(1:2:end-1);
@@ -92,9 +104,9 @@ end
 list_2=find(Spec_freq_list<Underlay_freq_list(1))
 
 if(isempty(list_2)==0)
-  Spec_freq_list=[Underlay_freq_list(1),Spec_freq_list(list2(end)+1:end)];
+  Spec_freq_list=[Underlay_freq_list(1),Spec_freq_list(list_2(end)+1:end)];
   p2 = find_power(Underlay_freq_list(1),Spec_mask_new);
-  Spec_mask_new=[Underlay_freq_list(end),p2,Spec_mask_new(2*list_2(end)+2:end)];
+  Spec_mask_new=[Underlay_freq_list(1),p2,Spec_mask_new(2*list_2(end)+1:end)];
 end
 
 fig1 = figure;
@@ -113,13 +125,13 @@ movefile('CompatAnalysis.png', report_directory)
 ind=find(P_diff<0);
 
 %Power_Tx_dB
-PowerMargin = min((P_diff));
+PowerMargin = min((P_diff));	 								% the actual power margin is the negative of this value
 if(isempty(ind)==1)
-    disp('System is compatible')
-    disp(PowerMargin);
+    disp('System is compatible');
+    disp(PowerMargin * -1);										% the system is compaitable when the power margin is negative
 else
-    disp('System is not compatible') 
-    disp(PowerMargin);
+    disp('System is not compatible');
+    disp(PowerMargin * -1);
 end
 
 end

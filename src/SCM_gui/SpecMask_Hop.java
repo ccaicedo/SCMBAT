@@ -28,6 +28,7 @@ package SCM_gui;
 
 
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -152,6 +153,8 @@ public class SpecMask_Hop {
         
         // FreqList Table
 		FreqListLabel = new JLabel("Center frequency list definition");
+		Font f = FreqListLabel.getFont();
+		FreqListLabel.setFont(f.deriveFont(f.getStyle() | Font.BOLD));
 		Dimension FreqLabSize = FreqListLabel.getPreferredSize();
 		FreqListLabel.setBounds(725, 130, FreqLabSize.width, FreqLabSize.height);
         
@@ -230,6 +233,8 @@ public class SpecMask_Hop {
 		
 		//Band List Data
 		BandListLabel = new JLabel("Band list definition");
+		Font f2 = BandListLabel.getFont();
+		BandListLabel.setFont(f2.deriveFont(f2.getStyle() | Font.BOLD));
 		Dimension BandLabSize = BandListLabel.getPreferredSize();
 		BandListLabel.setBounds(725, 130, BandLabSize.width, BandLabSize.height);
 		
