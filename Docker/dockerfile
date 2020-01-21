@@ -1,60 +1,33 @@
-################################################################################
-# Built with base Image : dorowu/ubuntu-desktop-lxde-vnc ; which as of now is build over Ubuntu 18.04
-################################################################################
-
-# Defining the base Image
 FROM dorowu/ubuntu-desktop-lxde-vnc
 
 MAINTAINER Ashwani Bhatt <abhatt02@syr.edu>
 
-# Defining the application name to be SCMBAT
-ENV APP_NAME=“SCMBAT”
-
-#once the image has been created out of the base image, we install the dependencies that we require for create the environment for SCMBAT to work
 RUN sudo apt-get -y update \
 && sudo apt-get install -y apt-utils \
 && sudo apt-get install -y curl \
+&& sudo apt-get install -y openjdk-8-jdk \
 && sudo apt-get install -y openjdk-11-jdk \
+&& sudo update-java-alternatives --jre-headless --jre --set java-1.8.0-openjdk-amd64 \
 && sudo apt-get install -y octave \
 && sudo apt-get install -y transfig \
 && sudo apt-get install -y wget
 
-#setting the maven environment version
-ENV MAVEN_VERSION 3.8.0
 
-##################
-#installing and setting the environment for maven
-#################
-RUN sudo apt-get install -y maven
+ENV MAVEN_VERSION 3.3.9
 
-RUN wget https://www-us.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz -P /tmp \
-&& sudo tar xf /tmp/apache-maven-*.tar.gz -C /opt \
-&& sudo ln -s /opt/apache-maven-3.6.3 /opt/maven
-
-RUN sudo touch /etc/profile.d/maven.sh
-RUN sudo chmod 777 /etc/profile.d/maven.sh
-RUN sudo echo "export JAVA_HOME=/usr/lib/jvm/default-java" >> /etc/profile.d/maven.sh
-RUN sudo echo "export M2_HOME=/opt/maven" >> /etc/profile.d/maven.sh
-RUN sudo echo "export MAVEN_HOME=/opt/maven" >> /etc/profile.d/maven.sh
-RUN sudo echo "export PATH=${M2_HOME}/bin:${PATH}" >> /etc/profile.d/maven.sh
-RUN sudo chmod +x /etc/profile.d/maven.sh
-RUN source /etc/profile.d/maven.sh
-
+RUN mkdir -p /usr/share/maven \
+  && curl -fsSL http://apache.osuosl.org/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz \
+    | tar -xzC /usr/share/maven --strip-components=1 \
+  && ln -s /usr/share/maven/bin/mvn /usr/bin/mvn
 
 ENV MAVEN_HOME /usr/share/maven
 
-#sharing a volume with the host, ** we are not using this as of now.
 VOLUME /root/.m2
 
 CMD ["mvn"]
-
-#expose port 6080 to connect with the docker container
 EXPOSE 6080
 
-##################
-#create the directory to extract SCMBAT tar file into the container
-#and extract the tar file into the container
-#################
+RUN echo pwd
 RUN sudo mkdir -p /root/Desktop/scmbat
 COPY scmbat.tar.gz /root/Desktop/scmbat/
 RUN chmod +x  /root/Desktop/scmbat/scmbat.tar.gz
