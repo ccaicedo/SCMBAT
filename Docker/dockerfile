@@ -2,7 +2,16 @@ FROM dorowu/ubuntu-desktop-lxde-vnc
 
 MAINTAINER Ashwani Bhatt <abhatt02@syr.edu>
 
-RUN sudo apt-get -y update && sudo apt-get install -y apt-utils && sudo apt-get install -y curl && sudo apt-get install -y openjdk-11-jdk && sudo apt-get install -y octave && sudo apt-get install -y transfig
+RUN sudo apt-get -y update \
+&& sudo apt-get install -y apt-utils \
+&& sudo apt-get install -y curl \
+&& sudo apt-get install -y openjdk-8-jdk \
+&& sudo apt-get install -y openjdk-11-jdk \
+&& sudo update-java-alternatives --jre-headless --jre --set java-1.8.0-openjdk-amd64 \
+&& sudo apt-get install -y octave \
+&& sudo apt-get install -y transfig \
+&& sudo apt-get install -y wget
+
 
 ENV MAVEN_VERSION 3.3.9
 
