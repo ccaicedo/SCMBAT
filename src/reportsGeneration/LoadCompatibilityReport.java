@@ -35,7 +35,7 @@ public class LoadCompatibilityReport {
 	 * @input PowerMargin - contains the Power margin value
 	 * Returns no value
 	 */
-	public void displayCompatibilityReport(String CompatStat,String PowerMargin, String reportPath)
+	public void displayCompatibilityReport(String CompatStat,String PowerMargin, String reportPath, String method)
 	{
 		String image_1 = null;
 		String image_2 = null;
@@ -81,6 +81,11 @@ public class LoadCompatibilityReport {
            
            divElem.appendChild(paraElem_1);
            divElem.appendChild(paraElem_2);
+           if(method=="Total Power") {
+        	   rootDoc.getElementById("intText").text("Intermediate Analysis Figure");
+           }
+           else
+        	   rootDoc.getElementById("intText").text("");
            
            //Write the contents into the file and 
            BufferedWriter writer;
@@ -146,6 +151,7 @@ public class LoadCompatibilityReport {
            //Add the non compatible table contents
            
            Element nonCompTable = rootDoc.getElementById("notcomp");
+           nonCompTable.empty();
          
            for(int i=0;i<nonCompatModelList.size();i++)
            {
@@ -154,10 +160,18 @@ public class LoadCompatibilityReport {
                cell.appendText(nonCompatModelList.get(i));
                row.appendChild(cell);
                nonCompTable.appendChild(row);
-               
            }
+
+           if(nonCompatModelList.size() == 0) {
+        	   Element row = rootDoc.createElement("tr");
+               Element cell = rootDoc.createElement("td");
+               cell.appendText("None ");
+               row.appendChild(cell);
+               nonCompTable.appendChild(row);
+        	   }
            
            Element allcompTable = rootDoc.getElementById("allcomp");
+           allcompTable.empty();
            
            for(int i=0;i<allCompatModelList.size();i++)
            {
@@ -166,11 +180,19 @@ public class LoadCompatibilityReport {
                cell.appendText(allCompatModelList.get(i));
                row.appendChild(cell);
                allcompTable.appendChild(row);
-               
            }
+           
+           if(allCompatModelList.size() == 0) {
+        	   Element row = rootDoc.createElement("tr");
+               Element cell = rootDoc.createElement("td");
+               cell.appendText("None ");
+               row.appendChild(cell);
+        	   allcompTable.appendChild(row);
+        	   }
            
            
            Element compTable = rootDoc.getElementById("speccomp");
+           compTable.empty();
            
            for(int i=0;i<compatModelList.size();i++)
            {
@@ -181,14 +203,23 @@ public class LoadCompatibilityReport {
                compTable.appendChild(row);
                
            }
+
+           if(compatModelList.size() == 0) {
+        	   Element row = rootDoc.createElement("tr");
+               Element cell = rootDoc.createElement("td");
+               cell.appendText("None ");
+               row.appendChild(cell);
+               compTable.appendChild(row);
+        	   }
+           
            //Add the tables to the div
           
            Element divElem_1 =  rootDoc.getElementById("div03");
            Element divElem_2 =  rootDoc.getElementById("div04");
            Element divElem_3 =  rootDoc.getElementById("div05");
-           divElem_1.empty();
-           divElem_2.empty();
-           divElem_3.empty();
+//           divElem_1.empty();
+//           divElem_2.empty();
+//           divElem_3.empty();
            
            divElem_1.appendChild(nonCompTable);
            divElem_2.appendChild(allcompTable);
@@ -234,9 +265,11 @@ public class LoadCompatibilityReport {
         	image_1 = reportPath+"/Analysis_Figure_1.png";
         	image_2 = reportPath+"/BTPRatedAnalysis.png";
         }catch (IOException e) {
+        	e.printStackTrace();
     		System.out.println("Error in reading the HTML template contents from the file");
     	}
         catch(Exception e){
+        	e.printStackTrace();
         	System.out.println("Error while reading image files");
        }
        if(stringHTML != null)
@@ -259,6 +292,7 @@ public class LoadCompatibilityReport {
            //Add the non compatible table contents
            
            Element nonCompTable = rootDoc.getElementById("notcomp");
+           nonCompTable.empty();
          
            for(int i=0;i<nonCompatModelList.size();i++)
            {
@@ -269,9 +303,17 @@ public class LoadCompatibilityReport {
                nonCompTable.appendChild(row);
                
            }
+           if(nonCompatModelList.size() == 0) {
+        	   Element row = rootDoc.createElement("tr");
+               Element cell = rootDoc.createElement("td");
+               cell.appendText("None ");
+               row.appendChild(cell);
+               nonCompTable.appendChild(row);
+        	   }
            
           
            Element compTable = rootDoc.getElementById("speccomp");
+           compTable.empty();
            
            for(int i=0;i<compatModelList.size();i++)
            {
@@ -282,12 +324,17 @@ public class LoadCompatibilityReport {
                compTable.appendChild(row);
                
            }
+           if(compatModelList.size() == 0) {
+        	   Element row = rootDoc.createElement("tr");
+               Element cell = rootDoc.createElement("td");
+               cell.appendText("None ");
+               row.appendChild(cell);
+               compTable.appendChild(row);
+        	   }
            //Add the tables to the div
           
            Element divElem_1 =  rootDoc.getElementById("div03");
            Element divElem_2 =  rootDoc.getElementById("div04");
-           divElem_1.empty();
-           divElem_2.empty();
            
            divElem_1.appendChild(nonCompTable);
            divElem_2.appendChild(compTable);
@@ -331,16 +378,25 @@ public class LoadCompatibilityReport {
     	}
        if(stringHTML != null)
        {
-    	    
+   	    
            Document rootDoc = Jsoup.parse(stringHTML); 
            
            //Navigate the document and obtain the division element where the content needs to be added
          
-          
+           
+           //Update the image src in the img elements
+           Element imgElem_1 = rootDoc.getElementById("img1");
+//           imgElem_1.attr("src", image_1);
+           
+           //Update the image src in the img elements
+           Element imgElem_2 = rootDoc.getElementById("img2");
+//           imgElem_2.attr("src", image_2);
+           
                      
            //Add the non compatible table contents
            
            Element nonCompTable = rootDoc.getElementById("notcomp");
+           nonCompTable.empty();
          
            for(int i=0;i<nonCompatModelList.size();i++)
            {
@@ -351,9 +407,17 @@ public class LoadCompatibilityReport {
                nonCompTable.appendChild(row);
                
            }
+           if(nonCompatModelList.size() == 0) {
+        	   Element row = rootDoc.createElement("tr");
+               Element cell = rootDoc.createElement("td");
+               cell.appendText("None ");
+               row.appendChild(cell);
+               nonCompTable.appendChild(row);
+        	   }
            
           
            Element compTable = rootDoc.getElementById("speccomp");
+           compTable.empty();
            
            for(int i=0;i<compatModelList.size();i++)
            {
@@ -364,12 +428,17 @@ public class LoadCompatibilityReport {
                compTable.appendChild(row);
                
            }
+           if(compatModelList.size() == 0) {
+        	   Element row = rootDoc.createElement("tr");
+               Element cell = rootDoc.createElement("td");
+               cell.appendText("None ");
+               row.appendChild(cell);
+               compTable.appendChild(row);
+        	   }
            //Add the tables to the div
           
            Element divElem_1 =  rootDoc.getElementById("div03");
            Element divElem_2 =  rootDoc.getElementById("div04");
-           divElem_1.empty();
-           divElem_2.empty();
            
            divElem_1.appendChild(nonCompTable);
            divElem_2.appendChild(compTable);
@@ -396,6 +465,7 @@ public class LoadCompatibilityReport {
            
            
        }
+
 	}
 	
 

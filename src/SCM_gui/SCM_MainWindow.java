@@ -38,13 +38,20 @@ import java.util.HashMap;
 
 import javax.swing.Action;
 import javax.swing.ButtonGroup;
+import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableModel;
 
 //import org.apache.log4j.Logger;
 
@@ -91,9 +98,42 @@ public class SCM_MainWindow {
 	// Maintain a static variable to hold the tabbedPane
 	public JTabbedPane tabbedPane = new JTabbedPane();
 
-	// OpenedModels HahhMap
+	// OpenedModels HashMap
 	HashMap<String, Boolean> openedModels = new HashMap<String, Boolean>();
 	public JFrame frame = new JFrame();
+	
+	//buttons to add and remove rows
+    JButton AddButton; 
+    JButton RemoveButton;
+    private int count = 2;
+	
+	//table for parameters
+	Object rowData[][] = {{ "1", "","", ""}};
+	Object columnNames[] = {"#","String ID","Param Type (Select)", "Parameter Value"};
+  
+    TableModel parameter_table_model = new DefaultTableModel(rowData, columnNames) {
+    	
+		private static final long serialVersionUID = 4471013790870970066L;
+
+		@Override
+		public boolean isCellEditable(int row, int column)
+        {
+            // make read only column
+			if(column == 0 )
+			{
+				return false;
+			}
+			else
+			{
+				return true;
+			}
+        }
+    	
+    };
+    
+    //Paramter Table
+	public JTable parameterTable = new JTable(parameter_table_model);
+	JScrollPane parameterTableContainer = new JScrollPane(parameterTable);
 
 	public SCM_MainWindow() {
 
@@ -113,6 +153,7 @@ public class SCM_MainWindow {
 	public void design(final int Index, SCM_MainWindow scmMainObj) {
 		control.setSCM_MainWindowObj(scmMainObj);
 		frame.setTitle("Spectrum Consumption Model Builder - " + SaveName);
+
 
 		frame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent evt) {
@@ -367,7 +408,63 @@ public class SCM_MainWindow {
 		JLabel polLabel0 = new JLabel("Do you want to associate a ‘Protocol or Policy’ to this model ? ");
 		final JLabel polLabel = new JLabel("Protocol or Policy name:");
 		final JLabel indLabel = new JLabel("Index value: ");
-		final JLabel paramLabel = new JLabel("Parameters: ");
+		
+		//Parameters table
+		final JLabel paramLabel = new JLabel("Parameters: ");		
+		//To allow the element on the last edit to be saved
+		parameterTable.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
+		
+		Dimension size = parameterTableContainer.getPreferredSize();
+		parameterTable.getColumnModel().getColumn(0).setPreferredWidth(10);
+		
+	    //add remove buttons for Parameter table
+        AddButton = new JButton("Add Row");
+        RemoveButton = new JButton("Remove Row");
+
+        Dimension sizeBtn = AddButton.getPreferredSize();
+
+        AddButton.setBounds(700, 435, sizeBtn.width + 50, sizeBtn.height);
+        RemoveButton.setBounds(700, 485 , sizeBtn.width + 50, sizeBtn.height);
+        
+        //add button action listener
+        AddButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				((DefaultTableModel) parameter_table_model).addRow(new Object[]{count, ""});	
+			    count++;
+			}
+		});
+			
+        //remove button action listener
+        RemoveButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				DefaultTableModel model = (DefaultTableModel) parameterTable.getModel();
+
+				/*
+				 * Allowing the deletion of selected rows
+				 */
+				int[] selectedRows =  parameterTable.getSelectedRows();
+				int numberOfRows = selectedRows.length;
+				   for(int row=selectedRows.length-1;row>=0;row--){
+					int rowNum = selectedRows[row];
+					model.removeRow(rowNum);
+				     //Updating the index column - count variable appropriately
+				     if(rowNum!=((DefaultTableModel) parameter_table_model).getRowCount())
+				     {
+				    	 model.setValueAt(rowNum+1,rowNum ,0 );
+				     }
+				   }
+				   count = count - numberOfRows;
+				   for(int i=count;i>=0;i--)
+				   {
+					   int curVal = Integer.parseInt(model.getValueAt(i, 0).toString());
+					   if(curVal!= i+1)
+					   {
+						   model.setValueAt(i+1, i, 0);
+					   }
+				   }
+			}
+		});	
+		
 		JRadioButton polNo = new JRadioButton("No");
 		JRadioButton polYes = new JRadioButton("Yes");
 
@@ -389,11 +486,19 @@ public class SCM_MainWindow {
 		polLabel.setBounds(25, 350, polLabelSize.width, polLabelSize.height);
 		indLabel.setBounds(25, 380, indLabelSize.width, indLabelSize.height);
 		paramLabel.setBounds(25, 410, paramLabelSize.width, paramLabelSize.height);
-		polNameField.setBounds(225, 345, polFieldSize.width + 100, polFieldSize.height);
+		parameterTableContainer.setBounds(225, 410, size.width, size.height - 250);
+		polNameField.setBounds(226, 345, polFieldSize.width + 100, polFieldSize.height);
 		indexField.setBounds(225, 375, indFieldSize.width + 100, indFieldSize.height);
 		paramField.setBounds(225, 405, paramFieldSize.width + 100, paramFieldSize.height);
 		polNo.setBounds(550, 295, polNoSize.width, polNoSize.height);
 		polYes.setBounds(500, 295, polYesSize.width, polYesSize.height);
+		
+		//adding dropdown option to prameter table
+		TableColumn paramColumn = parameterTable.getColumnModel().getColumn(2);
+		JComboBox comboBox = new JComboBox();
+		comboBox.addItem("StringParameter");
+		comboBox.addItem("NumberParameter");
+		paramColumn.setCellEditor(new DefaultCellEditor(comboBox));
 
 		ButtonGroup polGroup = new ButtonGroup();
 		polGroup.add(polYes);
@@ -412,7 +517,9 @@ public class SCM_MainWindow {
 				panel.add(paramLabel);
 				panel.add(polNameField);
 				panel.add(indexField);
-				panel.add(paramField);
+				panel.add(parameterTableContainer);
+				panel.add(AddButton);
+				panel.add(RemoveButton);
 
 				panel.revalidate();
 				panel.repaint();
@@ -426,7 +533,9 @@ public class SCM_MainWindow {
 				panel.remove(paramLabel);
 				panel.remove(polNameField);
 				panel.remove(indexField);
-				panel.remove(paramField);
+				panel.remove(parameterTableContainer);
+				panel.remove(AddButton);
+				panel.remove(RemoveButton);
 
 				panel.revalidate();
 				panel.repaint();

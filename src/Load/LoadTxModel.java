@@ -32,7 +32,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import org.ieee.dyspansc._1900._5.scm.Band;
-import org.ieee.dyspansc._1900._5.scm.InflectionPnt;
+import org.ieee.dyspansc._1900._5.scm.ControlPoint;
 import org.ieee.dyspansc._1900._5.scm.IntermodulationMask;
 import org.ieee.dyspansc._1900._5.scm.TxModel;
 
@@ -51,7 +51,7 @@ public class LoadTxModel extends LoadGUI {
 		int o = 0;
 		scm.spec.ResTextField.setText(String.valueOf(txModel.getSpectrumMask().get(o).getResolutionBW()));
 
-		List<InflectionPnt> infP = txModel.getSpectrumMask().get(o).getScmMask().getInflectionPnt();
+		List<ControlPoint> infP = txModel.getSpectrumMask().get(o).getScmMask().getControlPoint();
 		int inflectionLength = infP.size();
 		DefaultTableModel model = (DefaultTableModel) scm.spec.table.getModel();
 		model.setRowCount(0);
@@ -72,7 +72,7 @@ public class LoadTxModel extends LoadGUI {
 			scm.spec.relFreqNo.setSelected(true);
 		} else {
 			scm.spec.relFreqYes.setSelected(true);
-			scm.spec.centerFreqTextField
+			scm.spec.refFreqTextField
 					.setText(String.valueOf(txModel.getSpectrumMask().get(o).getScmMask().getRefFrequency()));
 		}
 

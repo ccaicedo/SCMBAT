@@ -30,6 +30,7 @@ package SaveXML;
 
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.math.BigInteger;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -55,6 +56,7 @@ import org.ieee.dyspansc._1900._5.scm.BWRating;
 import org.ieee.dyspansc._1900._5.scm.Band;
 import org.ieee.dyspansc._1900._5.scm.BandList;
 import org.ieee.dyspansc._1900._5.scm.CircularSurface;
+import org.ieee.dyspansc._1900._5.scm.ControlPoint;
 import org.ieee.dyspansc._1900._5.scm.Cylinder;
 import org.ieee.dyspansc._1900._5.scm.DCRatedList;
 import org.ieee.dyspansc._1900._5.scm.DCRating;
@@ -62,14 +64,18 @@ import org.ieee.dyspansc._1900._5.scm.FrequencyList;
 import org.ieee.dyspansc._1900._5.scm.GainMap;
 import org.ieee.dyspansc._1900._5.scm.GainMapValue;
 import org.ieee.dyspansc._1900._5.scm.HoppingData;
-import org.ieee.dyspansc._1900._5.scm.InflectionPnt;
 import org.ieee.dyspansc._1900._5.scm.IntermodulationMask;
+import org.ieee.dyspansc._1900._5.scm.LinearLossValue;
+import org.ieee.dyspansc._1900._5.scm.LinearLosses;
 import org.ieee.dyspansc._1900._5.scm.Location;
+import org.ieee.dyspansc._1900._5.scm.LogLinearValue;
+import org.ieee.dyspansc._1900._5.scm.MaskPowerMarginMethod;
 import org.ieee.dyspansc._1900._5.scm.ObjectFactory;
 import org.ieee.dyspansc._1900._5.scm.Orientation;
 import org.ieee.dyspansc._1900._5.scm.PathPoint;
 import org.ieee.dyspansc._1900._5.scm.Path;
-import org.ieee.dyspansc._1900._5.scm.PiecewiseLinear;
+
+import org.ieee.dyspansc._1900._5.scm.PiecewiseLogLinear;
 import org.ieee.dyspansc._1900._5.scm.PointSurface;
 import org.ieee.dyspansc._1900._5.scm.Point;
 import org.ieee.dyspansc._1900._5.scm.PolygonSurface;
@@ -77,7 +83,9 @@ import org.ieee.dyspansc._1900._5.scm.Polyhedron;
 import org.ieee.dyspansc._1900._5.scm.PropMap;
 import org.ieee.dyspansc._1900._5.scm.PropMapValue;
 import org.ieee.dyspansc._1900._5.scm.PropagationModel;
+import org.ieee.dyspansc._1900._5.scm.Purpose;
 import org.ieee.dyspansc._1900._5.scm.Rating;
+import org.ieee.dyspansc._1900._5.scm.Reference;
 import org.ieee.dyspansc._1900._5.scm.ReferencePower;
 import org.ieee.dyspansc._1900._5.scm.RelativeToPlatform;
 import org.ieee.dyspansc._1900._5.scm.RxModel;
@@ -105,7 +113,7 @@ public class Save_XML extends ObjectFactory {
 	DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 	DocumentBuilder docBuilder;
 	Document doc;
-		
+	
 	TxModel TxModel;
 	RxModel RxModel;
 	Object Model;
@@ -127,12 +135,12 @@ public class Save_XML extends ObjectFactory {
 			if(device.equals("Tx")){
 				TxModel = createTxModel();
 				TxModel.setSystemID(SystemID);
-				TxModel.setPurpose(purpose);
+				TxModel.setPurpose(Purpose.fromValue(purpose));
 				Model = (Object) TxModel;
 			}else{
 				RxModel = createRxModel();
 				RxModel.setSystemID(SystemID);
-				RxModel.setPurpose(purpose);
+				RxModel.setPurpose(Purpose.fromValue(purpose));
 				Model = (Object) RxModel;
 			}
 			
@@ -154,7 +162,7 @@ public class Save_XML extends ObjectFactory {
 		TxModel.getSpectrumMask().get(o).setScmMask(new SCMMask());
 		
 		try{
-			TxModel.getSpectrumMask().get(o).getScmMask().setRefFrequency(Double.parseDouble(specMask.centerFreqTextField.getText()));
+			TxModel.getSpectrumMask().get(o).getScmMask().setRefFrequency(Double.parseDouble(specMask.refFreqTextField.getText()));
 		}catch(Exception e){
 			TxModel.getSpectrumMask().get(o).getScmMask().setRefFrequency(0.0);
 		}
@@ -162,13 +170,13 @@ public class Save_XML extends ObjectFactory {
 		TableModel Sdata = specMask.table.getModel();
 		for (int i = 0; i < Sdata.getRowCount(); i++) {
 			try{
-			InflectionPnt ifPoint = new InflectionPnt();
-			TxModel.getSpectrumMask().get(o).getScmMask().getInflectionPnt().add(ifPoint);
+			ControlPoint ctrlPoint = new ControlPoint();
+			TxModel.getSpectrumMask().get(o).getScmMask().getControlPoint().add(ctrlPoint);
 			
 			Double data = Double.parseDouble(Sdata.getValueAt(i, 1).toString());
-			TxModel.getSpectrumMask().get(o).getScmMask().getInflectionPnt().get(i).setFrequency(data);
+			TxModel.getSpectrumMask().get(o).getScmMask().getControlPoint().get(i).setFrequency(data);
 			data = Double.parseDouble(Sdata.getValueAt(i, 2).toString());
-			TxModel.getSpectrumMask().get(o).getScmMask().getInflectionPnt().get(i).setRelativePower(data);
+			TxModel.getSpectrumMask().get(o).getScmMask().getControlPoint().get(i).setRelativePower(data);
 		
 			}catch(Exception e){
 				warningMessage = warningMessage + "\nThe entry at row: " +(i+1)+" in the Spectrum Mask table should be numerical";
@@ -256,17 +264,17 @@ public class Save_XML extends ObjectFactory {
 		Double data = 0.0;
 		TableModel Sdata = spec.table.getModel();
 		for (int i=0; i<Sdata.getRowCount(); i++){
-			InflectionPnt ifPoint = new InflectionPnt();
+			ControlPoint ctrlPoint = new ControlPoint();
 			try{
 			if(Sdata.getValueAt(i, 1).toString().equals("")&& Sdata.getValueAt(i, 2).toString().equals(""))
 			{
 				break;
 			}
 			data = Double.parseDouble(Sdata.getValueAt(i, 1).toString());
-			ifPoint.setFrequency(data);
+			ctrlPoint.setFrequency(data);
 			data = Double.parseDouble(Sdata.getValueAt(i, 2).toString());
-			ifPoint.setRelativePower(data);
-			under.getScmMask().getInflectionPnt().add(ifPoint);
+			ctrlPoint.setRelativePower(data);
+			under.getScmMask().getControlPoint().add(ctrlPoint);
 			}catch(Exception e){
 				
 				warningMessage = warningMessage + "\nThe entry at row: "+(i+1)+ "in the Underlay Mask table should be numeric";
@@ -279,9 +287,9 @@ public class Save_XML extends ObjectFactory {
 		
 		
 		if(spec.MaxPowBtn.isSelected()==true){
-			under.setMaskPowerMarginMethod("MaximumPowerDensity");
+			under.setMaskPowerMarginMethod(MaskPowerMarginMethod.fromValue("MaximumPowerDensity"));
 		}else{
-			under.setMaskPowerMarginMethod("TotalPower");
+			under.setMaskPowerMarginMethod(MaskPowerMarginMethod.fromValue("TotalPower"));
 		}
 		
 		// If Underlay Mask is rated		
@@ -403,8 +411,8 @@ public class Save_XML extends ObjectFactory {
 
 
 			if (!(under.getConfidence() == null && under.getRating() == null
-					&& (under.getScmMask().getInflectionPnt() == null
-							|| under.getScmMask().getInflectionPnt().size() == 0)
+					&& (under.getScmMask().getControlPoint() == null
+							|| under.getScmMask().getControlPoint().size() == 0)
 					&& under.getScmMask().getRefFrequency() == null
 					&& Double.compare(under.getResolutionBW(), new Double(0.0)) == 0)) {
 				RxModel.getUnderlayMask().add(under);
@@ -441,7 +449,7 @@ public class Save_XML extends ObjectFactory {
 		Double data = 0.0;
 		TableModel Sdata = spec.underlayTable.getModel();
 		for (int i=0; i<Sdata.getRowCount(); i++){
-			InflectionPnt ifPoint = new InflectionPnt();
+			ControlPoint ifPoint = new ControlPoint();
 			try{
 			if(Sdata.getValueAt(i, 1).toString().equals("")&& Sdata.getValueAt(i, 2).toString().equals(""))
 			{
@@ -451,7 +459,7 @@ public class Save_XML extends ObjectFactory {
 			ifPoint.setFrequency(data);
 			data = Double.parseDouble(Sdata.getValueAt(i, 2).toString());
 			ifPoint.setRelativePower(data);
-			under.getScmMask().getInflectionPnt().add(ifPoint);
+			under.getScmMask().getControlPoint().add(ifPoint);
 			}catch(Exception e){
 				
 				warningMessage = warningMessage + "\nThe entry at row: "+(i+1)+ "in the Underlay Mask table should be numeric";
@@ -464,9 +472,9 @@ public class Save_XML extends ObjectFactory {
 		
 		
 		if(spec.MaxPowBtn.isSelected()==true){
-			under.setMaskPowerMarginMethod("MaximumPowerDensity");
+			under.setMaskPowerMarginMethod(MaskPowerMarginMethod.fromValue("MaximumPowerDensity"));
 		}else{
-			under.setMaskPowerMarginMethod("TotalPower");
+			under.setMaskPowerMarginMethod(MaskPowerMarginMethod.fromValue("TotalPower"));
 		}
 		
 		// If Underlay Mask is rated		
@@ -588,8 +596,8 @@ public class Save_XML extends ObjectFactory {
 
 		if (device.equals("Tx")) {
 			if (!(under.getConfidence() == null && under.getRating() == null
-					&& (under.getScmMask().getInflectionPnt() == null
-							|| under.getScmMask().getInflectionPnt().size() == 0)
+					&& (under.getScmMask().getControlPoint() == null
+							|| under.getScmMask().getControlPoint().size() == 0)
 					&& under.getScmMask().getRefFrequency() == null
 					&& Double.compare(under.getResolutionBW(), new Double(0.0)) == 0))
 				TxModel.setUnderlayMask(under);
@@ -745,6 +753,9 @@ public class Save_XML extends ObjectFactory {
 		int propMapIndex = -1;
 		String firstExponent = "";
 		String breakpoint = "";
+		
+		String DistanceLinearLoss = "";
+		
 		for (int i = 0; i < tableData.getRowCount(); i++) {
 			try{
 			
@@ -765,11 +776,27 @@ public class Save_XML extends ObjectFactory {
 				prop.getPropMap().getPropMapValue().get((propMapIndex)).setAzimuth(Double.parseDouble(dataValue));
 			}
 			
-			else if (strData.equals("PropExponent")) {
+			else if (strData.equals("Distance")) {
+
+				DistanceLinearLoss = dataValue;
+				
+			}
+			else if(strData.equals("Loss")) {
 				++propMapIndex;
 				prop.getPropMap().getPropMapValue().add(new PropMapValue());
 				PropagationModel propModel = new PropagationModel();
-				propModel.setLinear(Double.parseDouble(dataValue));
+				
+				LinearLossValue linearLossValue = new LinearLossValue();
+				linearLossValue.setLoss(Double.parseDouble(dataValue));
+				linearLossValue.setDistance(Double.parseDouble(DistanceLinearLoss));
+				
+				//TODO bhatt
+//				linearLossValue.setDistance(value);
+				
+				LinearLosses linearLosses = new LinearLosses();
+				linearLosses.getLinearLossValue().add(linearLossValue);
+				
+				propModel.setLinearLosses(linearLosses);
 				prop.getPropMap().getPropMapValue().get((propMapIndex)).setPropagationModel(propModel);
 			}
 			
@@ -784,20 +811,28 @@ public class Save_XML extends ObjectFactory {
 			else if (strData.equals("SecondExponent")) {
 				++propMapIndex;
 				PropagationModel propModel = new PropagationModel();
-				PiecewiseLinear plinear = new PiecewiseLinear();
+				PiecewiseLogLinear plinear = new PiecewiseLogLinear();
+				LogLinearValue logLinearvalue = new LogLinearValue();
+				
 				prop.getPropMap().getPropMapValue().add(new PropMapValue());
 				
+				logLinearvalue.setExponent(Double.parseDouble(firstExponent));
+				logLinearvalue.setBreakpoint(Double.parseDouble(breakpoint));
+				
+				plinear.getLogLinearValue().add(logLinearvalue);
+				
+				//TODO bhatt what about first exponent here?
 				//setting first exponent
-				plinear.setFirstExponent(Double.parseDouble(firstExponent));
-				propModel.setPiecewiseLinear(plinear);
+//				plinear.setFirstExponent(Double.parseDouble(firstExponent));
+//				propModel.setPiecewiseLinear(plinear);
 				
 				//setting breakpoint value
-				plinear.setBreakpoint(Double.parseDouble(breakpoint));
-				propModel.setPiecewiseLinear(plinear);
+//				plinear.setBreakpoint(Double.parseDouble(breakpoint));
+//				propModel.setPiecewiseLinear(plinear);
 				
 				//setting second exponent
-				plinear.setSecondExponent(Double.parseDouble(dataValue));
-				propModel.setPiecewiseLinear(plinear);
+//				plinear.setSecondExponent(Double.parseDouble(dataValue));
+				propModel.setPiecewiseLogLinear(plinear);
 				
 				prop.getPropMap().getPropMapValue().get((propMapIndex)).setPropagationModel(propModel);
 			}
@@ -1094,7 +1129,7 @@ public class Save_XML extends ObjectFactory {
 			}
 			
 
-			loc.getPointSurface().getAntennaHeight().setReference(val);
+			loc.getPointSurface().getAntennaHeight().setReference(Reference.fromValue(val));
 		}
 		else if(locData.LocCombo.getItemAt(locData.LocCombo.getSelectedIndex()).equals("Circular Surface")) {
 			
@@ -1137,7 +1172,7 @@ public class Save_XML extends ObjectFactory {
 				val="HAAT";
 			}
 			
-			loc.getCircularSurface().getAntennaHeight().setReference(val);
+			loc.getCircularSurface().getAntennaHeight().setReference(Reference.fromValue(val));
 			
 			if(locData.transmitterField.getText()!=null && locData.transmitterField.getText()!="")
 			{
@@ -1195,7 +1230,7 @@ public class Save_XML extends ObjectFactory {
 				val="HAAT";
 			}
 			
-			loc.getPolygonSurface().getAntennaHeight().setReference(val);
+			loc.getPolygonSurface().getAntennaHeight().setReference(Reference.fromValue(val));
 			if(locData.transmitterField.getText()!=null && locData.transmitterField.getText()!="")
 			{
 				loc.getPolygonSurface().setTransmitterDensity(Double.parseDouble(locData.transmitterField.getText()));
@@ -1407,13 +1442,13 @@ public class Save_XML extends ObjectFactory {
 		TableModel Sdata = imc.imatable.getModel();
 		for (int i = 0; i < Sdata.getRowCount(); i++) {
 			try{
-			InflectionPnt ifPoint = new InflectionPnt();
-			imcMask.getImAmplificationMask().getInflectionPnt().add(ifPoint);
+			ControlPoint ifPoint = new ControlPoint();
+			imcMask.getImAmplificationMask().getControlPoint().add(ifPoint);
 			
 			Double data = Double.parseDouble(Sdata.getValueAt(i, 1).toString());
-			imcMask.getImAmplificationMask().getInflectionPnt().get(i).setFrequency(data);
+			imcMask.getImAmplificationMask().getControlPoint().get(i).setFrequency(data);
 			data = Double.parseDouble(Sdata.getValueAt(i, 2).toString());
-			imcMask.getImAmplificationMask().getInflectionPnt().get(i).setRelativePower(data);
+			imcMask.getImAmplificationMask().getControlPoint().get(i).setRelativePower(data);
 			isIMAProvided = true;
 			}catch(Exception e){
 				warningMessage = warningMessage + "\nThe entry at row: " +(i+1)+" in the IMA table should be numerical";
@@ -1454,8 +1489,8 @@ public class Save_XML extends ObjectFactory {
 		TableModel Sdata = imc.table.getModel();
 		for (int i = 0; i < Sdata.getRowCount(); i++) {
 			try{
-			InflectionPnt ifPoint = new InflectionPnt();
-			imask.getImCombiningMask().getInflectionPnt().add(ifPoint);
+			ControlPoint cntrPoint = new ControlPoint();
+			imask.getImCombiningMask().getControlPoint().add(cntrPoint);
 			
 			if(Sdata.getValueAt(i, 1).toString().equals("")&& Sdata.getValueAt(i, 2).toString().equals(""))
 			{
@@ -1463,9 +1498,9 @@ public class Save_XML extends ObjectFactory {
 			}
 			
 			Double data = Double.parseDouble(Sdata.getValueAt(i, 1).toString());
-			imask.getImCombiningMask().getInflectionPnt().get(i).setFrequency(data);
+			imask.getImCombiningMask().getControlPoint().get(i).setFrequency(data);
 			data = Double.parseDouble(Sdata.getValueAt(i, 2).toString());
-			imask.getImCombiningMask().getInflectionPnt().get(i).setRelativePower(data);
+			imask.getImCombiningMask().getControlPoint().get(i).setRelativePower(data);
 			isIntermodulationMaskProvided = true;
 			}catch(Exception e){
 				warningFlag = true;
@@ -1483,7 +1518,7 @@ public class Save_XML extends ObjectFactory {
 				warningMessage = warningMessage
 						+ "\nThe entry in IM Order field in the Intermodulation mask should be numeric";
 			}
-			imask.setOrder(order);
+			imask.setOrder(BigInteger.valueOf(order));
 		}
 		
 		// If there is highSideInjection to be stored
@@ -1519,7 +1554,7 @@ public class Save_XML extends ObjectFactory {
 			}
 			
 			if(device.equals("Tx")){
-				JAXBElement<TxModel> element = createTxModel(TxModel);
+				TxModel element = createTxModel();
 				Marshaller marshaller = context.createMarshaller();
 		        marshaller.setProperty("jaxb.formatted.output",Boolean.TRUE);
 		        marshaller.marshal(element,System.out);
@@ -1528,7 +1563,7 @@ public class Save_XML extends ObjectFactory {
 		        marshaller.marshal(element, os );
 		        os.close();
 			}else{
-				JAXBElement<RxModel> element = createRxModel(RxModel);
+				RxModel element = createRxModel();
 				Marshaller marshaller = context.createMarshaller();
 		        marshaller.setProperty("jaxb.formatted.output",Boolean.TRUE);
 		        marshaller.marshal(element,System.out);

@@ -45,9 +45,13 @@ import org.ieee.dyspansc._1900._5.scm.CircularSurface;
 import org.ieee.dyspansc._1900._5.scm.DCRatedList;
 import org.ieee.dyspansc._1900._5.scm.DCRating;
 import org.ieee.dyspansc._1900._5.scm.GainMapValue;
-import org.ieee.dyspansc._1900._5.scm.InflectionPnt;
+import org.ieee.dyspansc._1900._5.scm.ControlPoint;
 import org.ieee.dyspansc._1900._5.scm.IntermodulationMask;
+import org.ieee.dyspansc._1900._5.scm.LinearLossValue;
+import org.ieee.dyspansc._1900._5.scm.LinearLosses;
+import org.ieee.dyspansc._1900._5.scm.LogLinearValue;
 import org.ieee.dyspansc._1900._5.scm.PathPoint;
+import org.ieee.dyspansc._1900._5.scm.PiecewiseLogLinear;
 import org.ieee.dyspansc._1900._5.scm.PointSurface;
 import org.ieee.dyspansc._1900._5.scm.PropMapValue;
 import org.ieee.dyspansc._1900._5.scm.Rating;
@@ -91,12 +95,11 @@ public void setUnderlay(SCM_MainWindow scm, UnderlayMask underlay, String device
 			if(underlay!=null){
 				scm.spec.underlayResTextField.setText(String.valueOf(underlay.getResolutionBW()));
 				
-				List<InflectionPnt> infP = underlay.getScmMask().getInflectionPnt();
+				List<ControlPoint> infP = underlay.getScmMask().getControlPoint();
 				DefaultTableModel model = (DefaultTableModel) scm.spec.underlayTable.getModel();
 			  	model.setRowCount(0);
 			  	
-				for(int i=0; i<infP.size(); i++){
-						
+				for(int i=0; i<infP.size(); i++){						
 						String serial = Integer.toString(i+1);
 						String data1 = String.valueOf(infP.get(i).getFrequency());
 						String data2 = String.valueOf(infP.get(i).getRelativePower());
@@ -194,7 +197,7 @@ public void setUnderlay(SCM_MainWindow scm, UnderlayMask underlay, String device
 		if(underlay!=null){
 			scm.underlay.ResTextField.setText(String.valueOf(underlay.getResolutionBW()));
 			
-			List<InflectionPnt> infP = underlay.getScmMask().getInflectionPnt();
+			List<ControlPoint> infP = underlay.getScmMask().getControlPoint();
 			DefaultTableModel model = (DefaultTableModel) scm.underlay.table.getModel();
 		  	model.setRowCount(0);
 		  	
@@ -424,30 +427,46 @@ public void setUnderlay(SCM_MainWindow scm, UnderlayMask underlay, String device
 				}
 				
 				else if(propMapValue.get(i).getPropagationModel() != null) {
-					if (propMapValue.get(i).getPropagationModel().getPiecewiseLinear() != null) {
-						n1 = String.valueOf(propMapValue.get(i).getPropagationModel().
-								getPiecewiseLinear().getFirstExponent());					
-						dist = String.valueOf(propMapValue.get(i).getPropagationModel().
-								getPiecewiseLinear().getBreakpoint());
-						n2 = String.valueOf(propMapValue.get(i).getPropagationModel().
-								getPiecewiseLinear().getSecondExponent());
+					PiecewiseLogLinear piecewiseLogLinear = propMapValue.get(i).getPropagationModel().getPiecewiseLogLinear();
+					if (piecewiseLogLinear.getLogLinearValue().size() > 0) {
 						
-						Object[] firstExponentData = {currentProp.table.getRowCount()+1, "First Exponent", n1};
-						model.addRow(firstExponentData);
+						//TODO bhatt now, LogLinearValue is the list, don't know what to do here ?
 						
-						Object[] breakpointData = {currentProp.table.getRowCount()+1, "Breakpoint(m)", dist};
-						model.addRow(breakpointData);
-						
-						Object[] secondExponentData = {currentProp.table.getRowCount()+1, "Second Exponent", n2};
-						model.addRow(secondExponentData);
+						for(int logLinearIndex=0;logLinearIndex < piecewiseLogLinear.getLogLinearValue().size(); logLinearIndex++) {
+							LogLinearValue logLinear = piecewiseLogLinear.getLogLinearValue().get(logLinearIndex);
+							
+							n1 = String.valueOf(logLinear.getExponent());					
+							dist = String.valueOf(logLinear.getBreakpoint());
+							
+							
+							Object[] firstExponentData = {currentProp.table.getRowCount()+1, "First Exponent", n1};
+							model.addRow(firstExponentData);
+							
+							Object[] breakpointData = {currentProp.table.getRowCount()+1, "Breakpoint(m)", dist};
+							model.addRow(breakpointData);
+						}
+					
 						
 						continue;
 					}
-					else if(propMapValue.get(i).getPropagationModel().getLinear()!=0.0) {
-						valueType = "Prop Exponent";
-//						value = String.valueOf(propMapValue.get(i+2).getPropagationModel().getLinear());
-						value = String.valueOf(propMapValue.get(i).getPropagationModel().getLinear());
+					else if(propMapValue.get(i).getPropagationModel().getLinearLosses().getLinearLossValue().size()>0) {
+						LinearLosses linearLosses = propMapValue.get(i).getPropagationModel().getLinearLosses();
 						
+						for(int linearLossesIndex=0;linearLossesIndex < linearLosses.getLinearLossValue().size(); linearLossesIndex++) {
+							LinearLossValue linearLossesValue = linearLosses.getLinearLossValue().get(linearLossesIndex);
+							
+							n1 = String.valueOf(linearLossesValue.getDistance());					
+							dist = String.valueOf(linearLossesValue.getLoss());
+							
+							
+							Object[] firstExponentData = {currentProp.table.getRowCount()+1, "Distance", n1};
+							model.addRow(firstExponentData);
+							
+							Object[] breakpointData = {currentProp.table.getRowCount()+1, "Loss", dist};
+							model.addRow(breakpointData);
+						}				
+						
+						continue;						
 					}
 				}
 				
@@ -828,7 +847,7 @@ public void setUnderlay(SCM_MainWindow scm, UnderlayMask underlay, String device
 			currentImc.RelFreqField.setEnabled(true);
 			
 		
-		List<InflectionPnt> infP = interMod.getImCombiningMask().getInflectionPnt();
+		List<ControlPoint> infP = interMod.getImCombiningMask().getControlPoint();
 		DefaultTableModel model = (DefaultTableModel) currentImc.table.getModel();
 	  	model.setRowCount(0);
 	  	
@@ -857,7 +876,7 @@ public void setUnderlay(SCM_MainWindow scm, UnderlayMask underlay, String device
 		
 		if(interMod.getImAmplificationMask()!=null)
 		{
-			List<InflectionPnt> imaInflP = interMod.getImAmplificationMask().getInflectionPnt();
+			List<ControlPoint> imaInflP = interMod.getImAmplificationMask().getControlPoint();
 			if(imaInflP.size()>0)
 			{
 				currentImc.IMAYes.setSelected(true);

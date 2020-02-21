@@ -33,12 +33,15 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.geom.Line2D;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -61,7 +64,7 @@ public class SpecMask {
 	public JRadioButton FreqListBtn = new JRadioButton("Center frequency list");
 	public JRadioButton BandListBtn = new JRadioButton("Band list");
 	
-	public JTextField centerFreqTextField = new JTextField();
+	public JTextField refFreqTextField = new JTextField();
 	JTextField DwellField;
 	public JTextField ResTextField = new JTextField();
 	JTextField RevisitField;
@@ -72,7 +75,7 @@ public class SpecMask {
     public JLabel RelFreq = new JLabel("Use relative frequency values");
     public JRadioButton relFreqYes = new JRadioButton("Yes");
     public JRadioButton relFreqNo = new JRadioButton("No");
-    public JLabel centerFreq= new JLabel("Center Frequency (MHz)");
+    public JLabel refFreq= new JLabel("Reference Frequency (MHz)");
     
 	//Global Buttons
 	JButton b3 = new JButton("Save");
@@ -278,20 +281,22 @@ public class SpecMask {
        SpecPanel.add(b1);
        SpecPanel.add(b2);
        SpecPanel.add(b3);
-       SpecPanel.add(b4);     
+       SpecPanel.add(b4);  
        
        //relative frequency options
        Dimension RelFreqSize = RelFreq.getPreferredSize();
        RelFreq.setBounds(25, 135,
                 RelFreqSize.width, RelFreqSize.height);
-       SpecPanel.add(RelFreq);
-       relFreqNo.setSelected(true);
+//       SpecPanel.add(RelFreq);
+       relFreqYes.setSelected(true);
        
        Dimension relFreqRadioSize = relFreqYes.getPreferredSize();
        relFreqYes.setBounds(300, 135, relFreqRadioSize.width, relFreqRadioSize.height);
        relFreqNo.setBounds(400, 135, relFreqRadioSize.width, relFreqRadioSize.height);
-       SpecPanel.add(relFreqNo);
-       SpecPanel.add(relFreqYes);
+//       SpecPanel.add(relFreqNo);
+//       SpecPanel.add(relFreqYes);
+       SpecPanel.add(refFreq);
+	   SpecPanel.add(refFreqTextField);
        
        
        // Creating Resolution Bandwidth Label and Text Field
@@ -306,12 +311,12 @@ public class SpecMask {
        
        
        // Creating Reference- Center Frequency label
-       Dimension sizeLabel = centerFreq.getPreferredSize();
-       centerFreq.setBounds(25 + 20 + sizeBW.width + ResTextFieldSize.width + 120 + 50, 180, sizeLabel.width, sizeLabel.height);
+       Dimension sizeLabel = refFreq.getPreferredSize();
+       refFreq.setBounds(25 + 20 + sizeBW.width + ResTextFieldSize.width + 120 + 50, 180, sizeLabel.width, sizeLabel.height);
 
        // Creating reference frequency text field
-       Dimension centerFreqTextFieldSize = centerFreqTextField.getPreferredSize();
-       centerFreqTextField.setBounds(25 + 20 + sizeBW.width + ResTextFieldSize.width + 120 + 50 + sizeLabel.width + 20, 180 -2, centerFreqTextFieldSize.width + 120, centerFreqTextFieldSize.height);
+       Dimension refFreqTextFieldSize = refFreqTextField.getPreferredSize();
+       refFreqTextField.setBounds(25 + 20 + sizeBW.width + ResTextFieldSize.width + 120 + 50 + sizeLabel.width + 20, 180 -2, refFreqTextFieldSize.width + 120, refFreqTextFieldSize.height);
        
        // Positioning table
                
@@ -352,6 +357,7 @@ public class SpecMask {
 					}
 			}        	
        };
+      
 
     // Setting definition Radio Button Operation
        
@@ -446,8 +452,8 @@ public class SpecMask {
        
        relFreqYes.addActionListener(new ActionListener(){
     	   public void actionPerformed(ActionEvent e){
-    		   SpecPanel.add(centerFreq);
-    		   SpecPanel.add(centerFreqTextField);
+    		   SpecPanel.add(refFreq);
+    		   SpecPanel.add(refFreqTextField);
     		   relFreqYes.setSelected(true);
     		   relFreqNo.setSelected(false);
 
@@ -460,8 +466,8 @@ public class SpecMask {
        
        relFreqNo.addActionListener(new ActionListener(){
     	   public void actionPerformed(ActionEvent e){
-    		   SpecPanel.remove(centerFreqTextField);
-    		   SpecPanel.remove(centerFreq);
+    		   SpecPanel.remove(refFreqTextField);
+    		   SpecPanel.remove(refFreq);
     		   relFreqNo.setSelected(true);
     		   relFreqYes.setSelected(false);
 
@@ -506,6 +512,15 @@ public class SpecMask {
        BandListBtn.addActionListener(BandAction);
 
 
+       //action listener for the table
+       table.addMouseListener(new java.awt.event.MouseAdapter() {
+    	    @Override
+    	    public void mouseClicked(java.awt.event.MouseEvent evt) {
+    	    	if(refFreqTextField.getText().toString().length() == 0) {
+					JOptionPane.showMessageDialog(null, "Please provide a Reference Frequency Value before proceeding");
+				 }
+    	    }
+    	});
 
         // Button Actions        
       
@@ -551,6 +566,17 @@ public class SpecMask {
 			}
 		});
 	
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		/**************To add the Underlay Mask**********************/
 		 //underlayText.setFont(new Font("Arial", Font.BOLD, 14));
 		// underlayYesButton.setFont(new Font("Arial", Font.BOLD, 14));
@@ -963,8 +989,14 @@ public class SpecMask {
         spec.underlayb1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 			
-				DefaultTableModel model = (DefaultTableModel) spec.underlayTable.getModel();
-				model.addRow(new Object[]{spec.underlayTable.getRowCount()+1, "", ""});	
+				//perform an action only if center frequency value has been entered, otherwise just show a error dialog box
+//				if(refFreqTextField.getText().toString() == null) {
+//					JOptionPane.showMessageDialog(null, "Please provide a Reference Frequency Value before proceeding");
+//				 }
+//				else {
+					DefaultTableModel model = (DefaultTableModel) spec.underlayTable.getModel();
+					model.addRow(new Object[]{spec.underlayTable.getRowCount()+1, "", ""});	
+//				}
 			}
 		});
 		

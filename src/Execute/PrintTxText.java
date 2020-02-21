@@ -32,8 +32,8 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.ieee.dyspansc._1900._5.scm.Band;
+import org.ieee.dyspansc._1900._5.scm.ControlPoint;
 import org.ieee.dyspansc._1900._5.scm.HoppingData;
-import org.ieee.dyspansc._1900._5.scm.InflectionPnt;
 import org.ieee.dyspansc._1900._5.scm.TxModel;
 
 import SCM_home.Home;
@@ -50,12 +50,6 @@ public class PrintTxText extends PrintText {
 		try {
 			System.out.println("Tx Printing");
 			logger.info("Tx Printing");
-			// printfile = new PrintWriter ("Octave/" + SaveName);
-			// Adding the Output folder for storing the output files
-
-			// MethodAnalysis meth = new MethodAnalysis();
-			// printfile = new PrintWriter (meth.getFilePath()+"Reports/" + SaveName);
-
 			// Update the folder to be the Report folder containing all the Compatibility
 			// Steps Details
 			printfile = new PrintWriter(SaveName);
@@ -67,13 +61,13 @@ public class PrintTxText extends PrintText {
 				printfile.println("# name: " + "Tx_SpecMask");
 				printfile.println("# type: matrix");
 				printfile.println("# rows: 1");
-				List<InflectionPnt> infPoint = model.getSpectrumMask().get(o).getScmMask().getInflectionPnt();
+				List<ControlPoint> controlPoint = model.getSpectrumMask().get(o).getScmMask().getControlPoint();
 				String data = "";
-				for (int i = 0; i < infPoint.size(); i++) {
-					data = data + infPoint.get(i).getFrequency() + " ";
-					data = data + infPoint.get(i).getRelativePower() + " ";
+				for (int i = 0; i < controlPoint.size(); i++) {
+					data = data + controlPoint.get(i).getFrequency() + " ";
+					data = data + controlPoint.get(i).getRelativePower() + " ";
 				}
-				printfile.println("# columns: " + infPoint.size() * 2);
+				printfile.println("# columns: " + controlPoint.size() * 2);
 				printfile.println(data);
 				printfile.println("");
 				printfile.println("");
